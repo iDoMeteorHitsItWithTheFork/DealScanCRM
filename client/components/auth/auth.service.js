@@ -78,7 +78,7 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
      * @return {Promise}
      */
     changePassword(oldPassword, newPassword, callback) {
-      return User.changePassword({ id: currentUser._id }, {
+      return User.changePassword({ id: currentUser.userID }, {
         oldPassword: oldPassword,
         newPassword: newPassword
       }, function() {
