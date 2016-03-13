@@ -9,7 +9,7 @@ var LoginPage = function() {
   var form = this.form = element(by.css('.form'));
   form.email = form.element(by.model('vm.user.email'));
   form.password = form.element(by.model('vm.user.password'));
-  form.submit = form.element(by.css('.btn-login'));
+  form.submit = form.element(by.css('.btn-login_'));
 
   this.login = function(data) {
     for (var prop in data) {

@@ -5,7 +5,7 @@ var UserModel = require(config.serverConfig.root + '/server/sqldb').User;
 
 describe('Logout View', function() {
   var login = function(user) {
-    browser.get(config.baseUrl + '/login');
+    browser.get(config.baseUrl + '/login_');
     require('../login/login.po').login(user);
   };
 

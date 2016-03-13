@@ -16,7 +16,7 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
     /**
      * Authenticate user and save token
      *
-     * @param  {Object}   user     - login info
+     * @param  {Object}   user     - login_ info
      * @param  {Function} callback - optional, function(error, user)
      * @return {Promise}
      */
