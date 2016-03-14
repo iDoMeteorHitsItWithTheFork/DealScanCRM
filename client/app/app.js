@@ -12,7 +12,9 @@ angular.module('dealScanCrmApp', [
     'btford.socket-io',
     'ui.router',
     'ui.bootstrap',
-    'validation.match'
+    'validation.match',
+    'ui.select', 
+    'chart.js'
 ])
     .config(function ($urlRouterProvider, $locationProvider) {
         $urlRouterProvider
