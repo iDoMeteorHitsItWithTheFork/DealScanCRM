@@ -29,7 +29,7 @@ export function isAuthenticated() {
     .use(function(req, res, next) {
       User.find({
         where: {
-          _id: req.user._id
+          userID: req.user.userID
         }
       })
         .then(user => {
@@ -67,7 +67,7 @@ export function hasRole(roleRequired) {
  * Returns a jwt token signed by the app secret
  */
 export function signToken(id, role) {
-  return jwt.sign({ _id: id, role: role }, config.secrets.session, {
+  return jwt.sign({ userID: id, role: role }, config.secrets.session, {
     expiresIn: 60 * 60 * 5
   });
 }
@@ -79,7 +79,7 @@ export function setTokenCookie(req, res) {
   if (!req.user) {
     return res.status(404).send('It looks like you aren\'t logged in, please try again.');
   }
-  var token = signToken(req.user._id, req.user.role);
+  var token = signToken(req.user.userID, req.user.role);
   res.cookie('token', token);
   res.redirect('/');
 }

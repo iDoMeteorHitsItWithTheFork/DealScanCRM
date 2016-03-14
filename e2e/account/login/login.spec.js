@@ -7,7 +7,7 @@ describe('Login View', function() {
   var page;
 
   var loadPage = function() {
-    browser.get(config.baseUrl + '/login');
+    browser.get(config.baseUrl + '/login_');
     page = require('./login.po');
   };
 
@@ -33,7 +33,7 @@ describe('Login View', function() {
       });
   });
 
-  it('should include login form with correct inputs and submit button', function() {
+  it('should include login_ form with correct inputs and submit button', function() {
     expect(page.form.email.getAttribute('type')).toBe('email');
     expect(page.form.email.getAttribute('name')).toBe('email');
     expect(page.form.password.getAttribute('type')).toBe('password');
@@ -44,7 +44,7 @@ describe('Login View', function() {
 
   describe('with local auth', function() {
 
-    it('should login a user and redirecting to "/"', function() {
+    it('should login_ a user and redirecting to "/"', function() {
       page.login(testUser);
 
       var navbar = require('../../components/navbar/navbar.po');
@@ -53,13 +53,13 @@ describe('Login View', function() {
       expect(navbar.navbarAccountGreeting.getText()).toBe('Hello ' + testUser.name);
     });
 
-    it('should indicate login failures', function() {
+    it('should indicate login_ failures', function() {
       page.login({
         email: testUser.email,
         password: 'badPassword'
       });
 
-      expect(browser.getCurrentUrl()).toBe(config.baseUrl + '/login');
+      expect(browser.getCurrentUrl()).toBe(config.baseUrl + '/login_');
 
       var helpBlock = page.form.element(by.css('.form-group.has-error .help-block.ng-binding'));
       expect(helpBlock.getText()).toBe('This password is not correct.');

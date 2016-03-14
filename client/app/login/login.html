@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-2 col-lg-offset-5">
+        <div class="logo text-center">
+            <img src="../assets/images/login-logo.png" alt="" class="img-responsive"/>
+        </div>
+        <p class="text-center text-dark text-bold text-extra-large margin-top-15">
+            Welcome to DealScan xS
+        </p>
+
+        <p class="text-center">
+            Please enter your name and password to log in.
+        </p>
+
+        <div class="box-login">
+            <form class="form-login" name="form" ng-submit="vm.login(form)" novalidate>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username" ng-model="vm.user.email"
+                           placeholder="Enter email address...">
+                </div>
+                <div class="form-group form-actions">
+
+                    <input type="password" class="form-control password" name="password" ng-model="vm.user.password"
+                           placeholder="Enter password">
+
+                </div>
+                <div class="form-group has-error">
+                    <p class="help-block"
+                       ng-show="form.email.$error.required && form.password.$error.required && vm.submitted">
+                        Please enter your email and password.
+                    </p>
+
+                    <p class="help-block" ng-show="form.email.$error.email && vm.submitted">
+                        Please enter a valid email.
+                    </p>
+
+                    <p class="help-block">{{ vm.errors.other }}</p>
+                </div>
+                <div class="text-center">
+                    <a ui-sref="login.forgot"> I forgot my password </a>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-red btn-block"><i
+                            ng-class="vm.submitted ? 'fa fa-spinner fa-pulse' : ''"></i>{{vm.submitted ? 'checking...' : 'Login'}}
+                    </button>
+                    <div class="checkbox clip-check check-primary">
+                        <input type="checkbox" id="remember" value="1">
+                        <label for="remember"> Keep me signed in </label>
+                    </div>
+                </div>
+                <div class="new-account text-center">
+                    <a>Don't have an account yet?</a>
+                    <a ui-sref="register"> Create an account </a>
+                </div>
+            </form>
+            <div class="copyright">
+               <a>2016 © DealScan by KelCar, LLC.</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,7 +16,7 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
     /**
      * Authenticate user and save token
      *
-     * @param  {Object}   user     - login info
+     * @param  {Object}   user     - login_ info
      * @param  {Function} callback - optional, function(error, user)
      * @return {Promise}
      */
@@ -78,7 +78,7 @@ function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
      * @return {Promise}
      */
     changePassword(oldPassword, newPassword, callback) {
-      return User.changePassword({ id: currentUser._id }, {
+      return User.changePassword({ id: currentUser.userID }, {
         oldPassword: oldPassword,
         newPassword: newPassword
       }, function() {

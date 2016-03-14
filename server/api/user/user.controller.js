@@ -26,9 +26,11 @@ function handleError(res, statusCode) {
 export function index(req, res) {
   User.findAll({
     attributes: [
-      '_id',
-      'name',
+      'userID',
+      'firstName',
+      'lastName',
       'email',
+      'phone',
       'role',
       'provider'
     ]
@@ -48,7 +50,7 @@ export function create(req, res, next) {
   newUser.setDataValue('role', 'user');
   newUser.save()
     .then(function(user) {
-      var token = jwt.sign({ _id: user._id }, config.secrets.session, {
+      var token = jwt.sign({ userID: user.userID }, config.secrets.session, {
         expiresIn: 60 * 60 * 5
       });
       res.json({ token });
@@ -64,7 +66,7 @@ export function show(req, res, next) {
 
   User.find({
     where: {
-      _id: userId
+      userID: userId
     }
   })
     .then(user => {
@@ -81,7 +83,7 @@ export function show(req, res, next) {
  * restriction: 'admin'
  */
 export function destroy(req, res) {
-  User.destroy({ _id: req.params.id })
+  User.destroy({ userID: req.params.id })
     .then(function() {
       res.status(204).end();
     })
@@ -92,13 +94,13 @@ export function destroy(req, res) {
  * Change a users password
  */
 export function changePassword(req, res, next) {
-  var userId = req.user._id;
+  var userId = req.user.userID;
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
 
   User.find({
     where: {
-      _id: userId
+      userID: userId
     }
   })
     .then(user => {
@@ -119,16 +121,18 @@ export function changePassword(req, res, next) {
  * Get my info
  */
 export function me(req, res, next) {
-  var userId = req.user._id;
+  var userId = req.user.userID;
 
   User.find({
     where: {
-      _id: userId
+      userID: userId
     },
     attributes: [
-      '_id',
-      'name',
+      'userID',
+      'firstName',
+      'lastName',
       'email',
+      'phone',
       'role',
       'provider'
     ]

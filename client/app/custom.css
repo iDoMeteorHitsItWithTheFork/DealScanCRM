@@ -1,0 +1,145 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.display-block {
+  display: block!important;
+}
+
+a:hover, a:active, a:focus {
+  text-decoration:none!important;
+}
+
+.p-l-0{padding-left:0!important;}
+.p-l-5{padding-left:5px!important;}
+.p-l-10{padding-left:10px!important;}
+.p-l-15{padding-left:15px!important;}
+.p-l-20{padding-left:20px!important;}
+
+.p-r-0{padding-right:0!important;}
+.p-r-5{padding-right:5px!important;}
+.p-r-10{padding-right:10px!important;}
+.p-r-15{padding-right:15px!important;}
+.p-r-20{padding-right:20px!important;}
+
+.p-t-0{padding-top:0!important;}
+.p-t-5{padding-top:5px!important;}
+.p-t-8{padding-top: 8px!important;;}
+.p-t-10{padding-top:10px!important;}
+.p-t-15{padding-top:15px!important;}
+.p-t-20{padding-top:20px!important;}
+.p-t-30{padding-top:30px!important;}
+
+.p-b-0{padding-bottom:0!important;}
+.p-b-5{padding-bottom:5px!important;}
+.p-b-10{padding-bottom:10px!important;}
+.p-b-15{padding-bottom:15px!important;}
+.p-b-16{padding-bottom:16px!important;}
+.p-b-20{padding-bottom:20px!important;}
+
+.m-t-0 {margin-top:0;}
+.m-t-2 {margin-top:2px;}
+.m-t-4 {margin-top:4px;}
+.m-t-5 {margin-top:5px;}
+.m-t-10{margin-top:10px;}
+.m-t-20{margin-top:20px;}
+.m-t-30{margin-top:30px;}
+.m-t-30 {margin-top:30px;}
+
+.m-a-0 {
+	margin:0!important;
+}
+
+.m-b-10{margin-bottom:10px;}
+.m-r-0{margin-right:0!important;}
+.m-r-5{margin-right:5px!important;}
+.m-r-10{margin-right:10px!important;}
+.m-r-15{margin-right:15px!important;}
+.m-r-16{margin-right:16px!important;}
+.m-r-30{margin-right:30px!important;}
+
+.mb-15{margin-bottom:15px!important;}
+
+.m-l-5{margin-left:5px;}
+.r-0 {right:0px!important;}
+.r-5 {right:5px!important;}
+.r-10 {right:10px!important;}
+.r-14 {right:14px!important;}
+.r-15 {right:15px!important;}
+.r-20 {right:20px!important;}
+.r-25 {right:25px!important;}
+.r-26 {right:26px!important;}
+.r-30 {right:30px!important;}
+.r-32 {right:32px!important;}
+
+.l-0 {left:0px!important;}
+.l-5 {left:5px!important;}
+.l-10 {left:10px!important;}
+.l-15 {left:15px!important;}
+.l-20 {left:20px!important;}
+.l-25 {left:25px!important;}
+.l-30 {left:30px!important;}
+
+.t-40{top:40px!important;}
+.fs-17 {font-size: 17px !important;}
+.fs-18 {font-size: 18px !important;}
+.fs-19 {font-size: 19px !important;}
+.fs-20 {font-size: 20px !important;}
+.fs-22 {font-size: 22px !important;}
+.fs-25 {font-size: 25px !important;}
+.fs-28 {font-size: 28px !important;}
+.fs-30 {font-size: 30px !important;}
+.lh-23 {line-height:23px!important;}
+
+.m-t-40 {margin-top:40px!important;}
+.m-t-5 {margin-top:5px !important;}
+.tc {text-align:center!important;}
+
+
+.navbar .navbar-header .navbar-brand {
+    padding: 0px 15px;
+    padding-left: 10px;
+    padding-top: 9px;
+}
+.navbar .navbar-header .navbar-brand img {
+    display: inline-block;
+    height: 56px;
+    width: 240px;
+}
+.navbar .navbar-collapse .navbar-left > li.sidebar-toggler-wrapper .btn:focus,
+{
+    background-color: #FE5402;
+    border-color: #FE5402;
+    color: #FFF !important;
+}
+#sidebar .nav-user-wrapper::before {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background-image: url("//osintsandbox.com/CRM/app/assets/img/user-background.png");
+}
+.navbar .navbar-collapse .navbar-left > li.sidebar-toggler-wrapper .btn {
+    background-color: #FE5402;
+    border-color:#FE5402;
+    color: #FFF !important;
+}
+#sidebar > div nav > ul > li.active .letter-icon-wrapper {
+    background: #FE5402 none repeat scroll 0% 0% !important;
+}
+
+.navbar .navbar-header .navbar-brand img {
+    display: inline-block;
+    height: 48px;
+    width: 240px;
+}
+.navbar .navbar-header .navbar-brand {
+    padding: 9px 15px 0px 10px;
+    padding-top: 0;
+}
+.app-sidebar-fixed #sidebar > .sidebar-container {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    position: relative;
+}

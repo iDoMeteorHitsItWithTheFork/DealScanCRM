@@ -1,4 +1,4 @@
-<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarController">
+<!--<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarController">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" ng-click="nav.isCollapsed = !nav.isCollapsed">
@@ -26,4 +26,49 @@
       </ul>
     </div>
   </div>
-</div>
+</div> -->
+<header class="navbar navbar-default navbar-static-top hidden-print" ng-controller="NavbarController">
+    <div class="navbar-header">
+        <button  class="menu-mobile-toggler btn no-radius pull-left hidden-md hidden-lg"
+                id="horizontal-menu-toggler">
+            <i class="fa fa-bars"></i>
+        </button>
+        <button  class="sidebar-mobile-toggler btn no-radius pull-left hidden-md hidden-lg"
+                id="sidebar-toggler" >
+            <i class="fa fa-bars"></i>
+        </button>
+        <a class="navbar-brand hidden-xs hidden-sm "> <img src="../../assets/images/dealscan-logo-white.png"
+                                                           alt="DealScan logo"/> </a>
+    </div>
+    <div class="navbar-collapse collapse" uib-collapse="navbarCollapsed" >
+        <ul class="nav navbar-left hidden-sm hidden-xs">
+            <li class="sidebar-toggler-wrapper">
+                <div>
+                    <button  class="btn sidebar-toggler visible-md visible-lg" >
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+            </li>
+            <li>
+                <form role="search" class="navbar-form main-search">
+                    <div class="form-group">
+                        <input type="text" placeholder="Search" class="form-control">
+                        <button class="btn search-button" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </li>
+        </ul>
+        <ul class="nav navbar-right">
+            <li class="dropdown" >
+                <a  class="dropdown-toggle">
+
+                </a>
+            </li>
+            <li class="dropdown" >
+                <a class="dropdown-toggle" ><i class="fa fa-bell"></i></a>
+            </li>
+        </ul>
+    </div>
+</header>

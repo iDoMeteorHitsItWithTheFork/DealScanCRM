@@ -6,10 +6,18 @@ module.exports = {
 
   // Sequelize connection opions
   sequelize: {
-    uri: 'sqlite://',
+    database: 'dealscancrm',
+    username: 'dealscancrm',
+    password: 'Baiser12!',
     options: {
+      host:'dealscancrm.db.3266541.hostedresource.com',
+      dialect: 'mysql',
+      pool: {
+          max: 5,
+          min: 0,
+          idle: 10000
+      },
       logging: false,
-      storage: 'dev.sqlite',
       define: {
         timestamps: false
       }
