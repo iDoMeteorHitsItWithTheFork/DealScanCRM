@@ -29,7 +29,7 @@ angular.module('dealScanCrmApp')
 		segmentStrokeColor: '#fff',
 		segmentStrokeWidth: 1,
 		percentageInnerCutout: 50, // This is 0 for Pie charts
-		animationSteps: 100,
+		animationSteps: 40,
 		animationEasing: 'easeOutBounce',
 		animateRotate: true,
 		animateScale: false
@@ -38,6 +38,7 @@ angular.module('dealScanCrmApp')
 
 $scope.clickChart = function(points, evt){
 	console.log(points, evt);
+	$scope.showTable = !$scope.showTable;
 }
 
   $scope.addLead = function () {
