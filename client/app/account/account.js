@@ -21,7 +21,14 @@ angular.module('dealScanCrmApp')
                 controller: 'SettingsController',
                 controllerAs: 'vm',
                 authenticate: true
-            });
+            })
+
+        
+        
+        
+        ;
+  
+            /* Overall router will go here!*/
 
     })
     .run(function ($rootScope) {

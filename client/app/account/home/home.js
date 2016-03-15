@@ -7,5 +7,17 @@ angular.module('dealScanCrmApp')
         url: '/home',
         templateUrl: 'app/account/home/home.html',
         controller: 'HomeCtrl'
-      });
+      })
+      .state('home.dashboard', {
+         url:'/dashboard',
+         title: 'Dashboard',
+         views : {
+          'pageContent': {
+            templateUrl:'app/account/dashboard/dashboard.html',
+            controller: 'DashboardCtrl as Dashboard'
+          },
+           }			   
+        })
+    
+    ;
   });

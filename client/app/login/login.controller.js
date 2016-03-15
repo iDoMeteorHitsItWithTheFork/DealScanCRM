@@ -22,7 +22,7 @@ angular.module('dealScanCrmApp')
                     .then(() => {
                         console.log('login successfull');
                         // Logged in, redirect to home
-                        this.$state.go('home');
+                        this.$state.go('home.dashboard');
                     })
                     .catch(err => {
                         this.errors.other = err.message;
