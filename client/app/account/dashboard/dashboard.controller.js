@@ -48,7 +48,14 @@ $scope.clickChart = function(points, evt){
       controller: 'AddLeadCtrl',
     });
 	}
-
+  $scope.addTask = function () {
+    var modalInstance = $uibModal.open({
+      animation: true,
+			windowClass: 'slide-up',
+      templateUrl: 'app/account/task/addTask.html',
+      controller: 'AddTaskCtrl',
+    });
+	}
 }]);
 
 
