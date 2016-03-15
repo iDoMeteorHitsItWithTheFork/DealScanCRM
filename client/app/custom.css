@@ -88,6 +88,10 @@ a:hover, a:active, a:focus {
 .l-30 {left:30px!important;}
 
 .t-40{top:40px!important;}
+
+.fs-14 {font-size: 14px !important;}
+.fs-15 {font-size: 15px !important;}
+.fs-16 {font-size: 16px !important;}
 .fs-17 {font-size: 17px !important;}
 .fs-18 {font-size: 18px !important;}
 .fs-19 {font-size: 19px !important;}
@@ -101,7 +105,7 @@ a:hover, a:active, a:focus {
 .m-t-40 {margin-top:40px!important;}
 .m-t-5 {margin-top:5px !important;}
 .tc {text-align:center!important;}
-
+.tl {text-align:left!important;}
 
 .navbar .navbar-header .navbar-brand {
     padding: 0px 15px;
@@ -163,4 +167,11 @@ a:hover, a:active, a:focus {
     line-height: 20px;
     padding-left: 15px;
     padding-top: 6px;
+}
+
+.modal-title {
+    margin: 0px;
+    line-height: 20px;
+    margin-bottom: 13px;
+    text-align: left;
 }

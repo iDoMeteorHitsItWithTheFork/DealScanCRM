@@ -1,5 +1,5 @@
 angular.module('dealScanCrmApp')
-.controller('DashboardCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $filter) {
+.controller('DashboardCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$uibModal','$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $uibModal, $filter) {
 	
 	var _dashboard = this;
 	console.log("dashboard controller loaded");
@@ -40,8 +40,14 @@ $scope.clickChart = function(points, evt){
 	console.log(points, evt);
 }
 
-
-
+  $scope.addLead = function () {
+    var modalInstance = $uibModal.open({
+      animation: true,
+			windowClass: 'slide-up',
+      templateUrl: 'app/account/dashboard/addLead.html',
+      controller: 'AddLeadCtrl',
+    });
+	}
 
 }]);
 

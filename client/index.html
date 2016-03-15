@@ -17,14 +17,15 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-aside/dist/css/angular-aside.css" />
     <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css" />
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
     <!-- injector:css -->
+    <link rel="stylesheet" href="app/account/dashboard/dashboard.css">
     <link rel="stylesheet" href="app/account/home/home.css">
     <link rel="stylesheet" href="app/admin/admin.css">
     <link rel="stylesheet" href="app/app.css">
@@ -84,6 +85,8 @@
 <script src="bower_components/angular-aside/dist/js/angular-aside.js"></script>
 <script src="bower_components/Chart.js/Chart.js"></script>
 <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js"></script>
 <!-- endbower -->
   
 <script src="socket.io-client/socket.io.js"></script>
@@ -99,6 +102,7 @@
 <script src="components/auth/auth.module.js"></script>
 <script src="components/util/util.module.js"></script>
 <script src="components/auth/auth.service.js"></script>
+<script src="app/account/home/home.js"></script>
 <script src="app/account/settings/settings.controller.js"></script>
 <script src="app/admin/admin.controller.js"></script>
 <script src="app/account/account.js"></script>
@@ -107,8 +111,8 @@
 <script src="app/app.directives.js"></script>
 <script src="app/login/login.controller.js"></script>
 <script src="app/login/login.js"></script>
-<script src="app/account/home/home.controller.js"></script>
 <script src="app/account/dashboard/dashboard.controller.js"></script>
+<script src="app/account/dashboard/addLead.controller.js"></script>
 <script src="components/auth/interceptor.service.js"></script>
 <script src="components/auth/router.decorator.js"></script>
 <script src="components/auth/user.service.js"></script>
@@ -120,7 +124,7 @@
 <script src="components/sidebar/sidebar.controller.js"></script>
 <script src="components/sidebar/sidebar.directive.js"></script>
 <script src="components/socket/socket.service.js"></script>
-<script src="app/account/home/home.js"></script>
+<script src="app/account/home/home.controller.js"></script>
 <script src="components/util/util.service.js"></script>
 <!-- endinjector -->
 <!-- endbuild -->
