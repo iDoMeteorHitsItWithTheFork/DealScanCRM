@@ -38,7 +38,7 @@ angular.module('dealScanCrmApp')
 
 $scope.clickChart = function(points, evt){
 	console.log(points, evt);
-	$scope.showTable = !$scope.showTable;
+	$scope.showTable = true;
 }
 
   $scope.addLead = function () {

@@ -9,6 +9,10 @@
 a:hover, a:active, a:focus {
   text-decoration:none!important;
 }
+
+.crm-blue{
+	background-color: rgb(49, 87, 119);
+}
 .p-a-0 {padding:0px!important;}
 .p-a-5 {padding:5px!important;}
 .p-a-10 {padding:10px!important;}
@@ -44,6 +48,8 @@ a:hover, a:active, a:focus {
 .p-b-16{padding-bottom:16px!important;}
 .p-b-20{padding-bottom:20px!important;}
 
+
+.m-b-20{margin-bottom:20px;}
 .m-t-0 {margin-top:0;}
 .m-t-2 {margin-top:2px;}
 .m-t-4 {margin-top:4px;}

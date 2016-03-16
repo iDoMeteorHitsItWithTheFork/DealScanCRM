@@ -1,4 +1,4 @@
-
+'use strict';
 angular.module('dealScanCrmApp')
 .directive('ctFullheight', ['$window', '$rootScope', '$timeout', 
 function ($window, $rootScope, $timeout, mq) {

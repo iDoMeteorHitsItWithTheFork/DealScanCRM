@@ -25,8 +25,7 @@
 		<div class="col-md-12 p-a-15 p-t-0">
 			<div class="panel panel-white no-radius" id="chartsPanel">
 				<div class="panel-heading border-light">
-					
-					<div class="form-group pull-left" style="margin-top: -6px; margin-right:20px; width:150px">
+					<div class="form-group pull-left" style="margin:0;margin-top: -6px; margin-right:20px; width:150px">
 						<select class="cs-select cs-skin-slide" ng-model="dataView">
 								<option value="" disabled="">NEW & USED</option>
 							 <option value="NEW & USED">NEW & USED</option>
@@ -34,23 +33,23 @@
 								<option value="USED">USED</option>
 						</select>
 					</div>
-					<div class="form-group pull-right" style="margin-top: -6px; margin-right:20px; width:150px">
+					<div class="form-group pull-right" style="margin:0; margin-top: -6px; margin-right:20px; width:150px">
 						<select class="cs-select cs-skin-slide" ng-model="dataView">
 								<option value="" disabled="">CHARTS</option>
 								<option value="chartView" data-class="fa fa-pie-chart">CHARTS</option>
 								<option value="mapView" data-class="fa fa-map-marker">MAP</option>
 						</select>
 					</div>
-					<div class="form-group pull-right" style="margin-top: -6px; margin-right:20px;width:300px;">
+					<div class="form-group pull-right" style="margin:0; margin-top: -6px; margin-right:20px;width:300px;">
 						<select class="cs-select cs-skin-slide" ng-options="item.name for item in people" ng-model="person">
 								<option value="" disabled="">ALL EMPLOYEE DATA</option>
 						</select>
 					</div>
 				</div>
-				<div style="height: auto;" aria-hidden="false" aria-expanded="true" class="panel-wrapper in collapse">
+				<div style="height: auto;" class="panel-wrapper in collapse">
 					<div class="tabbable no-padding no-margin">
-						<ul class="nav nav-tabs">
-							<li heading="TODAY"  class="padding-top-5 padding-left-5 uib-tab active">
+						<ul class="nav nav-tabs p-l-15">
+							<li heading="TODAY"  class="padding-top-5 uib-tab active">
 								<a class="" href=""  >TODAY</a>
 							</li>
 							<li heading="YESTERDAY" ng-class="{active: active, disabled: disabled}" class="padding-top-5 uib-tab">
@@ -69,9 +68,9 @@
 						</ul>
 						<div class="tab-content p-a-15">
 							<div class="row">
-								<div class="col-md-3">
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 									<div class="col-md-12">
-										<div class="partition-light-grey padding-15 text-center margin-bottom-25">
+										<div class="partition-light-grey padding-15 text-center m-b-10">
 											<h4 class="no-margin">Today's Statics</h4>
 											<span class="text-light">All Employee Data</span>
 										</div>
@@ -82,46 +81,40 @@
 											<tbody>
 												<tr>
 													<td class="center text-extra-large"><i class="fa fa-phone"></i></td>
-													<td><span class="text-dark block">Calls</span></td>
+													<td class="hidden-xs hidden-sm hidden-md"><span class="text-dark block">Calls</span></td>
 													<td class="center">100</td>
-													<td class="center"><i class="fa fa-caret-down text-red"></i></td>
 												</tr>
 												<tr>
 													<td class="center text-extra-large"><i class="fa fa-calendar-o"></i></td>
-													<td>Appointments</td>
+													<td class="hidden-xs hidden-sm hidden-md">Appointments</td>
 													<td class="center">217</td>
-													<td class="center"><i class="fa fa-caret-up text-green"></i></td>
 												</tr>
 												<tr>
 													<td class="center text-extra-large"><i class="fa fa-commenting-o"></i></td>
-													<td>Texts</td>
+													<td class="hidden-xs hidden-sm hidden-md">Texts</td>
 													<td class="center">350</td>
-													<td class="center"><i class="fa fa-caret-down text-red"></i></td>
 												</tr>
 												<tr>
 													<td class="center text-extra-large"><i class="fa fa-calendar-check-o"></i></td>
-													<td>Appts Posted</td>
+													<td class="hidden-xs hidden-sm hidden-md">Appts Posted</td>
 													<td class="center">12</td>
-													<td class="center"><i class="fa fa-caret-up text-green"></i></td>
 												</tr>
 												<tr>
 													<td class="center text-extra-large"><i class="fa fa-envelope-o"></i></td>
-													<td>Emails</td>
+													<td class="hidden-xs hidden-sm hidden-md">Emails</td>
 													<td class="center">36</td>
-													<td class="center"><i class="fa fa-caret-down text-red"></i></td>
 												</tr>		
 												<tr>
 													<td class="center text-extra-large"><i class="fa fa-calendar-times-o"></i></td>
-													<td>Appts Sold</td>
+													<td class="hidden-xs hidden-sm hidden-md">Appts Sold</td>
 													<td class="center">12</td>
-													<td class="center"><i class="fa fa-caret-up text-green"></i></td>
 												</tr>									
 											</tbody>
 										</table>
 									</div>									
 								</div>
 								
-								<div class=col-md-3>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 m-b-20">
 									<h3 class="tc m-b-0">
 										WON
 									</h3>
@@ -154,7 +147,7 @@
 										</div>
 									</div>
 								</div>
-								<div class=col-md-3>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 									<h3 class="tc m-b-0">
 										LOST
 									</h3>
@@ -187,7 +180,7 @@
 										</div>
 									</div>
 								</div>
-								<div class=col-md-3>
+								<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 									<h3 class="tc m-b-0">
 										TOTAL
 									</h3>
@@ -242,10 +235,11 @@
 	<div class="row flipIn flipOut" ng-hide="!showTable">
 		<div class="col-md-12">
 				<div class="panel panel-white">
-						<div class="panel-body">
-								<h4 class="over-title margin-bottom-15 inline">Customers</h4>
-
-						 <div class="form-group pull-right inline">
+				<div class="panel-heading border-light">
+					<h4 class="panel-title">Customers</h4>
+					<span class="panel-tools" >
+					<a href ng-click="showTable=false;" class='btn btn-transparent btn-sm pull-right' style="margin-top: -2px; margin-left: 12px;" tooltip-placement='top' uib-tooltip='Close'><i class='ti-close'></i></a>
+					<div class="form-group pull-right inline" style="margin-top:-6px;">
 								<select class="cs-select cs-skin-elastic">
 										<option value="" disabled selected>Filter By</option>
 										<option value="france">Name</option>
@@ -254,12 +248,17 @@
 										<option value="another">Another</option>
 								</select>
 						</div>
-							<div class="form-group inline pull-right">
-									<span class="input-icon">
-											<input type="text" placeholder="Search..." class="form-control">
-											<i class="ti-search"></i>
-									</span>
-							</div>									
+						<div class="form-group inline pull-right" style="margin-top:-6px;">
+								<span class="input-icon">
+										<input type="text" placeholder="Search..." class="form-control">
+										<i class="ti-search"></i>
+								</span>
+						</div>	
+					</span>
+				</div>
+						<div class="panel-body">
+
+								
 								<table class="table table-stylish">
 										<thead>
 												<tr>
@@ -532,7 +531,7 @@
 <div class="container-fluid container-fullw" >
 	
 	<div class="row">
-		<div class="col-md-5 col-lg-4">
+		<div class="col-xs-12 col-md-5 col-lg-4">
 					<div class="panel-fullscreen"><div class="panel panel-white no-radius">
 						<div class="panel-heading border-light">
 							<h4 class="panel-title"> Active Users </h4>
@@ -595,7 +594,102 @@
 						</div>
 					</div></div>
 				</div>
-		
+		<div class="col-xs-12 col-md-4 col-lg-4">
+			<div class="panel panel-white no-radius">
+				<div class="panel-heading border-bottom">
+					<h4 class="panel-title">My Tasks</h4>
+				</div>
+				<div class="panel-body">
+					<ul class="list-group">
+						<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<a href="#"><div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span class="letter-icon ng-binding">T</span></div>
+										Task Title</a>
+								</div>
+								<div class="col-xs-6">
+									<span class="block padding-top-10">
+										<div class="progress-xs no-radius background-dark no-margin progress">
+  											<div class="progress-bar" role="progressbar" style="width: 54%;"></div>
+										</div>
+									</span>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<a href="#"><div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span class="letter-icon ng-binding">T</span></div>
+										Task Title</a>
+								</div>
+								<div class="col-xs-6">
+									<span class="block padding-top-10">
+										<div class="progress-xs no-radius background-dark no-margin progress">
+  											<div class="progress-bar" role="progressbar" style="width: 100%;"></div>
+										</div>
+									</span>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<a href="#"><div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span class="letter-icon ng-binding">T</span></div>
+										Task Title</a>
+								</div>
+								<div class="col-xs-6">
+									<span class="block padding-top-10">
+										<div class="progress-xs no-radius background-dark no-margin progress">
+  											<div class="progress-bar" role="progressbar" style="width: 75%;"></div>
+										</div>
+									</span>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
+							<div class="row">
+								<div class="col-xs-6">
+									<a href="#"><div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span class="letter-icon ng-binding">T</span></div>
+										Task Title</a>
+								</div>
+								<div class="col-xs-6">
+									<span class="block padding-top-10">
+										<div class="progress-xs no-radius background-dark no-margin progress">
+  											<div class="progress-bar" role="progressbar" style="width: 20%;"></div>
+										</div>
+									</span>
+								</div>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-3 col-lg-4">
+			<div class="panel panel-white no-radius">
+				<div class="panel-heading border-bottom">
+					<h4 class="panel-title">Quick Search</h4>
+				</div>
+				<div class="panel-body">
+					<div class="form-group" style="">
+						<select class="cs-select cs-skin-slide" ng-model="searchType">
+								<option value="" disabled="">Customer</option>
+							 <option value="Customer">Customer</option>
+								<option value="Vehicle">Vehicle</option>
+								<option value="Task">Task</option>
+						</select>
+					</div>
+					
+					<div class="form-group">
+							<span class="input-icon">
+									<input type="text" placeholder="Search..." id="form-field-14" class="form-control">
+									<i class="ti-search"></i>
+							</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 </div>
