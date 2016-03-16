@@ -18,6 +18,15 @@ angular.module('dealScanCrmApp')
           },
            }			   
         })
-    
+      .state('home.bdc', {
+         url:'/bdc',
+         title: 'BDC Dashboard',
+         views : {
+          'pageContent': {
+            templateUrl:'app/account/bdc/bdc.html',
+            controller: 'BDCCtrl'
+          },
+           }			   
+        })
     ;
   });
