@@ -18,9 +18,9 @@ angular.module('dealScanCrmApp')
                         var df = $q.defer();
                         Dashboard.getTeamMates(function(teamMates){
                             console.log(teamMates);
-                            df.resolve();
+                            df.resolve(teamMates);
                         }, function(err){
-                            df.reject(err);
+                            df.reject(err.data);
                         });
                         return df.$promise;
                     }
