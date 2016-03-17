@@ -20,9 +20,9 @@ angular.module('dealScanCrmApp')
 
 
 
-        $scope.labels = ['Walk-In', 'Phone', 'Email', 'DealScan', 'Social Media', 'Something', 'Somethingx', 'Somethingxx', 'Somethingxxxx', 'Somethingxxx'];
+        $scope.labels = ['Walk-In', 'Phone', 'Email', 'DealScan', 'Social Media', 'Something'];
         $scope.data = [300, 50, 100, 75, 12, 55, 30, 22, 56, 55, 45];
-        $scope.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636', 'red', 'purple', 'black', 'green'];
+        $scope.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
 
         $scope.options = {
             responsive: true,
