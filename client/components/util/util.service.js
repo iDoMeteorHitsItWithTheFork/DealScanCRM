@@ -53,6 +53,17 @@ function UtilService($window) {
           url.protocol === o.protocol;
       });
       return (origins.length >= 1);
+    },
+
+    /**
+     * Test whether or not a given url is same origin
+     *
+     * @param  {String}           url       - url to test
+     * @param  {String|String[]}  [origins] - additional origins to test against
+     * @return {Boolean}                    - true if url is same origin
+     */
+     handleError(err) {
+       console.log(err);
     }
   };
 

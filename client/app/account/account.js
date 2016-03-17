@@ -5,14 +5,10 @@ angular.module('dealScanCrmApp')
         $stateProvider
             .state('logout', {
                 url: '/logout?referrer',
-                referrer: 'login',
                 template: '',
                 controller: function ($state, Auth) {
-                    var referrer = $state.params.referrer ||
-                        $state.current.referrer ||
-                        'login';
                     Auth.logout();
-                    $state.go(referrer);
+                    $state.go('login');
                 }
             })
             .state('settings', {
@@ -21,14 +17,7 @@ angular.module('dealScanCrmApp')
                 controller: 'SettingsController',
                 controllerAs: 'vm',
                 authenticate: true
-            })
-
-        
-        
-        
-        ;
-  
-            /* Overall router will go here!*/
+            });
 
     })
     .run(function ($rootScope) {

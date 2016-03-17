@@ -17,7 +17,15 @@ function UserResource($resource) {
       params: {
         id: 'me'
       }
+    },
+    getTeamMates : {
+        method:'GET',
+        isArray: true,
+        params: {
+            controller:'teammates'
+        }
     }
+
   });
 }
 

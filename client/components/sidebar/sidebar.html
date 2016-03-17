@@ -6,9 +6,9 @@
                 <a class="profile-card-photo" href="#"><img alt="" src="../../assets/images/profile.jpg"></a>
             </div>
             <div class="media-body">
-                <span class="media-heading text-white">John S.</span>
+                <span class="media-heading text-white">{{sidebar.user.firstName}} {{sidebar.user.lastName | uppercase |limitTo:1}}.</span>
 
-                <div class="text-small text-white-transparent">Sales Manager</div>
+                <div class="text-small text-white-transparent">{{sidebar.user.profile.role}}</div>
             </div>
 
             <div class="media-right media-middle">
@@ -16,18 +16,12 @@
                     <a  class="dropdown-toggle btn btn-transparent text-white" uib-dropdown-toggle><i
                             class="fa fa-caret-down"></i> </a>
                     <ul class="dropdown-menu pull-right animated fadeInRight">
-                        <li>
-                            <a> Profile </a>
-                        </li>
-                        <li>
-                            <a> Calendar </a>
-                        </li>
-                        <li>
-                            <a> Tasks </a>
+                        <li ng-repeat="item in sidebar.user.menu">
+                            <a ng-click="item.action()"> {{item.option}} </a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a> Log Out </a>
+                            <a ng-click="sidebar.logout()"> Log Out </a>
                         </li>
                     </ul>
                 </div>
@@ -41,79 +35,20 @@
             <span>Main Navigation</span>
         </div>
         <ul class="main-navigation-menu">
-            <li ui-sref-active="active">
-                <a ui-sref="home.dashboard">
+            <li ui-sref-active="active" ng-repeat="item in sidebar.menu">
+                <a ui-sref="{{item.state}}">
                     <div class="item-content">
                         <div class="item-media">
-                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">D</span></div>
+                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">{{item.alias | uppercase}}</span></div>
                         </div>
                         <div class="item-inner">
-                            <span class="title"> DASHBOARD </span>
+                            <span class="title"> {{item.title | uppercase}} </span>
                         </div>
                     </div>
                 </a>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="crm.profile">
-                    <div class="item-content">
-                        <div class="item-media">
-                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">P</span></div>
-                        </div>
-                        <div class="item-inner">
-                            <span class="title"> PROFILE </span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="crm.tasks">
-                    <div class="item-content">
-                        <div class="item-media">
-                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">T</span></div>
-                        </div>
-                        <div class="item-inner">
-                            <span class="title"> TASKS </span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="crm.notes">
-                    <div class="item-content">
-                        <div class="item-media">
-                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">N</span></div>
-                        </div>
-                        <div class="item-inner">
-                            <span class="title"> NOTES </span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="home.bdc">
-                    <div class="item-content">
-                        <div class="item-media">
-                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">L</span></div>
-                        </div>
-                        <div class="item-inner">
-                            <span class="title"> LEAD MANAGEMENT </span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="home.email">
-                    <div class="item-content">
-                        <div class="item-media">
-                            <div class="letter-icon-wrapper size-sm"><span class="letter-icon">E</span></div>
-                        </div>
-                        <div class="item-inner">
-                            <span class="title"> EMAIL CAMPAIGN </span>
-                        </div>
-                    </div>
-                </a>
-            </li>
-        </ul>
+         </ul>
+
     </nav>
 </div>
 <!-- end: MAIN NAVIGATION MENU -->

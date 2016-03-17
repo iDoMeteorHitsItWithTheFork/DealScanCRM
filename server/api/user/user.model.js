@@ -1,6 +1,7 @@
 'use strict';
 
 import crypto from 'crypto';
+import config from '../../config/environment';
 
 var validatePresenceOf = function (value) {
     return value && value.length;
@@ -58,7 +59,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        status:{
+        status: {
             type: DataTypes.ENUM,
             values: ['pending', 'active', 'suspended', 'deleted'],
             allowNull: false,
@@ -77,7 +78,7 @@ module.exports = function (sequelize, DataTypes) {
                     'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
                     'email': this.getDataValue('email'),
                     'phone': this.getDataValue('phone'),
-                    'role': this.getDataValue('role')
+                    'role': config.getDisplayRole(this.getDataValue('role'))
                 };
             },
 
