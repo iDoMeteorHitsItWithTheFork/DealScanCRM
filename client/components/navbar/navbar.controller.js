@@ -1,21 +1,16 @@
 'use strict';
 
-class NavbarController {
-  //start-non-standard
-  menu = [{
-    'title': 'Home',
-    'state': 'main'
-  }];
-
-  isCollapsed = true;
-  //end-non-standard
-
-  constructor(Auth) {
-    this.isLoggedIn = Auth.isLoggedIn;
-    this.isAdmin = Auth.isAdmin;
-    this.getCurrentUser = Auth.getCurrentUser;
-  }
-}
 
 angular.module('dealScanCrmApp')
-  .controller('NavbarController', NavbarController);
+  .controller('NavbarController', function($scope, Auth){
+
+      var _nav = this;
+      _nav.isLoggedIn = Auth.isLoggedIn;
+      _nav.isAdmin = Auth.isAdmin;
+      _nav.getCurrentUser = Auth.getCurrentUser;
+
+
+
+
+
+    });

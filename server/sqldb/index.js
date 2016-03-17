@@ -19,9 +19,15 @@ var db = {
 
 
 // Insert models below
-db.Team = db.sequelize.import('../api/team/team.model');
-db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
 db.Thing = db.sequelize.import('../api/thing/thing.model');
+
+db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
+db.Team = db.sequelize.import('../api/team/team.model');
 db.User = db.sequelize.import('../api/user/user.model');
+
+db.Team.belongsTo(db.Dealership);
+db.Dealership.belongsToMany(db.User, {through:'Owns'});
+db.User.belongsToMany(db.Team, {through:'membership'});
+
 
 export default db;
