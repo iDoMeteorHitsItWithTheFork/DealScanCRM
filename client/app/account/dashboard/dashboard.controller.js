@@ -1,14 +1,20 @@
 angular.module('dealScanCrmApp')
-    .controller('DashboardCtrl', function ($scope, $state, $uibModal, Auth, Util, Dashboard) {
-
+    .controller('DashboardCtrl', function ($scope, $state, $uibModal, $location, $anchorScroll, Auth, Util, Dashboard) {
+       console.log("dashboard controller loaded");
         var _dashboard = this;
         _dashboard.user = Auth.getCurrentUser();
         _dashboard.isAdmin = Auth.isAdmin;
 
         _dashboard.teamMates = Dashboard.teamMates();
         _dashboard.teamMate = {};
+        
+        _dashboard.dataView = 'charts';
 
-        console.log("dashboard controller loaded");
+        /* Initialize Map Object */
+        $scope.$on('mapInitialized', function (event, map) {
+            _dashboard.map = map;
+          console.log(_dashboard.map.center);
+        });
         $scope.itemArray = [
             {id: 1, name: 'first'},
             {id: 2, name: 'second'},
@@ -40,6 +46,8 @@ angular.module('dealScanCrmApp')
         $scope.clickChart = function (points, evt) {
             console.log(points, evt);
             $scope.showTable = true;
+          $location.hash('scrollToPoint');
+          $anchorScroll();
         }
 
         $scope.addLead = function () {

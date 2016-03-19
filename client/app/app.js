@@ -15,7 +15,8 @@ angular.module('dealScanCrmApp', [
     'validation.match',
     'ui.select',
     'chart.js',
-    'mwl.calendar'
+    'mwl.calendar',
+   'ngMap'
 ])
     .config(function ($urlRouterProvider, $locationProvider) {
         $urlRouterProvider
