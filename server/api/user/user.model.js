@@ -43,9 +43,10 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         role: {
-            type: DataTypes.STRING,
+            type: DataTypes.ENUM,
+            values: config.userRoles,
+            defaultValue: 'sale_rep',
             allowNull: false,
-            defaultValue: 'sale_rep'
         },
         password: {
             type: DataTypes.STRING,

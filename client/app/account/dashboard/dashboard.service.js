@@ -15,10 +15,10 @@ angular.module('dealScanCrmApp')
             if (!_user) return;
             return Auth.getTeamMates(function(teammates){
                 _teamMates = teammates;
+                if (teamMates.length > 0) teamMates.length = 0;
                 angular.forEach(_teamMates, function(teamMate){
                     teamMates.push({userID: teamMate.userID, profile: teamMate.profile});
-                });
-                return safeCb(callback)(teamMates);
+                }); return safeCb(callback)(teamMates);
             }, function(err){
                 safeCb(callback)(err);
                 return err;

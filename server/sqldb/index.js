@@ -27,10 +27,11 @@ db.User = db.sequelize.import('../api/user/user.model');
 
 db.Team.belongsTo(db.Dealership);
 db.Dealership.hasMany(db.Team);
-db.User.belongsToMany(db.Dealership, {as:'Owner', through:'Owns'});
-db.Dealership.belongsToMany(db.User, {through:'Owns'});
-db.User.belongsToMany(db.Team, {as:'teamMates', through:'membership'});
-db.Team.belongsToMany(db.User, {as:'teamMates', through:'membership'});
+db.User.belongsToMany(db.Dealership, {through:'Owns'});
+db.Dealership.belongsToMany(db.User, {as:'owners', through:'Owns'});
+db.User.belongsToMany(db.Team, {as:'userTeams', through:'membership'});
+db.Team.belongsToMany(db.User, {as:'teamMembers', through:'membership'});
+
 
 
 export default db;
