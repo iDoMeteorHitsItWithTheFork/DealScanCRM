@@ -1,8 +1,16 @@
 angular.module('dealScanCrmApp')
-.controller('BDCCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$uibModal','$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $uibModal, $filter) {
+.controller('BDCCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$uibModal','$filter', '$location', '$anchorScroll', function ($scope, $rootScope, $timeout, $compile, $state, $window, $uibModal, $filter, $location, $anchorScroll) {
 	
 	var _bdc = this;
 	console.log("BDC controller loaded");
+	_bdc.dataView = 'charts';
+
+	/* Initialize Map Object */
+	$scope.$on('mapInitialized', function (event, map) {
+			_bdc.map = map;
+		console.log(_bdc.map.center);
+	});
+	
 	 $scope.itemArray = [
         {id: 1, name: 'first'},
         {id: 2, name: 'second'},
@@ -40,6 +48,8 @@ angular.module('dealScanCrmApp')
 $scope.clickChart = function(points, evt){
 	console.log(points, evt);
 	$scope.showTable = true;
+	$location.hash('scrollToPoint');
+  $anchorScroll();
 }
 
   $scope.addLead = function () {
