@@ -210,12 +210,11 @@ angular.module('dealScanCrmApp')
       segmentShowStroke: false,
       segmentStrokeColor: '#fff',
       segmentStrokeWidth: 1,
-      percentageInnerCutout: 50, // This is 0 for Pie charts
+      percentageInnerCutout: 0, // This is 0 for Pie charts
       animationSteps: 40,
       animationEasing: 'easeOutBounce',
       animateRotate: true,
       animateScale: false
-
     };
 
     $scope.clickChart = function (points, evt) {
@@ -224,6 +223,57 @@ angular.module('dealScanCrmApp')
       $location.hash('scrollToPoint');
       $anchorScroll();
     }
+    
+    
+  $scope.labels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus', 'Police Interceptor Sedan', 'Mustang',
+      'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition','F-Series','E-Series','Transit','Transit Connect','Heavy Trucks'];
+  $scope.series = ['Series A', 'Series B'];
+
+  $scope.data = [
+ [getModelCount(_dashboard.labels[0], data), getModelCount(_dashboard.labels[1], data), getModelCount(_dashboard.labels[2], data),
+      getModelCount(_dashboard.labels[3], data), getModelCount(_dashboard.labels[4], data), getModelCount(_dashboard.labels[5], data),
+      getModelCount(_dashboard.labels[6], data), getModelCount(_dashboard.labels[7], data), getModelCount(_dashboard.labels[8], data),
+      getModelCount(_dashboard.labels[9], data), getModelCount(_dashboard.labels[10], data), getModelCount(_dashboard.labels[11], data),
+      getModelCount(_dashboard.labels[12], data), getModelCount(_dashboard.labels[13], data), getModelCount(_dashboard.labels[14], data),
+      getModelCount(_dashboard.labels[15], data), getModelCount(_dashboard.labels[16], data), getModelCount(_dashboard.labels[17], data)]
+  ];
+ $scope.options = {
+    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+    //scaleBeginAtZero : true,
+responsive: true,
+   maintainAspectRatio: true,
+    //Boolean - Whether grid lines are shown across the chart
+    //scaleShowGridLines : true,
+
+    //String - Colour of the grid lines
+   // scaleGridLineColor : "rgba(0,0,0,.05)",
+
+    //Number - Width of the grid lines
+    //scaleGridLineWidth : 1,
+
+    //Boolean - Whether to show horizontal lines (except X axis)
+    //scaleShowHorizontalLines: true,
+
+    //Boolean - Whether to show vertical lines (except Y axis)
+    //scaleShowVerticalLines: true,
+
+    //Boolean - If there is a stroke on each bar
+   // barShowStroke : true,
+
+    //Number - Pixel width of the bar stroke
+   // barStrokeWidth : 2,
+
+    //Number - Spacing between each of the X value sets
+   // barValueSpacing : 5,
+
+    //Number - Spacing between data sets within X values
+   // barDatasetSpacing : 1,
+
+    //String - A legend template
+    legendTemplate : "<ul ><% for (var i=0; i<datasets.length; i++){%><li ><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+
+}
+ 
 
     $scope.addLead = function () {
       var modalInstance = $uibModal.open({
