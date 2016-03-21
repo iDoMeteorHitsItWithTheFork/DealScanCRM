@@ -46,6 +46,13 @@
 								<option value="" disabled="">ALL EMPLOYEE DATA</option>
 						</select>
 					</div>
+          <div ng-if="bdc.isGM" class="form-group pull-right"
+               style="margin:0; margin-top: -6px; margin-right:20px;width: 268px;">
+            <select class="cs-select cs-skin-slide" ng-options="item.name for item in bdc.dealerships"
+                    ng-model="bdc.dealership">
+              <option value="" disabled="">ALL DEALERSHIP DATA</option>
+            </select>
+          </div>
 				</div>
 				<div style="height: auto;" class="panel-wrapper in collapse">
 					<div class="tabbable no-padding no-margin">

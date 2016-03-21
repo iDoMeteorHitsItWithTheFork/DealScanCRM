@@ -5,12 +5,22 @@ angular.module('dealScanCrmApp')
     _bdc.user = Auth.getCurrentUser();
     _bdc.isAdmin = Auth.isAdmin;
     _bdc.isManager = false;
+    _bdc.isGM = false;
     Auth.hasRole(appConfig.userRoles[2], function(has){
       _bdc.isManager = has;
     });
 
+    Auth.hasRole(appConfig.userRoles[7], function(ans){
+      _bdc.isGM = ans;
+    })
+
+    _bdc.dealerships = [{name: 'Hagerstown Ford'},
+      {name: 'King Kia'},
+      {name: 'King Hyndai'}];
+
     _bdc.teamMates = Dashboard.teamMates();
     _bdc.teamMate = {};
+    _bdc.dealership = {};
 
     _bdc.dataView = 'charts';
 
