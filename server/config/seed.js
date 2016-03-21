@@ -393,6 +393,7 @@ User.sync()
         phone: '6148019788',
         email: "ammie@corrio.com",
         role: "bdc_rep",
+        password: 'a',
         provider: "local"
       }
 

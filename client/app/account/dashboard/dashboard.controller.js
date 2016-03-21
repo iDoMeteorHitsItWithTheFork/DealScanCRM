@@ -1,9 +1,13 @@
 angular.module('dealScanCrmApp')
-  .controller('DashboardCtrl', function ($scope, $state, $uibModal, $location, $anchorScroll, Auth, Util, Dashboard, NgMap) {
+  .controller('DashboardCtrl', function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, NgMap, appConfig) {
     console.log("dashboard controller loaded");
     var _dashboard = this;
     _dashboard.user = Auth.getCurrentUser();
     _dashboard.isAdmin = Auth.isAdmin;
+    _dashboard.isManager = false;
+    Auth.hasRole(appConfig.userRoles[2], function(ans){
+      _dashboard.isManager = ans;
+    });
 
     _dashboard.teamMates = Dashboard.teamMates();
     _dashboard.teamMate = {};
@@ -223,8 +227,8 @@ angular.module('dealScanCrmApp')
       $location.hash('scrollToPoint');
       $anchorScroll();
     }
-    
-    
+
+
   $scope.labels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus', 'Police Interceptor Sedan', 'Mustang',
       'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition','F-Series','E-Series','Transit','Transit Connect','Heavy Trucks'];
   $scope.series = ['Series A', 'Series B'];
@@ -273,7 +277,7 @@ responsive: true,
     legendTemplate : "<ul ><% for (var i=0; i<datasets.length; i++){%><li ><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
 }
- 
+
 
     $scope.addLead = function () {
       var modalInstance = $uibModal.open({
