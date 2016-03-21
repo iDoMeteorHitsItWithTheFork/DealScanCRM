@@ -40,7 +40,7 @@
                 <option value="" disabled="">CHARTS</option>
                 <option value="charts" data-class="fa fa-pie-chart">CHARTS</option>
                 <option value="map" data-class="fa fa-map-marker">MAP</option>
-								 <option value="demo" data-class="fa fa-map-marker">DEMO</option>
+								 <option value="demo" data-class="fa fa-bolt">DEMO</option>
               </select>
             </div>
             <div class="form-group pull-right"
@@ -80,10 +80,10 @@
 									<div class="row">
                   <div class="col-xs-12 hidden-xs hidden-sm hidden-md">
                     <div class="col-md-2">
-                       <table class="table table-stylish">
+                       <table class="table table-stylish" tooltip-placement="bottom" uib-tooltip="Calls">
                         <tbody>
-                        <tr>
-                          <td class="center text-extra-large"><i class="fa fa-phone"></i></td>
+                        <tr >
+                          <td class="center text-extra-large" ><i class="fa fa-phone"></i></td>
                           <td class="hidden-xs hidden-sm hidden-md" ng-hide="true"><span
                             class="text-dark block">Calls</span></td>
                           <td class="center">100</td>
@@ -92,7 +92,7 @@
 											</table>
                     </div>
 										<div class="col-md-2">
-                       <table class="table table-stylish">
+                       <table class="table table-stylish" tooltip-placement="bottom" uib-tooltip="Appointments">
                         <tbody>
                         <tr>
                           <td class="center text-extra-large"><i class="fa fa-calendar-o"></i>
@@ -104,7 +104,7 @@
 											</table>
                     </div>
 										<div class="col-md-2">
-                       <table class="table table-stylish">
+                       <table class="table table-stylish" tooltip-placement="bottom" uib-tooltip="Texts">
                         <tbody>
                         <tr>
                           <td class="center text-extra-large"><i
@@ -116,7 +116,7 @@
 											</table>
                     </div>
 										<div class="col-md-2">
-                       <table class="table table-stylish">
+                       <table class="table table-stylish" tooltip-placement="bottom" uib-tooltip="Appointments Posted">
                         <tbody>
                         <tr>
                           <td class="center text-extra-large"><i
@@ -128,7 +128,7 @@
 											</table>
                     </div>
 										<div class="col-md-2">
-                       <table class="table table-stylish">
+                       <table class="table table-stylish" tooltip-placement="bottom" uib-tooltip="Emails">
                         <tbody>
                         <tr>
                           <td class="center text-extra-large"><i class="fa fa-envelope-o"></i>
@@ -140,11 +140,11 @@
 											</table>
                     </div>
 										<div class="col-md-2">
-                       <table class="table table-stylish">
+                       <table class="table table-stylish" tooltip-placement="bottom" uib-tooltip="Appointments Sold">
                         <tbody>
                         <tr>
-                          <td class="center text-extra-large"><i
-                            class="fa fa-calendar-times-o"></i></td>
+                          <td class="center text-extra-large">
+														<i class="fa fa-calendar-times-o"></i></td>
                           <td class="hidden-xs hidden-sm hidden-md" ng-hide="true">Appts Sold</td>
                           <td class="center">12</td>
                         </tr>
@@ -164,38 +164,38 @@
                         <tbody>
                         <tr>
                           <td class="center text-extra-large"><i class="fa fa-phone"></i></td>
-                          <td class="hidden-xs hidden-sm hidden-md"><span
+                          <td class="hidden-md"><span
                             class="text-dark block">Calls</span></td>
                           <td class="center">100</td>
                         </tr>
                         <tr>
                           <td class="center text-extra-large"><i class="fa fa-calendar-o"></i>
                           </td>
-                          <td class="hidden-xs hidden-sm hidden-md">Appointments</td>
+                          <td class="hidden-md">Appointments</td>
                           <td class="center">217</td>
                         </tr>
                         <tr>
                           <td class="center text-extra-large"><i
                             class="fa fa-commenting-o"></i></td>
-                          <td class="hidden-xs hidden-sm hidden-md">Texts</td>
+                          <td class="hidden-md">Texts</td>
                           <td class="center">350</td>
                         </tr>
                         <tr>
                           <td class="center text-extra-large"><i
                             class="fa fa-calendar-check-o"></i></td>
-                          <td class="hidden-xs hidden-sm hidden-md">Appts Posted</td>
+                          <td class="hidden-md">Appts Posted</td>
                           <td class="center">12</td>
                         </tr>
                         <tr>
                           <td class="center text-extra-large"><i class="fa fa-envelope-o"></i>
                           </td>
-                          <td class="hidden-xs hidden-sm hidden-md">Emails</td>
+                          <td class="hidden-md">Emails</td>
                           <td class="center">36</td>
                         </tr>
                         <tr>
                           <td class="center text-extra-large"><i
                             class="fa fa-calendar-times-o"></i></td>
-                          <td class="hidden-xs hidden-sm hidden-md">Appts Sold</td>
+                          <td class="hidden-md">Appts Sold</td>
                           <td class="center">12</td>
                         </tr>
                         </tbody>
@@ -250,21 +250,21 @@
                     <div class="row p-t-5">
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Cars
+                          <small class="text-muted fs-14">Cars
                             <br>
                             <strong>$6,052</strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Trucks
+                          <small class="text-muted fs-14">Trucks
                             <br>
                             <strong>$3,488 </strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="padding-5">
-                          <small class="text-muted">Total
+                          <small class="text-muted fs-14">Total
                             <br>
                             <strong>$9,530</strong></small>
                         </div>
@@ -272,10 +272,10 @@
                     </div>
                     <div class="row padding-top-25">
                       <div class="col-md-12 tc chart-padding" style="padding:50px; padding-top:0; padding-bottom: 0; padding-left:75px; padding-right:75px;" >
-                        <canvas id="wonChart" style="cursor:pointer;" chart-click="clickChart"
+                        <canvas id="smallChart" style="cursor:pointer;" chart-click="clickChart"
                                 class="chart chart-doughnut" width="200" height="200"
-                                chart-data="dashboard.data" chart-options="dashboard.options" chart-labels="dashboard.labels"
-                                 chart-colours="dashboard.colors"
+                                chart-data="dashboard.smallData" chart-options="dashboard.options" chart-labels="dashboard.smallLabels"
+                                 chart-colours="dashboard.smallColors"
                                 chart-legend="false"></canvas>
                       </div>
                     </div>
@@ -330,21 +330,21 @@
                     <div class="row p-t-5">
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Cars
+                          <small class="text-muted fs-14">Cars
                             <br>
                             <strong>$6,052</strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Trucks
+                          <small class="text-muted fs-14">Trucks
                             <br>
                             <strong>$3,488 </strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="padding-5">
-                          <small class="text-muted">Total
+                          <small class="text-muted fs-14">Total
                             <br>
                             <strong>$9,530</strong></small>
                         </div>
@@ -410,21 +410,21 @@
                     <div class="row p-t-5">
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Cars
+                          <small class="text-muted fs-14">Cars
                             <br>
                             <strong>$6,052</strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Trucks
+                          <small class="text-muted fs-14">Trucks
                             <br>
                             <strong>$3,488 </strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="padding-5">
-                          <small class="text-muted">Total
+                          <small class="text-muted fs-14">Total
                             <br>
                             <strong>$9,530</strong></small>
                         </div>
@@ -554,21 +554,21 @@
                     <div class="row p-t-5">
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Cars
+                          <small class="text-muted fs-14">Cars
                             <br>
                             <strong>$6,052</strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="border-right border-dark padding-5">
-                          <small class="text-muted">Trucks
+                          <small class="text-muted fs-14">Trucks
                             <br>
                             <strong>$3,488 </strong></small>
                         </div>
                       </div>
                       <div class="col-xs-4 no-padding text-center">
                         <div class="padding-5">
-                          <small class="text-muted">Total
+                          <small class="text-muted fs-14">Total
                             <br>
                             <strong>$9,530</strong></small>
                         </div>
@@ -577,17 +577,16 @@
 											</div>
                     <div class="row padding-top-25 tc" style="margin-top:40px;">
                       <div class="col-md-12 tc" style="padding:0; padding-top:0; padding-bottom: 0; padding-right:10px;">
-                        <canvas id="bar" class="chart chart-bar" chart-legend="false" chart-data="data" chart-labels="labels" chart-series="series" chart-click="clickChart"> </canvas>
+                        <canvas id="bar" class="chart chart-bar" chart-legend="false" chart-data="data2" chart-labels="labels" chart-series="series" chart-click="clickChart"> </canvas>
 												<div id="js-legend" class="chart-legend"></div>
                       </div>
                     </div>
                   </div>
 								</div>
-              
-								
-								
                 <div ng-if="dashboard.dataView === 'map' && dashboard.dataView !== 'demo'">
-                  <ng-map center="[39.638113, -77.725292]" zoom="13"></ng-map>
+                  <ng-map center="[39.638113, -77.725292]" zoom="13">
+									  <marker ng-repeat="marker in data" position="{{::marker.Location}}"></marker>
+									</ng-map>
                 </div>
 
               </div>
