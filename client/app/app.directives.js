@@ -1,4 +1,30 @@
 'use strict';
+
+angular.module('dealScanCrmApp').directive('crmSidebar', function($window) {
+  return {
+
+    restrict: 'AE',
+    link: function(s, e, a) {
+
+      $window.onresize = function(event) {
+				console.log($window.innerWidth);
+        if ($window.innerWidth < 1200)
+
+        {
+          //e.addClass('app-sidebar-closed')
+         
+        } else {
+         // e.removeClass('app-sidebar-closed');
+        }
+      }
+
+
+    }
+
+
+  }
+
+});
 angular.module('dealScanCrmApp')
 .directive('ctFullheight', ['$window', '$rootScope', '$timeout', 
 function ($window, $rootScope, $timeout, mq) {

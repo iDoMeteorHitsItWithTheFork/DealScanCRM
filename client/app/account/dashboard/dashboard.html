@@ -40,10 +40,11 @@
                 <option value="" disabled="">CHARTS</option>
                 <option value="charts" data-class="fa fa-pie-chart">CHARTS</option>
                 <option value="map" data-class="fa fa-map-marker">MAP</option>
+								 <option value="demo" data-class="fa fa-map-marker">DEMO</option>
               </select>
             </div>
             <div class="form-group pull-right"
-                 style="margin:0; margin-top: -6px; margin-right:20px;width:300px;">
+                 style="margin:0; margin-top: -6px; margin-right:20px;width: 268px;">
               <select class="cs-select cs-skin-slide" ng-options="item.profile.name for item in dashboard.teamMates"
                       ng-model="dashboard.teamMate">
                 <option value="" disabled="">ALL EMPLOYEE DATA</option>
@@ -75,16 +76,90 @@
 
               </ul>
               <div class="tab-content p-a-15">
-                <div ng-hide="dashboard.dataView === 'map'" class="row">
-                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                    <div class="col-md-12">
-                      <div class="partition-light-grey padding-15 text-center m-b-10">
-                        <h4 class="no-margin">Today's Statics</h4>
-                        <span class="text-light">All Employee Data</span>
-                      </div>
+                <div ng-hide="dashboard.dataView === 'map' || dashboard.dataView === 'demo'" class="row">
+									<div class="row">
+                  <div class="col-xs-12 hidden-xs hidden-sm hidden-md">
+                    <div class="col-md-2">
+                       <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i class="fa fa-phone"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md" ng-hide="true"><span
+                            class="text-dark block">Calls</span></td>
+                          <td class="center">100</td>
+                        </tr>
+												 </tbody>
+											</table>
                     </div>
-
-                    <div class="col-md-12">
+										<div class="col-md-2">
+                       <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i class="fa fa-calendar-o"></i>
+                          </td>
+                          <td class="hidden-xs hidden-sm hidden-md" ng-hide="true">Appts</td>
+                          <td class="center">217</td>
+                        </tr>
+												 </tbody>
+											</table>
+                    </div>
+										<div class="col-md-2">
+                       <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i
+                            class="fa fa-commenting-o"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md" ng-hide="true">Texts</td>
+                          <td class="center">350</td>
+                        </tr>
+												 </tbody>
+											</table>
+                    </div>
+										<div class="col-md-2">
+                       <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i
+                            class="fa fa-calendar-check-o"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md" ng-hide="true">Appts Posted</td>
+                          <td class="center">12</td>
+                        </tr>
+												 </tbody>
+											</table>
+                    </div>
+										<div class="col-md-2">
+                       <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i class="fa fa-envelope-o"></i>
+                          </td>
+                          <td class="hidden-xs hidden-sm hidden-md" ng-hide="true">Emails</td>
+                          <td class="center">36</td>
+                        </tr>
+												 </tbody>
+											</table>
+                    </div>
+										<div class="col-md-2">
+                       <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i
+                            class="fa fa-calendar-times-o"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md" ng-hide="true">Appts Sold</td>
+                          <td class="center">12</td>
+                        </tr>
+												 </tbody>
+											</table>
+                    </div>
+										</div>
+                  </div>
+ 									<div class="col-xs-12 col-sm-6 col-md-6 hidden-lg">
+									<div class="col-md-12" style="padding:0;">
+										<div class="partition-light-grey padding-15 text-center m-b-10">
+											<h4 class="no-margin">Today's Statics</h4>
+											<span class="text-light">All Employee Data</span>
+										</div>
+									</div>
                       <table class="table table-stylish">
                         <tbody>
                         <tr>
@@ -126,9 +201,7 @@
                         </tbody>
                       </table>
                     </div>
-                  </div>
-
-                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 m-b-20">
+                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 m-b-20">
                     <h3 class="tc m-b-0">
                       WON
                       <div class="btn-group" uib-dropdown>
@@ -198,17 +271,17 @@
                       </div>
                     </div>
                     <div class="row padding-top-25">
-                      <div class="col-md-12 tc"
-                           style="padding:50px; padding-top:0; padding-bottom: 0;">
+                      <div class="col-md-12 tc chart-padding" style="padding:50px; padding-top:0; padding-bottom: 0; padding-left:75px; padding-right:75px;" >
                         <canvas id="wonChart" style="cursor:pointer;" chart-click="clickChart"
                                 class="chart chart-doughnut" width="200" height="200"
                                 chart-data="dashboard.data" chart-options="dashboard.options" chart-labels="dashboard.labels"
                                  chart-colours="dashboard.colors"
-                                chart-legend="true"></canvas>
+                                chart-legend="false"></canvas>
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+									<div class="clearfix hidden-xs hidden-lg" ></div>
+                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                     <h3 class="tc m-b-0">
                       LOST
                       <div class="btn-group" uib-dropdown>
@@ -278,17 +351,18 @@
                       </div>
                     </div>
                     <div class="row padding-top-25">
-                      <div class="col-md-12 tc"
-                           style="padding:50px; padding-top:0; padding-bottom: 0;">
+                      <div class="col-md-12 tc chart-padding"
+                           style="padding:50px; padding-top:0; padding-bottom: 0; padding-left:75px; padding-right:75px;">
                         <canvas id="wonChart" chart-click="clickChart"
                                 class="chart chart-doughnut" width="200" height="200"
                                 chart-data="dashboard.data" chart-options="dashboard.options" chart-labels="dashboard.labels"
                                 chart-colours="dashboard.colors"
-                                chart-legend="true"></canvas>
+                                chart-legend="false"></canvas>
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+									<div class="clearfix hidden-sm hidden-md hidden-lg" ></div>
+                  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                     <h3 class="tc m-b-0">
                       TOTAL
                       <div class="btn-group" uib-dropdown>
@@ -357,18 +431,162 @@
                       </div>
                     </div>
                     <div class="row padding-top-25">
-                      <div class="col-md-12 tc"
-                           style="padding:50px; padding-top:0; padding-bottom: 0;">
+                      <div class="col-md-12 tc chart-padding"
+                           style="padding:50px; padding-top:0; padding-bottom: 0; padding-left:75px; padding-right:75px;">
                         <canvas id="wonChart" chart-click="clickChart"
                                 class="chart chart-doughnut" width="200" height="200"
                                 chart-data="dashboard.data" chart-options="dashboard.options" chart-labels="dashboard.labels"
                                 chart-colours="dashboard.colors"
-                                chart-legend="true"></canvas>
+                                chart-legend="false"></canvas>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div ng-if="dashboard.dataView === 'map'">
+								
+								
+                <div ng-hide="dashboard.dataView === 'map' || dashboard.dataView === 'charts'" class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-2 col-lg-3">
+                    <div class="col-md-12 hidden-sm hidden-md">
+                      <div class="partition-light-grey padding-15 text-center m-b-10">
+                        <h4 class="no-margin">Today's Statics</h4>
+                        <span class="text-light">All Employee Data</span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <table class="table table-stylish">
+                        <tbody>
+                        <tr>
+                          <td class="center text-extra-large"><i class="fa fa-phone"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md"><span
+                            class="text-dark block">Calls</span></td>
+                          <td class="center">100</td>
+                        </tr>
+                        <tr>
+                          <td class="center text-extra-large"><i class="fa fa-calendar-o"></i>
+                          </td>
+                          <td class="hidden-xs hidden-sm hidden-md">Appointments</td>
+                          <td class="center">217</td>
+                        </tr>
+                        <tr>
+                          <td class="center text-extra-large"><i
+                            class="fa fa-commenting-o"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md">Texts</td>
+                          <td class="center">350</td>
+                        </tr>
+                        <tr>
+                          <td class="center text-extra-large"><i
+                            class="fa fa-calendar-check-o"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md">Appts Posted</td>
+                          <td class="center">12</td>
+                        </tr>
+                        <tr>
+                          <td class="center text-extra-large"><i class="fa fa-envelope-o"></i>
+                          </td>
+                          <td class="hidden-xs hidden-sm hidden-md">Emails</td>
+                          <td class="center">36</td>
+                        </tr>
+                        <tr>
+                          <td class="center text-extra-large"><i
+                            class="fa fa-calendar-times-o"></i></td>
+                          <td class="hidden-xs hidden-sm hidden-md">Appts Sold</td>
+                          <td class="center">12</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div class="col-xs-12 col-sm-12 col-md-10 col-lg-9 m-b-20">
+                   <div class="col-md-4 p-l-0 p-t-10">
+										<div class="form-group pull-left" style="margin:0;margin-right:10px; width:150px">
+											<select class="cs-select cs-skin-slide" ng-model="dataView">
+												<option value="" disabled="">TOTAL</option>
+												<option value="NEW & USED">WON</option>
+												<option value="NEW">LOST</option>
+												<option value="USED">TOTAL</option>
+											</select>
+										</div>
+                      <div class="btn-group m-t-10" uib-dropdown>
+                        <button ng-click="$event.stopPropagation();" style="margin-top: -3px;" type="button" class="btn btn-primary btn-o btn-xs" uib-dropdown-toggle ng-disabled="disabled">
+                          <span class="caret"></span>
+                        </button>
+                        <ul ng-click="$event.stopPropagation();" uib-dropdown-menu role="menu" style=" left: -68px;">
+                          <div class="form-inline">
+                            <div class="checkbox clip-check check-primary checkbox-inline">
+                              <input type="checkbox" id="checkbox10" value="1" checked="">
+                              <label for="checkbox10">
+                                Walk-In
+                              </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary checkbox-inline">
+                              <input type="checkbox" id="checkbox11" value="1" checked="">
+                              <label for="checkbox11">
+                                Phone
+                              </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary checkbox-inline">
+                              <input type="checkbox" id="checkbox12" value="1" checked="">
+                              <label for="checkbox12">
+                                Email
+                              </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary checkbox-inline">
+                              <input type="checkbox" id="checkbox13" value="1" checked="">
+                              <label for="checkbox13">
+                                Option
+                              </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary checkbox-inline">
+                              <input type="checkbox" id="checkbox14" value="1" checked="">
+                              <label for="checkbox14">
+                                Option
+                              </label>
+                            </div>
+                          </div>
+                        </ul>
+                      </div>
+                   
+									</div>
+										<div class="col-md-8 p-r-0">
+											
+										
+                    <div class="row p-t-5">
+                      <div class="col-xs-4 no-padding text-center">
+                        <div class="border-right border-dark padding-5">
+                          <small class="text-muted">Cars
+                            <br>
+                            <strong>$6,052</strong></small>
+                        </div>
+                      </div>
+                      <div class="col-xs-4 no-padding text-center">
+                        <div class="border-right border-dark padding-5">
+                          <small class="text-muted">Trucks
+                            <br>
+                            <strong>$3,488 </strong></small>
+                        </div>
+                      </div>
+                      <div class="col-xs-4 no-padding text-center">
+                        <div class="padding-5">
+                          <small class="text-muted">Total
+                            <br>
+                            <strong>$9,530</strong></small>
+                        </div>
+                      </div>
+                    </div>
+											</div>
+                    <div class="row padding-top-25 tc" style="margin-top:40px;">
+                      <div class="col-md-12 tc" style="padding:0; padding-top:0; padding-bottom: 0; padding-right:10px;">
+                        <canvas id="bar" class="chart chart-bar" chart-legend="false" chart-data="data" chart-labels="labels" chart-series="series" chart-click="clickChart"> </canvas>
+												<div id="js-legend" class="chart-legend"></div>
+                      </div>
+                    </div>
+                  </div>
+								</div>
+              
+								
+								
+                <div ng-if="dashboard.dataView === 'map' && dashboard.dataView !== 'demo'">
                   <ng-map center="[39.638113, -77.725292]" zoom="13"></ng-map>
                 </div>
 
@@ -386,6 +604,7 @@
 
       </div>
     </div>
+		
     <div class="row flipIn flipOut" ng-hide="!showTable">
       <div class="col-md-12">
         <div class="panel panel-white">
@@ -712,9 +931,9 @@
         </div>
       </div>
     </div>
-    <span id="scrollToPoint" style="visibility:hidden"></span>
+    <span id="scrollToPoint" style="visibility:hidden;"></span>
   </div>
-  <div class="container-fluid container-fullw">
+  <div class="container-fluid container-fullw ">
 
     <div class="row">
       <div class="col-xs-12 col-md-5 col-lg-4">

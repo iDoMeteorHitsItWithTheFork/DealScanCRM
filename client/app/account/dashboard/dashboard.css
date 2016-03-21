@@ -131,3 +131,15 @@
   -ms-backface-visibility: visible!important;
   backface-visibility: visible!important
 }
+
+.chart-padding {
+  padding-left:75px;
+  padding-right:75px;
+}
+
+@media (min-width: 1500px) {
+.chart-padding {
+  padding-left:100px!important;
+  padding-right:100px!important;
+}
+}
