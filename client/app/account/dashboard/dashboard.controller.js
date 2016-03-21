@@ -19,6 +19,7 @@ angular.module('dealScanCrmApp')
     });
 
 
+
     $scope.itemArray = [
       {id: 1, name: 'first'},
       {id: 2, name: 'second'},
@@ -36,11 +37,11 @@ angular.module('dealScanCrmApp')
         "Source": 2,
         "Location": "-61.7134, -116.20717"
       },
-      {"model": "  Flex", "Customer": "Preston Z. Mack", "Source": 4, "Location": "32.03139, -166.94248"},
-      {"model": "  Transit", "Customer": "Hayes Dunn", "Source": 4, "Location": "13.70113, -111.26865"},
-      {"model": "  Edge", "Customer": "Lana H. Sheppard", "Source": 0, "Location": "20.48076, 38.38029"},
-      {"model": "Fiesta", "Customer": "Sybil O. Ashley", "Source": 3, "Location": "-33.25441, 172.41903"},
-      {"model": "  C-MAX", "Customer": "Chiquita A. Hart", "Source": 3, "Location": "-17.26592, 86.54964"},
+      {"model": "  Flex", "Customer": "Preston Z. Mack", "Source": 4, "Location": "39.649315, -77.716352"},
+      {"model": "  Transit", "Customer": "Hayes Dunn", "Source": 4, "Location": "38.649315, -77.716352"},
+      {"model": "  Edge", "Customer": "Lana H. Sheppard", "Source": 0, "Location": "39.649315, -78.716352"},
+      {"model": "Fiesta", "Customer": "Sybil O. Ashley", "Source": 3, "Location": "39.645, -77.712"},
+      {"model": "  C-MAX", "Customer": "Chiquita A. Hart", "Source": 3, "Location": "39.6315, -77.7352"},
       {"model": "  Taurus", "Customer": "Ira P. Aguilar", "Source": 0, "Location": "-36.91876, -154.89909"},
       {"model": "  Transit Connect", "Customer": "Aurora M. Barker", "Source": 2, "Location": "-61.40704, 35.46322"},
       {"model": "  F-Series", "Customer": "Allen O. Cotton", "Source": 2, "Location": "38.59563, 144.26042"},
