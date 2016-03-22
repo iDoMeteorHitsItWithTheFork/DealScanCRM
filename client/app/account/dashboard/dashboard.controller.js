@@ -33,6 +33,7 @@ angular.module('dealScanCrmApp')
     });
 
 
+
     $scope.itemArray = [
       {id: 1, name: 'first'},
       {id: 2, name: 'second'},
@@ -43,18 +44,18 @@ angular.module('dealScanCrmApp')
 
 
     _dashboard.sources = ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
-    var data = [
+    $scope.data = [
       {
         "model": "  Police Interceptor Utility",
         "Customer": "Burton Stuart",
         "Source": 2,
         "Location": "-61.7134, -116.20717"
       },
-      {"model": "  Flex", "Customer": "Preston Z. Mack", "Source": 4, "Location": "32.03139, -166.94248"},
-      {"model": "  Transit", "Customer": "Hayes Dunn", "Source": 4, "Location": "13.70113, -111.26865"},
-      {"model": "  Edge", "Customer": "Lana H. Sheppard", "Source": 0, "Location": "20.48076, 38.38029"},
-      {"model": "Fiesta", "Customer": "Sybil O. Ashley", "Source": 3, "Location": "-33.25441, 172.41903"},
-      {"model": "  C-MAX", "Customer": "Chiquita A. Hart", "Source": 3, "Location": "-17.26592, 86.54964"},
+      {"model": "  Flex", "Customer": "Preston Z. Mack", "Source": 4, "Location": "39.649315, -77.716352"},
+      {"model": "  Transit", "Customer": "Hayes Dunn", "Source": 4, "Location": "38.649315, -77.716352"},
+      {"model": "  Edge", "Customer": "Lana H. Sheppard", "Source": 0, "Location": "39.649315, -78.716352"},
+      {"model": "Fiesta", "Customer": "Sybil O. Ashley", "Source": 3, "Location": "39.645, -77.712"},
+      {"model": "  C-MAX", "Customer": "Chiquita A. Hart", "Source": 3, "Location": "39.6315, -77.7352"},
       {"model": "  Taurus", "Customer": "Ira P. Aguilar", "Source": 0, "Location": "-36.91876, -154.89909"},
       {"model": "  Transit Connect", "Customer": "Aurora M. Barker", "Source": 2, "Location": "-61.40704, 35.46322"},
       {"model": "  F-Series", "Customer": "Allen O. Cotton", "Source": 2, "Location": "38.59563, 144.26042"},
@@ -210,13 +211,18 @@ angular.module('dealScanCrmApp')
       'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition','F-Series','E-Series','Transit','Transit Connect','Heavy Trucks'];
 
     _dashboard.data = [
-      getModelCount(_dashboard.labels[0], data), getModelCount(_dashboard.labels[1], data), getModelCount(_dashboard.labels[2], data),
-      getModelCount(_dashboard.labels[3], data), getModelCount(_dashboard.labels[4], data), getModelCount(_dashboard.labels[5], data),
-      getModelCount(_dashboard.labels[6], data), getModelCount(_dashboard.labels[7], data), getModelCount(_dashboard.labels[8], data),
-      getModelCount(_dashboard.labels[9], data), getModelCount(_dashboard.labels[10], data), getModelCount(_dashboard.labels[11], data),
-      getModelCount(_dashboard.labels[12], data), getModelCount(_dashboard.labels[13], data), getModelCount(_dashboard.labels[14], data),
-      getModelCount(_dashboard.labels[15], data), getModelCount(_dashboard.labels[16], data), getModelCount(_dashboard.labels[17], data)];
-
+      getModelCount(_dashboard.labels[0], $scope.data), getModelCount(_dashboard.labels[1],  $scope.data), getModelCount(_dashboard.labels[2],  $scope.data),
+      getModelCount(_dashboard.labels[3],  $scope.data), getModelCount(_dashboard.labels[4],  $scope.data), getModelCount(_dashboard.labels[5],  $scope.data),
+      getModelCount(_dashboard.labels[6],  $scope.data), getModelCount(_dashboard.labels[7],  $scope.data), getModelCount(_dashboard.labels[8],  $scope.data),
+      getModelCount(_dashboard.labels[9],  $scope.data), getModelCount(_dashboard.labels[10],  $scope.data), getModelCount(_dashboard.labels[11],  $scope.data),
+      getModelCount(_dashboard.labels[12],  $scope.data), getModelCount(_dashboard.labels[13],  $scope.data), getModelCount(_dashboard.labels[14],  $scope.data),
+      getModelCount(_dashboard.labels[15],  $scope.data), getModelCount(_dashboard.labels[16],  $scope.data), getModelCount(_dashboard.labels[17],  $scope.data)];
+  
+      _dashboard.smallData = [getModelCount(_dashboard.labels[0],  $scope.data), getModelCount(_dashboard.labels[1],  $scope.data), getModelCount(_dashboard.labels[2],  $scope.data), 
+                              getModelCount(_dashboard.labels[3],  $scope.data), getModelCount(_dashboard.labels[4],  $scope.data)];
+      _dashboard.smallColors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5'];
+      _dashboard.smallLabels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus'];
+  
     _dashboard.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
 
     _dashboard.options = {
@@ -243,13 +249,13 @@ angular.module('dealScanCrmApp')
       'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition','F-Series','E-Series','Transit','Transit Connect','Heavy Trucks'];
   $scope.series = ['Series A', 'Series B'];
 
-  $scope.data = [
- [getModelCount(_dashboard.labels[0], data), getModelCount(_dashboard.labels[1], data), getModelCount(_dashboard.labels[2], data),
-      getModelCount(_dashboard.labels[3], data), getModelCount(_dashboard.labels[4], data), getModelCount(_dashboard.labels[5], data),
-      getModelCount(_dashboard.labels[6], data), getModelCount(_dashboard.labels[7], data), getModelCount(_dashboard.labels[8], data),
-      getModelCount(_dashboard.labels[9], data), getModelCount(_dashboard.labels[10], data), getModelCount(_dashboard.labels[11], data),
-      getModelCount(_dashboard.labels[12], data), getModelCount(_dashboard.labels[13], data), getModelCount(_dashboard.labels[14], data),
-      getModelCount(_dashboard.labels[15], data), getModelCount(_dashboard.labels[16], data), getModelCount(_dashboard.labels[17], data)]
+  $scope.data2 = [
+ [getModelCount(_dashboard.labels[0],  $scope.data), getModelCount(_dashboard.labels[1],  $scope.data), getModelCount(_dashboard.labels[2],  $scope.data),
+      getModelCount(_dashboard.labels[3], $scope.data), getModelCount(_dashboard.labels[4], $scope.data), getModelCount(_dashboard.labels[5],  $scope.data),
+      getModelCount(_dashboard.labels[6], $scope.data), getModelCount(_dashboard.labels[7], $scope.data), getModelCount(_dashboard.labels[8],  $scope.data),
+      getModelCount(_dashboard.labels[9], $scope.data), getModelCount(_dashboard.labels[10], $scope.data), getModelCount(_dashboard.labels[11],  $scope.data),
+      getModelCount(_dashboard.labels[12], $scope.data), getModelCount(_dashboard.labels[13], $scope.data), getModelCount(_dashboard.labels[14],  $scope.data),
+      getModelCount(_dashboard.labels[15], $scope.data), getModelCount(_dashboard.labels[16], $scope.data), getModelCount(_dashboard.labels[17],  $scope.data)]
   ];
  $scope.options = {
     //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value

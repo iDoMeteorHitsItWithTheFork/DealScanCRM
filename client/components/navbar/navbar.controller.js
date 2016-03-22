@@ -2,7 +2,7 @@
 
 
 angular.module('dealScanCrmApp')
-  .controller('NavbarController', function($scope, Auth){
+  .controller('NavbarController', function($scope, Auth, $state){
 
       var _nav = this;
       _nav.isLoggedIn = Auth.isLoggedIn;
@@ -11,6 +11,9 @@ angular.module('dealScanCrmApp')
 
 
 
+        _nav.logout = function(){
+            $state.go('logout');
+        }
 
 
     });
