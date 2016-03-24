@@ -1,0 +1,20 @@
+.dealership-select {
+  width: 199px;
+  margin-right: 25px;
+}
+.m-b-0 {
+  margin-bottom:0!important;
+}
+
+.col-no-padding {
+  padding-left:0;
+  padding-right:0;
+}
+.pointer {
+  cursor:pointer;
+}
+
+.member-container {
+    height: 207px;
+    overflow-x: auto;
+}

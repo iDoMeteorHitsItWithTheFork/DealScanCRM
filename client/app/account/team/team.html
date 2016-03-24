@@ -1,0 +1,60 @@
+<div class="wrap-content container fade-in-up ng-cloak" id="container">
+
+  <div class="breadcrumb-wrapper">
+    <h4 class="mainTitle no-margin inline">TEAM MANAGEMENT</h4>
+		<span class="pull-right" style="margin-top:-8px">
+			<a class="btn btn-wide btn-primary btn-o pull-right" href="" ng-click="team.createTeam()"><i class="fa fa-users"></i> CREATE TEAM</a>
+		</span>
+  </div>
+  <div class="container-fluid container-fullw">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group" style="width:300px;">
+        <select class="cs-select cs-skin-slide" ng-model="team.selectedDealership">
+           <option ng-repeat="team in team.dealerships" value="{{::team.name}}">{{::team.name}}</option>
+         </select>
+       </div>
+      </div>
+    </div>
+    <div class="row">
+      <div ng-repeat="team in team.teams" class="col-xs-12 col-md-4 col-lg-4">
+        <div class="panel panel-white no-radius">
+          <div class="panel-heading border-bottom">
+            <h4 class="m-b-0">{{team.name}}</h4>
+            <button class="btn btn-primary btn-o pull-right" ng-click="editTeam(team)" style="margin-top: -25px;">EDIT TEAM</button>
+          </div>
+          <div class="panel-body">
+            <div class="col-md-12 col-no-padding">
+              <h4>{{team.dealership}}</h4>
+            </div>
+             <div>
+            <div class="col-md-12 col-no-padding member-container">
+              <div>
+                  <table class="table no-margin">
+                      <tbody>
+                      <tr ng-repeat="member in team.members">
+                        <td class="center"><img alt="image" class="img-circle  h-40" src="assets/images/profile.jpg"></td>
+                        <td>
+                        <a href="#">
+                          {{member.profile.name}}
+                        </a>
+                          <span class="text-small block text-light">{{member.profile.email}}</span>
+                        </td>
+                        <td><span class="label partition-blue">{{member.profile.role}}</span></td>
+                      </tr>
+                      </tbody>
+                    </table>
+               </div>
+            </div>
+          </div>
+
+          
+          
+        </div>
+      </div>
+      
+      
+      
+    </div>
+  </div>
+</div>
