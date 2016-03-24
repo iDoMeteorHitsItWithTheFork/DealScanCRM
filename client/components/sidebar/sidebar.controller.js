@@ -25,14 +25,16 @@ angular.module('dealScanCrmApp')
           menu = [{title: 'Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'}];
+            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
+            {title: 'Team Management', alias: 't', state: 'home.team'}];
           break;
         case appConfig.userRoles[1]:
           console.log(appConfig.userRoles[1]);
           menu = [{title: 'Dashboard', alias: 'd', state: 'home.bdc'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'}];
+            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
+            {title: 'Team Management', alias: 't', state: 'home.team'}];
           break;
         case appConfig.userRoles[5]:
           console.log(appConfig.userRoles[5]);
@@ -40,7 +42,8 @@ angular.module('dealScanCrmApp')
             {title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'}];
+            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
+            {title: 'Team Management', alias: 't', state: 'home.team'}];
           break;
         default:
           console.log('Default');
@@ -48,7 +51,8 @@ angular.module('dealScanCrmApp')
             {title: 'Lead Management', alias: 'l', state: 'home.bdc'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'}];
+            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
+            {title: 'Team Management', alias: 't', state: 'home.team'}];
           break;
       }
       return menu;

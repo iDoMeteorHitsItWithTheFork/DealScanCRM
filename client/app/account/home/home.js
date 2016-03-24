@@ -43,5 +43,28 @@ angular.module('dealScanCrmApp')
                     },
                 }
             })
+            .state('home.team', {
+                url: '/team',
+                title: 'Manage Team',
+                authenticate: true,
+                resolve: {
+                    teamMembers:function(Dashboard, $q){
+                        var df = $q.defer();
+                        Dashboard.getTeamMates(function(teamMates){
+                            console.log(teamMates);
+                            df.resolve(teamMates);
+                        }, function(err){
+                            df.reject(err.data);
+                        });
+                        return df.$promise;
+                    }
+                },
+                views: {
+                    'pageContent': {
+                        templateUrl: 'app/account/team/team.html',
+                        controller: 'TeamCtrl as team'
+                    },
+                }
+            })
         ;
     });
