@@ -35,7 +35,6 @@ angular.module('dealScanCrmApp')
                         console.log('login successfull');
                         // Logged in, redirect to home
                         this.$state.go(this.landingPage(Auth.getCurrentUser()));
-                        this.$state.go('home.dashboard');
                     })
                     .catch(err => {
                         this.errors.other = err.message;
