@@ -217,12 +217,13 @@ angular.module('dealScanCrmApp')
       getModelCount(_dashboard.labels[9],  $scope.data), getModelCount(_dashboard.labels[10],  $scope.data), getModelCount(_dashboard.labels[11],  $scope.data),
       getModelCount(_dashboard.labels[12],  $scope.data), getModelCount(_dashboard.labels[13],  $scope.data), getModelCount(_dashboard.labels[14],  $scope.data),
       getModelCount(_dashboard.labels[15],  $scope.data), getModelCount(_dashboard.labels[16],  $scope.data), getModelCount(_dashboard.labels[17],  $scope.data)];
-  
-      _dashboard.smallData = [getModelCount(_dashboard.labels[0],  $scope.data), getModelCount(_dashboard.labels[1],  $scope.data), getModelCount(_dashboard.labels[2],  $scope.data), 
-                              getModelCount(_dashboard.labels[3],  $scope.data), getModelCount(_dashboard.labels[4],  $scope.data)];
+
+      _dashboard.smallData = [getModelCount(_dashboard.labels[0],  $scope.data), getModelCount(_dashboard.labels[1],  $scope.data),
+                              getModelCount(_dashboard.labels[2],  $scope.data), getModelCount(_dashboard.labels[3],  $scope.data),
+                              getModelCount(_dashboard.labels[4],  $scope.data)];
       _dashboard.smallColors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5'];
       _dashboard.smallLabels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus'];
-  
+
     _dashboard.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
 
     _dashboard.options = {
@@ -240,8 +241,8 @@ angular.module('dealScanCrmApp')
     $scope.clickChart = function (points, evt) {
       console.log(points, evt);
       $scope.showTable = true;
-      $location.hash('scrollToPoint');
-      $anchorScroll();
+      //$location.hash('scrollToPoint');
+      $anchorScroll('scrollToPoint');
     }
 
 
