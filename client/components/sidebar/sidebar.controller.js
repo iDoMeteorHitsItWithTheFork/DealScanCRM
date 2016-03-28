@@ -13,6 +13,7 @@ angular.module('dealScanCrmApp')
     }, {option: 'My Messages', action: null}];
 
 
+
     _sidebar.logout = function () {
       $state.go('logout');
     }
