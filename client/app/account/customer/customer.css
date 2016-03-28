@@ -1,0 +1,93 @@
+
+.cusTab {
+  margin-bottom: 20px;
+}
+
+.actvityPanel {
+  height: 275px;
+  max-height: 275px !important;
+  overflow-y: scroll;
+  overflow-x: hidden !important;
+}
+
+.customPanelHeight {
+  min-height: 0px !important;
+  height: 30px;
+  padding: 10px 0px 27px 10px !important;
+}
+.menuText {
+  font-size: 11px;
+  border-width: 10px;
+  align-content: center;
+  box-shadow: none;
+}
+
+.morePhotos {
+  border-style: solid !important;
+  border-width: 1px;
+}
+.ul {
+  margin-top: -5px;
+}
+
+.tabMenu {
+  margin-top: -5px;
+}
+
+.navButtons {
+  margin-top: 15px;
+}
+.tabbable {
+  margin-top: -20px;
+  box-shadow: none;
+}
+
+.cusRow {
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+}
+
+.butt {
+  height: 50px;
+  width: 50px;
+}
+
+.docPanel {
+  max-height: 75px;
+}
+
+/* Experiences */
+ul.experiences li {
+  position:relative; /* so that pseudoelements are positioned relatively to their "li"s*/
+  /* use padding-bottom instead of margin-bottom.*/
+  margin-bottom: 0; /* This overrides previously specified margin-bottom */
+  padding-bottom: 0.5em;
+}
+
+ul.experiences li:after {
+  /* bullets */
+  content: url('https://qph.is.quoracdn.net/main-qimg-e9c30971d9aedf18db1a3f6419fb0dd8?convert_to_webp=true');
+  position: absolute;
+  left: -24px; /*adjust manually*/
+  top: 0px;
+}
+
+ul.experiences li:before {
+  /* lines */
+  content:"";
+  position: absolute;
+  left: -16px; /* adjust manually */
+  border-left: 1px solid #5FA5E7;
+  height: 100%;
+  width: 1px;
+}
+
+ul.experiences li:first-child:before {
+  /* first li's line */
+  top: 6px; /* moves the line down so that it disappears under the bullet. Adjust manually */
+}
+
+ul.experiences li:last-child:before {
+  /* last li's line */
+  height: 6px; /* shorten the line so it goes only up to the bullet. Is equal to first-child:before's top */
+}

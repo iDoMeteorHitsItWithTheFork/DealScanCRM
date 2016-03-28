@@ -12,7 +12,7 @@ angular.module('dealScanCrmApp')
         }, {option: 'My Messages', action: null}];
 
         _sidebar.menu = [{title: 'Dashboard', alias: 'd', state: 'home.dashboard'},
-            {title: 'Profile', alias: 'p', state: 'home.profile'},
+            {title: 'Customer', alias: 'c', state: 'home.customer'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Lead Management', alias: 'l', state: 'home.bdc'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'}];
