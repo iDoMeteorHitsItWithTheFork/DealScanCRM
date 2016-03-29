@@ -6,8 +6,11 @@ angular.module('dealScanCrmApp')
     _customer.user = Auth.getCurrentUser();
 
     _customer.info = {
-      name: 'Cary Gaskall*',
-      phone: '222-444-MMMM'
+      name: 'Cary Gaskell',
+      phone: '555-555-555',
+      cell: '555-555-5555',
+      email: 'Carylgaskell@gmail.com',
+      address: '1253 Wisconsin Avenue NW, Washington DC 20007'
     }
 
     _customer.navButtons = [
@@ -67,33 +70,53 @@ angular.module('dealScanCrmApp')
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Document4'
+      },
+            {
+        image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+        name: 'Document0'
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'Document1'
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'Document2'
       }
     ]
     _customer.photos = [
-      {
-        url0: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt0: 'Ford',
-        url1: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt1: 'Audi',
-        url2: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt2: 'Audi'
-      },
-      {
-        url0: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt0: 'Audi',
-        url1: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt1: 'Ford',
-        url2: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt2: 'Audi'
-      },
-      {
-        url0: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt0: 'Audi',
-        url1: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt1: 'Audi',
-        url2: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt2: 'Ford'
-      },
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+       alt: 'Audi'}, 
+       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'}, 
+       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+            {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+       alt: 'Audi'}, 
+       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'}, 
+       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+            {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+       alt: 'Audi'}, 
+       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'}, 
+       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+            {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'},
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+       alt: 'Audi'}, 
+       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'}, 
+       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'}
     ]
     _customer.menuItems = [
       {
