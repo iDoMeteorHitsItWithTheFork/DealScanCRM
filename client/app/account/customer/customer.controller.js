@@ -118,4 +118,23 @@ angular.module('dealScanCrmApp')
       }
     ]
 
+    $scope.images = [
+      {
+        'url': 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        'caption': 'Optional caption',
+        'thumbUrl': 'thumb1.jpg' // used only for this example
+      },
+      {
+        'url': 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        'thumbUrl': 'thumb2.jpg'
+      },
+      {
+        'url': 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        'thumbUrl': 'thumb3.png'
+      }
+    ];
+
+    $scope.openLightboxModal = function (index) {
+      Lightbox.openModal($scope.images, index);
+    };
   });
