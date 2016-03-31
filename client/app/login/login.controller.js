@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-    .controller('LoginCtrl', function ($scope, Auth, $state) {
+    .controller('LoginCtrl', function ($scope, Auth, appConfig, $state) {
 
 
         this.user = {};
@@ -10,6 +10,17 @@ angular.module('dealScanCrmApp')
 
         this.Auth = Auth;
         this.$state = $state;
+
+        this.landingPage = function(user){
+          switch(user.role){
+            case appConfig.userRoles[1]:
+            case appConfig.userRoles[5]:
+                  return 'home.bdc';
+            default:
+                  return 'home.dashboard';
+
+          }
+        }
 
 
         this.login = function (form) {
@@ -23,8 +34,7 @@ angular.module('dealScanCrmApp')
                     .then(() => {
                         console.log('login successfull');
                         // Logged in, redirect to home
-                        this.$state.go('home.dashboard');
-                        console.log('test123');
+                        this.$state.go(this.landingPage(Auth.getCurrentUser()));
                     })
                     .catch(err => {
                         this.errors.other = err.message;
