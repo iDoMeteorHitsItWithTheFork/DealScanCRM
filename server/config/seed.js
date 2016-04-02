@@ -379,24 +379,41 @@ User.sync()
         provider: "local"
       },
       {
-        firstName: "Bernardo",
-        lastName: "Figeroa",
+        firstName: "Sales",
+        lastName: "Rep",
         phone: '9363363951',
-        email: "bfigeroa@aol.com",
+        email: "sale_rep@hagerstownford.com",
         password: 'a',
-        role: "bdc_rep",
+        role: "sale_rep",
         provider: "local"
       },
       {
-        firstName: "Ammie",
-        lastName: "Corrio",
+        firstName: "Bdc",
+        lastName: "Rep",
         phone: '6148019788',
-        email: "ammie@corrio.com",
+        email: "bdc_rep@hagerstownford.com",
         role: "bdc_rep",
         password: 'a',
         provider: "local"
+      },
+      {
+        firstName: "Sales",
+        lastName: "Manager",
+        phone: '4106691642',
+        email: "sale_mgr@hagerstownford.com",
+        password: 'a',
+        role: "sale_mgr",
+        provider: "local"
+      },
+      {
+        firstName: "Bdc",
+        lastName: "Manager",
+        phone: '2125824976',
+        email: "bdc_mgr@hagerstownford.com",
+        password: 'a',
+        role: "bdc_mgr",
+        provider: "local"
       }
-
     ])
       .then(function () {
         console.log('>> Finished setting up users...');
@@ -405,35 +422,58 @@ User.sync()
             dealershipName: 'Hagerstown Ford'
           }
         }).then(function(dealership){
-           return User.findAll({
-             where:{
-               role: 'owner'
-             }
-           }).then(function(owners){
-              return dealership.setOwners(owners).then(function(){
-                console.log('>> Finished setting up owners...');
+          return User.findAll().then(function(users){
+            return dealership.setEmployees(users).then(function(){
+              console.log('>> Finished setting up dealership employees...');
+              User.findAll({
+                where: {
+                  role: 'owner'
+                }
+              }).then(function(owners){
+                dealership.setOwners(owners).then(function(){
+                  console.log('>> Finished setting up dealership owners...');
+                  User.findAll({
+                    where: {
+                      role:'gen_mgr'
+                    }
+                  }).then(function(generalManagers){
+                    dealership.setGeneralManagers(generalManagers).then(function(){
+                      console.log('>> Finished setting up dealership general managers...');
+                    }).catch(function(err){
+                      console.log(err);
+                    });
+                    return User.findAll();
+                  }).then(function(users){
+                      Team.find({
+                        where: {
+                          teamName: 'HagerstownFord'
+                        }
+                      }).then(function(team){
+                          if (!team) return null;
+                          team.setTeamMembers(users).then(function(){
+                            console.log('>> Finished setting up teammates...');
+                          });
+                      })
+                  }).catch(function(err){
+                    console.log(err);
+                  })
+                }).catch(function(err){
+                   console.log(err);
+                })
+              }).catch(function(err){
+                 console.log(err);
               })
-           })
+            })
+          })
         }).catch(function(err){
           console.log(err);
         })
-        return User.findAll();
-      }).then(function (users) {
-           return Team.find({
-             where: {
-               teamName: 'HagerstownFord'
-             }
-           }).then(function(team){
-              if (!team) return null;
-              return team.setTeamMembers(users).then(function(){
-                console.log('>> Finished setting up teamMates...');
-              }).catch(function(err){
-                console.log(err.data);
-              });
-           })
       })
-
   });
+
+
+
+
 
 
 
