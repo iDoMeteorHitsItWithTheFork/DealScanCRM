@@ -3,6 +3,7 @@
 angular.module('dealScanCrmApp')
     .controller('LoginCtrl', function ($scope, Auth, appConfig, $state) {
 
+
         this.user = {};
         this.errors = {};
         this.submitted = false;

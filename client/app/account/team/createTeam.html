@@ -1,0 +1,70 @@
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title">CREATE TEAM</h3>
+  <label class="tl" style="float: left;">Create a new team for a dealership</label>
+</div>
+<div class="modal-body p-b-10">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Team Name</label>
+        <input type="text" class="form-control" placeholder="" ng-model="newTeam.team.name" required>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Dealership</label>
+        <select class="cs-select cs-skin-elastic" ng-model="newTeam.team.dealership">
+          <option ng-repeat="dealership in newTeam.dealerships" value="{{::dealership.dealershipName}}">{{::dealership.dealershipName}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 member-container">
+      <label>Click to Add Members</label>
+
+      <div>
+        <table class="table no-margin">
+          <tbody>
+          <tr ng-repeat="member in newTeam.teams.teamMembers" ng-click="newTeam.addMember(member);" ng-hide="member.hide"
+              class="pointer">
+            <td class="center"><img alt="image" class="img-circle h-40"
+                                    src="assets/images/profile.jpg"></td>
+            <td>
+              <a href="#">
+                {{member.profile.name}}
+              </a>
+              <span class="text-small block text-light">{{member.profile.role}}</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6 member-container">
+      <label>Members</label>
+      <table class="table no-margin">
+        <tbody>
+        <tr ng-repeat="member in newTeam.team.members" ng-click="newTeam.removeMember(member);" class="pointer">
+          <td class="center"><img alt="image" class="img-circle h-40"
+                                  src="assets/images/profile.jpg"></td>
+          <td>
+            <a href="#">
+              {{member.profile.name}}
+            </a>
+            <span class="text-small block text-light">{{member.profile.role}}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning btn-o" type="button" ng-click="cancel()">Cancel</button>
+  <button class="btn btn-primary btn-o" type="button" ng-click="ok()"
+          ng-disabled="!newTeam.team.name || !newTeam.team.members.length > 0">Create Team
+  </button>
+</div>
