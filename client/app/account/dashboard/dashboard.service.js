@@ -32,6 +32,5 @@ angular.module('dealScanCrmApp')
             teamMates: function(){
                 return teamMates;
             }
-
         };
     });
