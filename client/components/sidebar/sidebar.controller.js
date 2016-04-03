@@ -26,6 +26,7 @@ angular.module('dealScanCrmApp')
           menu = [{title: 'Team Management', alias: 't', state: 'home.team'},
             {title: 'Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
             ];
@@ -35,6 +36,7 @@ angular.module('dealScanCrmApp')
           menu = [{title: 'Team Management', alias: 't', state: 'home.team'},
             {title: 'Dashboard', alias: 'd', state: 'home.bdc'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
             ];
@@ -45,6 +47,7 @@ angular.module('dealScanCrmApp')
             {title: 'Lead Management', alias: 'l', state: 'home.bdc'},
             {title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
             ];
@@ -56,6 +59,7 @@ angular.module('dealScanCrmApp')
             {title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Lead Management', alias: 'l', state: 'home.bdc'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
             ];
