@@ -82,11 +82,61 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
+// Creates a Team and Set its members
+function createTeam(name, dealership, members){
+  return Team.create({
+    teamName:name
+  }).then(function(team){
+    return team.setDealership(dealership).then(function(){
+      console.log('>> Team "'+name+'" created...');
+      return User.findAll({
+         where: {
+           userID: members
+         }
+       }).then(function(users){
+          return team.setTeamMembers(users).then(function(){
+             console.log('>> Finished setting up teamMembers...');
+            return team;
+          })
+       })
+    })
+  })
+
+}
+
 // Creates a new Team in the DB
 export function create(req, res) {
-  Team.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+
+   var teamName = req.body.name;
+   var dealershipID = req.body.dealershipID;
+   var teamMembers = [];
+   req.body.members.forEach(function(member){
+     teamMembers.push(member.userID);
+   });
+
+
+  if (!dealershipID){
+     User.find({
+       where: {
+         userID: req.user.userID
+       }
+     }).then(function(user){
+       return user.getOrganizations().then(function(organizations){
+         var dealership = organizations[0];
+         return createTeam(teamName, dealership, teamMembers);
+       })
+     })
+       .then(respondWithResult(res, 201))
+       .catch(handleError(res));
+
+  } else {
+     Dealership.findbyId(dealershipID).then(function(dealership){
+        return createTeam(teamName, dealership, teamMembers);
+     })
+       .then(respondWithResult(res, 201))
+       .catch(handleError(res));
+  }
+
 }
 
 // Updates an existing Team in the DB
