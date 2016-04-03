@@ -25,7 +25,7 @@ angular.module('dealScanCrmApp')
         })
         _team.teams.teamMembers = _team.members;
         console.log('>> Printing teams');
-        console.log(teams);
+        console.log(_team.teams);
         console.log('>> EOP');
       }).catch(function (err) {
         console.log(err);
@@ -75,7 +75,7 @@ angular.module('dealScanCrmApp')
       });
 
       modalInstance.result.then(function (newTeam) {
-
+        _team.teams = _team.teams.concat(newTeam);
       });
     }
 

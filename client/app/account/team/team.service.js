@@ -34,11 +34,22 @@ angular.module('dealScanCrmApp')
       })
     }
 
+    function createTeam(team){
+      var t = new TeamResource({name: team.name, members:team.members});
+      return t.$save().then(function(newTeam){
+        console.log(newTeam);
+        return newTeam;
+      }).catch(function(err){
+        console.log(err);
+      })
+    }
+
 
     // Public API here
     return {
       myTeams: getMyTeams,
-      myManagers: getMyManagers
+      myManagers: getMyManagers,
+      create: createTeam
     };
 
   });

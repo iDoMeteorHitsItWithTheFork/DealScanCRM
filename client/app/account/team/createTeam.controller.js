@@ -1,9 +1,9 @@
 angular.module('dealScanCrmApp')
-  .controller('CreateTeamCtrl', function ($scope, $rootScope, $timeout, $state, $window, $uibModalInstance, $filter, Dashboard, dealerships, teams) {
+  .controller('CreateTeamCtrl', function ($scope, $rootScope, $timeout, $state, $window, $uibModalInstance, $filter, Dashboard, Team, dealerships, teams) {
     console.log("create team controller loaded");
 
     var _newTeam = this;
-    _newTeam.team = {dealership:null, name:null, members:null};
+    _newTeam.team = {dealershipID:null, name:null, members:[]};
     _newTeam.dealerships = dealerships;
     _newTeam.teams = teams;
 
@@ -29,7 +29,12 @@ angular.module('dealScanCrmApp')
     }
 
     $scope.ok = function () {
-      $uibModalInstance.close(_newTeam.team);
+      Team.create(_newTeam.team).then(function(newTeam){
+        $uibModalInstance.close(newTeam);
+      }).catch(function(err){
+        console.log(err);
+      });
+
     };
 
     $scope.cancel = function () {
