@@ -14,12 +14,12 @@ angular.module('dealScanCrmApp')
     Auth.hasRole(appConfig.userRoles[7], function (ans) {
       _team.isGM = ans;
     })
-    
+
     _team.selectedView = "myteam";
-    _team.selectedTeam = "team1";\
-  
-  
-  
+    _team.selectedTeam = "team1";
+
+
+
     var getMyTeams = function () {
       Team.myTeams().then(function (teams) {
         _team.teams = teams;
