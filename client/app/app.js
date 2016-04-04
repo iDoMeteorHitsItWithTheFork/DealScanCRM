@@ -16,7 +16,8 @@ angular.module('dealScanCrmApp', [
   'ui.select',
   'chart.js',
   'mwl.calendar',
-  'ngMap'
+  'ngMap',
+  'angular-loading-bar'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
     $urlRouterProvider

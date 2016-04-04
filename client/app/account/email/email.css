@@ -1,0 +1,29 @@
+.custom-email {
+      position: absolute;
+    left: 0;
+    /* right: 0; */
+    /* bottom: 0; */
+    top: 0!important;
+    width: 300px!important;
+    height: 456px;
+}
+
+.messages-list .messages-item .messages-item-from, 
+.messages-list .messages-item .messages-item-subject,
+.messages-list .messages-item .messages-item-content {
+    margin-left: 0!important;
+      padding-left: 0!important;
+}
+.messages-list {
+   margin-left: -26px!important;
+      overflow-y: auto!important;
+}
+
+.tab-message-content {
+         padding-left: 257px!important;
+  padding-top:0!important;
+}
+
+.message-header {
+    padding: 0 15px 10px!important;
+}

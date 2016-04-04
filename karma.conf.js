@@ -28,6 +28,8 @@ module.exports = function(config) {
       'client/bower_components/angular-chart.js/dist/angular-chart.js',
       'client/bower_components/moment/moment.js',
       'client/bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js',
+      'client/bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js',
+      'client/bower_components/angular-loading-bar/build/loading-bar.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

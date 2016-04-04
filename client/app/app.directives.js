@@ -25,6 +25,17 @@ angular.module('dealScanCrmApp').directive('crmSidebar', function($window) {
   }
 
 });
+
+angular.module('dealScanCrmApp').directive('messageItem', ['$location', function ($location) {
+    return {
+        restrict: 'EA',
+        link: function (scope, elem, attrs) {
+            elem.on("click tap", function (e) {
+                var id = attrs.messageItem;
+            });
+        }
+    };
+}]);
 angular.module('dealScanCrmApp')
 .directive('ctFullheight', ['$window', '$rootScope', '$timeout', 
 function ($window, $rootScope, $timeout, mq) {
