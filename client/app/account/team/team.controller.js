@@ -1,85 +1,96 @@
 angular.module('dealScanCrmApp')
-  .controller('TeamCtrl', function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig) {
+  .controller('TeamCtrl', function ($scope, $state, $uibModal, $anchorScroll, Auth, Dashboard, Team, appConfig) {
     console.log("team controller loaded");
-  
-   var _team = this;
+
+    var _team = this;
     _team.user = Auth.getCurrentUser();
     _team.isAdmin = Auth.isAdmin;
     _team.isManager = false;
     _team.isGM = false;
-    Auth.hasRole(appConfig.userRoles[2], function(ans){
-     _team.isManager = ans;
+    Auth.hasRole(appConfig.userRoles[2], function (ans) {
+      _team.isManager = ans;
     });
 
-    Auth.hasRole(appConfig.userRoles[7], function(ans){
+    Auth.hasRole(appConfig.userRoles[7], function (ans) {
       _team.isGM = ans;
     })
 
-    _team.dealerships = [{name: 'Hagerstown Ford'},
-                               {name: 'King Kia'},
-                              {name: 'King Hyndai'}];
-  
-   _team.selectedDealership = _team.dealerships[0].name;
-   _team.teamMates = Dashboard.teamMates();
-   _team.teamMate = {};
-   _team.dealership = {};
-
-   _team.teams = [{id: 1, name: "Sales Team", dealership: 'Hagerstown Ford', description: "This team sells stuff", 
-                   members: [
-                     {profile: {name:"Cary Gaskell", role: "Administrator", email: "carylgaskell@gmail.com"}},
-                     {profile: {name:"Eric Carper", role: "General Manager", email: "ecarper@hagerstownford.com"}},
-                     {profile: {name:"Lenna Paprocki", role: "Sales Manager", email: "lpaprocki@hotmail.com"}},
-                     {profile: {name:"Abel Maclead", role: "Sales Manager", email: "amaclead@gmail.com"}},
-                   ]}];
-  console.log(_team.teams);
-   
-  _team.createTeam = function () {
-    console.log("create new team");
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/team/createTeam.html',
-        controller: 'CreateTeamCtrl as newTeam',
-        resolve: {
-          dealership: function () {
-            console.log(_team.selectedDealership);
-            return _team.selectedDealership;
-          },
-          team: function () {
-            console.log(_team.selectedDealership);
-            return _team.selectedDealership;
-          }
-        }
-      });
-    
-      modalInstance.result.then(function (newTeam) {
-        console.log(newTeam);
-        _team.teams.push(newTeam);
-      });
-   }
-  
-    $scope.editTeam = function (team) {
-    console.log("edit team");
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/team/createTeam.html',
-        controller: 'CreateTeamCtrl as newTeam',
-        resolve: {
-          dealership: function () {
-            console.log(_team.selectedDealership);
-            return _team.selectedDealership;
-          },
-          team: function () {
+    var getMyTeams = function () {
+      Team.myTeams().then(function (teams) {
+        _team.teams = teams;
+        _team.members = [];
+        angular.forEach(teams, function(team){
             console.log(team);
-            return team;
+           _team.members =  _team.members.concat(team.TeamMembers);
+        })
+        _team.teams.teamMembers = _team.members;
+        console.log('>> Printing teams');
+        console.log(_team.teams);
+        console.log('>> EOP');
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+
+    getMyTeams();
+
+
+
+
+    var getDealerships = function () {
+      Team.myManagers().then(function (managers) {
+        console.log('>> Printing Dealerships');
+        console.log(managers);
+        console.log('>> EOP');
+        _team.dealerships = managers;
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+
+    getDealerships();
+
+
+
+
+    _team.teamMate = {};
+    _team.dealership = {};
+
+
+    _team.createTeam = function () {
+      console.log("create new team");
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/account/team/createTeam.html',
+        controller: 'CreateTeamCtrl as newTeam',
+        resolve: {
+          dealerships: function(){
+            return _team.dealerships;
+          },
+          teams: function(){
+            return _team.teams;
           }
         }
       });
-    
+
       modalInstance.result.then(function (newTeam) {
-        console.log(newTeam);
-        _team.teams.push(newTeam);
+        _team.teams = _team.teams.concat(newTeam);
       });
-   }
-    });
+    }
+
+    $scope.editTeam = function (team) {
+      console.log("edit team");
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/account/team/createTeam.html',
+        controller: 'CreateTeamCtrl as newTeam',
+
+      });
+
+      modalInstance.result.then(function (newTeam) {
+
+      });
+    }
+  });

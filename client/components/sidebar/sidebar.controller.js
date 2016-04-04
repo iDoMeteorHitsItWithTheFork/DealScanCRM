@@ -23,37 +23,46 @@ angular.module('dealScanCrmApp')
       switch (_sidebar.user.role) {
         case appConfig.userRoles[0]:
           console.log(appConfig.userRoles[0]);
-          menu = [{title: 'Dashboard', alias: 'd', state: 'home.dashboard'},
+          menu = [{title: 'Team Management', alias: 't', state: 'home.team'},
+            {title: 'Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
-            {title: 'Team Management', alias: 't', state: 'home.team'}];
+            ];
           break;
         case appConfig.userRoles[1]:
           console.log(appConfig.userRoles[1]);
-          menu = [{title: 'Dashboard', alias: 'd', state: 'home.bdc'},
+          menu = [{title: 'Team Management', alias: 't', state: 'home.team'},
+            {title: 'Dashboard', alias: 'd', state: 'home.bdc'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
-            {title: 'Team Management', alias: 't', state: 'home.team'}];
+            ];
           break;
         case appConfig.userRoles[5]:
           console.log(appConfig.userRoles[5]);
-          menu = [{title: 'Lead Management', alias: 'l', state: 'home.bdc'},
+          menu = [{title: 'Team Management', alias: 't', state: 'home.team'},
+            {title: 'Lead Management', alias: 'l', state: 'home.bdc'},
             {title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
-            {title: 'Team Management', alias: 't', state: 'home.team'}];
+            ];
           break;
         default:
           console.log('Default');
-          menu = [{title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard'},
+          menu = [
+            {title: 'Team Management', alias: 't', state: 'home.team'},
+            {title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard'},
             {title: 'Lead Management', alias: 'l', state: 'home.bdc'},
             {title: 'Customers', alias: 'c', state: 'home.customer'},
+            {title: 'Customer Search', alias: 's', state: 'home.search'},
             {title: 'Tasks', alias: 't', state: 'home.tasks'},
             {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign'},
-            {title: 'Team Management', alias: 't', state: 'home.team'}];
+            ];
           break;
       }
       return menu;
