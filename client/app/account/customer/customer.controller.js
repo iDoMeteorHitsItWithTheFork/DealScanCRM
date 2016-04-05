@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerCtrl', function ($scope, Auth) {
+  .controller('CustomerCtrl', function ($scope, Auth, $uibModal) {
     var _customer = this; //$scope
     _customer.user = Auth.getCurrentUser();
 
@@ -88,33 +88,33 @@ angular.module('dealScanCrmApp')
       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
             {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
             {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
             {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'}
     ]
@@ -157,7 +157,16 @@ angular.module('dealScanCrmApp')
       }
     ];
 
-    $scope.openLightboxModal = function (index) {
-      Lightbox.openModal($scope.images, index);
-    };
+    //$scope.openLightboxModal = function (index) {
+    //  Lightbox.openModal($scope.images, index);
+    //};
+    //
+    //$scope.addCustomer = function () {
+    //  var modalInstance = $uibModal.open({
+    //    animation: true,
+    //    windowClass: 'slide-up',
+    //    templateUrl: 'app/account/customer/addCustomer.html',
+    //    controller: 'AddCustomerCtrl'
+    //  });
+    //}
   });
