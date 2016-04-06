@@ -195,6 +195,7 @@ angular.module('dealScanCrmApp')
       }
     ];
 
+<<<<<<< HEAD
 
       _customer.emailCustomer = function () {
       var modalInstance = $uibModal.open({
@@ -341,7 +342,4 @@ angular.module('dealScanCrmApp')
       });
     }
 
-    $scope.openLightboxModal = function (index) {
-      Lightbox.openModal($scope.images, index);
-    };
   });

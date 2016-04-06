@@ -1,0 +1,110 @@
+'use strict';
+
+export default function(sequelize, DataTypes) {
+  var Customer = sequelize.define('Customer', {
+    customerID: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    driverLicenseID: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    firstName: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING(12),
+      allowNull: false,
+      validate: {
+        isNumeric: {
+          msg: 'Phone number must be numeric'
+        }
+      }
+    },
+    dateOfBirth: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING(45),
+      validate: {
+        isEmail: true
+      }
+    },
+    streetAddress: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    postalCode: {
+      type: DataTypes.STRING(16),
+      allowNull: false
+    },
+    source: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'walkIn'
+    }
+  }, {
+    /**
+     * Virtual Getters
+     */
+    getterMethods: {
+      // Public profile information
+      profile: function () {
+        return {
+          'customerID': this.getDataValue('customerID'),
+          'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
+          'email': this.getDataValue('email'),
+          'phone': this.getDataValue('phone'),
+          'addressLine1':this.getDataValue('addressLine1'),
+          'addressLine2': this.getDataValue('addressLine2'),
+          'city': this.getDataValue('city'),
+          'state': this.getDataValue('state'),
+          'zipCode': this.getDataValue('postalCode'),
+          'source': this.getDataValue('source')
+        };
+      },
+
+      // Non-sensitive info we'll be putting in the token
+      token: function () {
+        return {
+          'customerID': this.getDataValue('customerID'),
+          'email': this.getDataValue('email'),
+          'phone': this.getDataValue('phone'),
+          'addressLine1':this.getDataValue('addressLine1'),
+          'addressLine2': this.getDataValue('addressLine2'),
+          'city': this.getDataValue('city'),
+          'state': this.getDataValue('state'),
+          'zipCode': this.getDataValue('postalCode'),
+          'source': this.getDataValue('source')
+        };
+      }
+    },
+
+    instanceMethods: {}
+
+  });
+
+  return Customer;
+
+}
