@@ -1,9 +1,37 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerCtrl', function ($scope, Auth, $uibModal) {
+  .controller('CustomerCtrl', function ($scope, Auth, Util, Customer, $uibModal) {
     var _customer = this; //$scope
     _customer.user = Auth.getCurrentUser();
+
+    _customer.customers = [];
+
+    var customers  = function(){
+      Customer.customers().then(function(customers){
+        console.log(customers);
+        if (customers){
+          _customer.customers = customers;
+        }
+      }).catch(function(err){
+        console.log(err);
+      })
+    }
+
+
+
+    _customer.find = function(name){
+        Customer.find(name).then(function(customers){
+           console.log(customers);
+           return customers;
+        }).catch(function(err){
+          console.log(err);
+        });
+    }
+
+    _customer.find('Tracy');
+    _customer.find('Paula');
+    customers();
 
     _customer.info = {
       name: 'Cary Gaskell',
@@ -88,33 +116,33 @@ angular.module('dealScanCrmApp')
       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
             {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
             {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
             {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'}, 
+       alt: 'Audi'},
        {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'}, 
+        alt: 'Audi'},
        {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'}
     ]
@@ -167,7 +195,7 @@ angular.module('dealScanCrmApp')
       }
     ];
 
-  
+
       _customer.emailCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -176,8 +204,8 @@ angular.module('dealScanCrmApp')
         controller: 'EmailCustomerCtrl',
       });
     }
-  
-  $scope.messages = 
+
+  $scope.messages =
       [{
         "from": "Cary Gaskell",
         "date": "04/04/2016 at 4:36PM",
@@ -297,13 +325,13 @@ angular.module('dealScanCrmApp')
         "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
         "id": 50223456
     }];
-  
+
   $scope.displayingMessage = null;
   $scope.selectEmail = function (message){
     console.log(message);
     $scope.displayingMessage = message;
   }
-  
+
    $scope.emailCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -312,7 +340,7 @@ angular.module('dealScanCrmApp')
         controller: 'EmailCustomerCtrl as landing',
       });
     }
-  
+
     $scope.openLightboxModal = function (index) {
       Lightbox.openModal($scope.images, index);
     };

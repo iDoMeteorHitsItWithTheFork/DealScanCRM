@@ -56,15 +56,19 @@ function UtilService($window) {
     },
 
     /**
-     * Test whether or not a given url is same origin
+     * Trim all whitespace from a string
      *
-     * @param  {String}           url       - url to test
+     * @param  {String}           string       - string to trm
      * @param  {String|String[]}  [origins] - additional origins to test against
-     * @return {Boolean}                    - true if url is same origin
+     * @return {String}                    - trimmed string
      */
-     handleError(err) {
-       console.log(err);
+     slimTrim(string) {
+       return string.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ") || string;
     }
+
+
+
+
   };
 
   return Util;

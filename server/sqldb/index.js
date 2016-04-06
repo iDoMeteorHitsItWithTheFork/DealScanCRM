@@ -19,13 +19,12 @@ var db = {
 
 
 // Insert models below
-db.Customer = db.sequelize.import('../api/customer/customer.model');
-db.Thing = db.sequelize.import('../api/thing/thing.model');
 
 
 db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
 db.Team = db.sequelize.import('../api/team/team.model');
 db.User = db.sequelize.import('../api/user/user.model');
+db.Customer = db.sequelize.import('../api/customer/customer.model');
 
 
 
