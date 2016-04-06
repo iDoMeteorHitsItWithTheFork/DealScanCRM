@@ -86,7 +86,7 @@ module.exports = function (sequelize, DataTypes) {
             // Non-sensitive info we'll be putting in the token
             token: function () {
                 return {
-                    'userID': this.getDataValue('userID'),
+                    'userID': this.getDataValue('customerID'),
                     'email': this.getDataValue('email'),
                     'phone': this.getDataValue('phone'),
                     'role': this.getDataValue('role')

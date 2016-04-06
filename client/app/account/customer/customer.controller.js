@@ -1,9 +1,37 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerCtrl', function ($scope, Auth, $uibModal) {
+  .controller('CustomerCtrl', function ($scope, Auth, Util, Customer, $uibModal) {
     var _customer = this; //$scope
     _customer.user = Auth.getCurrentUser();
+
+    _customer.customers = [];
+
+    var customers  = function(){
+      Customer.customers().then(function(customers){
+        console.log(customers);
+        if (customers){
+          _customer.customers = customers;
+        }
+      }).catch(function(err){
+        console.log(err);
+      })
+    }
+
+
+
+    _customer.find = function(name){
+        Customer.find(name).then(function(customers){
+           console.log(customers);
+           return customers;
+        }).catch(function(err){
+          console.log(err);
+        });
+    }
+
+    _customer.find('Tracy');
+    _customer.find('Paula');
+    customers();
 
     _customer.info = {
       name: 'Cary Gaskell',
@@ -120,24 +148,34 @@ angular.module('dealScanCrmApp')
     ]
     _customer.menuItems = [
       {
-        name: 'Overview',
-        state: 'active'
-      },
-      {
         name: 'Documents',
-        state: 'disabled'
+        state: 'disabled',
+        template: 'app/account/customer/tabs/documentsTab.html'
       },
       {
         name: 'Images',
-        state: 'disabled'
+        state: 'disabled',
+        template: 'app/account/customer/tabs/imagesTab.html'
       },
       {
         name: 'Task Log',
-        state: 'disabled'
+        state: 'disabled',
+        template: 'app/account/customer/tabs/tasksTab.html'
       },
       {
-        name: 'Customer Notations',
-        state: 'disabled'
+        name: 'Notes',
+        state: 'disabled',
+        template: 'app/account/customer/tabs/notesTab.html'
+      },
+      {
+        name: 'Emails',
+        state: 'disabled',
+         template: 'app/account/customer/tabs/emailTab.html',
+      },
+      {
+        name: 'Text Messages',
+        state: 'disabled',
+        template: 'app/account/customer/tabs/textsTab.html'
       }
     ]
 
@@ -156,17 +194,150 @@ angular.module('dealScanCrmApp')
         'thumbUrl': 'thumb3.png'
       }
     ];
+    
+      _customer.emailCustomer = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/account/email/modal/emailModal.html',
+        controller: 'EmailCustomerCtrl',
+      });
+    }
 
-    //$scope.openLightboxModal = function (index) {
-    //  Lightbox.openModal($scope.images, index);
-    //};
-    //
-    //$scope.addCustomer = function () {
-    //  var modalInstance = $uibModal.open({
-    //    animation: true,
-    //    windowClass: 'slide-up',
-    //    templateUrl: 'app/account/customer/addCustomer.html',
-    //    controller: 'AddCustomerCtrl'
-    //  });
-    //}
+  $scope.messages =
+      [{
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "You're the best",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>You're awesome!</p> ",
+        "id": 50223456
+    }, {
+        "from": "Cary Gaskell",
+        "date": "04/02/2016 at 4:00PM",
+        "subject": "You're so cool",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/01/2016 at 3:30PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    },
+      {
+        "from": "Cary Gaskell",
+        "date": "04/04/2016 at 4:36PM",
+        "subject": "Buy a car",
+        "email": "carylgaskell@gmail.com",
+        "starred": false,
+        "sent": false,
+        "spam": false,
+        "read": false,
+        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+        "id": 50223456
+    }];
+
+  $scope.displayingMessage = null;
+  $scope.selectEmail = function (message){
+    console.log(message);
+    $scope.displayingMessage = message;
+  }
+
+   $scope.emailCustomer = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/account/email/modal/emailModal.html',
+        controller: 'EmailCustomerCtrl as landing',
+      });
+    }
+
   });
