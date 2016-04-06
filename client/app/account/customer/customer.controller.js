@@ -194,9 +194,7 @@ angular.module('dealScanCrmApp')
         'thumbUrl': 'thumb3.png'
       }
     ];
-
-<<<<<<< HEAD
-
+    
       _customer.emailCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
