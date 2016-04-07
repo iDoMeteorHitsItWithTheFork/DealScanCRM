@@ -17,7 +17,8 @@ angular.module('dealScanCrmApp', [
   'chart.js',
   'mwl.calendar',
   'ngMap',
-  'angular-loading-bar'
+  'angular-loading-bar',
+  'bootstrapLightbox'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
     $urlRouterProvider
