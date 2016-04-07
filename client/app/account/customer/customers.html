@@ -1,0 +1,161 @@
+<div>
+  <div>
+    <div class="wrap-content container fade-in-up ng-cloak" id="container">
+      <div class="breadcrumb-wrapper">
+        <h4 class="mainTitle no-margin inline">MY CUSTOMERS</h4>
+        <span class="pull-right" style="margin-top:-8px">
+           <a ui-sref="home.customer" ng-show="$state.is('home.customer.profile')" class="btn btn-primary btn-sm btn-o" href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
+           <a class="btn btn-wide btn-primary btn-sm btn-o" href ><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Add Customer</a>
+          </span>
+      </div>
+
+      <div class="row no-margin" ng-if="$state.is('home.customer')">
+        <div class="col-md-12" style="margin-top:15px;">
+          <div class="panel panel-white no-radius no-margin" ng-hide="customers.processingData">
+            <div class="panel-heading border-light padding-30">
+              <div class="row">
+                <div class="col-lg-4 col-xs-5">
+							<span class="input-icon">
+								<input type="text" placeholder="Search customers..." id="form-field-14" class="form-control radius-10">
+								<i class="ti-search"></i> </span>
+                </div>
+                <div class="col-lg-8 col-xs-7 text-right">
+                  <div class="btn-group margin-top-5 dropdown" uib-dropdown="" ng-init="selected='Newest'">
+                    <button id="split-button" type="button" class="btn btn-info btn-sm">
+                      Sort by: <span class="text-bold ng-binding">Newest</span>
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" uib-dropdown-toggle=""
+                            aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                      <span class="sr-only">Split button!</span>
+                    </button>
+                    <ul uib-dropdown-menu="" role="menu" aria-labelledby="split-button" class="dropdown-menu">
+                      <li role="menuitem">
+                        <a href="#" ng-click="selected='Newest'">
+                          Newest
+                        </a>
+                      </li>
+                      <li role="menuitem">
+                        <a href="#" ng-click="selected='Oldest'">
+                          Oldest
+                        </a>
+                      </li>
+                      <li role="menuitem">
+                        <a href="#" ng-click="selected='Approved'">
+                          Approved
+                        </a>
+                      </li>
+                      <li role="menuitem">
+                        <a href="#" ng-click="selected='In Review'">
+                          In Review
+                        </a>
+                      </li>
+                      <li class="divider"></li>
+                      <li role="menuitem">
+                        <a href="#" ng-click="selected='Declined'">
+                          Declined
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="jumbotron" ng-if="!customers.customers.rows || customers.customers.rows.length == 0">
+                <p>Sorry, there is no data to display</p>
+              </div>
+              <table class="table table-stylish" ng-if="customers.customers.rows.length > 0">
+                <thead>
+                <tr>
+                  <th class="no-border"></th>
+                  <th class="no-border">Customer Name</th>
+                  <th class="no-border">Email</th>
+                  <th class="no-border">Phone Number</th>
+                  <th class="no-border">Source</th>
+                  <th class="no-border">Status</th>
+                  <th class="no-border">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="aCustomer in customers.customers.rows">
+                  <td class="center"><img alt="image" class="" src="assets/images/profile.jpg"
+                                          style="width:25px; height:25px;"></td>
+                  <td ng-click="customers.goToProfile(aCustomer)"><a href rel="nofollow">{{aCustomer.profile.name}}</a>
+                  </td>
+                  <td ng-click="customers.emailCustomer(aCustomer)"><a href
+                                                                       rel="nofollow">{{aCustomer.profile.email}} </a>
+                  </td>
+                  <td ng-click="customers.textCustomer(aCustomer)"><a href
+                                                                      rel="nofollow">{{aCustomer.profile.phone}}</a>
+                  </td>
+                  <td>{{aCustomer.profile.source}}</td>
+                  <td><span class="label label-sm label-warning">Pending</span></td>
+                  <td>
+                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                      <a href ng-click="customers.emailCustomer(aCustomer)" class="btn btn-transparent btn-xs"
+                         tooltip-placement="top" uib-tooltip="Email"
+                        ><i class="fa fa-envelope"></i></a>
+                      <a href ng-click="customers.textCustomer(aCustomer)" class="btn btn-transparent btn-xs"
+                         tooltip-placement="top" uib-tooltip="Text"><i
+                        class="fa fa-commenting-o"></i></a>
+                      <a href ng-click="customers.editCustomer(aCustomer)" class="btn btn-transparent btn-xs"
+                         tooltip-placement="top" uib-tooltip="Edit"><i
+                        class="fa fa-pencil"></i></a>
+                      <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top"
+                         uib-tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                    </div>
+                    <div class="visible-xs visible-sm hidden-md hidden-lg">
+                      <div class="btn-group dropdown" uib-dropdown="">
+                        <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle"
+                                uib-dropdown-toggle=""
+                                aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right dropdown-light" role="menu">
+                          <li>
+                            <a href="#"> Email </a>
+                          </li>
+                          <li>
+                            <a href="#"> Edit </a>
+                          </li>
+                          <li>
+                            <a href="#"> Remove </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <nav class="tc" ng-if="customers.customers.rows && customer.customers.rows.length > 0">
+                <ul class="pagination no-margin">
+                  <li>
+                    <a href="#" aria-label="Previous">
+                      <span aria-hidden="true">«</span>
+                    </a>
+                  </li>
+                  <li><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li>
+                    <a href="#" aria-label="Next">
+                      <span aria-hidden="true">»</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+  <ui-view></ui-view>
+</div>

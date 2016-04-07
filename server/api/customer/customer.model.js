@@ -21,7 +21,7 @@ export default function(sequelize, DataTypes) {
       allowNull: false,
     },
     phone: {
-      type: DataTypes.STRING(12),
+      type: DataTypes.STRING(30),
       allowNull: false,
       validate: {
         isNumeric: {
@@ -73,11 +73,11 @@ export default function(sequelize, DataTypes) {
       profile: function () {
         return {
           'customerID': this.getDataValue('customerID'),
+          'driverLicenseID': this.getDataValue('driverLicenceID'),
           'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'addressLine1':this.getDataValue('addressLine1'),
-          'addressLine2': this.getDataValue('addressLine2'),
+          'address':this.getDataValue('streetAddress'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
@@ -89,10 +89,10 @@ export default function(sequelize, DataTypes) {
       token: function () {
         return {
           'customerID': this.getDataValue('customerID'),
+          'driverLicenseID': this.getDataValue('driverLicenceID'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'addressLine1':this.getDataValue('addressLine1'),
-          'addressLine2': this.getDataValue('addressLine2'),
+          'address':this.getDataValue('streetAddress'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),

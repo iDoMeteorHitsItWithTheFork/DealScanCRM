@@ -11,10 +11,12 @@ angular.module('dealScanCrmApp')
     * Returns a list of customers
     * */
     function getCustomers() {
-      return CustomerResource.query()
+      _customers.length = 0;
+      return CustomerResource.get()
         .$promise.then(function (customers) {
           console.log(customers);
           _customers = customers || [];
+          console.log(_customers);
           return _customers;
         }).catch(function (err) {
           console.log(err);
@@ -23,11 +25,14 @@ angular.module('dealScanCrmApp')
 
 
     /*
-    * Returns customer with specified id
+    * Returns customer with specified customerId
     * */
-    function getCustomer(id) {
-      return CustomerResource.get({customerID: id})
+    function getCustomer(customerID) {
+      console.log(customerID);
+      return CustomerResource.get({id: customerID})
         .$promise.then(function (customer) {
+           console.log('getCustomer -> ');
+           console.log(customer);
            return customer;
         }).catch(function(err){
           console.log(err);
@@ -52,9 +57,12 @@ angular.module('dealScanCrmApp')
 
     // Public API here
     return {
-      customers: getCustomers,
       get: getCustomer,
-      find: findCustomer
+      getCustomers: getCustomers,
+      find: findCustomer,
+      customers: function(){
+        return _customers;
+      },
     };
 
 

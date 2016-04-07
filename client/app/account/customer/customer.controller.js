@@ -1,37 +1,12 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerCtrl', function ($scope, Auth, Util, Customer, $uibModal) {
-    var _customer = this; //$scope
-    _customer.user = Auth.getCurrentUser();
+  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, SweetAlert) {
 
-    _customer.customers = [];
-
-    var customers  = function(){
-      Customer.customers().then(function(customers){
-        console.log(customers);
-        if (customers){
-          _customer.customers = customers;
-        }
-      }).catch(function(err){
-        console.log(err);
-      })
-    }
-
-
-
-    _customer.find = function(name){
-        Customer.find(name).then(function(customers){
-           console.log(customers);
-           return customers;
-        }).catch(function(err){
-          console.log(err);
-        });
-    }
-
-    _customer.find('Tracy');
-    _customer.find('Paula');
-    customers();
+    console.log('customer controller loaded....');
+    var _customer = this;
+    _customer.thisCustomer = selectedCustomer;
+    console.log(_customer.thisCustomer);
 
     _customer.info = {
       name: 'Cary Gaskell',
@@ -99,7 +74,7 @@ angular.module('dealScanCrmApp')
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Document4'
       },
-            {
+      {
         image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
         name: 'Document0'
       },
@@ -116,34 +91,34 @@ angular.module('dealScanCrmApp')
       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'},
-       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
         alt: 'Audi'},
-       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'},
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
-            {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'},
-       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
         alt: 'Audi'},
-       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'},
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
-            {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'},
-       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
         alt: 'Audi'},
-       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'},
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
-            {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'},
       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-       alt: 'Audi'},
-       {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
         alt: 'Audi'},
-       {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'},
+      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
         alt: 'Ford'}
     ]
     _customer.menuItems = [
@@ -170,7 +145,7 @@ angular.module('dealScanCrmApp')
       {
         name: 'Emails',
         state: 'disabled',
-         template: 'app/account/customer/tabs/emailTab.html',
+        template: 'app/account/customer/tabs/emailTab.html',
       },
       {
         name: 'Text Messages',
@@ -194,8 +169,8 @@ angular.module('dealScanCrmApp')
         'thumbUrl': 'thumb3.png'
       }
     ];
-    
-      _customer.emailCustomer = function () {
+
+    _customer.emailCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
@@ -204,7 +179,7 @@ angular.module('dealScanCrmApp')
       });
     }
 
-  $scope.messages =
+    $scope.messages =
       [{
         "from": "Cary Gaskell",
         "date": "04/04/2016 at 4:36PM",
@@ -216,7 +191,7 @@ angular.module('dealScanCrmApp')
         "read": false,
         "content": "<p>Hi Cary, <br>You're awesome!</p> ",
         "id": 50223456
-    }, {
+      }, {
         "from": "Cary Gaskell",
         "date": "04/02/2016 at 4:00PM",
         "subject": "You're so cool",
@@ -227,117 +202,107 @@ angular.module('dealScanCrmApp')
         "read": false,
         "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
         "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/01/2016 at 3:30PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    },
-      {
-        "from": "Cary Gaskell",
-        "date": "04/04/2016 at 4:36PM",
-        "subject": "Buy a car",
-        "email": "carylgaskell@gmail.com",
-        "starred": false,
-        "sent": false,
-        "spam": false,
-        "read": false,
-        "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
-        "id": 50223456
-    }];
+      },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/01/2016 at 3:30PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        },
+        {
+          "from": "Cary Gaskell",
+          "date": "04/04/2016 at 4:36PM",
+          "subject": "Buy a car",
+          "email": "carylgaskell@gmail.com",
+          "starred": false,
+          "sent": false,
+          "spam": false,
+          "read": false,
+          "content": "<p>Hi Cary, <br>Thanks for the e-mail. It is always nice to hear from people, especially from you, Luda.</p> ",
+          "id": 50223456
+        }];
 
-  $scope.displayingMessage = null;
-  $scope.selectEmail = function (message){
-    console.log(message);
-    $scope.displayingMessage = message;
-  }
-
-   $scope.emailCustomer = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/email/modal/emailModal.html',
-        controller: 'EmailCustomerCtrl as landing',
-      });
+    $scope.displayingMessage = null;
+    $scope.selectEmail = function (message){
+      console.log(message);
+      $scope.displayingMessage = message;
     }
-
   });
