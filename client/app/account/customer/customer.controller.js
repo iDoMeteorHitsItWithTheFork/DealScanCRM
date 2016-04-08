@@ -9,11 +9,10 @@ angular.module('dealScanCrmApp')
     console.log(_customer.thisCustomer);
 
     _customer.info = {
-      name: 'Cary Gaskell',
-      phone: '555-555-555',
-      cell: '555-555-5555',
-      email: 'Carylgaskell@gmail.com',
-      address: '1253 Wisconsin Avenue NW, Washington DC 20007'
+      name: _customer.thisCustomer.profile.name,
+      phone: _customer.thisCustomer.profile.phone,
+      email: _customer.thisCustomer.profile.email,
+      address: _customer.thisCustomer.profile.address
     }
 
     _customer.navButtons = [

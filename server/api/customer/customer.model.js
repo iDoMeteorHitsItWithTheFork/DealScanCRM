@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(sequelize, DataTypes) {
+export default function (sequelize, DataTypes) {
   var Customer = sequelize.define('Customer', {
     customerID: {
       type: DataTypes.BIGINT,
@@ -77,7 +77,7 @@ export default function(sequelize, DataTypes) {
           'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'address':this.getDataValue('streetAddress'),
+          'address': this.getDataValue('streetAddress') + ', ' + this.getDataValue('city') + ', ' + this.getDataValue('state') + ' ' + this.getDataValue('postalCode'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
@@ -92,7 +92,7 @@ export default function(sequelize, DataTypes) {
           'driverLicenseID': this.getDataValue('driverLicenceID'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'address':this.getDataValue('streetAddress'),
+          'address': this.getDataValue('streetAddress'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
