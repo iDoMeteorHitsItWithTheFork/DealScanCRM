@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, SweetAlert) {
 
-    console.log('customer controller loaded....');
+  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, SweetAlert, Lightbox) {
+
     var _customer = this;
+    _customer.user = Auth.getCurrentUser();
+    console.log('customer controller loaded....');
     _customer.thisCustomer = selectedCustomer;
     console.log(_customer.thisCustomer);
 
@@ -14,7 +16,6 @@ angular.module('dealScanCrmApp')
       email: _customer.thisCustomer.profile.email,
       address: _customer.thisCustomer.profile.address
     }
-
     _customer.navButtons = [
       {
         text: 'Add Appointment',
@@ -52,73 +53,145 @@ angular.module('dealScanCrmApp')
       }
     ]
 
-    _customer.documents =[
+    _customer.documents = [
       {
         image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-        name: 'Document0'
+        name: 'Purchase Vehicle Odometer',
+        applicable: true,
+        checked: true
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Document1'
+        name: 'Trade Vehicle Odometer',
+        applicable: true,
+        checked: true
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Document2'
-      },
-      {
-        image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-        name: 'Document3'
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Document4'
+        name: 'Rebate Incentive Approval',
+        applicable: true,
+        checked: true
       },
       {
         image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-        name: 'Document0'
+        name: 'We Owe',
+        applicable: true,
+        checked: true
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Document1'
+        name: 'Lemon Law',
+        applicable: true,
+        checked: true
+      },
+      {
+        image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+        name: 'Power Of Attorney',
+        applicable: true,
+        checked: true
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Document2'
+        name: 'Pay Off Verification',
+        applicable: true,
+        checked: true
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'Insurance Verification',
+        applicable: true,
+        checked: false
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'First Free Oil Change Certificate',
+        applicable: true,
+        checked: false
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'Pay Off Authorization',
+        applicable: true,
+        checked: false
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'Tittle Guarantee',
+        applicable: true,
+        checked: false
+      },
+      {
+        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
+        name: 'Used Car Warranty',
+        applicable: false,
+        checked: false
       }
     ]
     _customer.photos = [
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'},
-      {url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'}
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
+        alt: 'Audi'
+      },
+      {
+        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        alt: 'Ford'
+      }
     ]
     _customer.menuItems = [
       {
@@ -156,16 +229,15 @@ angular.module('dealScanCrmApp')
     $scope.images = [
       {
         'url': 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        'caption': 'Optional caption',
-        'thumbUrl': 'thumb1.jpg' // used only for this example
+        'thumbUrl': 'http://icons.iconarchive.com/icons/calebamesbury/classic-american-cars/48/Muscle-Car-Mustang-GT-icon.png'
+      },
+      {
+        'url': 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
+        'thumbUrl': 'http://files.softicons.com/download/internet-cons/blog-icons-by-jonas-hellwig/png/48/car.png'
       },
       {
         'url': 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        'thumbUrl': 'thumb2.jpg'
-      },
-      {
-        'url': 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        'thumbUrl': 'thumb3.png'
+        'thumbUrl': 'http://icons.iconarchive.com/icons/calebamesbury/classic-american-cars/48/Muscle-Car-Mustang-GT-icon.png'
       }
     ];
 
@@ -299,9 +371,24 @@ angular.module('dealScanCrmApp')
           "id": 50223456
         }];
 
+
     $scope.displayingMessage = null;
-    $scope.selectEmail = function (message){
+    $scope.selectEmail = function (message) {
       console.log(message);
       $scope.displayingMessage = message;
     }
+
+    $scope.addCustomer = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/account/customer/addCustomer.html',
+        controller: 'AddCustomerCtrl'
+      });
+    };
+
+    $scope.openLightboxModal = function (index) {
+      Lightbox.openModal($scope.images, index);
+    };
+
   });

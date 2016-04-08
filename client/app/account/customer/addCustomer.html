@@ -1,7 +1,6 @@
 <div class="modal-header p-b-15">
   <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times fs-14"></i></button>
   <h3 class="modal-title">Add Customer</h3>
-  <label class="tl" style="float: left;">Enter Customer Information</label>
 </div>
 <div class="modal-body p-b-10">
   <div class="row">
@@ -33,10 +32,6 @@
         <input type="text" class="form-control" id="usr">
       </div>
       <div class="form-group">
-        <label>Cell</label>
-        <input type="text" class="form-control" id="usr">
-      </div>
-      <div class="form-group">
         <label>Email</label>
         <input type="email" class="form-control" id="usr">
       </div>
@@ -63,24 +58,26 @@
         <label>Zip Code</label>
         <input type="text" class="form-control" id="usr">
       </div>
-      <div class="form-group">
-        <label>State</label>
-        <select class="cs-select cs-skin-elastic">
-          <option value="" disabled selected>Select a State</option>
-          <option class="form-control" ng-repeat="state in states" value="{{state.name}}">{{state.name}}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>State Code</label>
-        <!--<input type="text" class="form-control" id="usr" value="{{selectedItem.name}}">-->
-        <select class="cs-select cs-skin-elastic">
-          <option value="" disabled selected>Select a State Code</option>
-          <option ng-repeat="state in states" value="{{state.code}}">{{state.code}}</option>
-        </select>
+      <div class="row">
+        <div class="col-sm-9">
+          <div class="form-group">
+            <label>State</label>
+            <select class="cs-select cs-skin-elastic">
+              <option value="" disabled selected>Select a State</option>
+              <option class="form-control" ng-repeat="state in states" value="{{state.name}}">{{state.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Code</label>
+            <input type="text" class="form-control" id="usr">
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label>Country</label>
-        <input type="text" class="form-control" id="usr" value ="{{f2}}">
+        <input type="text" class="form-control" id="usr">
       </div>
     </div>
   </div>
