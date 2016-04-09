@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('Customer', function (Auth, Util, $q, CustomerResource) {
+  .factory('Customer', function (Auth, Util, $q, $filter, CustomerResource) {
     // Service logic
     // ...
 
@@ -40,14 +40,30 @@ angular.module('dealScanCrmApp')
     }
 
     /*
+    * Search customer array for customer match
+    *
+    * */
+    function filterCustomers(find, customers){
+      return $filter('filter')(customers, find);
+    }
+
+
+
+
+    /*
     * Returns a list of customers with the associated name
     *
     *
     * */
     function findCustomer(customerName) {
-      return CustomerResource.query({name: Util.slimTrim(customerName)}).
+      _customers.length = 0;
+      customerName = Util.slimTrim(customerName);
+      return CustomerResource.query({name: customerName}).
           $promise.then(function(customers){
-          return customers || [];
+          _customers = customers || [];
+          _customersInfo = customers ? customers.rows :  [];
+          _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
+          return _customersInfo;
       }).catch(function(err){
           console.log(err);
         })
@@ -59,6 +75,7 @@ angular.module('dealScanCrmApp')
       get: getCustomer,
       find: findCustomer,
       getCustomers: getCustomers,
+      filterCustomers: filterCustomers,
       customers: function(){
         return _customersInfo;
       },

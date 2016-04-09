@@ -18,7 +18,8 @@
               <div class="row">
                 <div class="col-lg-4 col-xs-5">
 							<span class="input-icon">
-								<input type="text" placeholder="Search customers..." id="form-field-14" class="form-control radius-10">
+								<input type="text" placeholder="Search customers..." id="form-field-14" class="form-control radius-10"
+                       ng-model="customers.findCustomer.name">
 								<i class="ti-search"></i> </span>
                 </div>
                 <div class="col-lg-8 col-xs-7 text-right">
@@ -67,7 +68,15 @@
               <div class="jumbotron" ng-if="customers.customersInfo.length == 0">
                 <p>Sorry, there is no data to display</p>
               </div>
-              <table class="table table-stylish" ng-if="customers.customersInfo.length > 0">
+              <div class="jumbotron" ng-if="customers.customersOnDisplay.length == 0">
+                <p>Sorry, we couldn't find <strong>"{{customers.findCustomer.name}}"</strong> in your active
+                  records.<br>
+                  <a class="btn btn-wide btn-primary btn-sm btn-o" href
+                     ng-click="customers.find(customers.findCustomer.name)"><i
+                    ng-class='customers.processingData ? "fa fa-spinner fa-pulse" : "fa fa-search"'></i>&nbsp;&nbsp;Search
+                    In Archives</a></p>
+              </div>
+              <table class="table table-stylish" ng-if="customers.customersOnDisplay.length > 0">
                 <thead>
                 <tr>
                   <th class="no-border"></th>
@@ -131,15 +140,16 @@
                 </tr>
                 </tbody>
               </table>
-              <nav class="tc" ng-if="customers.customersInfo.length > 0">
+              <nav class="tc" ng-if="customers.records > customers.itemsPerPage">
 
-                <uib-pagination total-items="customers.infoCount" ng-model="customers.currentPage"
+                <uib-pagination total-items="customers.records" ng-model="customers.currentPage"
                                 max-size="customers.maxSize"
                                 items-per-page="customers.itemsPerPage"
                                 class="pagination no-margin" num-pages="customers.numOfPages"
                                 ng-change="customers.pageChanged()"></uib-pagination>
 
               </nav>
+
             </div>
           </div>
         </div>
