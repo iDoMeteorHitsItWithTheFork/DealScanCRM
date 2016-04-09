@@ -4,8 +4,10 @@
       <div class="breadcrumb-wrapper">
         <h4 class="mainTitle no-margin inline">MY CUSTOMERS</h4>
         <span class="pull-right" style="margin-top:-8px">
-           <a ui-sref="home.customer" ng-show="$state.is('home.customer.profile')" class="btn btn-primary btn-sm btn-o" href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
-           <a class="btn btn-wide btn-primary btn-sm btn-o" href ><i class="fa fa-user-plus"></i>&nbsp;&nbsp;Add Customer</a>
+           <a ui-sref="home.customer" ng-show="$state.is('home.customer.profile')" class="btn btn-primary btn-sm btn-o"
+              href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
+           <a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="customers.addCustomer();"><i
+             class="fa fa-user-plus"></i>&nbsp;&nbsp;Add Customer</a>
           </span>
       </div>
 
@@ -62,10 +64,10 @@
               </div>
             </div>
             <div class="panel-body">
-              <div class="jumbotron" ng-if="!customers.customers.rows || customers.customers.rows.length == 0">
+              <div class="jumbotron" ng-if="customers.customersInfo.length == 0">
                 <p>Sorry, there is no data to display</p>
               </div>
-              <table class="table table-stylish" ng-if="customers.customers.rows.length > 0">
+              <table class="table table-stylish" ng-if="customers.customersInfo.length > 0">
                 <thead>
                 <tr>
                   <th class="no-border"></th>
@@ -78,7 +80,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="aCustomer in customers.customers.rows">
+                <tr ng-repeat="aCustomer in customers.customersOnDisplay">
                   <td class="center"><img alt="image" class="" src="assets/images/profile.jpg"
                                           style="width:25px; height:25px;"></td>
                   <td ng-click="customers.goToProfile(aCustomer)"><a href rel="nofollow">{{aCustomer.profile.name}}</a>
@@ -129,24 +131,14 @@
                 </tr>
                 </tbody>
               </table>
-              <nav class="tc" ng-if="customers.customers.rows && customers.customers.rows.length > 0">
-                <ul class="pagination no-margin">
-                  <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true">«</span>
-                    </a>
-                  </li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li>
-                    <a href="#" aria-label="Next">
-                      <span aria-hidden="true">»</span>
-                    </a>
-                  </li>
-                </ul>
+              <nav class="tc" ng-if="customers.customersInfo.length > 0">
+
+                <uib-pagination total-items="customers.infoCount" ng-model="customers.currentPage"
+                                max-size="customers.maxSize"
+                                items-per-page="customers.itemsPerPage"
+                                class="pagination no-margin" num-pages="customers.numOfPages"
+                                ng-change="customers.pageChanged()"></uib-pagination>
+
               </nav>
             </div>
           </div>

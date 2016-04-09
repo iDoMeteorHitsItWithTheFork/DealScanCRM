@@ -378,14 +378,7 @@ angular.module('dealScanCrmApp')
       $scope.displayingMessage = message;
     }
 
-    $scope.addCustomer = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/customer/addCustomer.html',
-        controller: 'AddCustomerCtrl'
-      });
-    };
+
 
     $scope.openLightboxModal = function (index) {
       Lightbox.openModal($scope.images, index);

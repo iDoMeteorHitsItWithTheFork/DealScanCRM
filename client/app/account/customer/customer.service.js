@@ -6,6 +6,8 @@ angular.module('dealScanCrmApp')
     // ...
 
     var _customers = [];
+    var _customersInfo = [];
+    var _pageSize = 100;
 
     /*
     * Returns a list of customers
@@ -16,8 +18,11 @@ angular.module('dealScanCrmApp')
         .$promise.then(function (customers) {
           console.log(customers);
           _customers = customers || [];
+          _customersInfo = customers ? customers.rows :  [];
           console.log(_customers);
-          return _customers;
+          _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
+          console.log(_customersInfo);
+          return _customersInfo;
         }).catch(function (err) {
           console.log(err);
         })
@@ -58,11 +63,18 @@ angular.module('dealScanCrmApp')
     // Public API here
     return {
       get: getCustomer,
-      getCustomers: getCustomers,
       find: findCustomer,
+      getCustomers: getCustomers,
       customers: function(){
-        return _customers;
+        return _customersInfo;
       },
+      getRows: function(){
+        return _customers.rows;
+      },
+      getCount: function(){
+        console.log(_customers);
+        return _customers.count;
+      }
     };
 
 
