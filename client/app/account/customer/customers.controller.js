@@ -28,7 +28,10 @@ angular.module('dealScanCrmApp')
       _customers.customersOnDisplay.length = 0;
       var start = (_customers.currentPage - 1) * _customers.itemsPerPage;
       var end = start + _customers.itemsPerPage;
-      _customers.customersOnDisplay = _customers.customersInfo.splice(start, end);
+      _customers.customersOnDisplay = _customers.customersInfo.slice(start, end);
+      console.log('Start: '+start+' End: '+end);
+      console.log(_customers.customersInfo);
+      console.log(_customers.customersOnDisplay);
     }
 
     _customers.pageChanged = function() {
