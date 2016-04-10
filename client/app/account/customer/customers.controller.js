@@ -3,6 +3,11 @@
 angular.module('dealScanCrmApp')
   .controller('CustomersCtrl', function ($scope, $state, Auth, Util, Customer, $uibModal, SweetAlert, appConfig) {
 
+
+    /*
+    * Controllers Variables
+    *
+    * */
     var _customers = this; //$scope
     var filteredData = [];
 
@@ -11,9 +16,9 @@ angular.module('dealScanCrmApp')
     _customers.searchResultsInfo = [];
     _customers.customersOnDisplay = [];
     _customers.customersContainer = [];
-    _customers.processingData = _customers.searchingArchives = false;
+    _customers.processingData = _customers.searchingArchives = _customers.deletingCustomer = false;
     _customers.findCustomer = {name: null};
-    _customers.sortOptions = ['Recent', 'Old', 'Ascending (A-z)', 'Descending (z-A)'];
+    _customers.sortOptions = ['Recent', 'Old', 'Name (A-z)', 'Name (z-A)'];
     _customers.orderCustomerByOption = _customers.sortOptions[0];
 
 
@@ -39,6 +44,10 @@ angular.module('dealScanCrmApp')
     _customers.maxSize = appConfig.paginationMaxSize;
 
 
+    /*
+    * Sort Customers
+    * */
+
     _customers.sortCustomers = function () {
       var data = _customers.customersContainer.length > 0 ? _customers.customersContainer : _customers.customersInfo;
       switch (_customers.orderCustomerByOption) {
@@ -59,37 +68,66 @@ angular.module('dealScanCrmApp')
       }
     }
 
+    /**
+     * Apply Sort Filter
+     *
+     */
     _customers.applyFilter = function(filter){
       _customers.orderCustomerByOption = filter;
 ;     _customers.displayCustomers();
     }
 
+    /*
+    * Set Pagination Page
+    * */
     _customers.setPage = function (pageNo) {
       _customers.currentPage = pageNo;
     }
 
+
+
+    /*
+    * Set Table Display Container
+    * */
     _customers.setDisplayContainer = function (customersToDisplay) {
       _customers.customersContainer = customersToDisplay;
     }
 
+
+
+    /*
+    * Render Customers
+    * */
 
     _customers.displayCustomers = function (customers, records, archives) {
       _customers.customersOnDisplay.length = 0;
       _customers.sortCustomers();
       var start = (_customers.currentPage - 1) * _customers.itemsPerPage;
       var end = start + _customers.itemsPerPage;
-      _customers.records = angular.isDefined(records) ? records : _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ? Customer.getResultsCount() : Customer.getCount();
+      _customers.records = angular.isDefined(records) ?
+        records : _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ? Customer.getResultsCount() : Customer.getCount();
       _customers.customersOnDisplay = customers ? customers.slice(start, end) : _customers.customersContainer.slice(start, end);
       var msg = archives ? ' archives either. Please check your spelling and try again.'
         : ' active records. Click below to search in your archives as well.';
       _customers.searchResultsDesc = msg;
     }
 
+
+
+    /*
+    * Pagination Callback
+    *
+    * */
     _customers.pageChanged = function () {
       _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ? _customers.displayCustomers(filteredData, filteredData.length) : _customers.displayCustomers();
     };
 
 
+
+
+    /*
+    * load Customers
+    * */
     var loadCustomers = function () {
       if (_customers.processingData) return;
       _customers.processingData = true;
@@ -109,6 +147,12 @@ angular.module('dealScanCrmApp')
     }
 
 
+
+    /*
+    *
+    * Find Customer
+    *
+    * */
     _customers.find = function (name) {
       if (_customers.processingData || _customers.searchingArchives) return;
       _customers.searchingArchives = true;
@@ -128,6 +172,13 @@ angular.module('dealScanCrmApp')
       });
     }
 
+
+
+    /*
+    *
+    * Go to customer profile
+    *
+    * */
     _customers.goToProfile = function (customer) {
       console.log('>> going to customer page...');
       $state.go('home.customer.profile', {
@@ -136,21 +187,94 @@ angular.module('dealScanCrmApp')
       });
     }
 
+
     /*
-     * Default Actions
-     *
-     * */
+    * Customer Controls
+    *
+    *
+    * */
 
-    loadCustomers();
 
+
+    /*
+    * add a customer
+    *
+    * */
     _customers.addCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
         templateUrl: 'app/account/customer/addCustomer.html',
-        controller: 'AddCustomerCtrl'
+        controller: 'AddCustomerCtrl as newCustomer'
       });
+
+      modalInstance.result.then(function(newCustomer){
+        _customers.customersInfo = Customer.customers();
+        _customers.setPage(1);
+        _customers.setDisplayContainer(_customers.customersInfo);
+        _customers.displayCustomers();
+      })
+
     };
+
+
+    /**
+     * Update an existing customer
+     *
+     *
+     */
+
+    _customers.editCustomer = function (customer) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/account/customer/updateCustomer.html',
+        controller: 'UpdateCustomerCtrl as updateCustomer',
+        resolve: {
+          selectedCustomer: function(){
+            return customer;
+          }
+        }
+      });
+
+      modalInstance.result.then(function(updatedCustomer){
+        _customers.customersInfo = Customer.customers();
+        _customers.setPage(1);
+        _customers.setDisplayContainer(_customers.customersInfo);
+        _customers.displayCustomers();
+      })
+
+    };
+
+
+    /*
+    * Delete a customer
+    *
+    *
+    * */
+
+    _customers.deleteCustomer  = function(customer){
+        if (_customers.deletingCustomer) return;
+      _customers.deletingCustomer = true;
+        Customer.remove(customer.customerID).then(function(customersInfo){
+          _customers.customersInfo = customersInfo;
+          _customers.setPage(1);
+          _customers.setDisplayContainer(_customers.customersInfo);
+          _customers.displayCustomers();
+          _customers.deletingCustomer =false;
+        }).catch(function(err){
+          _customers.deletingCustomer =false;
+          console.log(err);
+        })
+    }
+
+
+
+    /*
+    * Email a customer
+    *
+    * */
+
 
     _customers.emailCustomer = function () {
       var modalInstance = $uibModal.open({
@@ -161,6 +285,12 @@ angular.module('dealScanCrmApp')
       });
     }
 
+    /**
+     *
+     * text Customer
+     *
+     *
+     */
     _customers.textCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -169,5 +299,11 @@ angular.module('dealScanCrmApp')
         controller: 'EmailCustomerCtrl as landing',
       });
     }
+
+    /*
+     * Default Actions
+     *
+     * */
+    loadCustomers();
 
   });

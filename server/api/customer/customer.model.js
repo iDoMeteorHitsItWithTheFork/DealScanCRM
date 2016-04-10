@@ -16,6 +16,11 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false,
     },
+    middleInitial: {
+      type: DataTypes.STRING(1),
+      allowNull: true,
+      defaultValue: ''
+    },
     lastName: {
       type: DataTypes.STRING(45),
       allowNull: false,
@@ -71,10 +76,12 @@ export default function (sequelize, DataTypes) {
     getterMethods: {
       // Public profile information
       profile: function () {
+        var middleInitial = this.getDataValue('middleInitial');
+        if (middleInitial.length > 0) middleInitial += '.';
         return {
           'customerID': this.getDataValue('customerID'),
           'driverLicenseID': this.getDataValue('driverLicenceID'),
-          'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
+          'name': this.getDataValue('firstName') +' '+middleInitial+' ' + this.getDataValue('lastName'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
           'address': this.getDataValue('streetAddress') + ', ' + this.getDataValue('city') + ', ' + this.getDataValue('state') + ' ' + this.getDataValue('postalCode'),

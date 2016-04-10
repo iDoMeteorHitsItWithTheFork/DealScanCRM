@@ -2,110 +2,79 @@
  * Created by milesjohnson on 4/4/16.
  */
 angular.module('dealScanCrmApp')
-  .controller('AddCustomerCtrl', ['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$uibModal', '$uibModalInstance', '$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $uibModal, $uibModalInstance, $filter) {
+  .controller('AddCustomerCtrl', function ($scope, Util, Customer,$uibModalInstance, SweetAlert) {
     console.log("add customer controller loaded");
 
-    $scope.today = function () {
-      $scope.dt = new Date();
-    };
-    $scope.today();
-
-    $scope.clear = function () {
-      $scope.dt = null;
-    };
-
-    $scope.dateOptions = {
-      formatYear: 'yy',
-      startingDay: 1
-    };
-
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
-
-    $scope.lead = {'Assignee': 'Cary'};
-    $scope.ok = function () {
-      $uibModalInstance.close($scope.lead);
+    var _newCustomer = this;
+    _newCustomer.customerInfo = {
+      driverLicenseID: '',
+      firstName: '',
+      middleInitial: '',
+      lastName: '',
+      phone: '',
+      dateOfBirth: '',
+      email: '',
+      streetAddress: '',
+      city: '',
+      state: '',
+      country: '',
+      postalCode: '',
+      source: ''
     };
 
-    $scope.cancel = function () {
+
+
+    var st = $scope.$watch(function(){
+      return _newCustomer.customerInfo.state;
+    }, function(newValue, oldValue){
+        if (newValue) {
+          for(var i= 0; i < _newCustomer.states.length; i++){
+            if (Util.slimTrim(newValue).toLowerCase() == Util.slimTrim(_newCustomer.states[i].name).toLowerCase()) {
+              _newCustomer.stateCode =  _newCustomer.states[i].code
+              break;
+            };
+          }
+        }
+    })
+
+   /*
+   * Destory watch on exit
+   *
+   * */
+    $scope.$on('destroy', function(){
+      st();
+    });
+
+    _newCustomer.addingCustomer = false;
+
+    _newCustomer.today = function () {
+      _newCustomer.dt = new Date();
+    };
+    _newCustomer.today();
+
+    _newCustomer.clear = function () {
+      _newCustomer.dt = null;
+    };
+
+    _newCustomer.ok = function () {
+      if (_newCustomer.addingCustomer) return;
+      _newCustomer.addingCustomer = true;
+      Customer.add(_newCustomer.customerInfo).then(function(newCustomer){
+        console.log(newCustomer);
+        $uibModalInstance.close(newCustomer);
+      }).catch(function(err){
+        _newCustomer.addCustomer = false;
+        console.log(err);
+        SweetAlert.swal('Customer Error!', 'Sorry, an error ocurred while attempting to add customer. Please try again later.', 'error');
+      })
+
+    };
+
+    _newCustomer.cancel = function () {
       $uibModalInstance.dismiss('cancel');
     };
 
-    $scope.states = [
-      { name: 'ALABAMA', code: 'AL'},
-      { name: 'ALASKA', code: 'AK'},
-      { name: 'AMERICAN SAMOA', code: 'AS'},
-      { name: 'ARIZONA', code: 'AZ'},
-      { name: 'ARKANSAS', code: 'AR'},
-      { name: 'CALIFORNIA', code: 'CA'},
-      { name: 'COLORADO', code: 'CO'},
-      { name: 'CONNECTICUT', code: 'CT'},
-      { name: 'DELAWARE', code: 'DE'},
-      { name: 'DISTRICT OF COLUMBIA', code: 'DC'},
-      { name: 'FEDERATED STATES OF MICRONESIA', code: 'FM'},
-      { name: 'FLORIDA', code: 'FL'},
-      { name: 'GEORGIA', code: 'GA'},
-      { name: 'GUAM', code: 'GU'},
-      { name: 'HAWAII', code: 'HI'},
-      { name: 'IDAHO', code: 'ID'},
-      { name: 'ILLINOIS', code: 'IL'},
-      { name: 'INDIANA', code: 'IN'},
-      { name: 'IOWA', code: 'IA'},
-      { name: 'KANSAS', code: 'KS'},
-      { name: 'KENTUCKY', code: 'KY'},
-      { name: 'LOUISIANA', code: 'LA'},
-      { name: 'MAINE', code: 'ME'},
-      { name: 'MARSHALL ISLANDS', code: 'MH'},
-      { name: 'MARYLAND', code: 'MD'},
-      { name: 'MASSACHUSETTS', code: 'MA'},
-      { name: 'MICHIGAN', code: 'MI'},
-      { name: 'MINNESOTA', code: 'MN'},
-      { name: 'MISSISSIPPI', code: 'MS'},
-      { name: 'MISSOURI', code: 'MO'},
-      { name: 'MONTANA', code: 'MT'},
-      { name: 'NEBRASKA', code: 'NE'},
-      { name: 'NEVADA', code: 'NV'},
-      { name: 'NEW HAMPSHIRE', code: 'NH'},
-      { name: 'NEW JERSEY', code: 'NJ'},
-      { name: 'NEW MEXICO', code: 'NM'},
-      { name: 'NEW YORK', code: 'NY'},
-      { name: 'NORTH CAROLINA', code: 'NC'},
-      { name: 'NORTH DAKOTA', code: 'ND'},
-      { name: 'NORTHERN MARIANA ISLANDS', code: 'MP'},
-      { name: 'OHIO', code: 'OH'},
-      { name: 'OKLAHOMA', code: 'OK'},
-      { name: 'OREGON', code: 'OR'},
-      { name: 'PALAU', code: 'PW'},
-      { name: 'PENNSYLVANIA', code: 'PA'},
-      { name: 'PUERTO RICO', code: 'PR'},
-      { name: 'RHODE ISLAND', code: 'RI'},
-      { name: 'SOUTH CAROLINA', code: 'SC'},
-      { name: 'SOUTH DAKOTA', code: 'SD'},
-      { name: 'TENNESSEE', code: 'TN'},
-      { name: 'TEXAS', code: 'TX'},
-      { name: 'UTAH', code: 'UT'},
-      { name: 'VERMONT', code: 'VT'},
-      { name: 'VIRGIN ISLANDS', code: 'VI'},
-      { name: 'VIRGINIA', code: 'VA'},
-      { name: 'WASHINGTON', code: 'WA'},
-      { name: 'WEST VIRGINIA', code: 'WV'},
-      { name: 'WISCONSIN', code: 'WI'},
-      { name: 'WYOMING', code: 'WY' }
-    ];
-    //
-    //$scope.$watch(function () {
-    //    return $scope.f1;
-    //  },
-    //  function (newValue, oldValue) {
-    //    $scope.f2 = $scope.f1;
-    //  }, true);
-    //
-    //function DropdownCtrl($scope) {
-    //
-    //  $scope.selectedItem = "Items";
-    //
-    //  $scope.OnItemClick = function(event) {
-    //    $scope.selectedItem = event;
-    //  }
-    //}
-  }]);
+    _newCustomer.sources = [{name: 'WalkIn'}, {name: 'Internet'}, {name: 'Phone'}];
+    _newCustomer.states = Util.usStates();
+
+  });

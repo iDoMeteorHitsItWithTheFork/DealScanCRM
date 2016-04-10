@@ -1,0 +1,100 @@
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="updateCustomer.cancel()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title">Update Customer</h3>
+</div>
+<div class="modal-body p-b-10">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-sm-9">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.firstName">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>MI</label>
+            <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.middleInitial">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.lastName">
+      </div>
+      <div class="form-group">
+        <label>Date of Birth</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.dateOfBirth"/>
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.phone">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" ng-model="updateCustomer.customerInfo.email">
+      </div>
+      <div class="form-group">
+        <label>Drivers License Number</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.driverLicenseID">
+      </div>
+    </div>
+    <!-- Column Two -->
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Street Address</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.streetAddress">
+      </div>
+
+      <div class="form-group">
+        <label>City/Town</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.city">
+      </div>
+      <div class="form-group">
+        <label>Zip Code</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.postalCode">
+      </div>
+      <div class="row">
+        <div class="col-sm-9">
+          <div class="form-group">
+            <label>State</label>
+            <select class="cs-select cs-skin-elastic" ng-model="updateCustomer.customerInfo.state">
+              <option value="" disabled selected>{{updateCustomer.customerInfo.state}}</option>
+              <option class="form-control" ng-repeat="state in updateCustomer.states" value="{{state.name}}">
+                {{state.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label>Code</label>
+            <input type="text" class="form-control" ng-model="updateCustomer.stateCode">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.country">
+      </div>
+      <div class="form-group">
+        <label>Source</label>
+        <select class="cs-select cs-skin-elastic" ng-model="updateCustomer.customerInfo.source">
+          <option value="" disabled selected>{{updateCustomer.customerInfo.source}}</option>
+          <option class="form-control" ng-repeat="source in updateCustomer.sources" value="{{source.name}}">
+            {{source.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning btn-o" type="button" ng-click="updateCustomer.cancel()">Cancel</button>
+  <button class="btn btn-primary btn-o" type="button" ng-click="updateCustomer.ok()">
+    <i class="fa fa-spin fa-spinner" ng-if="updateCustomer.updatingCustomer"></i>&nbsp;&nbsp;{{updateCustomer.updatingCustomer
+    ? 'Updating Now...' : 'Update now'}}
+  </button>
+</div>
+

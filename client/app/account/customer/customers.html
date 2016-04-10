@@ -67,7 +67,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="aCustomer in customers.customersOnDisplay">
+                <tr ng-repeat="aCustomer in customers.customersOnDisplay track by aCustomer.customerID">
                   <td class="center"><img alt="image" class="" src="assets/images/profile.jpg"
                                           style="width:25px; height:25px;"></td>
                   <td ng-click="customers.goToProfile(aCustomer)"><a href rel="nofollow">{{aCustomer.profile.name}}</a>
@@ -92,7 +92,7 @@
                          tooltip-placement="top" uib-tooltip="Edit"><i
                         class="fa fa-pencil"></i></a>
                       <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top"
-                         uib-tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                         uib-tooltip="Remove" ng-click="customers.deleteCustomer(aCustomer)"><i class="fa fa-times fa fa-white"></i></a>
                     </div>
                     <div class="visible-xs visible-sm hidden-md hidden-lg">
                       <div class="btn-group dropdown" uib-dropdown="">
