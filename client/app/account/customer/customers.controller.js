@@ -39,29 +39,29 @@ angular.module('dealScanCrmApp')
     _customers.maxSize = appConfig.paginationMaxSize;
 
 
-    _customers.sortCustomers = function (option, forceStop) {
+    _customers.sortCustomers = function () {
       var data = _customers.customersContainer.length > 0 ? _customers.customersContainer : _customers.customersInfo;
-      switch (option) {
+      switch (_customers.orderCustomerByOption) {
         default:
         case _customers.sortOptions[0]:
-          _customers.orderCustomerByOption = _customers.sortOptions[0];
           _customers.customersContainer = Customer.sortCustomers(data, 'customerID', true);
           break;
         case _customers.sortOptions[1]:
-          _customers.orderCustomerByOption = _customers.sortOptions[1];
           _customers.customersContainer = Customer.sortCustomers(data, 'customerID', false);
           break;
         case _customers.sortOptions[2]:
-          _customers.orderCustomerByOption = _customers.sortOptions[2];
           _customers.customersContainer = Customer.sortCustomers(data, 'profile.name', false);
           break;
         case _customers.sortOptions[3]:
-          _customers.orderCustomerByOption = _customers.sortOptions[3];
           _customers.customersContainer = Customer.sortCustomers(data, 'profile.name', true);
           break;
 
       }
-      _customers.displayCustomers();
+    }
+
+    _customers.applyFilter = function(filter){
+      _customers.orderCustomerByOption = filter;
+;     _customers.displayCustomers();
     }
 
     _customers.setPage = function (pageNo) {
@@ -75,6 +75,7 @@ angular.module('dealScanCrmApp')
 
     _customers.displayCustomers = function (customers, records, archives) {
       _customers.customersOnDisplay.length = 0;
+      _customers.sortCustomers();
       var start = (_customers.currentPage - 1) * _customers.itemsPerPage;
       var end = start + _customers.itemsPerPage;
       _customers.records = angular.isDefined(records) ? records : _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ? Customer.getResultsCount() : Customer.getCount();

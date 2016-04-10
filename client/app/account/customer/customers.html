@@ -34,7 +34,7 @@
                     </button>
                     <ul uib-dropdown-menu="" role="menu" aria-labelledby="split-button" class="dropdown-menu">
                       <li role="menuitem" ng-repeat="option in customers.sortOptions">
-                        <a href ng-click="customers.sortCustomers(option)">
+                        <a href ng-click="customers.applyFilter(option)">
                           {{option}}
                         </a>
                       </li>
