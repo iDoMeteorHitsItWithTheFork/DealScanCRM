@@ -73,11 +73,11 @@ export function index(req, res) {
    var customers = (req.query.hasOwnProperty('name') && req.query.name) ?
         Customer.findAndCountAll({
           where: Customer.sequelize.where(Customer.sequelize.fn('concat', Customer.sequelize.col('firstName'), ' ', Customer.sequelize.col('lastName')), {
-            like: '%'+ req.query.name + '%',
-            limit: config.pagination,
-            order: [['customerID', 'DESC']]
-          })
-        }) : Customer.findAndCountAll({
+            like: '%'+ req.query.name + '%'
+          }),
+          limit: config.pagination,
+          order: [['customerID', 'DESC']]
+        }): Customer.findAndCountAll({
             limit: config.pagination,
             order: [['customerID', 'DESC']]
         });

@@ -6,7 +6,9 @@ angular.module('dealScanCrmApp')
     // ...
 
     var _customers = [];
+    var _searchResults = []
     var _customersInfo = [];
+    var _searchResultsInfo = [];
     var _pageSize = 1000;
 
     /*
@@ -19,6 +21,7 @@ angular.module('dealScanCrmApp')
           _customers = customers || [];
           _customersInfo = customers ? customers.rows :  [];
           _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
+          console.log(_customersInfo);
           return _customersInfo;
         }).catch(function (err) {
           console.log(err);
@@ -47,23 +50,27 @@ angular.module('dealScanCrmApp')
       return $filter('filter')(customers, find);
     }
 
-
-
+    /*
+    * Sort customer array
+    *
+    * */
+    function sortCustomers(customers, criteria, reverse){
+      return $filter('orderBy')(customers, criteria, reverse);
+    }
 
     /*
     * Returns a list of customers with the associated name
-    *
     *
     * */
     function findCustomer(customerName) {
       _customers.length = 0;
       customerName = Util.slimTrim(customerName);
-      return CustomerResource.query({name: customerName}).
-          $promise.then(function(customers){
-          _customers = customers || [];
-          _customersInfo = customers ? customers.rows :  [];
-          _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
-          return _customersInfo;
+      return CustomerResource.get({name: customerName}).
+          $promise.then(function(searchResults){
+          _searchResults = searchResults || [];
+          _searchResultsInfo = searchResults ? searchResults.rows :  [];
+          _searchResultsInfo = (_searchResultsInfo.length > _pageSize) ? _searchResultsInfo.slice(0, _pageSize) : _searchResultsInfo;
+          return _searchResultsInfo;
       }).catch(function(err){
           console.log(err);
         })
@@ -76,14 +83,21 @@ angular.module('dealScanCrmApp')
       find: findCustomer,
       getCustomers: getCustomers,
       filterCustomers: filterCustomers,
+      sortCustomers: sortCustomers,
       customers: function(){
         return _customersInfo;
+      },
+      searchResults: function(){
+        return _searchResults;
       },
       getRows: function(){
         return _customers.rows;
       },
       getCount: function(){
         return _customers.count;
+      },
+      getResultsCount: function(){
+        return _searchResults.count;
       }
     };
 

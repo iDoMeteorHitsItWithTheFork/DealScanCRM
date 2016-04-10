@@ -23,9 +23,9 @@
 								<i class="ti-search"></i> </span>
                 </div>
                 <div class="col-lg-8 col-xs-7 text-right">
-                  <div class="btn-group margin-top-5 dropdown" uib-dropdown="" ng-init="selected='Newest'">
+                  <div class="btn-group margin-top-5 dropdown" uib-dropdown="">
                     <button id="split-button" type="button" class="btn btn-info btn-sm">
-                      Sort by: <span class="text-bold ng-binding">Newest</span>
+                      Sort by: <span class="text-bold ng-binding">{{customers.orderCustomerByOption}}</span>
                     </button>
                     <button type="button" class="btn btn-info btn-sm dropdown-toggle" uib-dropdown-toggle=""
                             aria-haspopup="true" aria-expanded="false">
@@ -33,30 +33,9 @@
                       <span class="sr-only">Split button!</span>
                     </button>
                     <ul uib-dropdown-menu="" role="menu" aria-labelledby="split-button" class="dropdown-menu">
-                      <li role="menuitem">
-                        <a href="#" ng-click="selected='Newest'">
-                          Newest
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a href="#" ng-click="selected='Oldest'">
-                          Oldest
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a href="#" ng-click="selected='Approved'">
-                          Approved
-                        </a>
-                      </li>
-                      <li role="menuitem">
-                        <a href="#" ng-click="selected='In Review'">
-                          In Review
-                        </a>
-                      </li>
-                      <li class="divider"></li>
-                      <li role="menuitem">
-                        <a href="#" ng-click="selected='Declined'">
-                          Declined
+                      <li role="menuitem" ng-repeat="option in customers.sortOptions">
+                        <a href ng-click="customers.sortCustomers(option)">
+                          {{option}}
                         </a>
                       </li>
                     </ul>
@@ -69,12 +48,11 @@
                 <p>Sorry, there is no data to display</p>
               </div>
               <div class="jumbotron" ng-if="customers.customersOnDisplay.length == 0">
-                <p>Sorry, we couldn't find <strong>"{{customers.findCustomer.name}}"</strong> in your active
-                  records.<br>
-                  <a class="btn btn-wide btn-primary btn-sm btn-o" href
-                     ng-click="customers.find(customers.findCustomer.name)"><i
-                    ng-class='customers.processingData ? "fa fa-spinner fa-pulse" : "fa fa-search"'></i>&nbsp;&nbsp;Search
-                    In Archives</a></p>
+                <p>Sorry, we couldn't find <strong>"{{customers.findCustomer.name}}"</strong> in your {{customers.searchResultsDesc}}</p>
+                <a class="btn btn-wide btn-primary btn-sm btn-o" href
+                   ng-click="customers.find(customers.findCustomer.name)"><i
+                  ng-class='customers.searchingArchives ? "fa fa-spinner fa-pulse" : "fa fa-search"'></i>&nbsp;&nbsp;Search
+                  In Archives</a>
               </div>
               <table class="table table-stylish" ng-if="customers.customersOnDisplay.length > 0">
                 <thead>
@@ -146,7 +124,7 @@
                                 max-size="customers.maxSize"
                                 items-per-page="customers.itemsPerPage"
                                 class="pagination no-margin" num-pages="customers.numOfPages"
-                                ng-change="customers.pageChanged()"></uib-pagination>
+                                ng-change="customers.pageChanged()" boundary-links="true"></uib-pagination>
 
               </nav>
 
