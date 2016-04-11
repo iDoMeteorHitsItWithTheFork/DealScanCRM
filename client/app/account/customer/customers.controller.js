@@ -3,11 +3,10 @@
 angular.module('dealScanCrmApp')
   .controller('CustomersCtrl', function ($scope, $state, Auth, Util, Customer, $uibModal, SweetAlert, appConfig) {
 
-
     /*
-    * Controllers Variables
-    *
-    * */
+     * Controllers Variables
+     *
+     * */
     var _customers = this; //$scope
     var filteredData = [];
 
@@ -45,9 +44,8 @@ angular.module('dealScanCrmApp')
 
 
     /*
-    * Sort Customers
-    * */
-
+     * Sort Customers
+     * */
     _customers.sortCustomers = function () {
       var data = _customers.customersContainer.length > 0 ? _customers.customersContainer : _customers.customersInfo;
       switch (_customers.orderCustomerByOption) {
@@ -72,40 +70,39 @@ angular.module('dealScanCrmApp')
      * Apply Sort Filter
      *
      */
-    _customers.applyFilter = function(filter){
+    _customers.applyFilter = function (filter) {
       _customers.orderCustomerByOption = filter;
-;     _customers.displayCustomers();
+      ;
+      _customers.displayCustomers();
     }
 
     /*
-    * Set Pagination Page
-    * */
+     * Set Pagination Page
+     * */
     _customers.setPage = function (pageNo) {
       _customers.currentPage = pageNo;
     }
 
 
-
     /*
-    * Set Table Display Container
-    * */
+     * Set Table Display Container
+     * */
     _customers.setDisplayContainer = function (customersToDisplay) {
       _customers.customersContainer = customersToDisplay;
     }
 
 
-
     /*
-    * Render Customers
-    * */
-
+     * Render Customers
+     * */
     _customers.displayCustomers = function (customers, records, archives) {
       _customers.customersOnDisplay.length = 0;
       _customers.sortCustomers();
       var start = (_customers.currentPage - 1) * _customers.itemsPerPage;
       var end = start + _customers.itemsPerPage;
       _customers.records = angular.isDefined(records) ?
-        records : _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ? Customer.getResultsCount() : Customer.getCount();
+        records : _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ?
+        Customer.getResultsCount() : Customer.getCount();
       _customers.customersOnDisplay = customers ? customers.slice(start, end) : _customers.customersContainer.slice(start, end);
       var msg = archives ? ' archives either. Please check your spelling and try again.'
         : ' active records. Click below to search in your archives as well.';
@@ -113,21 +110,19 @@ angular.module('dealScanCrmApp')
     }
 
 
-
     /*
-    * Pagination Callback
-    *
-    * */
+     * Pagination Callback
+     *
+     * */
     _customers.pageChanged = function () {
-      _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ? _customers.displayCustomers(filteredData, filteredData.length) : _customers.displayCustomers();
+      _customers.findCustomer.name && _customers.findCustomer.name.length > 0 ?
+        _customers.displayCustomers(filteredData, filteredData.length) : _customers.displayCustomers();
     };
 
 
-
-
     /*
-    * load Customers
-    * */
+     * load Customers
+     * */
     var loadCustomers = function () {
       if (_customers.processingData) return;
       _customers.processingData = true;
@@ -142,17 +137,18 @@ angular.module('dealScanCrmApp')
       }).catch(function (err) {
         console.log(err);
         _customers.processingData = false;
-        SweetAlert.swal("Customer Loading Error ", "Sorry, an error occurred while attempting to retrieve your customer info.", "error");
+        SweetAlert.swal("Customer Loading Error ",
+          "Sorry, an error occurred while attempting to retrieve your customer info.",
+          "error");
       });
     }
 
 
-
     /*
-    *
-    * Find Customer
-    *
-    * */
+     *
+     * Find Customer
+     *
+     * */
     _customers.find = function (name) {
       if (_customers.processingData || _customers.searchingArchives) return;
       _customers.searchingArchives = true;
@@ -168,20 +164,21 @@ angular.module('dealScanCrmApp')
       }).catch(function (err) {
         console.log(err);
         _customers.processingData = false;
-        SweetAlert.swal("Customer Search Error ", "Sorry, an error occurred while attempting to retrieve your customer info.", "error");
+        SweetAlert.swal("Customer Search Error ",
+          "Sorry, an error occurred while attempting to retrieve your customer info.",
+          "error");
       });
     }
 
 
-
     /*
-    *
-    * Go to customer profile
-    *
-    * */
+     *
+     * Go to customer profile
+     *
+     * */
     _customers.goToProfile = function (customer) {
       console.log('>> going to customer page...');
-      $state.go('home.customer.profile', {
+      $state.go('home.customer.profile.summary.overview', {
         customerID: customer.customerID,
         customerName: customer.profile.name.replace(/\ /g, '_')
       });
@@ -189,17 +186,16 @@ angular.module('dealScanCrmApp')
 
 
     /*
-    * Customer Controls
-    *
-    *
-    * */
-
+     * Customer Controls
+     *
+     *
+     * */
 
 
     /*
-    * add a customer
-    *
-    * */
+     * add a customer
+     *
+     * */
     _customers.addCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -208,7 +204,7 @@ angular.module('dealScanCrmApp')
         controller: 'AddCustomerCtrl as newCustomer'
       });
 
-      modalInstance.result.then(function(newCustomer){
+      modalInstance.result.then(function (newCustomer) {
         _customers.customersInfo = Customer.customers();
         _customers.setPage(1);
         _customers.setDisplayContainer(_customers.customersInfo);
@@ -223,7 +219,6 @@ angular.module('dealScanCrmApp')
      *
      *
      */
-
     _customers.editCustomer = function (customer) {
       var modalInstance = $uibModal.open({
         animation: true,
@@ -231,13 +226,13 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/account/customer/updateCustomer.html',
         controller: 'UpdateCustomerCtrl as updateCustomer',
         resolve: {
-          selectedCustomer: function(){
+          selectedCustomer: function () {
             return customer;
           }
         }
       });
 
-      modalInstance.result.then(function(updatedCustomer){
+      modalInstance.result.then(function (updatedCustomer) {
         _customers.customersInfo = Customer.customers();
         _customers.setPage(1);
         _customers.setDisplayContainer(_customers.customersInfo);
@@ -248,34 +243,30 @@ angular.module('dealScanCrmApp')
 
 
     /*
-    * Delete a customer
-    *
-    *
-    * */
-
-    _customers.deleteCustomer  = function(customer){
-        if (_customers.deletingCustomer) return;
+     * Delete a customer
+     *
+     *
+     * */
+    _customers.deleteCustomer = function (customer) {
+      if (_customers.deletingCustomer) return;
       _customers.deletingCustomer = true;
-        Customer.remove(customer.customerID).then(function(customersInfo){
-          _customers.customersInfo = customersInfo;
-          _customers.setPage(1);
-          _customers.setDisplayContainer(_customers.customersInfo);
-          _customers.displayCustomers();
-          _customers.deletingCustomer =false;
-        }).catch(function(err){
-          _customers.deletingCustomer =false;
-          console.log(err);
-        })
+      Customer.remove(customer.customerID).then(function (customersInfo) {
+        _customers.customersInfo = customersInfo;
+        _customers.setPage(1);
+        _customers.setDisplayContainer(_customers.customersInfo);
+        _customers.displayCustomers();
+        _customers.deletingCustomer = false;
+      }).catch(function (err) {
+        _customers.deletingCustomer = false;
+        console.log(err);
+      })
     }
 
 
-
     /*
-    * Email a customer
-    *
-    * */
-
-
+     * Email a customer
+     *
+     * */
     _customers.emailCustomer = function () {
       var modalInstance = $uibModal.open({
         animation: true,

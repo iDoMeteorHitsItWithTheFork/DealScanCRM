@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
 
-  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, SweetAlert, Lightbox) {
+  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, SweetAlert) {
 
     var _customer = this;
     _customer.user = Auth.getCurrentUser();
@@ -16,6 +16,38 @@ angular.module('dealScanCrmApp')
       email: _customer.thisCustomer.profile.email,
       address: _customer.thisCustomer.profile.address
     }
+
+    _customer.tabs = [{
+      id: 'overview',
+      heading: 'Overview',
+      route: 'home.customer.profile.summary.overview',
+    }, {
+      id: 'documents',
+      heading: 'Documents',
+      route: 'home.customer.profile.summary.documents',
+    }, {
+      id: 'images',
+      heading: 'Images',
+      route: 'home.customer.profile.summary.images',
+    }, {
+      id: 'tasks',
+      heading: 'Tasks',
+      route: 'home.customer.profile.summary.tasks',
+    }, {
+      id: 'notes',
+      heading: 'Notes',
+      route: 'home.customer.profile.summary.notes',
+    }, {
+      id: 'messages',
+      heading: 'Messages',
+      route: 'home.customer.profile.summary.messages'
+    }];
+
+    var setActiveTab = function(){
+      var idx = Util.indexOfObject(_customer.tabs, 'route', $state.current.name);
+      if (idx != -1) _customer.activeTab = idx;
+    }; setActiveTab();
+
     _customer.navButtons = [
       {
         text: 'Add Appointment',
@@ -193,38 +225,7 @@ angular.module('dealScanCrmApp')
         alt: 'Ford'
       }
     ]
-    _customer.menuItems = [
-      {
-        name: 'Documents',
-        state: 'disabled',
-        template: 'app/account/customer/tabs/documentsTab.html'
-      },
-      {
-        name: 'Images',
-        state: 'disabled',
-        template: 'app/account/customer/tabs/imagesTab.html'
-      },
-      {
-        name: 'Task Log',
-        state: 'disabled',
-        template: 'app/account/customer/tabs/tasksTab.html'
-      },
-      {
-        name: 'Notes',
-        state: 'disabled',
-        template: 'app/account/customer/tabs/notesTab.html'
-      },
-      {
-        name: 'Emails',
-        state: 'disabled',
-        template: 'app/account/customer/tabs/emailTab.html',
-      },
-      {
-        name: 'Text Messages',
-        state: 'disabled',
-        template: 'app/account/customer/tabs/textsTab.html'
-      }
-    ]
+
 
     $scope.images = [
       {
@@ -379,9 +380,9 @@ angular.module('dealScanCrmApp')
     }
 
 
-
     $scope.openLightboxModal = function (index) {
       Lightbox.openModal($scope.images, index);
     };
 
-  });
+  })
+;

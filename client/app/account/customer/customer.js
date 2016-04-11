@@ -41,7 +41,7 @@ angular.module('dealScanCrmApp')
             }).catch(function (err) {
               SweetAlert.swal(
                 'Customer Error',
-                'Sorry, an error occured while attempting to retreive your customer info. Please try again later. Thanks',
+                'Sorry, an error occurred while attempting to retrieve your customer info. Please try again later. Thanks',
                 'error'
               );
               df.reject(err);
@@ -49,5 +49,93 @@ angular.module('dealScanCrmApp')
             return df.promise;
           }
         },
+      })
+      .state('home.customer.profile.summary', {
+        url: '/summary',
+        abstract: true,
+        authenticate: true,
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        },
+        views: {
+          tabs: {
+            templateUrl: 'app/account/customer/tabs/summary.html',
+            controller: 'CustomerCtrl as customer',
+          }
+        }
+      })
+      .state('home.customer.profile.summary.overview', {
+        url: '/overview',
+        title: 'Overview',
+        authenticate: true,
+        templateUrl: 'app/account/customer/tabs/overview.html',
+        controller: 'CustomerCtrl as customer',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        }
+      })
+      .state('home.customer.profile.summary.documents', {
+        url: '/documents',
+        title: 'Documents',
+        authenticate: true,
+        templateUrl: 'app/account/customer/tabs/documents.html',
+        controller: 'CustomerCtrl as customer',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        }
+      })
+      .state('home.customer.profile.summary.images', {
+        url: '/images',
+        title: 'Images',
+        authenticate: true,
+        templateUrl: 'app/account/customer/tabs/images.html',
+        controller: 'CustomerCtrl as customer',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        }
+      })
+      .state('home.customer.profile.summary.tasks', {
+        url: '/tasks',
+        title: 'Tasks',
+        authenticate: true,
+        templateUrl: 'app/account/customer/tabs/tasks.html',
+        controller: 'CustomerCtrl as customer',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        }
+      })
+      .state('home.customer.profile.summary.notes', {
+        url: '/notes',
+        title: 'Notes',
+        authenticate: true,
+        templateUrl: 'app/account/customer/tabs/note/note.html',
+        controller: 'NoteCtrl as note',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        }
+      })
+      .state('home.customer.profile.summary.messages', {
+        url: '/messages',
+        title: 'Messages',
+        authenticate: true,
+        templateUrl: 'app/account/customer/tabs/messages.html',
+        controller: 'CustomerCtrl as customer',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        }
       })
   });

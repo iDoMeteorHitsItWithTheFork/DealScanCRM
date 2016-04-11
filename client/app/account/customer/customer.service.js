@@ -80,13 +80,8 @@ angular.module('dealScanCrmApp')
     function updateCustomers(newCustomer) {
       var idx = _customers.rows.indexOf(newCustomer);
       if (idx != -1) return false;
-      console.log('>> Updating Customers..');
-      console.log('(bfr) Customers.length: ' + _customers.rows.length);
-      console.log('(bfr) CustomersInfo.length: ' + _customersInfo.length);
       _customers.rows.push(newCustomer);
       _customers.count++;
-      console.log('(afr) Customers.length: ' + _customers.rows.length);
-      console.log('(afr) CustomersInfo.length: ' + _customersInfo.length);
       return true;
     }
 

@@ -4,13 +4,12 @@
       <div class="breadcrumb-wrapper">
         <h4 class="mainTitle no-margin inline">MY CUSTOMERS</h4>
         <span class="pull-right" style="margin-top:-8px">
-           <a ui-sref="home.customer" ng-show="$state.is('home.customer.profile')" class="btn btn-primary btn-sm btn-o"
+           <a ui-sref="home.customer" ng-show="$state.includes('home.customer.profile')" class="btn btn-primary btn-sm btn-o"
               href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
            <a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="customers.addCustomer();"><i
              class="fa fa-user-plus"></i>&nbsp;&nbsp;Add Customer</a>
           </span>
       </div>
-
       <div class="row no-margin" ng-if="$state.is('home.customer')">
         <div class="col-md-12" style="margin-top:15px;">
           <div class="panel panel-white no-radius no-margin" ng-hide="customers.processingData">
@@ -48,7 +47,8 @@
                 <p>Sorry, there is no data to display</p>
               </div>
               <div class="jumbotron" ng-if="customers.customersOnDisplay.length == 0">
-                <p>Sorry, we couldn't find <strong>"{{customers.findCustomer.name}}"</strong> in your {{customers.searchResultsDesc}}</p>
+                <p>Sorry, we couldn't find <strong>"{{customers.findCustomer.name}}"</strong> in your
+                  {{customers.searchResultsDesc}}</p>
                 <a class="btn btn-wide btn-primary btn-sm btn-o" href
                    ng-click="customers.find(customers.findCustomer.name)"><i
                   ng-class='customers.searchingArchives ? "fa fa-spinner fa-pulse" : "fa fa-search"'></i>&nbsp;&nbsp;Search
@@ -92,7 +92,8 @@
                          tooltip-placement="top" uib-tooltip="Edit"><i
                         class="fa fa-pencil"></i></a>
                       <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top"
-                         uib-tooltip="Remove" ng-click="customers.deleteCustomer(aCustomer)"><i class="fa fa-times fa fa-white"></i></a>
+                         uib-tooltip="Remove" ng-click="customers.deleteCustomer(aCustomer)"><i
+                        class="fa fa-times fa fa-white"></i></a>
                     </div>
                     <div class="visible-xs visible-sm hidden-md hidden-lg">
                       <div class="btn-group dropdown" uib-dropdown="">
@@ -119,23 +120,17 @@
                 </tbody>
               </table>
               <nav class="tc" ng-if="customers.records > customers.itemsPerPage">
-
                 <uib-pagination total-items="customers.records" ng-model="customers.currentPage"
                                 max-size="customers.maxSize"
                                 items-per-page="customers.itemsPerPage"
                                 class="pagination no-margin" num-pages="customers.numOfPages"
                                 ng-change="customers.pageChanged()" boundary-links="true"></uib-pagination>
-
               </nav>
-
             </div>
           </div>
         </div>
       </div>
-
-
     </div>
-
   </div>
   <ui-view></ui-view>
 </div>
