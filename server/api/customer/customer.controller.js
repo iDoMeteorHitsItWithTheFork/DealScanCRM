@@ -11,6 +11,7 @@
 
 import _ from 'lodash';
 import {Customer} from '../../sqldb';
+import config from '../../config/environment';
 
 
 function respondWithResult(res, statusCode) {
@@ -70,11 +71,16 @@ function validationError(res, statusCode) {
 export function index(req, res) {
    if (!req.user) return validationError(res, 400);
    var customers = (req.query.hasOwnProperty('name') && req.query.name) ?
-        Customer.findAll({
+        Customer.findAndCountAll({
           where: Customer.sequelize.where(Customer.sequelize.fn('concat', Customer.sequelize.col('firstName'), ' ', Customer.sequelize.col('lastName')), {
             like: '%'+ req.query.name + '%'
-          })
-        }) : Customer.findAll();
+          }),
+          limit: config.pagination,
+          order: [['customerID', 'DESC']]
+        }): Customer.findAndCountAll({
+            limit: config.pagination,
+            order: [['customerID', 'DESC']]
+        });
    return customers.then(respondWithResult(res)) .catch(handleError(res));
 }
 

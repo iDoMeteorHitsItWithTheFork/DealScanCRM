@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(sequelize, DataTypes) {
+export default function (sequelize, DataTypes) {
   var Customer = sequelize.define('Customer', {
     customerID: {
       type: DataTypes.BIGINT,
@@ -16,12 +16,17 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false,
     },
+    middleInitial: {
+      type: DataTypes.STRING(1),
+      allowNull: true,
+      defaultValue: ''
+    },
     lastName: {
       type: DataTypes.STRING(45),
       allowNull: false,
     },
     phone: {
-      type: DataTypes.STRING(12),
+      type: DataTypes.STRING(30),
       allowNull: false,
       validate: {
         isNumeric: {
@@ -71,13 +76,15 @@ export default function(sequelize, DataTypes) {
     getterMethods: {
       // Public profile information
       profile: function () {
+        var middleInitial = this.getDataValue('middleInitial');
+        if (middleInitial.length > 0) middleInitial += '.';
         return {
           'customerID': this.getDataValue('customerID'),
-          'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
+          'driverLicenseID': this.getDataValue('driverLicenceID'),
+          'name': this.getDataValue('firstName') +' '+middleInitial+' ' + this.getDataValue('lastName'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'addressLine1':this.getDataValue('addressLine1'),
-          'addressLine2': this.getDataValue('addressLine2'),
+          'address': this.getDataValue('streetAddress') + ', ' + this.getDataValue('city') + ', ' + this.getDataValue('state') + ' ' + this.getDataValue('postalCode'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
@@ -89,10 +96,10 @@ export default function(sequelize, DataTypes) {
       token: function () {
         return {
           'customerID': this.getDataValue('customerID'),
+          'driverLicenseID': this.getDataValue('driverLicenceID'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'addressLine1':this.getDataValue('addressLine1'),
-          'addressLine2': this.getDataValue('addressLine2'),
+          'address': this.getDataValue('streetAddress'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),

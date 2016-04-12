@@ -1,0 +1,6 @@
+<uib-tabset active="customer.activeTab">
+  <uib-tab ng-repeat="tab in customer.tabs" heading="{{tab.heading}}"
+            ui-sref="{{tab.route}}"  style="padding-left:0;" ui-sref-active="active">
+  </uib-tab>
+</uib-tabset>
+<div ui-view style="background:#fff;"></div>

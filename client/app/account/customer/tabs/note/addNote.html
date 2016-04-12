@@ -1,0 +1,25 @@
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="newNote.cancel()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title" style="margin-left: 15px;">Add Note</h3>
+</div>
+<div class="modal-body p-b-10">
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <textarea class="form-control" rows="8" placeholder="Note..." ng-model="newNote.note.content"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="col-md-12">
+    <button class="btn btn-warning btn-o" type="button" ng-click="newNote.cancel()">Cancel</button>
+    <button class="btn btn-primary btn-o" type="button" ng-click="newNote.ok()">
+      <i class="fa fa-spin fa-spinner" ng-if="newNote.addingNote"></i>&nbsp;&nbsp;{{newNote.addingNote
+      ? 'Adding Note...' : 'Add Note'}}
+    </button>
+  </div>
+</div>

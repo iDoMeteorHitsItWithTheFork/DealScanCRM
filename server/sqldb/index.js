@@ -19,6 +19,7 @@ var db = {
 
 
 // Insert models below
+db.Note = db.sequelize.import('../api/note/note.model');
 
 
 db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
@@ -26,8 +27,8 @@ db.Team = db.sequelize.import('../api/team/team.model');
 db.User = db.sequelize.import('../api/user/user.model');
 db.Customer = db.sequelize.import('../api/customer/customer.model');
 
-
-
+db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
+db.Note.belongsTo(db.Customer, {as: 'CustomerNotes', foreignKey:'customerID'});
 
 db.Team.belongsTo(db.Dealership, {foreignKey:'dealershipID'});
 
@@ -45,7 +46,6 @@ db.Team.belongsToMany(db.User, {as:'TeamMembers', through:'TeamMemberships', for
 
 db.Team.belongsToMany(db.User, {as: 'TeamManagers', through: 'Managers', foreignKey:'teamID'});
 db.User.belongsToMany(db.Team, {as: 'ManagesTeams', through: 'Managers', foreignKey:'teamManagerID'});
-
 
 
 export default db;

@@ -6,7 +6,9 @@
     return $resource('/api/customers/:id/:controller', {
       id: '@customerID'
     }, {
-
+         update: {
+           method:'PUT',
+         },
     });
   }
 

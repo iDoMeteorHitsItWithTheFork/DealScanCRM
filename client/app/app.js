@@ -18,6 +18,7 @@ angular.module('dealScanCrmApp', [
   'mwl.calendar',
   'ngMap',
   'angular-loading-bar',
+  'oitozero.ngSweetAlert',
   'bootstrapLightbox'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {

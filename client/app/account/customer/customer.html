@@ -4,7 +4,6 @@
   <div class="breadcrumb-wrapper">
     <h4 class="mainTitle no-margin inline">{{customer.info.name}}</h4>
     <span class="pull-right" style="margin-top:-5px">
-      <a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="addCustomer();">Add Customer</a>
 			<a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="emailCustomer();">Email Customer</a>
 			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Assign as Lead</a>
 			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Schedule Appointment</a>
@@ -41,10 +40,6 @@
                       {{customer.info.phone}}
                     </a>
                   </td>
-                </tr>
-                <tr>
-                  <td>Cell:</td>
-                  <td>{{customer.info.cell}}</td>
                 </tr>
                 <tr>
                   <td>Address:</td>
@@ -111,134 +106,8 @@
           </div>
           <div class="col-md-8">
             <div style="height: auto;" class="panel-wrapper in collapse">
-              <div class="tabbable no-padding no-margin">
-                <uib-tabset active="active">
-                  <uib-tab class="p-l-5" index="0" heading="Overview">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="panel panel-white" id="activities">
-                          <div class="panel-heading border-light">
-                            <h4 class="panel-title text-primary">Recent Activities</h4>
-                            <paneltool class="panel-tools" tool-collapse="tool-collapse" tool-refresh="load1"
-                                       tool-dismiss="tool-dismiss"></paneltool>
-                          </div>
-                          <div class="panel-wrapper">
-                            <div class="panel-body scroll-300">
-                              <ul class="timeline-xs">
-                                <li class="timeline-item success">
-                                  <div class="margin-left-15">
-                                    <div class="text-muted text-small">
-                                      2
-                                      minutes ago
-                                    </div>
-                                    <p>John S. assigned some tasks to <a class="text-info" href>Ryan H.</a>
-                                    </p>
-                                  </div>
-                                </li>
-                                <li class="timeline-item">
-                                  <div class="margin-left-15">
-                                    <div class="text-muted text-small">
-                                      Thur,
-
-                                      12
-                                      Jan
-                                    </div>
-                                    <p>Ryan H. sent <a class="text-info" href>text message</a>
-                                    </p>
-                                  </div>
-                                </li>
-                                <li class="timeline-item danger">
-                                  <div class="margin-left-15">
-                                    <div class="text-muted text-small">
-                                      Tue,
-
-                                      10
-                                      Jun
-                                    </div>
-                                    <p>
-                                      Cary Gaskell bought <a class="text-info" href>2001 Escape</a>
-                                    </p>
-                                  </div>
-                                </li>
-                                <li class="timeline-item info">
-                                  <div class="margin-left-15">
-                                    <div class="text-muted text-small">
-                                      Sun,
-
-                                      11
-                                      Apr
-                                    </div>
-                                    <p>Ryan H. uploaded <a class="text-info" href>Credit Application</a>
-                                    </p>
-                                  </div>
-                                </li>
-                                <li class="timeline-item">
-                                  <div class="margin-left-15">
-                                    <div class="text-muted text-small">
-                                      Wed,
-
-                                      25
-                                      Mar
-                                    </div>
-                                    <p>
-                                      Appointment with Ryan H.
-                                    </p>
-                                  </div>
-                                </li>
-                                <li class="timeline-item">
-                                  <div class="margin-left-15">
-                                    <div class="text-muted text-small">
-                                      Fri,
-
-                                      20
-                                      Mar
-                                    </div>
-                                    <p>Ryan H. Created Cary Gaskell
-                                    </p>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="panel panel-white" id="activities">
-                          <div class="panel-heading border-light">
-                            <h4 class="panel-title text-primary">Recent Images</h4>
-                          </div>
-                          <div class="panel-wrapper">
-                            <div class="panel-body scroll-300">
-                              <span class="" ng-repeat="photo in customer.photos">
-																	<img class="customer-photo" src="{{photo.url}}" alt="{{photo.alt}}">
-																</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xs-12">
-                        <div class="panel panel-white" id="activities">
-                          <div class="panel-heading border-light">
-                            <h4 class="panel-title text-primary">Recent Documents
-                            </h4>
-                          </div>
-                          <div class="panel-wrapper" style="overflow-x:auto;">
-                            <div class="panel-body" style="width: 900px;">
-                              <div class="document-item" ng-repeat="doc in customer.documents">
-                                <img class="document-photo" src="{{doc.image}}" alt="{{doc.name}}">
-                                <span>{{doc.name}}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </uib-tab>
-                  <uib-tab index="$index + 1" ng-repeat="tab in customer.menuItems" heading="{{tab.name}}"
-                           active="tab.active" disable="tab.disabled" style="padding-left:0;">
-                    <div ng-include="tab.template" style="height: 433px;"></div>
-                  </uib-tab>
-                </uib-tabset>
+              <div  class="tabbable no-padding no-margin">
+                <div ui-view="tabs"></div>
               </div>
             </div>
           </div>
@@ -249,3 +118,4 @@
 </div>
 <!-- end: USER PROFILE -->
 </div>
+
