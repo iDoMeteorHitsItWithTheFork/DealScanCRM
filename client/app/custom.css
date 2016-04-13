@@ -149,8 +149,8 @@ a:hover, a:active, a:focus {
 
 .navbar .navbar-header .navbar-brand img {
     display: inline-block;
-    height: 48px;
-    width: 240px;
+    height: 40px;
+    width: 200px;
 }
 .navbar .navbar-header .navbar-brand {
     padding: 9px 15px 0px 10px;
