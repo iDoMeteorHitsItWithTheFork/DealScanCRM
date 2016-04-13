@@ -3,9 +3,9 @@
   <h3 class="modal-title">Add Customer</h3>
 </div>
 <div class="modal-body p-b-10">
-  <div class="row">
+  <div class="row margin-negative-left-15 margin-negative-right-15">
     <div class="col-md-6">
-      <div class="row">
+      <div class="row margin-negative-left-15 margin-negative-right-15">
         <div class="col-sm-9">
           <div class="form-group">
             <label>First Name</label>
@@ -55,15 +55,13 @@
         <label>Zip Code</label>
         <input type="text" class="form-control" ng-model="newCustomer.customerInfo.postalCode">
       </div>
-      <div class="row">
+      <div class="row margin-negative-left-15 margin-negative-right-15">
         <div class="col-sm-9">
           <div class="form-group">
             <label>State</label>
-            <select class="cs-select cs-skin-elastic" ng-model="newCustomer.customerInfo.state">
-              <option value="" disabled selected>Select a State</option>
-              <option class="form-control" ng-repeat="state in newCustomer.states" value="{{state.name}}">
-                {{state.name}}
-              </option>
+            <select class="cs-select cs-skin-slide" ng-model="newCustomer.customerInfo.state" ng-options="state.name for state in newCustomer.states"
+                    ng-model="newCustomer.customerInfo.state">
+              <option value="" disabled="">Select a State</option>
             </select>
           </div>
         </div>
@@ -80,11 +78,9 @@
       </div>
       <div class="form-group">
         <label>Source</label>
-        <select class="cs-select cs-skin-elastic" ng-model="newCustomer.customerInfo.source">
-          <option value="" disabled selected>Pick a Source</option>
-          <option class="form-control" ng-repeat="source in newCustomer.sources" value="{{source.name}}">
-            {{source.name}}
-          </option>
+        <select class="cs-select cs-skin-slide" ng-model="newCustomer.customerInfo.source"
+                ng-options="source.name for source in newCustomer.sources">
+          <option value="" disabled="">Pick a Source</option>
         </select>
       </div>
     </div>

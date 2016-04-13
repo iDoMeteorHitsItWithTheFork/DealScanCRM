@@ -19697,6 +19697,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   padding-right: 0 !important;
 }
 
+
 .no-margin {
   margin: 0 !important;
 }
@@ -20150,7 +20151,12 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 .margin-negative-5 {
   margin: -5px !important;
 }
-
+.margin-negative-left-15 {
+  margin-left: -15px !important;
+}
+.margin-negative-right-15 {
+  margin-right: -15px !important;
+}
 .margin-5 {
   margin: 5px !important;
 }
@@ -23605,6 +23611,7 @@ div.cs-select:focus {
 }
 
 /* Options */
+
 .cs-select .cs-options {
   position: absolute;
   overflow: hidden;
@@ -23616,6 +23623,7 @@ div.cs-select:focus {
 .cs-select.cs-active .cs-options {
   visibility: visible;
 }
+
 
 .cs-select ul {
   list-style: none;
