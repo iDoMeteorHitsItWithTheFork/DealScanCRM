@@ -1610,14 +1610,28 @@ pre code {
   }
 }
 .container-fluid {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 5px;
+  padding-left: 5px;
   margin-right: auto;
   margin-left: auto;
 }
 .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.stripped-margin {
   margin-right: -15px;
   margin-left: -15px;
+}
+
+.sp-md-3 {
+  width: 28% !important;
+}
+.sp-md-9 {
+  width: 72% !important;
+}
+.no-padding-left {
+  padding-left: 0 !important;
 }
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
   position: relative;
@@ -15747,7 +15761,7 @@ body {
   overflow-x: hidden;
   height: 100%;
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 11px;
   padding: 0;
   margin: 0;
   background: #f7f7f8;
@@ -16019,8 +16033,8 @@ h5.over-title {
 .container-fullw {
   margin-left: -15px;
   margin-right: -15px;
-  padding-left: 30px;
-  padding-right: 30px;
+  /*padding-left: 30px;*/
+  /*padding-right: 30px;*/
   padding-top: 30px;
   padding-bottom: 15px;
   position: relative;
@@ -16061,7 +16075,7 @@ span[role="slider"] {
   z-index: 1089;
   border: none;
   margin-bottom: 0;
-  height: 60px;
+  height: 55px;
 }
 .navbar .loading-bar-wrapper {
   position: absolute;
@@ -16076,11 +16090,11 @@ span[role="slider"] {
   background: #2C2F3B;
   border-bottom: 1px solid transparent;
   position: relative;
-  height: 60px;
+  height: 55px;
 }
 @media (min-width: 768px) {
   .navbar .navbar-header {
-    width: 260px;
+    width: 220px;
   }
 }
 @media (min-width: 992px) {
@@ -16094,7 +16108,7 @@ span[role="slider"] {
 }
 .navbar .navbar-header a, .navbar .navbar-header button {
   line-height: 60px;
-  height: 60px;
+  height: 55px;
 }
 .navbar .navbar-header button {
   background: none;
@@ -16208,8 +16222,8 @@ span[role="slider"] {
     -o-transition: margin 0.5s;
     -webkit-transition: margin 0.5s;
     transition: margin 0.5s;
-    margin-left: 260px;
-    height: 60px !important;
+    margin-left: 220px;
+    height: 55px !important;
   }
   .navbar .navbar-collapse .nav {
     height: auto !important;
@@ -16456,7 +16470,7 @@ span[role="slider"] {
   }
 }
 .navbar .navbar-left {
-  margin-left: -15px;
+  margin-left: -10px;
 }
 @media (min-width: 768px) {
   .navbar .navbar-left > li {
@@ -16927,7 +16941,7 @@ span[role="slider"] {
 /*  Sidebar
 /* ---------------------------------------------------------------------- */
 #sidebar {
-  width: 260px;
+  width: 220px;
   position: absolute;
   top: 0;
   left: 0;
@@ -17135,7 +17149,7 @@ span[role="slider"] {
     width: inherit;
     z-index: -1;
     left: 10px;
-    width: 250px;
+    width: 210px;
     -webkit-box-shadow: inset -9px 0 8px -11px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: inset -9px 0 8px -11px rgba(0, 0, 0, 0.4);
     box-shadow: inset -9px 0 8px -11px rgba(0, 0, 0, 0.4);
@@ -17718,7 +17732,7 @@ span[role="slider"] {
 }
 #sidebar > div nav > ul li > a {
   margin-top: -1px !important;
-  font-size: 14px;
+  font-size: 12px;
 }
 #sidebar > div nav > ul li a {
   border: none;
@@ -18126,7 +18140,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 @media (min-width: 992px) {
   .main-content {
     margin-top: 60px;
-    margin-left: 260px;
+    margin-left: 220px;
     z-index: 1052;
     -moz-transition: margin-left 0.5s;
     -o-transition: margin-left 0.5s;
@@ -19679,6 +19693,10 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   padding: 0 !important;
 }
 
+.no-padding-right {
+  padding-right: 0 !important;
+}
+
 .no-margin {
   margin: 0 !important;
 }
@@ -20650,11 +20668,11 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 }
 
 .text-extra-small {
-  font-size: 11px !important;
+  font-size: 10px !important;
 }
 
 .text-small {
-  font-size: 12px !important;
+  font-size: 11px !important;
 }
 
 .text-large {
@@ -21640,13 +21658,13 @@ hr.white-line {
 /*Miles Changes*/
 .nav-tabs > li > a {
   border: 0 none;
-  border-radius: 0;
+  /*border-radius: 0;*/
   color: #8E9AA2;
   min-width: 70px;
   padding: 15px 12px;
 }
 .nav-tabs > li.active a, .nav-tabs > li.active a:hover, .nav-tabs > li.active a:focus {
-  border-width: 0;
+  /*border-width: 0;*/
 }
 .nav-tabs > .active a, .nav-tabs > .active a:hover, .nav-tabs > .active a:focus {
   border: 0 none;
@@ -30614,7 +30632,7 @@ figure.effect-goliath:hover p {
   background-color: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
   position: relative;
-  padding: 15px 35px;
+  padding: 15px 20px;
   margin: 0 -15px;
 }
 @media (max-width: 991px) {
