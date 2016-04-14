@@ -70,7 +70,7 @@ angular.module('dealScanCrmApp')
         url: '/overview',
         title: 'Overview',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/overview.html',
+        templateUrl: 'app/account/customer/tabs/overview/overview.html',
         controller: 'CustomerCtrl as customer',
         resolve: {
           thisCustomer: function (selectedCustomer) {
