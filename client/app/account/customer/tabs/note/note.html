@@ -1,22 +1,32 @@
-<div class="jumbotron" ng-if="note.customerNotes.length == 0">
-  <p>Sorry, this customer has no notes to display. Click below to add the notes.</p>
-  <a class="btn  btn-primary btn-sm btn-o" href ng-click="note.addNote();"><i
-    class="fa fa-plus">&nbsp;&nbsp;Add Note</i></a>
+<!--<div class="jumbotron" ng-if="note.customerNotes.length == 0">-->
+<!--<p>Sorry, this customer has no notes to display. Click below to add the notes.</p>-->
+<!--<a class="btn  btn-primary btn-sm btn-o" href ng-click="note.addNote();"><i-->
+<!--class="fa fa-plus">&nbsp;&nbsp;Add Note</i></a>-->
+<!--</div>-->
+<!--<ul class="media-list" ng-if="note.customerNotes.length > 0">-->
+<!--<li class="media"ng-repeat="n in note.customerNotes">-->
+<!--<div class="media-left">-->
+<!--<a href="#">-->
+<!--<img class="media-object" src="assets/images/profile.jpg" alt="" style="width:48px;">-->
+<!--</a>-->
+<!--</div>-->
+<!--<div class="media-body">-->
+<!--<h4 class="media-heading">{{n.Creator.profile.name}}-->
+<!--<span class="pull-right" style="margin-top:-8px" ng-if="n.creatorID == note.user.userID">-->
+<!--<a class="btn btn-link btn-sm btn-o" href ng-click="note.editNote(n)"><i class="fa fa-pencil"></i></a>-->
+<!--<a class="btn  btn-link btn-sm btn-o" href ng-click="note.deleteNote(n)"><i class="fa fa-remove text-danger"></i></a>-->
+<!--</span></h4>-->
+<!--<p>{{n.content}}</p>-->
+<!--</div>-->
+<!--</li>-->
+<!--</ul>-->
+<div class="row">
+  <div class="col-md-12">
+    <div class="form-group">
+      <label>Notes</label>
+      <div class="note-editor">
+        <textarea rows="2" placeholder="+ Type here to add a note..." class="form-control" style="resize: none"></textarea>
+      </div>
+    </div>
+  </div>
 </div>
-<ul class="media-list" ng-if="note.customerNotes.length > 0">
-  <li class="media"ng-repeat="n in note.customerNotes">
-    <div class="media-left">
-      <a href="#">
-        <img class="media-object" src="assets/images/profile.jpg" alt="" style="width:48px;">
-      </a>
-    </div>
-    <div class="media-body">
-      <h4 class="media-heading">{{n.Creator.profile.name}}
-        <span class="pull-right" style="margin-top:-8px" ng-if="n.creatorID == note.user.userID">
-           <a class="btn btn-link btn-sm btn-o" href ng-click="note.editNote(n)"><i class="fa fa-pencil"></i></a>
-           <a class="btn  btn-link btn-sm btn-o" href ng-click="note.deleteNote(n)"><i class="fa fa-remove text-danger"></i></a>
-          </span></h4>
-      <p>{{n.content}}</p>
-    </div>
-  </li>
-</ul>

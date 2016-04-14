@@ -106,8 +106,8 @@ angular.module('dealScanCrmApp')
         url: '/tasks',
         title: 'Tasks',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/tasks.html',
-        controller: 'CustomerCtrl as customer',
+        templateUrl: 'app/account/customer/tabs/task/task.html',
+        controller: 'TaskCtrl as task',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
@@ -130,8 +130,8 @@ angular.module('dealScanCrmApp')
         url: '/messages',
         title: 'Messages',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/messages.html',
-        controller: 'CustomerCtrl as customer',
+        templateUrl: 'app/account/customer/tabs/messages/messages.html',
+        controller: 'MessagesCtrl as messages',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
