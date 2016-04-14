@@ -1,0 +1,12 @@
+.large-thumbnail {
+  width: 360px !important;
+  height: 200px !important;
+}
+
+.img-action-btns {
+  position: absolute;;
+  bottom: 31%;
+  right: 9%;
+}
+
+
