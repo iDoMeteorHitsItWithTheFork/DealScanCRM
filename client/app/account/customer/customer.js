@@ -94,8 +94,8 @@ angular.module('dealScanCrmApp')
         url: '/images',
         title: 'Images',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/images.html',
-        controller: 'CustomerCtrl as customer',
+        templateUrl: 'app/account/customer/tabs/images/images.html',
+        controller: 'ImagesCtrl as images',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
