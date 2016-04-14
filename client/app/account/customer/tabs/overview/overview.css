@@ -1,0 +1,21 @@
+.ft-sz-12 {
+  font-size: 12px !important;
+}
+.min-height-40 {
+  min-height: 40px !important;
+}
+.thumbnail{
+  width: 150px;
+  height: 125px;
+  overflow: auto;
+}
+
+.thumbnail img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.recent-docs-listItem {
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
+}
