@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomersCtrl', function ($scope, $state, Auth, Util, Customer, $uibModal, SweetAlert, appConfig) {
+  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, SweetAlert, appConfig) {
 
     /*
      * Controllers Variables
@@ -19,7 +19,6 @@ angular.module('dealScanCrmApp')
     _customers.findCustomer = {name: null};
     _customers.sortOptions = ['Recent', 'Old', 'Name (A-z)', 'Name (z-A)'];
     _customers.orderCustomerByOption = _customers.sortOptions[0];
-
 
     $scope.$watch(function () {
       return _customers.findCustomer.name;
