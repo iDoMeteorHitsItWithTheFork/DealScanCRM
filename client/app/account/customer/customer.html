@@ -1,10 +1,10 @@
 <!-- start: BREADCRUMB -->
 <div class="wrap-content container fade-in-up ng-cloak" id="container">
-
-  <div class="breadcrumb-wrapper">
+  <div class="breadcrumb-wrapper margin-negative-top-20">
     <h4 class="mainTitle no-margin inline">{{customer.info.name}}</h4>
     <span class="pull-right" style="margin-top:-5px">
-			<a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="emailCustomer();">Email Customer</a>
+			<a ui-sref="home.customer" ng-show="$state.includes('home.customer.profile')" class="btn btn-primary btn-sm btn-o"
+         href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
 			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Assign as Lead</a>
 			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Schedule Appointment</a>
 			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Edit Customer</a>

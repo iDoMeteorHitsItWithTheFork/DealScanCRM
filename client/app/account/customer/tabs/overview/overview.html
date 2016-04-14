@@ -103,13 +103,14 @@
           <div class="media-body">
             <h4 class="media-heading ft-sz-12">
               <strong>Wed, Oct 15th, 2016</strong>
-              <span class="label pull-right margin-negative-left-21" ng-class="doc.checked ? 'label-success' : 'label-warning'"><i
-                ng-class="doc.checked ? 'fa fa-check' : 'fa fa-hourglass-start'">
-                &nbsp;</i>{{doc.checked ? 'Success' : 'Pending'}}</span>
-              <span class="label label-danger pull-right margin-right-5" ng-if="doc.applicable">
-                <i class="fa fa-exclamation-triangle" aria-hidden="true">&nbsp;</i>Required</span>
+              <a>
+                <span class="label label-success pull-right">
+                <i class="fa fa-cloud-download fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>{{doc.size | uppercase}}</span></span>
+              </a>
             </h4>
-            <p>{{doc.name}}<br><span class="text-muted text-small">{{ doc.applicable && doc.checked ? 'Reviewed by:': 'Pending Review by: '}} <a href>Bryan H.</a></span></p>
+
+            <p>{{doc.name}}<br><span class="text-muted text-small">Uploaded by: <a
+              href>Bryan H.</a></span></p>
 
           </div>
         </li>

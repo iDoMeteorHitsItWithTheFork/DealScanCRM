@@ -90,49 +90,57 @@ angular.module('dealScanCrmApp')
         image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
         name: 'Purchase Vehicle Odometer',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '25 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Trade Vehicle Odometer',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '15 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Rebate Incentive Approval',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '1.2 Mb',
       },
       {
         image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
         name: 'We Owe',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '245 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Lemon Law',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '25 Kb',
       },
       {
         image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
         name: 'Power Of Attorney',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '5 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Pay Off Verification',
         applicable: true,
-        checked: true
+        checked: true,
+        size: '2 Mb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Insurance Verification',
         applicable: true,
-        checked: false
+        checked: false,
+        size: '25 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
@@ -144,19 +152,22 @@ angular.module('dealScanCrmApp')
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Pay Off Authorization',
         applicable: true,
-        checked: false
+        checked: false,
+        size: '25 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Tittle Guarantee',
         applicable: true,
-        checked: false
+        checked: false,
+        size: '25 Kb',
       },
       {
         image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
         name: 'Used Car Warranty',
         applicable: false,
-        checked: false
+        checked: false,
+        size: '25 Kb',
       }
     ]
     _customer.photos = [

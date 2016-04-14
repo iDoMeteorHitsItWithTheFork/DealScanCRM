@@ -1,11 +1,9 @@
 <div>
   <div>
     <div class="wrap-content container fade-in-up ng-cloak" id="container">
-      <div class="breadcrumb-wrapper">
+      <div class="breadcrumb-wrapper" ng-if="$state.is('home.customer')">
         <h4 class="mainTitle no-margin inline">MY CUSTOMERS</h4>
         <span class="pull-right" style="margin-top:-8px">
-           <a ui-sref="home.customer" ng-show="$state.includes('home.customer.profile')" class="btn btn-primary btn-sm btn-o"
-              href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
            <a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="customers.addCustomer();"><i
              class="fa fa-user-plus"></i>&nbsp;&nbsp;Add Customer</a>
           </span>
