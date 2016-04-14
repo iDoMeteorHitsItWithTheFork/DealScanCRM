@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-sm-4 col-md-4" ng-repeat="photo in images.data">
+    <a href="#" class="thumbnail large-thumbnail">
+      <img src="{{photo.url}}" alt="{{photo.alt}}">
+    </a>
+
+    <div class="caption margin-bottom-30">
+      <h4 class="ft-sz-14 text-center" ><strong>{{photo.title}}</strong><span class="pull-right img-action-btns">
+        <a href="#" class="btn btn-default" role="button"><i class="fa fa-pencil"></i></a>
+        <a href="#" class="btn btn-danger" role="button"><i class="fa fa-trash"></i></a></span></h4>
+    </div>
+  </div>
+</div>
