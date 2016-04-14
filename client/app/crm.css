@@ -23429,7 +23429,7 @@ textarea.autosize.area-animated:focus {
   background: url("../assets/images/line_detail.png") repeat !important;
   line-height: 20px !important;
   margin-top: 10px !important;
-  min-height: 140px !important;
+  /*min-height: 40px !important;*/
   border: none !important;
   padding: 0 !important;
   position: relative !important;
