@@ -82,8 +82,8 @@ angular.module('dealScanCrmApp')
         url: '/documents',
         title: 'Documents',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/documents.html',
-        controller: 'CustomerCtrl as customer',
+        templateUrl: 'app/account/customer/tabs/documents/documents.html',
+        controller: 'DocumentsCtrl as documents',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
