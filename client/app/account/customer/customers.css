@@ -170,3 +170,8 @@
 .text-red {
   color: #e74c3c;
 }
+
+.compose-email {
+  height: 450px !important;
+  top: 30% !important;
+}
