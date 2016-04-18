@@ -1,21 +1,70 @@
-<table st-table="rowCollection" class="table table-striped">
-  <thead>
-  <tr>
-    <th>first name</th>
-    <th>last name</th>
-    <th>birth date</th>
-    <th>balance</th>
-    <th>email</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr ng-repeat="row in rowCollection">
-    <td>{{row.firstName}}</td>
-    <td>{{row.lastName}}</td>
-    <td>{{row.birthDate | date:'shortDate'}}</td>
-    <td>{{row.balance}}</td>
-    <td>{{row.email}}</td>
-  </tr>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-white">
+      <div class="panel-heading border-light min-height-40">
+        <h4 class="panel-title text-primary ft-sz-12">Required Documents</h4>
+      </div>
+      <div class="panel-wrapper">
+        <div class="panel-body scroll-300">
+          <div class="row">
+            <table st-table="rowCollection" class="table table-striped">
+              <thead>
+              <tr>
+                <th>first name</th>
+                <th>last name</th>
+                <th>email</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="row in rowCollection">
+                <td>{{row.firstName}}</td>
+                <td>{{row.lastName}}</td>
+                <td>{{row.email}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="panel panel-white">
+      <div class="panel-heading border-light min-height-40">
+        <div class="row">
+          <span class="col-md-12 padding-right-0">
+            <a class="btn btn-primary btn-sm btn-o pull-right" href="#"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add</a>
+          </span>
+        </div>
+      </div>
+      <div class="panel-wrapper">
+        <div class="panel-body scroll-300">
+          <div class="row">
+            <table st-table="documents.docs" class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Uploaded by</th>
+                <th>Uploaded On</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="row in documents.docs">
+                <td><img ng-src="{{row.ext}}" class="doc-img-icon">{{row.name}}</td>
+                <td>{{row.uploadedBy}}</td>
+                <td>{{row.uploadedOn | date:'shortDate'}}</td>
+                <td>
+                  <a class="btn btn-default btn-sm btn-o btn-rounded-20 pull-right" href="#"><i class="fa fa-remove"></i></a>
+                  <a class="btn btn-default btn-sm btn-o btn-rounded-20 margin-right-10 pull-right" href="#"><i class="fa fa-pencil"></i></a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
 
