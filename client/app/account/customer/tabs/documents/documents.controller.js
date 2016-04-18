@@ -5,6 +5,57 @@ angular.module('dealScanCrmApp')
 
       var _documents = this;
 
+    _documents.docs = [{
+      ID:'',
+      name: 'Purchase Vehicle Odometer',
+      uploadedOn: new Date('2016/03/30'),
+      uploadedBy: 'Luda Agodio',
+      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      size: '25kb',
+      url: ''
+    },{
+      ID:'',
+      name: 'Trade Vehicle Odometer',
+      uploadedOn: new Date('2016/03/30'),
+      uploadedBy: 'Luda Agodio',
+      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+      size: '25kb',
+      url: ''
+    },{
+      ID:'',
+      name: 'Rebate Incentive Approval',
+      uploadedOn: new Date('2016/03/30'),
+      uploadedBy: 'Luda Agodio',
+      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/ppt-doc-48.png',
+      size: '25kb',
+      url: ''
+    },{
+      ID:'',
+      name: 'We Owe',
+      uploadedOn: new Date('2016/03/30'),
+      uploadedBy: 'Luda Agodio',
+      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      size: '25kb',
+      url: ''
+    },{
+      ID:'',
+      name: 'Lemon Law',
+      uploadedOn: new Date('2016/03/30'),
+      uploadedBy: 'Luda Agodio',
+      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/excel-doc-48.png',
+      size: '25kb',
+      url: ''
+    },{
+      ID:'',
+      name: 'Power Of Attorney',
+      uploadedOn: new Date('2016/03/30'),
+      uploadedBy: 'Luda Agodio',
+      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+      size: '25kb',
+      url: ''
+    },
+    ];
+
     $scope.rowCollection = [
       {firstName: 'Laurent', lastName: 'Renard', birthDate: new Date('1987-05-21'), balance: 102, email: 'whatever@gmail.com'},
       {firstName: 'Blandine', lastName: 'Faivre', birthDate: new Date('1987-04-25'), balance: -2323.22, email: 'oufblandou@gmail.com'},

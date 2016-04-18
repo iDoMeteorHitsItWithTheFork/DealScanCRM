@@ -96,14 +96,14 @@
       <ul class="media-list list-group scroll-300">
         <li class="media list-group-item recent-docs-listItem" ng-repeat="doc in customer.documents">
           <div class="media-left">
-            <a href="#">
+            <a href="{{doc.image}}" target="_blank">
               <img class="media-object" style="width:32px !important;" ng-src="{{doc.image}}" alt="{{doc.name}}">
             </a>
           </div>
           <div class="media-body">
             <h4 class="media-heading ft-sz-12">
-              <strong>Wed, Oct 15th, 2016</strong>
-              <a>
+              <strong><a href="{{doc.image}}" target="_blank">Wed, Oct 15th, 2016</a></strong>
+              <a href="{{doc.image}}" download="{{doc.name}}">
                 <span class="label label-success pull-right">
                 <i class="fa fa-cloud-download fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>{{doc.size | uppercase}}</span></span>
               </a>
@@ -127,7 +127,7 @@
         <div class="panel-body scroll-300">
           <div class="row">
             <div class="col-sm-6 col-md-6" ng-repeat="photo in customer.photos">
-              <a href="#" class="thumbnail">
+              <a ng-click="customer.openLightboxModal($index)" class="thumbnail">
                 <img src="{{photo.url}}" alt="{{photo.alt}}">
               </a>
             </div>
