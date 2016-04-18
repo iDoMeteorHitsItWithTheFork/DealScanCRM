@@ -68,6 +68,6 @@ angular.module('dealScanCrmApp')
       return menu;
     }
 
-    _sidebar.menu = _sidebar.menuBuilder(false);
+    _sidebar.menu = _sidebar.menuBuilder(true);
 
   });

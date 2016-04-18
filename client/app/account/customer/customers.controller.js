@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, SweetAlert, appConfig) {
+  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, $aside, SweetAlert, appConfig) {
 
     /*
      * Controllers Variables
@@ -9,6 +9,7 @@ angular.module('dealScanCrmApp')
      * */
     var _customers = this; //$scope
     var filteredData = [];
+    _customers.compose = false;
 
     _customers.user = Auth.getCurrentUser();
     _customers.customersInfo = [];
@@ -267,11 +268,14 @@ angular.module('dealScanCrmApp')
      *
      * */
     _customers.emailCustomer = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
+      _customers.compose = true;
+      var emailCustomer = $aside.open({
         templateUrl: 'app/account/email/modal/emailModal.html',
         controller: 'EmailCustomerCtrl as landing',
+        placement: 'right',
+        windowClass: 'compose-email',
+        size: 'md',
+        backdrop: false,
       });
     }
 
@@ -282,11 +286,11 @@ angular.module('dealScanCrmApp')
      *
      */
     _customers.textCustomer = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
+      var textCustomer = $aside.open({
         templateUrl: 'app/account/email/modal/emailModal.html',
         controller: 'EmailCustomerCtrl as landing',
+        placement: 'right',
+        size: 'sm'
       });
     }
 
