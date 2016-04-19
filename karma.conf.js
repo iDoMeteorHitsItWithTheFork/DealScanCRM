@@ -33,6 +33,7 @@ module.exports = function(config) {
       'client/bower_components/fullcalendar/dist/fullcalendar.js',
       'client/bower_components/angular-ui-calendar/src/calendar.js',
       'client/bower_components/angular-smart-table/dist/smart-table.js',
+      'client/bower_components/lr-sticky-header/lrStickyHeader.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',
