@@ -6,51 +6,44 @@ angular.module('dealScanCrmApp')
       var _documents = this;
 
     _documents.docs = [{
-      ID:'',
       name: 'Purchase Vehicle Odometer',
-      uploadedOn: new Date('2016/03/30'),
-      uploadedBy: 'Luda Agodio',
-      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      ext: 'pdf',
+      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
       size: '25kb',
+      status: true,
       url: ''
     },{
-      ID:'',
       name: 'Trade Vehicle Odometer',
-      uploadedOn: new Date('2016/03/30'),
-      uploadedBy: 'Luda Agodio',
-      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+      ext: 'pdf',
+      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
       size: '25kb',
+      status: true,
       url: ''
     },{
-      ID:'',
       name: 'Rebate Incentive Approval',
-      uploadedOn: new Date('2016/03/30'),
-      uploadedBy: 'Luda Agodio',
-      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/ppt-doc-48.png',
+      ext: 'doc',
+      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
       size: '25kb',
+      status: false,
       url: ''
     },{
-      ID:'',
       name: 'We Owe',
-      uploadedOn: new Date('2016/03/30'),
-      uploadedBy: 'Luda Agodio',
-      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
-      size: '25kb',
+      ext: 'xls',
+      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/excel-doc-48.png',
+      size: '25kb',status: true,
       url: ''
     },{
-      ID:'',
       name: 'Lemon Law',
-      uploadedOn: new Date('2016/03/30'),
-      uploadedBy: 'Luda Agodio',
-      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/excel-doc-48.png',
+      ext: 'ppt',
+      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/ppt-doc-48.png',
       size: '25kb',
+      status: false,
       url: ''
     },{
-      ID:'',
       name: 'Power Of Attorney',
-      uploadedOn: new Date('2016/03/30'),
-      uploadedBy: 'Luda Agodio',
-      ext: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+      ext: 'pdf',
+      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      status: false,
       size: '25kb',
       url: ''
     },
