@@ -273,9 +273,9 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/account/email/modal/emailModal.html',
         controller: 'EmailCustomerCtrl as landing',
         placement: 'right',
-        windowClass: 'compose-email',
-        size: 'md',
-        backdrop: false,
+        //windowClass: 'compose-email',
+        size: 'md'
+        //backdrop: false,
       });
     }
 
