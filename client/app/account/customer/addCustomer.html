@@ -59,8 +59,8 @@
         <div class="col-sm-9">
           <div class="form-group">
             <label>State</label>
-            <select class="cs-select cs-skin-slide" ng-model="newCustomer.customerInfo.state" ng-options="state.name for state in newCustomer.states"
-                    ng-model="newCustomer.customerInfo.state">
+            <select class="cs-select cs-skin-slide ft-sz-12" ng-model="newCustomer.state"
+                    ng-options="state.name for state in newCustomer.states">
               <option value="" disabled="">Select a State</option>
             </select>
           </div>
@@ -68,17 +68,17 @@
         <div class="col-sm-3">
           <div class="form-group">
             <label>Code</label>
-            <input type="text" class="form-control" ng-model="newCustomer.stateCode">
+            <input type="text" class="form-control" ng-model="newCustomer.state.code">
           </div>
         </div>
       </div>
       <div class="form-group">
         <label>Country</label>
-        <input type="text" class="form-control" ng-model="newCustomer.customerInfo.country">
+        <input type="text" class="form-control" ng-model="newCustomer.state.country">
       </div>
       <div class="form-group">
         <label>Source</label>
-        <select class="cs-select cs-skin-slide" ng-model="newCustomer.customerInfo.source"
+        <select class="cs-select cs-skin-slide ft-sz-12" ng-model="newCustomer.source"
                 ng-options="source.name for source in newCustomer.sources">
           <option value="" disabled="">Pick a Source</option>
         </select>

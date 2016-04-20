@@ -6,6 +6,10 @@ angular.module('dealScanCrmApp')
     console.log("add customer controller loaded");
 
     var _newCustomer = this;
+    _newCustomer.sources = [{name:'WalkIn'},{name:'Web'},{name:'Phone'}, {name:'HappyTag'}, {name:'Other'}];
+    _newCustomer.states = Util.usStates();
+    _newCustomer.state = {};
+    _newCustomer.source = {};
     _newCustomer.customerInfo = {
       driverLicenseID: '',
       firstName: '',
@@ -21,21 +25,6 @@ angular.module('dealScanCrmApp')
       postalCode: '',
       source: ''
     };
-
-
-
-    var st = $scope.$watch(function(){
-      return _newCustomer.customerInfo.state;
-    }, function(newValue, oldValue){
-        if (newValue) {
-          for(var i= 0; i < _newCustomer.states.length; i++){
-            if (Util.slimTrim(newValue).toLowerCase() == Util.slimTrim(_newCustomer.states[i].name).toLowerCase()) {
-              _newCustomer.stateCode =  _newCustomer.states[i].code
-              break;
-            };
-          }
-        }
-    })
 
    /*
    * Destory watch on exit
@@ -59,6 +48,9 @@ angular.module('dealScanCrmApp')
     _newCustomer.ok = function () {
       if (_newCustomer.addingCustomer) return;
       _newCustomer.addingCustomer = true;
+      _newCustomer.customerInfo.state = _newCustomer.state.name;
+      _newCustomer.customerInfo.country = _newCustomer.state.country;
+      _newCustomer.customerInfo.source = _newCustomer.source.name;
       Customer.add(_newCustomer.customerInfo).then(function(newCustomer){
         console.log(newCustomer);
         $uibModalInstance.close(newCustomer);
@@ -74,7 +66,5 @@ angular.module('dealScanCrmApp')
       $uibModalInstance.dismiss('cancel');
     };
 
-    _newCustomer.sources = [{name: 'WalkIn'}, {name: 'Internet'}, {name: 'Phone'}];
-    _newCustomer.states = Util.usStates();
 
   });
