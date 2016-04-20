@@ -54,8 +54,8 @@
               <div class="col-md-6">
                 <p style="margin-top: 10px; font-weight: bold; color: darkslategray;">Purchased Vehicles</p>
               </div>
-              <div class="col-md-6">
-                <div class="row pull-right" style="margin-top: 5px;">
+              <div class="col-md-4" style="margin-left: -15px;">
+                <div class="row" style="margin-top: 5px;">
                   <span ng-show="customer.purchases.length == 1"><a href>{{customer.purchase.vehicle}}</a></span>
                   <span>
                     <select ng-show="customer.purchases.length > 1"
@@ -65,6 +65,10 @@
                     </select>
                   </span>
                 </div>
+              </div>
+              <div class="col-md-2" style="margin-left: 15px;">
+                <span class="label label-success pull-right" style="margin-right: 5px; margin-top: 6px; height: 25px;">
+                  <i class="fa fa-folder-open" aria-hidden="true" style="padding-top: 5px;"></i>View Details</span>
               </div>
             </div>
             <div class="row" style="margin-left: -5px; margin-right: -20px;">
@@ -83,7 +87,7 @@
                   <li class="list-group-item" style="border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; padding-bottom: 8px;">
                     <div class="row inline">
                       <p class="pull-left" style="color: darkslategray; padding-top: 4px; margin-left: -10px;">Date Of Action</p>
-                      <p class="pull-right" style="padding-top: 4px;">05/11/2016</p>
+                      <p class="pull-right" style="padding-top: 4px;">05/10.5/2016</p>
                     </div>
                   </li>
                 </ul>
@@ -107,7 +111,6 @@
                       <p style="color: darkslategray;">Status</p>
                       <div class="" style="margin-top: -25px;">
                         <span class="label label-warning pull-right">Pending</span>
-                        <span class="label label-success pull-right" style="margin-right: 5px;"><i class="fa fa-folder-open" aria-hidden="true"></i>View Details</span>
                       </div>
                     </div>
                   </li>
@@ -119,33 +122,48 @@
             <div class="row">
               <div class="row" style="margin-left: 3px; background-color: #E6E8E8;">
                 <p class="" style="margin-left: 10px; margin-top: 8px; font-weight: bold; color: darkslategray;">Purchase Details</p>
-                <span class="label label-success pull-right" style="margin-right: 5px; margin-top: -25px;"><i class="fa fa-folder-open" aria-hidden="true"></i>View Details</span>
               </div>
               <div class="row" style="margin-top: 5px;">
                 <div class="col-md-6" style="padding: 5px;">
                   <ul class="list-group" style="border: none; !important;">
                     <li class="list-group-item" style="height: 27px; padding: 0px; padding-top: 5px; border-left: none; border-right: none; border-top: none;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Sale Price</p>
-                        <p class="pull-right" style="font-size: 11px;">$24,000</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Sale Price</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">$24,000</p>
+                        </div>
                       </div>
                     </li>
                     <li class="list-group-item" style="height: 27px; padding: 0px; border-left: none; border-right: none;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Allowance</p>
-                        <p class="pull-right" style="font-size: 11px;">$14,000</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Allowance</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">$14,000</p>
+                        </div>
                       </div>
                     </li>
                     <li class="list-group-item" style="height: 27px; padding: 0px; border-left: none; border-right: none;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Trade Payoff</p>
-                        <p class="pull-right" style="font-size: 11px">$10,000</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Trade Payoff</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">$10,000</p>
+                        </div>
                       </div>
                     </li>
                     <li class="list-group-item" style="height: 27px; padding: 0px; border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Amount Financed</p>
-                        <p class="pull-right" style="font-size: 11px;">$0</p>
+                        <div class="col-md-8" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Amount Financed</p>
+                        </div>
+                        <div class="col-md-4" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">$0</p>
+                        </div>
                       </div>
                     </li>
                   </ul>
@@ -154,26 +172,42 @@
                   <ul class="list-group" style="border: none; !important;">
                     <li class="list-group-item" style="height: 27px; padding: 0px; padding-top: 5px; border-left: none; border-right: none; border-top: none;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Rebate</p>
-                        <p class="pull-right" style="font-size: 11px;">$1,200</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Rebate</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">$1,200</p>
+                        </div>
                       </div>
                     </li>
                     <li class="list-group-item" style="height: 27px; padding: 0px; border-left: none; border-right: none;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Interest Rate</p>
-                        <p class="pull-right" style="font-size: 11px;">3.5%</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">IR</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">3.5%</p>
+                        </div>
                       </div>
                     </li>
                     <li class="list-group-item" style="height: 27px; padding: 0px; border-left: none; border-right: none;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Deal Terms</p>
-                        <p class="pull-right" style="font-size: 11px;">40 Months</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Terms</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">40 Months</p>
+                        </div>
                       </div>
                     </li>
                     <li class="list-group-item" style="height: 27px; padding: 0px; border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
                       <div class="row">
-                        <p class="pull-left" style="font-size: 11px; color: darkslategray;">Payment</p>
-                        <p class="pull-right" style="font-size: 11px;">$355</p>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-left" style="font-size: 10.5px; color: darkslategray;">Payment</p>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;">
+                          <p class="pull-right" style="font-size: 10.5px;">$355</p>
+                        </div>
                       </div>
                     </li>
                   </ul>
