@@ -1,3 +1,21 @@
+/*.user-left {*/
+  /*width: 20%; !important;*/
+/*}*/
+/*.list-group-item:first-child {*/
+  /*border: none; !important;*/
+/*}*/
+/*.list-group-item {*/
+  /*border: none; !important;*/
+/*}*/
+/*.list-group-item:last-child {*/
+  /*border: none; !important;*/
+/*}*/
+
+/*.cs-placeholder {*/
+  /*margin-left: 70px;*/
+  /*margin-top: -42px;*/
+  /*font-size: 11px;*/
+/*}*/
 .customer-photo {
       height: 80px;
       display: inline;
