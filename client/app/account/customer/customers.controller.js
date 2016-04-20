@@ -167,15 +167,18 @@ angular.module('dealScanCrmApp')
      * Email a customer
      *
      * */
-    _customers.emailCustomer = function () {
-      _customers.compose = true;
+    _customers.emailCustomer = function (customer) {
       var emailCustomer = $aside.open({
-        templateUrl: 'app/account/email/modal/emailModal.html',
-        controller: 'EmailCustomerCtrl as landing',
+        templateUrl: 'app/account/customer/sideviews/email/email.html',
+        controller: 'EmailCtrl as email',
         placement: 'right',
-        //windowClass: 'compose-email',
-        size: 'md'
-        //backdrop: false,
+        windowClass: 'slide-up',
+        size: 'md',
+        resolve: {
+          selectedCustomer: function(){
+            return customer;
+          }
+        }
       });
     }
 
@@ -185,12 +188,18 @@ angular.module('dealScanCrmApp')
      *
      *
      */
-    _customers.textCustomer = function () {
+    _customers.textCustomer = function (customer) {
       var textCustomer = $aside.open({
-        templateUrl: 'app/account/email/modal/emailModal.html',
-        controller: 'EmailCustomerCtrl as landing',
+        templateUrl: 'app/account/customer/sideviews/text/text.html',
+        controller: 'TextCtrl as text',
         placement: 'right',
-        size: 'sm'
+        windowClass: 'slide-up',
+        size: 'sm',
+        resolve: {
+          selectedCustomer: function(){
+            return customer;
+          }
+        }
       });
     }
 
