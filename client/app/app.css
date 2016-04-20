@@ -41,3 +41,15 @@
 textarea {
   resize: none;
 }
+
+.btn-dealscan {
+  background: #FA6424 !important;
+  color: #fff !important;
+  border: 1px solid #dedede !important;
+  box-sizing: border-box !important;
+}
+
+.btn-dealscan:hover {
+  background: #fff!important;
+  color: #FA6424 !important;
+}
