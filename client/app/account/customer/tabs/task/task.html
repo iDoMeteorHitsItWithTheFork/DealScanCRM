@@ -1,232 +1,288 @@
-<div class="row" style="padding-left: 15px">
-  <a class="btn btn-primary btn-sm btn-o"><i class="fa fa-tasks"></i> Add Task</a>
-  <div class="pull-right" style="padding-right: 15px">
-    <a class="btn btn-primary btn-sm btn-o"><i class="fa fa-calendar-o"></i></a>
-    <a class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>
+<div class="container" style="padding: 0px;">
+  <div class="row" style="margin-bottom: 15px;">
+    <div class="col-md-6" style="padding-right: 3px;">
+      <p style="margin-bottom: 5px;">COMPLETED TASKS</p>
+      <div class="col-md-4" style="background-color: #4A6F91">
+        <div class="row" style="margin-bottom: -10px; margin-top: 5px;">
+          <p style="color: white; font-size: 20px;">8</p>
+        </div>
+        <div class="row">
+          <p style="color: white;">CALLS MADE</p>
+        </div>
+      </div>
+      <div class="col-md-4" style="background-color: #5795DC;">
+        <div class="row" style="margin-bottom: -10px; margin-top: 5px;">
+          <p style="font-size: 20px; color: white;">12</p>
+        </div>
+        <div class="row">
+          <p style="color: white;">TEXTS SENT</p>
+        </div>
+      </div>
+      <div class="col-md-4" style="background-color: #8EBDF3;">
+        <div class="row" style="margin-bottom: -10px; margin-top: 5px;">
+          <p style="font-size: 20px; color: white;">2</p>
+        </div>
+        <div class="row">
+          <p style="color: white;">EMAILS SENT</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6" style="padding-left: 3px;">
+      <p style="margin-bottom: 5px;">PENDING TASKS</p>
+      <div class="col-md-9" style="background-color: #F2AE3E;">
+        <div class="row" style="margin-bottom: -10px; margin-top: 5px;">
+          <p style="font-size: 20px; color: white;">6</p>
+        </div>
+        <div class="row">
+          <p style="color: white;">TASKS REMAINING</p>
+        </div>
+      </div>
+      <div class="col-md-3" style="background-color: #FA6424;">
+        <a class="btn btn-link btn-sm pull-right" href="#" style="color: white; background-color: #FA6424; margin-bottom: 1px; margin-top: 1px; margin-right: -14px; font-size: 15px; width: 120px;"><i class="fa fa-plus"></i>  Add<br>Task</a>
+      </div>
+    </div>
+  </div>
+  <div class="row border-around" style="margin-left: 15px; margin-right: 15px; height: 36px;">
+    <div class="col-md-1" style="margin-top: 8px; padding: 0px;">
+      <p style="font-weight: bold; font-size: 12px; margin-left: 10px;">Due Date</p>
+    </div>
+    <div class="col-md-7" style="margin-top: 8px; padding: 0px;">
+      <p style="font-weight: bold; font-size: 12px; margin-left: 20px;">Task Tittle</p>
+    </div>
+    <div class="col-md-1" style="margin-top: 8px; padding: 0px;">
+      <p style="font-weight: bold; font-size: 12px; margin-left: 33px;">Category</p>
+    </div>
+    <div class="col-md-3" style="margin-top: 8px; padding: 0px;">
+      <p style="font-weight: bold; font-size: 12px; margin-left: 15px;">Progress</p>
+    </div>
+  </div>
+  <div class="container" style="overflow-x: hidden; overflow-y: scroll; height: 225px; margin-bottom: 39px;">
+      <ul class="list-group">
+        <li class="list-group-item" style="border-radius: 0px; border-top: none; background-color: #EFEFEF;">
+          <div class="row" style="margin-bottom: -5px; margin-top: -5px;">
+            <div class="col-md-1" style="padding: 0px;">
+              <p style="font-weight: bold; font-size: 14px;">April, 14th</p>
+              <p style="margin-left: 10px; font-size: 12px; margin-top: 15px;">1:00 PM</p>
+            </div>
+            <div class="col-md-11 border-left" style="padding-left: 10px; padding-right: 0px;">
+              <div class="row" style="margin-bottom: -10px;">
+                <div class="col-md-8 border-right">
+                  <div class="row">
+                    <div class="col-md-10" style="padding: 0px; margin-left: -15px;">
+                      <p class="" style="font-weight: bold; margin-bottom: 0px; font-size: 12px;">Joe P.</p>
+                      <p style="margin-bottom: 0px; font-style: italic; font-size: 10px;">Assigned By: Luda A.</p>
+                    </div>
+                    <div class="col-md-2" style="padding: 0px;">
+                      <i class="fa fa-exclamation-circle pull-right" aria-hidden="true" style="color: #FA6424; font-size: 17px; margin-top: 5px; margin-right: -13px;"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1" style="padding: 0; height: 30px; margin-top: 5px;">
+                  <span class="label label-info" style="margin-left: 10px;">Category</span>
+                </div>
+                <div class="col-md-2 border-left border-right" style="padding: 5px; height: 30px; width: 180px;">
+                  <span class="block padding-top-10" style="margin-left: 5px; margin-right: 5px; margin-top: -5px;">
+                    <div class="progress-xs no-radius background-dark no-margin progress">
+                      <div class="progress-bar" role="progressbar" style="width: 64%;"></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-md-1" style="width: 30px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" class="checkbox checkbox-large" style="margin-top: -1px; width: 15px; height: 15px; margin-left: -22px;">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-top">
+                <div class="col-md-12" style="margin-left: -15px; margin-top: -5px">
+                  <p>Lorem ipsum note note note ....... Lorem ipsum note note note ....... Lorem ipsum note note note .......</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item" style="border-radius: 0px; background-color: white;">
+          <div class="row" style="margin-bottom: -5px; margin-top: -5px;">
+            <div class="col-md-1" style="padding: 0px;">
+              <p style="font-weight: bold; font-size: 14px;">April, 14th</p>
+              <p style="margin-left: 10px; font-size: 12px; margin-top: 15px;">1:00 PM</p>
+            </div>
+            <div class="col-md-11 border-left" style="padding-left: 10px; padding-right: 0px;">
+              <div class="row" style="margin-bottom: -10px;">
+                <div class="col-md-8 border-right">
+                  <div class="row">
+                    <div class="col-md-10" style="padding: 0px; margin-left: -15px;">
+                      <p class="" style="font-weight: bold; margin-bottom: 0px; font-size: 12px;">Joe P.</p>
+                      <p style="margin-bottom: 0px; font-style: italic; font-size: 10px;">Assigned By: Luda A.</p>
+                    </div>
+                    <div class="col-md-2" style="padding: 0px;">
+                      <i class="fa fa-check-circle-o success pull-right" aria-hidden="true" style="color: #82D12E; font-size: 18px; margin-top: 5px; margin-right: -15px;"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1" style="padding: 0; height: 30px; margin-top: 5px;">
+                  <span class="label label-info" style="margin-left: 10px;">Category</span>
+                </div>
+                <div class="col-md-2 border-left border-right" style="padding: 5px; height: 30px; width: 180px;">
+                  <span class="block padding-top-10" style="margin-left: 5px; margin-right: 5px; margin-top: -5px;">
+                    <div class="progress-xs no-radius background-dark no-margin progress">
+                      <div class="progress-bar" role="progressbar" style="width: 54%;"></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-md-1" style="width: 30px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" class="checkbox checkbox-large" style="margin-top: -1px; width: 15px; height: 15px; margin-left: -22px;">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-top">
+                <div class="col-md-12" style="margin-left: -15px; margin-top: -5px">
+                  <p>Lorem ipsum note note note ....... Lorem ipsum note note note ....... Lorem ipsum note note note .......</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item" style="border-radius: 0px; background-color: #EFEFEF;">
+          <div class="row" style="margin-bottom: -5px; margin-top: -5px;">
+            <div class="col-md-1" style="padding: 0px;">
+              <p style="font-weight: bold; font-size: 14px;">April, 14th</p>
+              <p style="margin-left: 10px; font-size: 12px; margin-top: 15px;">1:00 PM</p>
+            </div>
+            <div class="col-md-11 border-left" style="padding-left: 10px; padding-right: 0px;">
+              <div class="row" style="margin-bottom: -10px;">
+                <div class="col-md-8 border-right">
+                  <div class="row">
+                    <div class="col-md-10" style="padding: 0px; margin-left: -15px;">
+                      <p class="" style="font-weight: bold; margin-bottom: 0px; font-size: 12px;">Joe P.</p>
+                      <p style="margin-bottom: 0px; font-style: italic; font-size: 10px;">Assigned By: Luda A.</p>
+                    </div>
+                    <div class="col-md-2" style="padding: 0px;">
+                      <i class="fa fa-check-circle-o success pull-right" aria-hidden="true" style="color: #82D12E; font-size: 18px; margin-top: 5px; margin-right: -15px;"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1" style="padding: 0; height: 30px; margin-top: 5px;">
+                  <span class="label label-info" style="margin-left: 10px;">Category</span>
+                </div>
+                <div class="col-md-2 border-left border-right" style="padding: 5px; height: 30px; width: 180px;">
+                  <span class="block padding-top-10" style="margin-left: 5px; margin-right: 5px; margin-top: -5px;">
+                    <div class="progress-xs no-radius background-dark no-margin progress">
+                      <div class="progress-bar" role="progressbar" style="width: 15%;"></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-md-1" style="width: 30px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" class="checkbox checkbox-large" style="margin-top: -1px; width: 15px; height: 15px; margin-left: -22px;">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-top">
+                <div class="col-md-12" style="margin-left: -15px; margin-top: -5px">
+                  <p>Lorem ipsum note note note ....... Lorem ipsum note note note ....... Lorem ipsum note note note .......</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item" style="border-radius: 0px; background-color: white;">
+          <div class="row" style="margin-bottom: -5px; margin-top: -5px;">
+            <div class="col-md-1" style="padding: 0px;">
+              <p style="font-weight: bold; font-size: 14px;">April, 14th</p>
+              <p style="margin-left: 10px; font-size: 12px; margin-top: 15px;">1:00 PM</p>
+            </div>
+            <div class="col-md-11 border-left" style="padding-left: 10px; padding-right: 0px;">
+              <div class="row" style="margin-bottom: -10px;">
+                <div class="col-md-8 border-right">
+                  <div class="row">
+                    <div class="col-md-10" style="padding: 0px; margin-left: -15px;">
+                      <p class="" style="font-weight: bold; margin-bottom: 0px; font-size: 12px;">Joe P.</p>
+                      <p style="margin-bottom: 0px; font-style: italic; font-size: 10px;">Assigned By: Luda A.</p>
+                    </div>
+                    <div class="col-md-2" style="padding: 0px;">
+                      <i class="fa fa-exclamation-circle pull-right" aria-hidden="true" style="color: #FA6424; font-size: 17px; margin-top: 5px; margin-right: -13px;"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1" style="padding: 0; height: 30px; margin-top: 5px;">
+                  <span class="label label-info" style="margin-left: 10px;">Category</span>
+                </div>
+                <div class="col-md-2 border-left border-right" style="padding: 5px; height: 30px; width: 180px;">
+                  <span class="block padding-top-10" style="margin-left: 5px; margin-right: 5px; margin-top: -5px;">
+                    <div class="progress-xs no-radius background-dark no-margin progress">
+                      <div class="progress-bar" role="progressbar" style="width: 74%;"></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-md-1" style="width: 30px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" class="checkbox checkbox-large" style="margin-top: -1px; width: 15px; height: 15px; margin-left: -22px;">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-top">
+                <div class="col-md-12" style="margin-left: -15px; margin-top: -5px">
+                  <p>Lorem ipsum note note note ....... Lorem ipsum note note note ....... Lorem ipsum note note note .......</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item" style="border-radius: 0px; background-color: #EFEFEF;">
+          <div class="row" style="margin-bottom: -5px; margin-top: -5px;">
+            <div class="col-md-1" style="padding: 0px;">
+              <p style="font-weight: bold; font-size: 14px;">April, 14th</p>
+              <p style="margin-left: 10px; font-size: 12px; margin-top: 15px;">1:00 PM</p>
+            </div>
+            <div class="col-md-11 border-left" style="padding-left: 10px; padding-right: 0px;">
+              <div class="row" style="margin-bottom: -10px;">
+                <div class="col-md-8 border-right">
+                  <div class="row">
+                    <div class="col-md-10" style="padding: 0px; margin-left: -15px;">
+                      <p class="" style="font-weight: bold; margin-bottom: 0px; font-size: 12px;">Joe P.</p>
+                      <p style="margin-bottom: 0px; font-style: italic; font-size: 10px;">Assigned By: Luda A.</p>
+                    </div>
+                    <div class="col-md-2" style="padding: 0px;">
+                      <i class="fa fa-check-circle-o success pull-right" aria-hidden="true" style="color: #82D12E; font-size: 18px; margin-top: 5px; margin-right: -15px;"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1" style="padding: 0; height: 30px; margin-top: 5px;">
+                  <span class="label label-info" style="margin-left: 10px;">Category</span>
+                </div>
+                <div class="col-md-2 border-left border-right" style="padding: 5px; height: 30px; width: 180px;">
+                  <span class="block padding-top-10" style="margin-left: 5px; margin-right: 5px; margin-top: -5px;">
+                    <div class="progress-xs no-radius background-dark no-margin progress">
+                      <div class="progress-bar" role="progressbar" style="width: 14%;"></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-md-1" style="width: 30px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" class="checkbox checkbox-large" style="margin-top: -1px; width: 15px; height: 15px; margin-left: -22px;">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row border-top">
+                <div class="col-md-12" style="margin-left: -15px; margin-top: -5px">
+                  <p>Lorem ipsum note note note ....... Lorem ipsum note note note ....... Lorem ipsum note note note .......</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
   </div>
 </div>
-
-<ul class="list-group">
-  <!--<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">-->
-    <!--<div class="row">-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">Mon, April 10 - 11:00 AM</a>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<div class="row" style="padding-right: 15px; padding-left: 15px">-->
-          <!--<a href="#">Task Tittle</a>-->
-          <!--<span class="label label-warning pull-right">Category</span>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<span class="block padding-top-10">-->
-          <!--<div class="progress-xs no-radius background-dark no-margin progress">-->
-            <!--<div class="progress-bar" role="progressbar" style="width: 54%;"></div>-->
-          <!--</div>-->
-        <!--</span>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</li>-->
-  <!--<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">-->
-    <!--<div class="row">-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">Mon, April 10 - 11:00 AM</a>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<div class="row" style="padding-right: 15px; padding-left: 15px">-->
-          <!--<a href="#">Call Paula about rebate</a>-->
-          <!--<span class="label label-info pull-right">Call</span>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<span class="block padding-top-10">-->
-          <!--<div class="progress-xs no-radius background-dark no-margin progress">-->
-            <!--<div class="progress-bar" role="progressbar" style="width: 54%;"></div>-->
-          <!--</div>-->
-        <!--</span>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</li>-->
-  <!--<li></li>-->
-  <li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
-    <div class="row">
-      <div class="col-xs-4">
-        <a href="#">Mon, April 10 - 11:00 AM</a>
-      </div>
-      <div class="col-xs-3">
-        <a href="#">Task Tittle</a>
-      </div>
-      <div class="col-xs-2">
-        <span class="label label-warning">Category</span>
-      </div>
-      <div class="col-xs-3">
-        <span class="block padding-top-10">
-          <div class="progress-xs no-radius background-dark no-margin progress">
-            <div class="progress-bar" role="progressbar" style="width: 54%;"></div>
-          </div>
-        </span>
-      </div>
-    </div>
-  </li>
-  <li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
-    <div class="row">
-      <div class="col-xs-4">
-        <a href="#">Mon, April 10 - 11:00 AM</a>
-      </div>
-      <div class="col-xs-3">
-        <a href="#">Task Tittle</a>
-      </div>
-      <div class="col-xs-2">
-        <span class="label label-info">Category</span>
-      </div>
-      <div class="col-xs-3">
-        <span class="block padding-top-10">
-          <div class="progress-xs no-radius background-dark no-margin progress">
-            <div class="progress-bar" role="progressbar" style="width: 14%;"></div>
-          </div>
-        </span>
-      </div>
-    </div>
-  </li>
-  <li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
-    <div class="row">
-      <div class="col-xs-4">
-        <a href="#">Mon, April 10 - 11:00 AM</a>
-      </div>
-      <div class="col-xs-3">
-        <a href="#">Task Tittle</a>
-      </div>
-      <div class="col-xs-2">
-        <span class="label label-warning">Category</span>
-      </div>
-      <div class="col-xs-3">
-        <span class="block padding-top-10">
-          <div class="progress-xs no-radius background-dark no-margin progress">
-            <div class="progress-bar" role="progressbar" style="width: 64%;"></div>
-          </div>
-        </span>
-      </div>
-    </div>
-  </li>
-  <li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
-    <div class="row">
-      <div class="col-xs-4">
-        <a href="#">Mon, April 10 - 11:00 AM</a>
-      </div>
-      <div class="col-xs-3">
-        <a href="#">Task Tittle</a>
-      </div>
-      <div class="col-xs-2">
-        <span class="label label-info">Category</span>
-      </div>
-      <div class="col-xs-3">
-        <span class="block padding-top-10">
-          <div class="progress-xs no-radius background-dark no-margin progress">
-            <div class="progress-bar" role="progressbar" style="width: 14%;"></div>
-          </div>
-        </span>
-      </div>
-    </div>
-  </li>
-  <li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">
-    <div class="row">
-      <div class="col-xs-4">
-        <a href="#">Mon, April 10 - 11:00 AM</a>
-      </div>
-      <div class="col-xs-3">
-        <a href="#">Task Tittle</a>
-      </div>
-      <div class="col-xs-2">
-        <span class="label label-success">Category</span>
-      </div>
-      <div class="col-xs-3">
-        <span class="block padding-top-10">
-          <div class="progress-xs no-radius background-dark no-margin progress">
-            <div class="progress-bar" role="progressbar" style="width: 64%;"></div>
-          </div>
-        </span>
-      </div>
-    </div>
-  </li>
-  <!--<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">-->
-    <!--<div class="row">-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">-->
-          <!--<div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span-->
-            <!--class="letter-icon ng-binding">T</span></div>-->
-          <!--Task Title</a>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-          <!--<span class="block padding-top-10">-->
-            <!--<div class="progress-xs no-radius background-dark no-margin progress">-->
-              <!--<div class="progress-bar" role="progressbar" style="width: 54%;"></div>-->
-            <!--</div>-->
-          <!--</span>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">Mon, April 10 - 11:00 AM</a>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</li>-->
-  <!--<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">-->
-    <!--<div class="row">-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">-->
-          <!--<div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span-->
-            <!--class="letter-icon ng-binding">T</span></div>-->
-          <!--Task Title</a>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<span class="block padding-top-10">-->
-          <!--<div class="progress-xs no-radius background-dark no-margin progress">-->
-            <!--<div class="progress-bar" role="progressbar" style="width: 54%;"></div>-->
-          <!--</div>-->
-        <!--</span>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">Mon, April 10 - 11:00 AM</a>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</li>-->
-  <!--<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">-->
-    <!--<div class="row">-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">-->
-          <!--<div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span-->
-            <!--class="letter-icon ng-binding">T</span></div>-->
-          <!--Task Title</a>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-          <!--<span class="block padding-top-10">-->
-            <!--<div class="progress-xs no-radius background-dark no-margin progress">-->
-              <!--<div class="progress-bar" role="progressbar" style="width: 54%;"></div>-->
-            <!--</div>-->
-          <!--</span>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">Mon, April 10 - 11:00 AM</a>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</li>-->
-  <!--<li class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right">-->
-    <!--<div class="row">-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">-->
-          <!--<div class="margin-right-5 letter-icon-wrapper size-sm crm-blue"><span-->
-            <!--class="letter-icon ng-binding">T</span></div>-->
-          <!--Task Title</a>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<span class="block padding-top-10">-->
-          <!--<div class="progress-xs no-radius background-dark no-margin progress">-->
-            <!--<div class="progress-bar" role="progressbar" style="width: 54%;"></div>-->
-          <!--</div>-->
-        <!--</span>-->
-      <!--</div>-->
-      <!--<div class="col-xs-4">-->
-        <!--<a href="#">Mon, April 10 - 11:00 AM</a>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</li>-->
-</ul>
-
