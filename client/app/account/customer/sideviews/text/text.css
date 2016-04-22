@@ -1,0 +1,9 @@
+.text-header {
+  width: 100% !important;
+  background: #2C2F3B !important;
+  position: fixed !important;
+}
+.text-avatar {
+  width: 48px !important;
+  border-radius: 48px !important;
+}

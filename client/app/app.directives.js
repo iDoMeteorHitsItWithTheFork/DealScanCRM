@@ -34,10 +34,7 @@ angular.module('dealScanCrmApp').directive('crmSidebar', function ($window) {
         }
       }
 
-
     }
-
-
   }
 
 });
