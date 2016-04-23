@@ -2,3 +2,24 @@
 .margin-negative-top-10 {
   margin-top: -10px !important;
 }
+
+.margin-negative-top-30 {
+  margin-top: -30px !important;
+}
+
+.msg-active {
+  background: blue !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  opacity: 0.8 !important;
+}
+
+.usr-msg {
+  margin-left: -130px !important;
+  margin-right: 105px !important;
+}
+
+.customer-msg {
+  margin-left: 105px !important;
+  margin-right: -130px !important;
+}
