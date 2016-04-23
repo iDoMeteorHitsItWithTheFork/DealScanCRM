@@ -43,9 +43,6 @@ export default function (sequelize, DataTypes) {
       instanceMethods: {}
 
 
-    }, {
-      timestamps: true,
-      paranoid: true
     });
 
 

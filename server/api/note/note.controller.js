@@ -141,7 +141,7 @@ export function destroy(req, res) {
   Note.find({
     where: {
       noteID: req.params.id,
-      userID: req.user.userID
+      creatorID: req.user.userID
     }
   })
     .then(handleEntityNotFound(res))

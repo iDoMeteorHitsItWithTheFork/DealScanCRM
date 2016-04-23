@@ -34,6 +34,10 @@ module.exports = function(config) {
       'client/bower_components/angular-ui-calendar/src/calendar.js',
       'client/bower_components/angular-smart-table/dist/smart-table.js',
       'client/bower_components/lr-sticky-header/lrStickyHeader.js',
+      'client/bower_components/sweetalert/dist/sweetalert.min.js',
+      'client/bower_components/angular-sweetalert/SweetAlert.js',
+      'client/bower_components/ngmap/build/scripts/ng-map.js',
+      'client/bower_components/angular-moment/angular-moment.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

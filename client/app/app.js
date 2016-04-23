@@ -20,7 +20,8 @@ angular.module('dealScanCrmApp', [
   'angular-loading-bar',
   'oitozero.ngSweetAlert',
   'bootstrapLightbox',
-  'smart-table'
+  'smart-table',
+  'angularMoment'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
     $urlRouterProvider

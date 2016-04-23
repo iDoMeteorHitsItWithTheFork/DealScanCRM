@@ -11,13 +11,13 @@ angular.module('dealScanCrmApp')
     _note.customerNotes  =[];
     _note.processingNotes = _note.deletingNotes = false;
     _note.typing = false;
+    _note.addingNote = false;
+    _note.newNote = {
+      content: '',
+      creatorID: _note.user.userID,
+      customerID: selectedCustomer.customerID
+    };
 
-
-    _note.saveButtonDisplay = function(){
-       console.log('typing...');
-      _note.typing = _note.newNote && _note.newNote.length > 0;
-      console.log(_note.typing);
-    }
 
 
     var loadCustomerNotes = function(){
@@ -40,49 +40,40 @@ angular.module('dealScanCrmApp')
      *
      * */
     _note.addNote = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/customer/tabs/note/addNote.html',
-        controller: 'AddNoteCtrl as newNote',
-        resolve: {
-          creatorID: function(){
-            return _note.user.userID;
-          },
-          customerID: function(){
-            return _note.thisCustomer.customerID;
-          }
-        }
-      });
-
-      modalInstance.result.then(function (newNote) {
+      if (_note.addingNote) return;
+      _note.addingNote = true;
+      Note.add(_note.newNote).then(function (newNote) {
+        console.log(newNote);
+        _note.newNote.content = '';
+        _note.newNoteForm.$setPristine();
         _note.customerNotes = Note.notes();
-      })
-    };
-
+        _note.addingNote = false;
+      }).catch(function (err) {
+        _note.addingNote = false;
+        console.log(err);
+        SweetAlert.swal('Note Error!', 'Sorry, an error ocurred while attempting to add your note. Please try again later.', 'error');
+      });
+    }
 
     /**
      * Update an existing customer
      *
      *
      */
-    _note.editNote = function (note) {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/customer/tabs/note/updateNote.html',
-        controller: 'UpdateNoteCtrl as updateNote',
-        resolve: {
-          thisNote: function () {
-            return note;
-          }
-        }
-      });
-
-      modalInstance.result.then(function (updatedNote) {
+    _note.editNote = function (note, content) {
+      if (note.editingNote) return;
+      note.editingNote = true;
+      note.content = content;
+      Note.update(note.noteID, note).then(function(updatedNote){
+        console.log(updatedNote);
         _note.customerNotes = Note.notes();
+        note.editingNote  = false;
+        note.editMode = false;
+      }).catch(function(err){
+          note.editingNote  = false;
+          console.log(err);
+          SweetAlert.swal('Note Error!', 'Sorry, an error ocurred while attempting to updated your note. Please try again later.', 'error');
       })
-
     };
 
 
@@ -92,13 +83,14 @@ angular.module('dealScanCrmApp')
      *
      * */
     _note.deleteNote = function (note) {
-      if (_note.deletingNotes) return;
-      _note.deletingNotes = true;
+      console.log('deleting note...');
+      if (note.deletingNote) return;
+      note.deletingNote = true;
       Note.remove(note).then(function () {
         _note.customerNotes = Note.notes();
-        _note.deletingNotes = false;
+        note.deletingNote = false;
       }).catch(function (err) {
-        _note.deletingNotes = false;
+        note.deletingNote = false;
         console.log(err);
       })
     }

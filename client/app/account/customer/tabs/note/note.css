@@ -14,3 +14,11 @@
 .dsc-fade-in {
   opacity: 1 !important;
 }
+
+.dsc-stripped-row{
+ background: #EFEFEF !important;
+}
+
+.dsc-clear-row {
+  background: #FFF !important;
+}

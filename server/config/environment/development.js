@@ -19,7 +19,7 @@ module.exports = {
       },
       logging: false,
       define: {
-        timestamps: false
+        timestamps: true,
       }
     }
   },
