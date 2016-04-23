@@ -25,6 +25,7 @@ angular.module('dealScanCrmApp')
           return _customersInfo;
         }).catch(function (err) {
           console.log(err);
+          return err;
         })
     }
 
@@ -39,6 +40,7 @@ angular.module('dealScanCrmApp')
           return customer;
         }).catch(function (err) {
           console.log(err);
+          return err;
         })
     }
 
@@ -73,6 +75,7 @@ angular.module('dealScanCrmApp')
           return _searchResultsInfo;
         }).catch(function (err) {
           console.log(err);
+          return err;
         })
     }
 
@@ -99,6 +102,7 @@ angular.module('dealScanCrmApp')
         return newCustomer;
       }).catch(function (err) {
         console.log(err);
+        return err;
       })
     }
 
@@ -114,6 +118,7 @@ angular.module('dealScanCrmApp')
           return updatedCustomer;
         }).catch(function (err) {
           console.log(err);
+          return err;
         })
     }
 
@@ -132,6 +137,7 @@ angular.module('dealScanCrmApp')
           return _customersInfo;
       }).catch(function(err){
           console.log(err);
+          return err;
         })
     }
 

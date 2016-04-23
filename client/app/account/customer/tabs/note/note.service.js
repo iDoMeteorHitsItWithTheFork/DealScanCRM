@@ -23,6 +23,7 @@ angular.module('dealScanCrmApp')
           return _notesInfo;
         }).catch(function (err) {
           console.log(err);
+          return err;
         })
     }
 
@@ -53,6 +54,7 @@ angular.module('dealScanCrmApp')
           return newNote;
       }).catch(function(err){
           console.log(err);
+          return err;
         })
     }
 
@@ -73,6 +75,7 @@ angular.module('dealScanCrmApp')
           return updatedNote;
       }).catch(function(err){
           console.log(err);
+          return err;
         })
     }
 
@@ -92,6 +95,7 @@ angular.module('dealScanCrmApp')
           return _notesInfo;
       }).catch(function(err){
           console.log(err);
+          return err;
         })
 
     }

@@ -47,22 +47,28 @@
           <div class="row">
             <div class="col-md-1">
               <p style="font-weight: bold; margin-bottom: 0px;">{{n.createdAt | amDateFormat:'MMM Do'}}</p>
+
               <p>{{n.createdAt | amDateFormat:'h:m A'}}</p>
             </div>
             <div class="col-md-9 border-left border-right">
               <p style="font-weight: bold; margin-bottom: 0px; color: #FA6424;">{{n.Creator.profile.name}}</p>
+
               <p ng-show="!n.editMode">{{n.content}}</p>
+
               <form name="editNoteForm" novalidate ng-show="n.editMode">
                 <textarea ng-model="n.editedContent"
-                          style="font-size:12px !important; height: 80px !important;border: 1px solid #dedede; padding: 10px !important; margin-top: 10px;margin-bottom: 10px;width: 100%;border-radius: 3px;">
+                          style="font-size:12px !important; height: 80px !important;border: 1px solid #dedede;
+                           padding: 10px !important; margin-top: 10px;margin-bottom: 10px;width: 100%;border-radius: 3px;">
                 </textarea>
                 <button ng-click="n.editMode = !n.editMode"
                         class="btn btn-danger btn-o btn-sm pull-right border-around bg-white"
                         style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px;">
                   <i class="fa fa-remove"></i></button>
-                <button ng-click="note.editNote(n, n.editedContent)" class="btn btn-o btn-success btn-sm pull-right border-around bg-white"
-                        style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px; margin-right: 5px;"><i
-                  ng-class="n.editingNote ? 'fa fa-spinner fa-pulse' :'fa fa-check'"></i></button>
+                <button ng-click="note.editNote(n, n.editedContent)"
+                        class="btn btn-o btn-success btn-sm pull-right border-around bg-white"
+                        style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px; margin-right: 5px;">
+                  <i
+                    ng-class="n.editingNote ? 'fa fa-spinner fa-pulse' :'fa fa-check'"></i></button>
               </form>
             </div>
             <div class="col-md-2">
@@ -70,7 +76,8 @@
                 <button ng-click="note.deleteNote(n)" class="btn btn-primary btn-sm btn-o pull-right border-around"
                         style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px;"><i
                   ng-class="n.deletingNote ? 'fa fa-spinner fa-pulse' :'fa fa-remove'"></i></button>
-                <button ng-click="n.editMode = true; n.editedContent = n.content" class="btn btn-primary btn-sm btn-o pull-right border-around"
+                <button ng-click="n.editMode = true; n.editedContent = n.content"
+                        class="btn btn-primary btn-sm btn-o pull-right border-around"
                         style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px; margin-right: 15px;">
                   <i class="fa fa-pencil"></i></button>
               </div>

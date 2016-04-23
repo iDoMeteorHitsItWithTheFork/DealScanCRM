@@ -1,9 +1,36 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('ImagesCtrl', function ($scope) {
+  .controller('ImagesCtrl', function ($scope, Auth, Images, sweetAlert) {
 
     var _images = this;
+
+    _images.user = Auth.getCurrentUser();
+    _images.loadingImages = false;
+    _images.imagesInfo = [];
+
+    var loadImages = function(){
+      if (_images.loadingImages) return;
+      _images.loadingImages = true;
+      Images.getImages().then(function(images){
+        if (images)_images.imagesInfo = images;
+        _images.loadingImages  = false;
+      }).catch(function(err){
+        _images.loadingImages = false;
+        console.log(err);
+        sweetAlert.swal('Images Load Error', 'Sorry, an error occured while attempting to retreive your images', 'error');
+      })
+    }
+
+
+    loadImages();
+
+
+
+
+
+
+
 
     _images.data = [
       {
