@@ -25,18 +25,28 @@
     <div class="col-md-12">
       <div class="form-group">
         <div class="note-editor">
-          <textarea rows="3" placeholder="+ Type here to add a note..." class="form-control" style="resize: none"></textarea>
+          <form name="note.newNoteForm" >
+            <textarea  ng-model="note.newNote" ng-change="note.saveButtonDisplay()"
+                       ng-required="true"  placeholder="Type here to add a note..."
+                       class="form-control" style="resize: none; height: 100px !important; font-size:12px !important;"></textarea>
+            <div class="row margin-top-30 margin-bottom-30 text-center" ng-show="note.newNote.length > 0 && note.newNoteForm.$valid">
+              <a class="btn btn-success btn-lg btn-o pull-right"
+                 style="width: 60px !important; height: 60px !important; border-radius: 60px; padding-top: 15px;
+                 position: absolute; top: 46px; right: 22px; opacity:.7">
+                <i class="fa fa-check fa-lg">&nbsp;&nbsp;</i></a>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <a class="btn btn-link btn-sm pull-right" href="#" style="margin-right: 15px; border-radius: 10px; height: 25px; padding-top: 3px; color: white; background-color: #FA6424;"><i class="fa fa-plus"></i>  Add</a>
+  <div class="row" id="note-list-caption" style="margin-left: 15px; margin-right: 15px;  margin-bottom: 5px;">
+    <p style="font-size: 12px; color: darkslategray;">NOTES</p>
   </div>
-  <div class="row" style="height: 20px; margin-left: 15px; margin-right: 15px; margin-top: -5px; margin-bottom: 5px;">
-    <p style="font-size: 14px; color: darkslategray;">Notes History</p>
-  </div>
-  <div class="row border-around" style="margin-left: 15px; margin-right: 15px; height: 36px;">
+
+
+  <!-- Note Row -->
+  <div class="row border-around" id="note-list-header" style="margin-left: 15px; margin-right: 15px; height: 36px;">
     <div class="col-md-1" style="margin-top: 8px">
       <p style="font-weight: bold; font-size: 12px;">Date</p>
     </div>
@@ -47,7 +57,7 @@
       <p style="font-weight: bold; font-size: 12px; margin-left: -20px;">Action</p>
     </div>
   </div>
-  <div class="container" style="padding: 0px; max-height: 180px; overflow-y: scroll;">
+  <div class="container" id="note-list-details" style="padding: 0px; max-height: 250px; overflow-y: scroll;">
     <ul class="list-group" style="margin-left: 15px; margin-right: 15px;">
       <li class="list-group-item" style="border-radius: 0px; border-top: none; background-color: #EFEFEF;">
         <div class="row">

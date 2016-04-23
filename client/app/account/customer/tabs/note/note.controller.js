@@ -10,7 +10,14 @@ angular.module('dealScanCrmApp')
     _note.thisCustomer = selectedCustomer;
     _note.customerNotes  =[];
     _note.processingNotes = _note.deletingNotes = false;
+    _note.typing = false;
 
+
+    _note.saveButtonDisplay = function(){
+       console.log('typing...');
+      _note.typing = _note.newNote && _note.newNote.length > 0;
+      console.log(_note.typing);
+    }
 
 
     var loadCustomerNotes = function(){

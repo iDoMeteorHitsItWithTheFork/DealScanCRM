@@ -5,3 +5,12 @@
   padding: 2px;
   border-radius: 20px;
 }
+
+
+.dsc-fade-out {
+  opacity: .2 !important;
+}
+
+.dsc-fade-in {
+  opacity: 1 !important;
+}
