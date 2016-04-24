@@ -25,7 +25,6 @@ angular.module('dealScanCrmApp')
       headers : {Authorization : 'Bearer ' + Auth.getToken()}
     };
 
-
     var loadImages = function(){
       if (_images.loadingImages) return;
       _images.loadingImages = true;
@@ -39,98 +38,14 @@ angular.module('dealScanCrmApp')
       })
     }
 
-
     loadImages();
-
 
     _images.remove = function(img){
         var idx = _images.data.indexOf(img);
         if (idx != -1) _images.data.splice(idx, 1);
     }
 
-
-
-    _images.data = [
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title:'Driver License',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Trade In',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Insurance Card',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Trade In',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Trade In',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Trade In',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Trade In',
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi',
-        title: 'Trade In',
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford',
-        title: 'Trade In',
-      }
-    ]
+    _images.data = [];
 
 
   });
