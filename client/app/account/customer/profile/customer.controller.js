@@ -24,15 +24,33 @@ angular.module('dealScanCrmApp')
       source: 'Walk-In',
       salePerson:{name: 'Bryan M'},
       status: 'Pending',
-      financing: {}
+      financing: {
+        salePrice: '20,000',
+        tradeAllowance:'5,000',
+        tradePayOff: '7,000',
+        financed: '14,000',
+        rebate:'500',
+        ir: '7.5',
+        terms :'60',
+        payment: '500'
+      }
     },{
       vehicle: '2015 Escape',
-      trades:['2001 BMW 323 ci'],
+      trades:['2001 BMW 323 ci', '2007 Honda Accord'],
       date:'03/02/2016',
       source: 'Web',
       salePerson:{name: 'Eric C.'},
       status: 'Completed',
-      financing: {}
+      financing:  {
+        salePrice: '30,000',
+        tradeAllowance:'1,000',
+        tradePayOff: '2,000',
+        financed: '50,000',
+        rebate:'1500',
+        ir: '2.5',
+        terms :'72',
+        payment: '1000'
+      }
     },
       {
         vehicle: '2014 Escape',
@@ -41,7 +59,16 @@ angular.module('dealScanCrmApp')
         source: 'Phone',
         salePerson:{name: 'Rick K'},
         status: 'Lost',
-        financing: {}
+        financing:  {
+          salePrice: '25,000',
+          tradeAllowance:'1,000',
+          tradePayOff: '10,000',
+          financed: '14,000',
+          rebate:'1000',
+          ir: '5.5',
+          terms :'60',
+          payment: '800'
+        }
       },
     ];
     _customer.purchase = _customer.purchases[0];

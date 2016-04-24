@@ -57,9 +57,8 @@
 
               <div class="purchase-vehicle-header">
                 <div class="col-md-12" style="margin-right:10px !important; margin-top:-3px !important;">
-                  <span ng-show="customer.purchases.length == 1"><a href>{{customer.purchase.vehicle}}</a></span>
                   <span>
-                    <select ng-show="customer.purchases.length > 1"
+                    <select ng-show="customer.purchases.length > 0"
                             class="cs-select cs-skin-elastic span-height-25 ft-sz-12" ng-model="customer.purchase"
                             ng-options="purchase.vehicle for purchase in customer.purchases">
                       <option value="" disabled="" style="margin-top: -38px; margin-left: 35px;">
@@ -81,25 +80,23 @@
                       style="border-top: none; border-left: none; border-right: none;">
                     <div class="row inline">
                       <p style="color: darkslategray; margin-left: -10px;">Trades</p>
-                      <div class="" style="margin-top: -25px;">
-                        <span class="label label-default pull-right"
-                              style="padding-top: 5px !important;">1997 Pinto</span>
-                        <span class="label label-default pull-right"
-                              style="padding-top: 5px !important; margin-right: 5px;">2003 Escape</span>
+                      <div class="text-right" style="margin-top: -25px;">
+                        <span ng-repeat="trade in customer.purchase.trades" class="label label-default"
+                              style="padding-top: 5px !important; margin-right: 5px;">{{trade}}</span>
                       </div>
                     </div>
                   </li>
                   <li class="list-group-item"
-                      style="height: 75px !important; border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; padding-top:6px !important; padding-bottom: 0px;">
+                      style="height: 80px !important; border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; padding-top:6px !important; padding-bottom: 0px;">
                     <div class="row inline">
                       <p class="pull-left" style="color: darkslategray; padding-top: 4px; margin-left: -10px;">Date Of
                         Action</p>
 
-                      <p class="pull-right" style="padding-top: 4px;">05/10/2016</p>
+                      <p class="pull-right" style="padding-top: 4px;">{{customer.purchase.date}}</p>
 
                     </div>
                     <span class="label label-dealscan pull-right"
-                          style="padding-left: 10px !important; padding-right:10px !important; height: 25px; cursor:pointer; margin-top: 3px !important;">
+                          style="padding-left: 10px !important; padding-right:10px !important; height: 25px; cursor:pointer; margin-top: 10px !important;">
                         <i class="fa fa-folder-open" aria-hidden="true" style="padding-top: 5px;">&nbsp;&nbsp;</i>View Details
                       </span>
                   </li>
@@ -112,34 +109,37 @@
                     <div class="row inline">
                       <p class="pull-left" style="color: darkslategray;">Source</p>
 
-                      <p class="pull-right">Walk In</p>
+                      <p class="pull-right">{{customer.purchase.source}}</p>
                     </div>
                   </li>
                   <li class="list-group-item" style="height: 38px; border-left: none; border-right: none;">
                     <div class="row inline">
                       <p class="pull-left" style="color: darkslategray;">Sales Rep</p>
 
-                      <p class="pull-right">Bryan M.</p>
+                      <p class="pull-right">{{customer.purchase.salePerson.name}}.</p>
                     </div>
                   </li>
                   <li class="list-group-item"
                       style="border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
                     <div class="row inline">
                       <p style="color: darkslategray;">Status</p>
-
                       <div class="" style="margin-top: -25px;">
-                        <span class="label label-warning pull-right" style="padding-top:5px !important; padding-bottom: 5px !important;">Pending</span>
+                        <span class="label pull-right" ng-class="{'label-warning': customer.purchase.status == 'Pending',
+                         'label-danger': customer.purchase.status == 'Lost', 'label-success': customer.purchase.status == 'Completed'}"
+                              style="padding-top:5px !important; padding-bottom: 5px !important;">{{customer.purchase.status}}</span>
                       </div>
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
+
+
           </div>
           <div class="col-md-4 padding-left-0 padding-right-0" style="width:26.105263% !important;">
             <div class="row">
-              <div class="row bg-success" style="margin-left: 3px; background-color: #E6E8E8;">
-                <h4 class="customer-info-header fs-11" style="color: #fff; font-weight: bold;">
+              <div class="row" style="margin-left: 3px; background-color: #E6E8E8;">
+                <h4 class="customer-info-header fs-11">
                   Purchase Details</h4>
               </div>
               <div class="row" style="margin-top: 10px;">
@@ -148,19 +148,19 @@
                     <tbody style="border: none !important;">
                     <tr class="success">
                       <td class="" style="color: darkslategray;">Sale Price</td>
-                      <td class="text-bold">$20,000</td>
+                      <td class="text-bold text-right ">${{customer.purchase.financing.salePrice}}</td>
                     </tr>
                     <tr>
                       <td class="" style="color: darkslategray;">Trade Allowance:</td>
-                      <td class="text-bold">$14,000</td>
+                      <td class="text-bold text-right ">${{customer.purchase.financing.tradeAllowance}}</td>
                     </tr>
                     <tr class="success" style="border: none;">
                       <td class="" style="color: darkslategray;">Trade Payoff:</td>
-                      <td class="text-bold">$10,000</td>
+                      <td class="text-bold text-right ">${{customer.purchase.financing.tradePayOff}}</td>
                     </tr>
                     <tr style="border: none;">
                       <td class="" style="color: darkslategray;">Financed:</td>
-                      <td class="text-bold">$20,000</td>
+                      <td class="text-bold text-right ">${{customer.purchase.financing.financed}}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -170,19 +170,19 @@
                     <tbody style="border: none !important;">
                     <tr class="success">
                       <td class="" style="color: darkslategray;">Rebate</td>
-                      <td class="text-right text-bold">$1,000</td>
+                      <td class="text-right text-bold">${{customer.purchase.financing.rebate}}</td>
                     </tr>
                     <tr>
                       <td class="" style="color: darkslategray;">IR:</td>
-                      <td class="text-right text-bold">7.5%</td>
+                      <td class="text-right text-bold">{{customer.purchase.financing.ir}}%</td>
                     </tr>
                     <tr class="success" style="border: none;">
                       <td class="" style="color: darkslategray;">Terms:</td>
-                      <td class="text-right text-bold">60</td>
+                      <td class="text-right text-bold">{{customer.purchase.financing.terms}}</td>
                     </tr>
                     <tr style="border: none;">
                       <td class="" style="color: darkslategray;">Payment:</td>
-                      <td class="text-right text-bold">$400</td>
+                      <td class="text-right text-bold">${{customer.purchase.financing.payment}}</td>
                     </tr>
                     </tbody>
                   </table>
