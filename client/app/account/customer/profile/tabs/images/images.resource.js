@@ -12,6 +12,12 @@
       update: {
         method:'PUT',
       },
+      upload :{
+        method: 'POST',
+        params: {
+          controller:'upload'
+        }
+      }
     });
   }
 

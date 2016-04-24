@@ -60,7 +60,7 @@ function handleError(res, statusCode) {
 
 // Gets a list of Images
 export function index(req, res) {
-  Image.findAll()
+  Image.findAndCountAll()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -84,14 +84,15 @@ export function create(req, res) {
     .catch(handleError(res));
 }
 
+
 // Updates an existing Image in the DB
 export function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  if (req.body.id) {
+    delete req.body.id;
   }
   Image.find({
     where: {
-      _id: req.params.id
+      imageID: req.params.id
     }
   })
     .then(handleEntityNotFound(res))
@@ -104,7 +105,7 @@ export function update(req, res) {
 export function destroy(req, res) {
   Image.find({
     where: {
-      _id: req.params.id
+      imageID: req.params.id
     }
   })
     .then(handleEntityNotFound(res))

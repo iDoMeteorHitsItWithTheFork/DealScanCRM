@@ -19,6 +19,7 @@ var db = {
 
 
 // Insert models below
+db.Upload = db.sequelize.import('../api/upload/upload.model');
 db.Image = db.sequelize.import('../api/image/image.model');
 db.Note = db.sequelize.import('../api/note/note.model');
 
@@ -31,7 +32,7 @@ db.Customer = db.sequelize.import('../api/customer/customer.model');
 db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
 db.Note.belongsTo(db.Customer, {as: 'CustomerNotes', foreignKey:'customerID'});
 
-db.Image.belongsTo(db.User, {as: 'Uploader', foreignKey:'uploadedID'});
+db.Image.belongsTo(db.User, {as: 'Uploader', foreignKey:'uploaderID'});
 db.Image.belongsTo(db.Customer, {as:'CustomerImages', foreignKey:'customerID'});
 
 db.Team.belongsTo(db.Dealership, {foreignKey:'dealershipID'});

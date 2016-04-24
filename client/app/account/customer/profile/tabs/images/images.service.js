@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('Images', function (ImageResource) {
+  .factory('Images', function (Util, ImageResource) {
     // Service logic
     // ...
 
