@@ -30,15 +30,15 @@
     <link rel="stylesheet" href="app/app.css">
     <!-- injector:css -->
     <link rel="stylesheet" href="app/account/bdc/bdc.css">
-    <link rel="stylesheet" href="app/account/customer/customer.css">
-    <link rel="stylesheet" href="app/account/customer/customers.css">
+    <link rel="stylesheet" href="app/account/customer/home/customer.css">
+    <link rel="stylesheet" href="app/account/customer/home/customers.css">
+    <link rel="stylesheet" href="app/account/customer/profile/tabs/documents/documents.css">
+    <link rel="stylesheet" href="app/account/customer/profile/tabs/images/images.css">
+    <link rel="stylesheet" href="app/account/customer/profile/tabs/messages/messages.css">
+    <link rel="stylesheet" href="app/account/customer/profile/tabs/note/note.css">
+    <link rel="stylesheet" href="app/account/customer/profile/tabs/overview/overview.css">
+    <link rel="stylesheet" href="app/account/customer/profile/tabs/task/task.css">
     <link rel="stylesheet" href="app/account/customer/sideviews/text/text.css">
-    <link rel="stylesheet" href="app/account/customer/tabs/documents/documents.css">
-    <link rel="stylesheet" href="app/account/customer/tabs/images/images.css">
-    <link rel="stylesheet" href="app/account/customer/tabs/messages/messages.css">
-    <link rel="stylesheet" href="app/account/customer/tabs/note/note.css">
-    <link rel="stylesheet" href="app/account/customer/tabs/overview/overview.css">
-    <link rel="stylesheet" href="app/account/customer/tabs/task/task.css">
     <link rel="stylesheet" href="app/account/dashboard/dashboard.css">
     <link rel="stylesheet" href="app/account/email/email.css">
     <link rel="stylesheet" href="app/account/home/home.css">
@@ -113,6 +113,8 @@
 <script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
 <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
 <script src="bower_components/angular-moment/angular-moment.js"></script>
+<script src="bower_components/flow.js/dist/flow.js"></script>
+<script src="bower_components/ng-flow/dist/ng-flow.js"></script>
 <!-- endbower -->
 
 <script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
@@ -132,26 +134,26 @@
 <script src="components/auth/auth.module.js"></script>
 <script src="components/util/util.module.js"></script>
 <script src="app/account/search/search.controller.js"></script>
-<script src="app/account/customer/customer.controller.js"></script>
-<script src="app/account/customer/customer.js"></script>
-<script src="app/account/customer/customer.resource.js"></script>
-<script src="app/account/customer/customer.service.js"></script>
-<script src="app/account/customer/customers.controller.js"></script>
+<script src="app/account/customer/edit/updateCustomer.controller.js"></script>
+<script src="app/account/customer/home/customer.js"></script>
+<script src="app/account/customer/home/customers.controller.js"></script>
+<script src="app/account/customer/profile/customer.controller.js"></script>
+<script src="app/account/customer/profile/customer.resource.js"></script>
+<script src="app/account/customer/profile/customer.service.js"></script>
+<script src="app/account/customer/profile/tabs/documents/documents.controller.js"></script>
+<script src="app/account/customer/profile/tabs/images/images.controller.js"></script>
+<script src="app/account/customer/profile/tabs/images/images.resource.js"></script>
+<script src="app/account/customer/profile/tabs/images/images.service.js"></script>
+<script src="app/account/customer/profile/tabs/messages/messages.controller.js"></script>
+<script src="app/account/customer/profile/tabs/note/addNote.controller.js"></script>
+<script src="app/account/customer/profile/tabs/note/note.controller.js"></script>
+<script src="app/account/customer/profile/tabs/note/note.resource.js"></script>
+<script src="app/account/customer/profile/tabs/note/note.service.js"></script>
+<script src="app/account/customer/profile/tabs/note/updateNote.controller.js"></script>
+<script src="app/account/customer/profile/tabs/overview/overview.controller.js"></script>
+<script src="app/account/customer/profile/tabs/task/task.controller.js"></script>
 <script src="app/account/customer/sideviews/email/email.controller.js"></script>
 <script src="app/account/customer/sideviews/text/text.controller.js"></script>
-<script src="app/account/customer/tabs/documents/documents.controller.js"></script>
-<script src="app/account/customer/tabs/images/images.controller.js"></script>
-<script src="app/account/customer/tabs/images/images.resource.js"></script>
-<script src="app/account/customer/tabs/images/images.service.js"></script>
-<script src="app/account/customer/tabs/messages/messages.controller.js"></script>
-<script src="app/account/customer/tabs/note/addNote.controller.js"></script>
-<script src="app/account/customer/tabs/note/note.controller.js"></script>
-<script src="app/account/customer/tabs/note/note.resource.js"></script>
-<script src="app/account/customer/tabs/note/note.service.js"></script>
-<script src="app/account/customer/tabs/note/updateNote.controller.js"></script>
-<script src="app/account/customer/tabs/overview/overview.controller.js"></script>
-<script src="app/account/customer/tabs/task/task.controller.js"></script>
-<script src="app/account/customer/updateCustomer.controller.js"></script>
 <script src="app/account/dashboard/addLead.controller.js"></script>
 <script src="app/account/dashboard/dashboard.controller.js"></script>
 <script src="app/account/dashboard/dashboard.js"></script>
@@ -190,7 +192,7 @@
 <script src="components/sidebar/sidebar.controller.js"></script>
 <script src="components/sidebar/sidebar.directive.js"></script>
 <script src="components/socket/socket.service.js"></script>
-<script src="app/account/customer/addCustomer.controller.js"></script>
+<script src="app/account/customer/add/addCustomer.controller.js"></script>
 <script src="components/util/util.service.js"></script>
 <!-- endinjector -->
 <!-- endbuild -->

@@ -37,12 +37,7 @@ angular.module('dealScanCrmApp')
       if (_customers.processingData) return;
       _customers.processingData = true;
       Customer.getCustomers().then(function (customersInfo) {
-        if (customersInfo) {
-          _customers.customersInfo = customersInfo;
-          //_customers.setPage(1);
-          //_customers.setDisplayContainer(_customers.customersInfo);
-          //_customers.displayCustomers();
-        }
+        if (customersInfo)_customers.customersInfo = customersInfo;
         _customers.processingData = false;
       }).catch(function (err) {
         console.log(err);
@@ -64,12 +59,7 @@ angular.module('dealScanCrmApp')
       _customers.searchingArchives = true;
       Customer.find(name).then(function (searchResultsInfo) {
         console.log(searchResultsInfo);
-        if (searchResultsInfo) {
-          _customers.searchResultsInfo = searchResultsInfo;
-          _customers.setPage(1);
-          _customers.setDisplayContainer(_customers.searchResultsInfo);
-          _customers.displayCustomers(_customers.searchResultsInfo, Customer.getResultsCount(), true);
-        }
+        if (searchResultsInfo) _customers.searchResultsInfo = searchResultsInfo;
         _customers.searchingArchives = false;
       }).catch(function (err) {
         console.log(err);
@@ -110,7 +100,7 @@ angular.module('dealScanCrmApp')
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
-        templateUrl: 'app/account/customer/addCustomer.html',
+        templateUrl: 'app/account/customer/add/addCustomer.html',
         controller: 'AddCustomerCtrl as newCustomer'
       });
 
@@ -129,7 +119,7 @@ angular.module('dealScanCrmApp')
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
-        templateUrl: 'app/account/customer/updateCustomer.html',
+        templateUrl: 'app/account/customer/edit/updateCustomer.html',
         controller: 'UpdateCustomerCtrl as updateCustomer',
         resolve: {
           selectedCustomer: function () {

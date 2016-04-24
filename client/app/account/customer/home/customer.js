@@ -9,7 +9,7 @@ angular.module('dealScanCrmApp')
         authenticate: true,
         views: {
           'pageContent': {
-            templateUrl: 'app/account/customer/customers.html',
+            templateUrl: 'app/account/customer/home/customers.html',
             controller: 'CustomersCtrl as customers'
           }
         }
@@ -18,7 +18,7 @@ angular.module('dealScanCrmApp')
         url: '/:customerID/:customerName',
         title: 'Customer',
         authenticate: true,
-        templateUrl: 'app/account/customer/customer.html',
+        templateUrl: 'app/account/customer/profile/customer.html',
         controller: 'CustomerCtrl as customer',
         resolve: {
           selectedCustomer: function ($q, $stateParams, Customer, SweetAlert) {
@@ -61,7 +61,7 @@ angular.module('dealScanCrmApp')
         },
         views: {
           tabs: {
-            templateUrl: 'app/account/customer/tabs/summary.html',
+            templateUrl: 'app/account/customer/profile/tabs/summary.html',
             controller: 'CustomerCtrl as customer',
           }
         }
@@ -70,7 +70,7 @@ angular.module('dealScanCrmApp')
         url: '/overview',
         title: 'Overview',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/overview/overview.html',
+        templateUrl: 'app/account/customer/profile/tabs/overview/overview.html',
         controller: 'CustomerCtrl as customer',
         resolve: {
           thisCustomer: function (selectedCustomer) {
@@ -82,7 +82,7 @@ angular.module('dealScanCrmApp')
         url: '/documents',
         title: 'Documents',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/documents/documents.html',
+        templateUrl: 'app/account/customer/profile/tabs/documents/documents.html',
         controller: 'DocumentsCtrl as documents',
         resolve: {
           thisCustomer: function (selectedCustomer) {
@@ -94,7 +94,7 @@ angular.module('dealScanCrmApp')
         url: '/images',
         title: 'Images',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/images/images.html',
+        templateUrl: 'app/account/customer/profile/tabs/images/images.html',
         controller: 'ImagesCtrl as images',
         resolve: {
           thisCustomer: function (selectedCustomer) {
@@ -106,7 +106,7 @@ angular.module('dealScanCrmApp')
         url: '/tasks',
         title: 'Tasks',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/task/task.html',
+        templateUrl: 'app/account/customer/profile/tabs/task/task.html',
         controller: 'TaskCtrl as task',
         resolve: {
           thisCustomer: function (selectedCustomer) {
@@ -118,7 +118,7 @@ angular.module('dealScanCrmApp')
         url: '/notes',
         title: 'Notes',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/note/note.html',
+        templateUrl: 'app/account/customer/profile/tabs/note/note.html',
         controller: 'NoteCtrl as note',
         resolve: {
           thisCustomer: function (selectedCustomer) {
@@ -130,7 +130,7 @@ angular.module('dealScanCrmApp')
         url: '/messages',
         title: 'Messages',
         authenticate: true,
-        templateUrl: 'app/account/customer/tabs/messages/messages.html',
+        templateUrl: 'app/account/customer/profile/tabs/messages/messages.html',
         controller: 'MessagesCtrl as messages',
         resolve: {
           thisCustomer: function (selectedCustomer) {
