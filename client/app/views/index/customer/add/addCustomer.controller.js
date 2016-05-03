@@ -2,7 +2,7 @@
  * Created by milesjohnson on 4/4/16.
  */
 angular.module('dealScanCrmApp')
-  .controller('AddCustomerCtrl', function ($scope, Util, Customer,$uibModalInstance, SweetAlert) {
+  .controller('AddCustomerCtrl', function ($scope, Util, Customer,$uibModalInstance) {
     console.log("add customer controller loaded");
 
     var _newCustomer = this;
@@ -57,7 +57,7 @@ angular.module('dealScanCrmApp')
       }).catch(function(err){
         _newCustomer.addCustomer = false;
         console.log(err);
-        SweetAlert.swal('Customer Error!', 'Sorry, an error ocurred while attempting to add customer. Please try again later.', 'error');
+        //SweetAlert.swal('Customer Error!', 'Sorry, an error ocurred while attempting to add customer. Please try again later.', 'error');
       })
 
     };

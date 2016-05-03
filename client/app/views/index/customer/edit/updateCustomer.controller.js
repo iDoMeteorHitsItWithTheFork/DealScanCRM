@@ -5,7 +5,7 @@
  * Created by milesjohnson on 4/4/16.
  */
 angular.module('dealScanCrmApp')
-  .controller('UpdateCustomerCtrl', function ($scope, Util, Customer, selectedCustomer, $uibModalInstance, SweetAlert) {
+  .controller('UpdateCustomerCtrl', function ($scope, Util, Customer, selectedCustomer, $uibModalInstance) {
     console.log("update customer controller loaded");
 
     var _updateCustomer = this;
@@ -58,7 +58,7 @@ angular.module('dealScanCrmApp')
       }).catch(function (err) {
         _updateCustomer.updatingCustomer = false;
         console.log(err);
-        SweetAlert.swal('Customer Error!', 'Sorry, an error ocurred while attempting to update customer. Please try again later.', 'error');
+        //SweetAlert.swal('Customer Error!', 'Sorry, an error ocurred while attempting to update customer. Please try again later.', 'error');
       })
 
     };

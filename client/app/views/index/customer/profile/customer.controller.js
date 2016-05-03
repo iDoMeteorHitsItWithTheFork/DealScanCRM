@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
 
-  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, SweetAlert, Lightbox) {
+  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal) {
 
     var _customer = this;
     _customer.user = Auth.getCurrentUser();
@@ -305,8 +305,8 @@ angular.module('dealScanCrmApp')
       });
     }
 
-    _customer.openLightboxModal = function (index) {
-      Lightbox.openModal(_customer.photos, index);
-    };
+    // _customer.openLightboxModal = function (index) {
+    //   Lightbox.openModal(_customer.photos, index);
+    // };
 
   });

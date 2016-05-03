@@ -1,3 +1,194 @@
+function dashboardCharts() {
+
+  var data1 = [
+    [gd(2012, 1, 1), 7],
+    [gd(2012, 1, 2), 6],
+    [gd(2012, 1, 3), 4],
+    [gd(2012, 1, 4), 8],
+    [gd(2012, 1, 5), 9],
+    [gd(2012, 1, 6), 7],
+    [gd(2012, 1, 7), 5],
+    [gd(2012, 1, 8), 4],
+    [gd(2012, 1, 9), 7],
+    [gd(2012, 1, 10), 8],
+    [gd(2012, 1, 11), 9],
+    [gd(2012, 1, 12), 6],
+    [gd(2012, 1, 13), 4],
+    [gd(2012, 1, 14), 5],
+    [gd(2012, 1, 15), 11],
+    [gd(2012, 1, 16), 8],
+    [gd(2012, 1, 17), 8],
+    [gd(2012, 1, 18), 11],
+    [gd(2012, 1, 19), 11],
+    [gd(2012, 1, 20), 6],
+    [gd(2012, 1, 21), 6],
+    [gd(2012, 1, 22), 8],
+    [gd(2012, 1, 23), 11],
+    [gd(2012, 1, 24), 13],
+    [gd(2012, 1, 25), 7],
+    [gd(2012, 1, 26), 9],
+    [gd(2012, 1, 27), 9],
+    [gd(2012, 1, 28), 8],
+    [gd(2012, 1, 29), 5],
+    [gd(2012, 1, 30), 8],
+    [gd(2012, 1, 31), 25]
+  ];
+
+  var data2 = [
+    [gd(2012, 1, 1), 800],
+    [gd(2012, 1, 2), 500],
+    [gd(2012, 1, 3), 600],
+    [gd(2012, 1, 4), 700],
+    [gd(2012, 1, 5), 500],
+    [gd(2012, 1, 6), 456],
+    [gd(2012, 1, 7), 800],
+    [gd(2012, 1, 8), 589],
+    [gd(2012, 1, 9), 467],
+    [gd(2012, 1, 10), 876],
+    [gd(2012, 1, 11), 689],
+    [gd(2012, 1, 12), 700],
+    [gd(2012, 1, 13), 500],
+    [gd(2012, 1, 14), 600],
+    [gd(2012, 1, 15), 700],
+    [gd(2012, 1, 16), 786],
+    [gd(2012, 1, 17), 345],
+    [gd(2012, 1, 18), 888],
+    [gd(2012, 1, 19), 888],
+    [gd(2012, 1, 20), 888],
+    [gd(2012, 1, 21), 987],
+    [gd(2012, 1, 22), 444],
+    [gd(2012, 1, 23), 999],
+    [gd(2012, 1, 24), 567],
+    [gd(2012, 1, 25), 786],
+    [gd(2012, 1, 26), 666],
+    [gd(2012, 1, 27), 888],
+    [gd(2012, 1, 28), 900],
+    [gd(2012, 1, 29), 178],
+    [gd(2012, 1, 30), 555],
+    [gd(2012, 1, 31), 993]
+  ];
+
+
+  var dataset = [
+    {
+      label: "Number of orders",
+      grow: {stepMode: "linear"},
+      data: data2,
+      color: "#1ab394",
+      bars: {
+        show: true,
+        align: "center",
+        barWidth: 24 * 60 * 60 * 600,
+        lineWidth: 0
+      }
+
+    },
+    {
+      label: "Payments",
+      grow: {stepMode: "linear"},
+      data: data1,
+      yaxis: 2,
+      color: "#1C84C6",
+      lines: {
+        lineWidth: 1,
+        show: true,
+        fill: true,
+        fillColor: {
+          colors: [
+            {
+              opacity: 0.2
+            },
+            {
+              opacity: 0.2
+            }
+          ]
+        }
+      }
+    }
+  ];
+
+
+  var options = {
+    grid: {
+      hoverable: true,
+      clickable: true,
+      tickColor: "#d5d5d5",
+      borderWidth: 0,
+      color: '#d5d5d5'
+    },
+    colors: ["#1ab394", "#464f88"],
+    tooltip: true,
+    xaxis: {
+      mode: "time",
+      tickSize: [3, "day"],
+      tickLength: 0,
+      axisLabel: "Date",
+      axisLabelUseCanvas: true,
+      axisLabelFontSizePixels: 12,
+      axisLabelFontFamily: 'Arial',
+      axisLabelPadding: 10,
+      color: "#d5d5d5"
+    },
+    yaxes: [
+      {
+        position: "left",
+        max: 1070,
+        color: "#d5d5d5",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: 'Arial',
+        axisLabelPadding: 3
+      },
+      {
+        position: "right",
+        color: "#d5d5d5",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: ' Arial',
+        axisLabelPadding: 67
+      }
+    ],
+    legend: {
+      noColumns: 1,
+      labelBoxBorderColor: "#d5d5d5",
+      position: "nw"
+    }
+
+  };
+
+  function gd(year, month, day) {
+    return new Date(year, month - 1, day).getTime();
+  }
+
+  /**
+   * Definition of variables
+   * Flot chart
+   */
+  this.flotData = dataset;
+  this.flotOptions = options;
+}
+
+angular.module('dealScanCrmApp').controller('DashboardCharts', dashboardCharts);
+
+
+function dashboardMap() {
+  var data = {
+    "US": 298,
+    "SA": 200,
+    "DE": 220,
+    "FR": 540,
+    "CN": 120,
+    "AU": 760,
+    "BR": 550,
+    "IN": 200,
+    "GB": 120
+  };
+
+  this.data = data;
+}
+
+angular.module('dealScanCrmApp').controller('DashboardMap', dashboardMap);
+
 angular.module('dealScanCrmApp')
   .controller('DashboardCtrl', function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, NgMap, appConfig) {
     console.log("dashboard controller loaded");
@@ -6,17 +197,17 @@ angular.module('dealScanCrmApp')
     _dashboard.isAdmin = Auth.isAdmin;
     _dashboard.isManager = false;
     _dashboard.isGM = false;
-    Auth.hasRole(appConfig.userRoles[2], function(ans){
+    Auth.hasRole(appConfig.userRoles[2], function (ans) {
       _dashboard.isManager = ans;
     });
 
-    Auth.hasRole(appConfig.userRoles[7], function(ans){
+    Auth.hasRole(appConfig.userRoles[7], function (ans) {
       _dashboard.isGM = ans;
     })
 
     _dashboard.dealerships = [{name: 'Hagerstown Ford'},
-                               {name: 'King Kia'},
-                              {name: 'King Hyndai'}];
+      {name: 'King Kia'},
+      {name: 'King Hyndai'}];
 
     _dashboard.teamMates = Dashboard.teamMates();
     _dashboard.teamMate = {};
@@ -31,7 +222,6 @@ angular.module('dealScanCrmApp')
     }).catch(function (err) {
       console.log(err);
     });
-
 
 
     $scope.itemArray = [
@@ -198,9 +388,9 @@ angular.module('dealScanCrmApp')
     ];
 
 
-      //= ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
+    //= ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
 
-    function getModelCount(id, data){
+    function getModelCount(id, data) {
       var count = 0;
       for (var i = 0; i < data.length; i++)
         if (id == data[i].model.trim()) count++;
@@ -208,21 +398,21 @@ angular.module('dealScanCrmApp')
     }
 
     _dashboard.labels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus', 'Police Interceptor Sedan', 'Mustang',
-      'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition','F-Series','E-Series','Transit','Transit Connect','Heavy Trucks'];
+      'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition', 'F-Series', 'E-Series', 'Transit', 'Transit Connect', 'Heavy Trucks'];
 
     _dashboard.data = [
-      getModelCount(_dashboard.labels[0], $scope.data), getModelCount(_dashboard.labels[1],  $scope.data), getModelCount(_dashboard.labels[2],  $scope.data),
-      getModelCount(_dashboard.labels[3],  $scope.data), getModelCount(_dashboard.labels[4],  $scope.data), getModelCount(_dashboard.labels[5],  $scope.data),
-      getModelCount(_dashboard.labels[6],  $scope.data), getModelCount(_dashboard.labels[7],  $scope.data), getModelCount(_dashboard.labels[8],  $scope.data),
-      getModelCount(_dashboard.labels[9],  $scope.data), getModelCount(_dashboard.labels[10],  $scope.data), getModelCount(_dashboard.labels[11],  $scope.data),
-      getModelCount(_dashboard.labels[12],  $scope.data), getModelCount(_dashboard.labels[13],  $scope.data), getModelCount(_dashboard.labels[14],  $scope.data),
-      getModelCount(_dashboard.labels[15],  $scope.data), getModelCount(_dashboard.labels[16],  $scope.data), getModelCount(_dashboard.labels[17],  $scope.data)];
+      getModelCount(_dashboard.labels[0], $scope.data), getModelCount(_dashboard.labels[1], $scope.data), getModelCount(_dashboard.labels[2], $scope.data),
+      getModelCount(_dashboard.labels[3], $scope.data), getModelCount(_dashboard.labels[4], $scope.data), getModelCount(_dashboard.labels[5], $scope.data),
+      getModelCount(_dashboard.labels[6], $scope.data), getModelCount(_dashboard.labels[7], $scope.data), getModelCount(_dashboard.labels[8], $scope.data),
+      getModelCount(_dashboard.labels[9], $scope.data), getModelCount(_dashboard.labels[10], $scope.data), getModelCount(_dashboard.labels[11], $scope.data),
+      getModelCount(_dashboard.labels[12], $scope.data), getModelCount(_dashboard.labels[13], $scope.data), getModelCount(_dashboard.labels[14], $scope.data),
+      getModelCount(_dashboard.labels[15], $scope.data), getModelCount(_dashboard.labels[16], $scope.data), getModelCount(_dashboard.labels[17], $scope.data)];
 
-      _dashboard.smallData = [getModelCount(_dashboard.labels[0],  $scope.data), getModelCount(_dashboard.labels[1],  $scope.data),
-                              getModelCount(_dashboard.labels[2],  $scope.data), getModelCount(_dashboard.labels[3],  $scope.data),
-                              getModelCount(_dashboard.labels[4],  $scope.data)];
-      _dashboard.smallColors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5'];
-      _dashboard.smallLabels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus'];
+    _dashboard.smallData = [getModelCount(_dashboard.labels[0], $scope.data), getModelCount(_dashboard.labels[1], $scope.data),
+      getModelCount(_dashboard.labels[2], $scope.data), getModelCount(_dashboard.labels[3], $scope.data),
+      getModelCount(_dashboard.labels[4], $scope.data)];
+    _dashboard.smallColors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5'];
+    _dashboard.smallLabels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus'];
 
     _dashboard.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
 
@@ -246,54 +436,54 @@ angular.module('dealScanCrmApp')
     }
 
 
-  $scope.labels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus', 'Police Interceptor Sedan', 'Mustang',
-      'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition','F-Series','E-Series','Transit','Transit Connect','Heavy Trucks'];
-  $scope.series = ['Series A', 'Series B'];
+    $scope.labels = ['Fiesta', 'Focus', 'C-MAX', 'Fusion', 'Taurus', 'Police Interceptor Sedan', 'Mustang',
+      'Escape', 'Edge', 'Flex', 'Explorer', 'Police Interceptor Utility', 'Expedition', 'F-Series', 'E-Series', 'Transit', 'Transit Connect', 'Heavy Trucks'];
+    $scope.series = ['Series A', 'Series B'];
 
-  $scope.data2 = [
- [getModelCount(_dashboard.labels[0],  $scope.data), getModelCount(_dashboard.labels[1],  $scope.data), getModelCount(_dashboard.labels[2],  $scope.data),
-      getModelCount(_dashboard.labels[3], $scope.data), getModelCount(_dashboard.labels[4], $scope.data), getModelCount(_dashboard.labels[5],  $scope.data),
-      getModelCount(_dashboard.labels[6], $scope.data), getModelCount(_dashboard.labels[7], $scope.data), getModelCount(_dashboard.labels[8],  $scope.data),
-      getModelCount(_dashboard.labels[9], $scope.data), getModelCount(_dashboard.labels[10], $scope.data), getModelCount(_dashboard.labels[11],  $scope.data),
-      getModelCount(_dashboard.labels[12], $scope.data), getModelCount(_dashboard.labels[13], $scope.data), getModelCount(_dashboard.labels[14],  $scope.data),
-      getModelCount(_dashboard.labels[15], $scope.data), getModelCount(_dashboard.labels[16], $scope.data), getModelCount(_dashboard.labels[17],  $scope.data)]
-  ];
- $scope.options = {
-    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-    //scaleBeginAtZero : true,
-responsive: true,
-   maintainAspectRatio: true,
-    //Boolean - Whether grid lines are shown across the chart
-    //scaleShowGridLines : true,
+    $scope.data2 = [
+      [getModelCount(_dashboard.labels[0], $scope.data), getModelCount(_dashboard.labels[1], $scope.data), getModelCount(_dashboard.labels[2], $scope.data),
+        getModelCount(_dashboard.labels[3], $scope.data), getModelCount(_dashboard.labels[4], $scope.data), getModelCount(_dashboard.labels[5], $scope.data),
+        getModelCount(_dashboard.labels[6], $scope.data), getModelCount(_dashboard.labels[7], $scope.data), getModelCount(_dashboard.labels[8], $scope.data),
+        getModelCount(_dashboard.labels[9], $scope.data), getModelCount(_dashboard.labels[10], $scope.data), getModelCount(_dashboard.labels[11], $scope.data),
+        getModelCount(_dashboard.labels[12], $scope.data), getModelCount(_dashboard.labels[13], $scope.data), getModelCount(_dashboard.labels[14], $scope.data),
+        getModelCount(_dashboard.labels[15], $scope.data), getModelCount(_dashboard.labels[16], $scope.data), getModelCount(_dashboard.labels[17], $scope.data)]
+    ];
+    $scope.options = {
+      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+      //scaleBeginAtZero : true,
+      responsive: true,
+      maintainAspectRatio: true,
+      //Boolean - Whether grid lines are shown across the chart
+      //scaleShowGridLines : true,
 
-    //String - Colour of the grid lines
-   // scaleGridLineColor : "rgba(0,0,0,.05)",
+      //String - Colour of the grid lines
+      // scaleGridLineColor : "rgba(0,0,0,.05)",
 
-    //Number - Width of the grid lines
-    //scaleGridLineWidth : 1,
+      //Number - Width of the grid lines
+      //scaleGridLineWidth : 1,
 
-    //Boolean - Whether to show horizontal lines (except X axis)
-    //scaleShowHorizontalLines: true,
+      //Boolean - Whether to show horizontal lines (except X axis)
+      //scaleShowHorizontalLines: true,
 
-    //Boolean - Whether to show vertical lines (except Y axis)
-    //scaleShowVerticalLines: true,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      //scaleShowVerticalLines: true,
 
-    //Boolean - If there is a stroke on each bar
-   // barShowStroke : true,
+      //Boolean - If there is a stroke on each bar
+      // barShowStroke : true,
 
-    //Number - Pixel width of the bar stroke
-   // barStrokeWidth : 2,
+      //Number - Pixel width of the bar stroke
+      // barStrokeWidth : 2,
 
-    //Number - Spacing between each of the X value sets
-   // barValueSpacing : 5,
+      //Number - Spacing between each of the X value sets
+      // barValueSpacing : 5,
 
-    //Number - Spacing between data sets within X values
-   // barDatasetSpacing : 1,
+      //Number - Spacing between data sets within X values
+      // barDatasetSpacing : 1,
 
-    //String - A legend template
-    legendTemplate : "<ul ><% for (var i=0; i<datasets.length; i++){%><li ><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+      //String - A legend template
+      legendTemplate: "<ul ><% for (var i=0; i<datasets.length; i++){%><li ><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
-}
+    }
 
 
     $scope.addLead = function () {

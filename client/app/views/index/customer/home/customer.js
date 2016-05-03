@@ -3,25 +3,23 @@
 angular.module('dealScanCrmApp')
   .config(function ($stateProvider) {
     $stateProvider
-      .state('index.home.customer', {
+      .state('index.customer', {
         url: '/customers',
         title: 'Customers',
         authenticate: true,
-        views: {
-          'pageContent': {
-            templateUrl: 'app/account/customer/home/customers.html',
-            controller: 'CustomersCtrl as customers'
-          }
-        }
+        templateUrl: 'app/views/index/customer/home/customers.html',
+        controller: 'CustomersCtrl as customers',
+        data: {pageTitle: 'Customers'}
       })
-      .state('index.home.customer.profile', {
+      .state('index.customer.profile', {
         url: '/:customerID/:customerName',
         title: 'Customer',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/customer.html',
+        templateUrl: 'app/views/index/customer/profile/customer.html',
         controller: 'CustomerCtrl as customer',
+        data: {pageTitle: 'Customer Profile'},
         resolve: {
-          selectedCustomer: function ($q, $stateParams, Customer, SweetAlert) {
+          selectedCustomer: function ($q, $stateParams, Customer) {
             var df = $q.defer();
             console.log($stateParams);
             Customer.get($stateParams.customerID).then(function (customer) {
@@ -30,27 +28,27 @@ angular.module('dealScanCrmApp')
                 console.log('I was resolved...');
                 df.resolve(customer);
               } else {
-                SweetAlert.swal(
-                  'Customer Not Found',
-                  'Sorry, we couldn\'t find this customer info.',
-                  'error'
-                );
+                // SweetAlert.swal(
+                //   'Customer Not Found',
+                //   'Sorry, we couldn\'t find this customer info.',
+                //   'error'
+                // );
                 console.log('I was rejected...');
                 df.reject('User Not Found');
               }
             }).catch(function (err) {
-              SweetAlert.swal(
-                'Customer Error',
-                'Sorry, an error occurred while attempting to retrieve your customer info. Please try again later. Thanks',
-                'error'
-              );
+              // SweetAlert.swal(
+              //   'Customer Error',
+              //   'Sorry, an error occurred while attempting to retrieve your customer info. Please try again later. Thanks',
+              //   'error'
+              // );
               df.reject(err);
             })
             return df.promise;
           }
         },
       })
-      .state('index.home.customer.profile.summary', {
+      .state('index.customer.profile.summary', {
         url: '/summary',
         abstract: true,
         authenticate: true,
@@ -61,81 +59,87 @@ angular.module('dealScanCrmApp')
         },
         views: {
           tabs: {
-            templateUrl: 'app/account/customer/profile/tabs/summary.html',
+            templateUrl: 'app/views/index/customer/profile/tabs/summary.html',
             controller: 'CustomerCtrl as customer',
           }
         }
       })
-      .state('home.customer.profile.summary.overview', {
+      .state('index.customer.profile.summary.overview', {
         url: '/overview',
         title: 'Overview',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/tabs/overview/overview.html',
+        templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
         controller: 'CustomerCtrl as customer',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
-        }
+        },
+        data: {pageTitle: 'Customer Overview'},
       })
-      .state('home.customer.profile.summary.documents', {
+      .state('index.customer.profile.summary.documents', {
         url: '/documents',
         title: 'Documents',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/tabs/documents/documents.html',
+        templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
         controller: 'DocumentsCtrl as documents',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
-        }
+        },
+        data: {pageTitle: 'Customer Documents'},
       })
-      .state('home.customer.profile.summary.images', {
+      .state('index.customer.profile.summary.images', {
         url: '/images',
         title: 'Images',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/tabs/images/images.html',
+        templateUrl: 'app/views/index/customer/profile/tabs/images/images.html',
         controller: 'ImagesCtrl as images',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
-        }
+        },
+        data: {pageTitle: 'Customer Images'},
       })
-      .state('home.customer.profile.summary.tasks', {
+      .state('index.customer.profile.summary.tasks', {
         url: '/tasks',
         title: 'Tasks',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/tabs/task/task.html',
+        templateUrl: 'app/views/index/customer/profile/tabs/task/task.html',
         controller: 'TaskCtrl as task',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
-        }
+        },
+        data: {pageTitle: 'Customer Tasks'},
       })
-      .state('home.customer.profile.summary.notes', {
+      .state('index.customer.profile.summary.notes', {
         url: '/notes',
         title: 'Notes',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/tabs/note/note.html',
+        templateUrl: 'app/views/index/customer/profile/tabs/note/note.html',
         controller: 'NoteCtrl as note',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
-        }
+        },
+        data: {pageTitle: 'Customer Notes'},
       })
-      .state('home.customer.profile.summary.messages', {
+      .state('index.customer.profile.summary.messages', {
         url: '/messages',
         title: 'Messages',
         authenticate: true,
-        templateUrl: 'app/account/customer/profile/tabs/messages/messages.html',
+        templateUrl: 'app/views/index/customer/profile/tabs/messages/messages.html',
         controller: 'MessagesCtrl as messages',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
-        }
+        },
+        data: {pageTitle: 'Customer Messages'},
       })
   });

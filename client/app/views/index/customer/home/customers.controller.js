@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, $aside, SweetAlert, appConfig) {
+  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, $aside,appConfig) {
 
     /*
      * Controllers Variables
@@ -42,9 +42,9 @@ angular.module('dealScanCrmApp')
       }).catch(function (err) {
         console.log(err);
         _customers.processingData = false;
-        SweetAlert.swal("Customer Loading Error ",
-          "Sorry, an error occurred while attempting to retrieve your customer info.",
-          "error");
+        // SweetAlert.swal("Customer Loading Error ",
+        //   "Sorry, an error occurred while attempting to retrieve your customer info.",
+        //   "error");
       });
     }
 
@@ -64,9 +64,9 @@ angular.module('dealScanCrmApp')
       }).catch(function (err) {
         console.log(err);
         _customers.processingData = false;
-        SweetAlert.swal("Customer Search Error ",
-          "Sorry, an error occurred while attempting to retrieve your customer info.",
-          "error");
+        // SweetAlert.swal("Customer Search Error ",
+        //   "Sorry, an error occurred while attempting to retrieve your customer info.",
+        //   "error");
       });
     }
 

@@ -1,14 +1,14 @@
 <div>
   <div>
     <div class="wrap-content container fade-in-up ng-cloak" id="container">
-      <div class="breadcrumb-wrapper" ng-if="$state.is('home.customer')">
+      <div class="breadcrumb-wrapper" ng-if="$state.is('index.customer')">
         <h4 class="mainTitle no-margin inline">MY CUSTOMERS</h4>
         <span class="pull-right" style="margin-top:-8px">
            <a class="btn btn-wide btn-primary btn-sm btn-o" href ng-click="customers.addCustomer();"><i
              class="fa fa-user-plus"></i>&nbsp;&nbsp;Add Customer</a>
           </span>
       </div>
-      <div class="row no-margin" ng-if="$state.is('home.customer')">
+      <div class="row no-margin" ng-if="$state.is('index.customer')">
         <div class="col-md-12" style="margin-top:15px;">
           <div class="panel panel-white no-radius no-margin" ng-hide="customers.processingData">
             <table st-table="customers.customersOnDisplay" st-safe-src="customers.customersInfo"

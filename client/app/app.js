@@ -11,6 +11,9 @@ angular.module('dealScanCrmApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
+  'oc.lazyLoad',                  // ocLazyLoad,
+  'ngIdle',                       // Idle timer
+  'ngAside',
   'ngMap',
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
