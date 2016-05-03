@@ -1,0 +1,30 @@
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+  <div>
+    <div>
+      <h1 class="logo-name">DS</h1>
+    </div>
+    <h3>Welcome to DealScan</h3>
+    <p>Please login to continue</p>
+    <form class="m-t" role="form" name="loginForm" ng-submit="landing.login(loginForm)">
+      <div class="form-group">
+        <input type="email" class="form-control" placeholder="Username" required="" ng-model="landing.user.email">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" placeholder="Password" required="" ng-model="landing.user.password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-o full-width m-b"
+              ng-disabled="!loginForm.$valid || loginForm.$pristine || landing.submitted">{{landing.submitted ?
+        'Authenticating...' : 'Login'}}
+      </button>
+      <a ui-sref="forgot_password">
+        <small>Forgot password?</small>
+      </a>
+      <p class="text-muted text-center">
+        <small>Do not have an account? <a href>register</a></small>
+      </p>
+    </form>
+    <p class="m-t">
+      <small>&copy; 2014 - KelCar, LLC</small>
+    </p>
+  </div>
+</div>

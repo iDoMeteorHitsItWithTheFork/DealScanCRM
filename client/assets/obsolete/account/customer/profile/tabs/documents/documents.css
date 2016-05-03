@@ -1,0 +1,19 @@
+.doc-img-icon {
+  width: 24px !important;
+  margin-right: 5px;
+}
+
+.height-30 {
+  height: 30px !important;
+}
+
+.width-48 {
+  width: 48px !important;
+}
+
+.scroll-400 {
+  height: 400px !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll;
+  margin-bottom: 35px !important;
+}

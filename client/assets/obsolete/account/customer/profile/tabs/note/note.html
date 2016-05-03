@@ -1,0 +1,91 @@
+<div class="container" style="padding: 0px;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="note-editor">
+          <form name="note.newNoteForm">
+            <textarea ng-model="note.newNote.content"
+                      ng-required="true" placeholder="Type here to add a note..."
+                      class="form-control"
+                      style="resize: none; height: 100px !important; font-size:12px !important;"></textarea>
+
+            <div class="row margin-top-30 margin-bottom-30 text-center"
+                 ng-show="note.newNote.content.length > 0 && note.newNoteForm.$valid">
+              <button ng-click="note.addNote()" ng-disabled="note.addingNote"
+                      class="btn btn-dealscan btn-lg btn-o btn-block pull-right"
+                      style="width: 60px; height: 60px; border-radius: 60px; padding-top: 10px; padding-left:18px;
+                 position: absolute; top: 46px; right: 22px; opacity:.7">
+                <i ng-class="note.addingNote ?'fa fa-spinner fa-pulse':'fa fa-check fa-lg'"></i></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" id="note-list-caption" style="margin-left: 15px; margin-right: 15px;  margin-bottom: 5px;">
+    <p style="font-size: 12px; color: darkslategray;">NOTES</p>
+  </div>
+
+
+  <!-- Note Row -->
+  <div ng-if="note.customerNotes.length > 0">
+    <div class="row border-around" id="note-list-header" style="margin-left: 15px; margin-right: 15px; height: 36px;">
+      <div class="col-md-1" style="margin-top: 8px">
+        <p style="font-weight: bold; font-size: 12px;">Date</p>
+      </div>
+      <div class="col-md-9" style="margin-top: 8px">
+        <p style="font-weight: bold; font-size: 12px; margin-left: 10px;">Description</p>
+      </div>
+      <div class="col-md-2" style="margin-top: 8px">
+        <p style="font-weight: bold; font-size: 12px; margin-left: -20px;">Action</p>
+      </div>
+    </div>
+    <div class="container" id="note-list-details" style="padding: 0px; max-height: 250px; overflow-y: scroll;">
+      <ul class="list-group" style="margin-left: 15px; margin-right: 15px;">
+        <li ng-repeat="n in note.customerNotes" class="list-group-item"
+            ng-class={'dsc-stripped-row':$even,'dsc-clear-row':$odd} style="border-radius: 0px; border-top: none;">
+          <div class="row">
+            <div class="col-md-1">
+              <p style="font-weight: bold; margin-bottom: 0px;">{{n.createdAt | amDateFormat:'MMM Do'}}</p>
+
+              <p>{{n.createdAt | amDateFormat:'h:m A'}}</p>
+            </div>
+            <div class="col-md-9 border-left border-right">
+              <p style="font-weight: bold; margin-bottom: 0px; color: #FA6424;">{{n.Creator.profile.name}}</p>
+
+              <p ng-show="!n.editMode">{{n.content}}</p>
+
+              <form name="editNoteForm" novalidate ng-show="n.editMode">
+                <textarea ng-model="n.editedContent"
+                          style="font-size:12px !important; height: 80px !important;border: 1px solid #dedede;
+                           padding: 10px !important; margin-top: 10px;margin-bottom: 10px;width: 100%;border-radius: 3px;">
+                </textarea>
+                <button ng-click="n.editMode = !n.editMode"
+                        class="btn btn-danger btn-o btn-sm pull-right border-around bg-white"
+                        style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px;">
+                  <i class="fa fa-remove"></i></button>
+                <button ng-click="note.editNote(n, n.editedContent)"
+                        class="btn btn-o btn-success btn-sm pull-right border-around bg-white"
+                        style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px; margin-right: 5px;">
+                  <i
+                    ng-class="n.editingNote ? 'fa fa-spinner fa-pulse' :'fa fa-check'"></i></button>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <div class="row" style="margin-right: 15px;">
+                <button ng-click="note.deleteNote(n)" class="btn btn-primary btn-sm btn-o pull-right border-around"
+                        style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px;"><i
+                  ng-class="n.deletingNote ? 'fa fa-spinner fa-pulse' :'fa fa-remove'"></i></button>
+                <button ng-click="n.editMode = true; n.editedContent = n.content"
+                        class="btn btn-primary btn-sm btn-o pull-right border-around"
+                        style="border: none; height: 30px; width: 30px; padding: 4px; border-radius: 20px; margin-right: 15px;">
+                  <i class="fa fa-pencil"></i></button>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--Note Row -->
+</div>

@@ -1,0 +1,169 @@
+<div class="margin-negative-top-10">
+  <div class="col-sm-4 border-around"
+       style="max-height: 385px; padding-right: 0px; padding-left: 15px; box-shadow: 0px 2px 5px #C4C4C4">
+    <div class="row" style="margin-bottom: 10px; margin-top: 12px; padding: 5px;">
+      <div class="btn-group" style="margin-left: -15px">
+        <a class="btn btn-primary btn-sm btn-o" ng-model="messages.viewOptions" uib-btn-radio="'All'" style="width: 82px;"><i class=""></i>All</a>
+        <a class="btn btn-primary btn-sm btn-o" ng-model="messages.viewOptions" uib-btn-radio="'Email'" style="width: 82px;"><i class=""></i>Emails</a>
+        <a class="btn btn-primary btn-sm btn-o" ng-model="messages.viewOptions" uib-btn-radio="'Text'" style="width: 82px;"><i class=""></i> Chats</a>
+      </div>
+      <div class="pull-right">
+        <span uib-dropdown>
+          <a href  uib-dropdown-toggle class="btn btn-primary btn-sm">
+            <i class="fa fa-plus"></i>
+          </a>
+          <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+            <li><a href ng-click="messages.compose('Text');"><i class="fa fa-commenting-o">&nbsp;&nbsp;</i>Text</a></li>
+            <li><a href ng-click="messages.compose('Email');"><i class="fa fa-envelope">&nbsp;&nbsp;</i>Email</a></li>
+          </ul>
+        </span>
+      </div>
+    </div>
+    <ul class="list-group no-border" style="margin-left: -15px; max-height: 325px; overflow-y: scroll">
+      <li ng-repeat="msg in messages.correspondences | filter:messages.filterMessages()"
+          ng-click="messages.chatView(msg);"
+          class="list-group-item no-radius no-margin no-border-top no-border-left no-border-right"
+          ng-class="messages.activeCorrespondence.correspondenceID == msg.correspondenceID ? 'msg-active' : ''"
+          style="padding: 25px; padding-top: 10px;padding-bottom: 10px; cursor: pointer;">
+        <div class="col-sm-1" style="margin-left: -15px; margin-right: 20px; padding-top: 0px">
+          <img ng-src="{{msg.type =='Text'? 'assets/images/chat@3x.png' : 'assets/images/letter@3x.png'}}"
+               alt="Smiley face" style="width: 40px; margin-left: -15px;">
+        </div>
+        <div>
+          <div class="row" style="margin-right: -15px; padding-bottom: 10px;">
+            <div class="pull-left ">
+              <p style="margin-bottom: 5px"><b>{{msg.sender}}</b></p>
+            </div>
+            <div class="pull-right ">
+              <p style="margin-bottom: 5px">{{msg.timestamp}}</p>
+            </div>
+          </div>
+          <div class="row" ng-show="msg.subject">
+            <p style="color: dodgerblue; font-size: 10px; margin-top: -26px; margin-left: 35px">Subject:
+              {{msg.subject}}</p>
+          </div>
+          <div class="row padding-left-15" style="margin-right: -15px" ng-if="msg.type == 'Text'">
+            <p style="font-size: 10px; margin-top: -30px; margin-bottom: -5px; margin-left: 20px;">
+              {{msg.chatHistory[0].content | limitTo: 150}}{{msg.chatHistory[0].content.length > 150 ? '...' : ''}}</p>
+          </div>
+          <div class="row padding-left-15" style="margin-right: -15px" ng-if="msg.type == 'Email'">
+            <p style="font-size: 10px; margin-top: -10px; margin-bottom: -5px; margin-left: 20px;">
+              {{msg.chatHistory[0].content | limitTo: 150}}{{msg.chatHistory[0].content.length > 1500 ? '...' : ''}}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+
+  <!-- **** BEGIN TEXT MESSAGE INTERFACE (MULTIPLE MESSAGES) **** -->
+  <div class="col-sm-8 border-around" style="height: 385px !important; position: relative;">
+
+    <span ng-show="messages.activeCorrespondence && messages.activeCorrespondence.type == 'Text' && !messages.composeNew.status">
+        <!-- CHAT HISTORY HEADER -->
+        <div class="row border-bottom" style="margin-bottom: -15px;">
+          <p style="margin-top: 10px; font-size: 12px; font-weight: bold;">{{messages.activeCorrespondence.sender}}</p>
+        </div>
+         <!-- ./CHAT HISTORY HEADER -->
+         <!-- CHAT HISTORY VIEW -->
+        <div class="container"
+             style="height: 249px; margin-top: 15px; padding: 20px; overflow-y: scroll; overflow-x: hidden;">
+
+          <!-- chat msg -->
+          <div class="row" ng-repeat="msg in messages.activeCorrespondence.chatHistory"
+               ng-class="{'customer-msg' : msg.status == 'received', 'usr-msg' : msg.status == 'sent'}">
+            <div class="container" style="padding-right: 110px; padding-left: 110px; padding-bottom: 10px">
+              <div class="row">
+                <div class="pull-left ">
+                  <p style="margin-bottom: 5px">
+                    <b>{{msg.status == 'sent' ? messages.activeCorrespondence.sender : messages.thisCustomer.firstName
+                      +' '+ messages.thisCustomer.middleInitial+ ' '+ messages.thisCustomer.lastName}}</b>
+                  </p>
+                </div>
+                <div class="pull-right ">
+                  <p style="margin-bottom: 5px">{{msg.timestamp}}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="container" style="padding: 0px; margin-top: -2px; background-color: #CFD1D1;">
+                  <p style="padding-right: 10px; padding-left: 10px; padding-top: 10px;">{{msg.content}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ./chat msg -->
+
+        </div>
+        <!-- ./CHAT HISTORY VIEW -->
+    </span>
+
+    <span ng-show="messages.activeCorrespondence && messages.activeCorrespondence.type == 'Email' && !messages.composeNew.status">
+        <!-- Insert Email Detail view contents here  -->
+
+    </span>
+
+
+    <span ng-show="messages.composeNew.status && messages.composeNew.type == 'Text'">
+          <div class="row border-bottom">
+            <i class="fa fa-plus-circle icon-align-left" aria-hidden="true" style="font-size: 20px; color: #58748B"></i>
+            <input type="text" placeholder="Enter Contact Name"
+                   style="margin-top: 12px; margin-left: 5px; border: none; outline: none; width: 96%">
+          </div>
+    </span>
+
+    <span ng-show="messages.composeNew.status && messages.composeNew.type == 'Email'">
+      <div class="row">
+        <div class="container background-dark" style="margin-top: 12px; padding: 5px;">
+          <div class="col-sm-11" style="margin-left: -20px">
+            <div class="row">
+              <input class="inputfield border-bottom" type="text" placeholder="To:"
+                     style="margin-left: 5px; border: none; outline: none; width: 96%; font-size:11px !important;">
+            </div>
+            <div class="row">
+              <input class="inputfield border-bottom" type="text" placeholder="Cc:"
+                     style="margin-left: 5px; border: none; outline: none; width: 96%; font-size:11px !important;">
+            </div>
+            <div class="row">
+              <input class="inputfield border-bottom" type="text" placeholder="Subject:"
+                     style="margin-left: 5px; border: none; outline: none; width: 96%; font-size:11px !important;">
+            </div>
+          </div>
+          <div class="col-sm-1" style="margin-left: -24.5px; padding-left: 0px;">
+            <a class="btn btn-primary btn-sm" style="width: 95px; height: 80px; padding: 29px;"><b
+              style="margin-left: 1px">SEND</b></a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="container" style="margin-left: -15px; margin-bottom: -5px; margin-top: 5px;">
+          <form role="form">
+            <div class="form-group">
+              <textarea placeholder="Start Typing" class="form-control background-dark" rows="16" id="comment"
+                        style="resize: none; margin-top: -5px; width: 105%; border: none;"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </span>
+
+    <!-- TEXT MESSAGE COMPOSE AREA -->
+    <div ng-show="messages.composeNew.type == 'Text'" class="row" style="position: absolute;width: 100%; bottom: 0;margin-left: -15px; margin-right: -15px; background-color: #D6D8D8; box-shadow: 0px 2px 5px #C4C4C4; margin-top: 5px;">
+      <div class="col-sm-11">
+        <div class="container" style="margin-left: -20px; margin-bottom: -5px; margin-top: 5px; padding-right: 40px;">
+          <form role="form">
+            <div class="form-group">
+              <label for="comment" style="color: #58748B"><b>NEW MESSAGE</b></label>
+              <textarea class="form-control" rows="3" id="comment" style="resize: none; margin-top: -5px"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-1" style="padding-top: 20px; margin-left: -65px; padding-left: 0px;">
+        <a class="btn btn-primary btn-sm" style="width: 111px; height: 60px; padding: 20px;"><b
+          style="margin-left: 1px">SEND</b></a>
+      </div>
+    </div>
+    <!-- ./ TEXT MESSAGE COMPOSE AREA -->
+  </div>
+
+</div>

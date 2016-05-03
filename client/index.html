@@ -1,85 +1,90 @@
 <!doctype html>
 <!--[if lt IE 7]>
-<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<html ng-app="dealScanCrmApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
-<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<html ng-app="dealScanCrmApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>
-<html class="no-js lt-ie9"> <![endif]-->
+<html ng-app="dealScanCrmApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js"> <!--<![endif]-->
+<html ng-app="dealScanCrmApp" class="no-js"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <base href="/">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) app/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/angular-aside/dist/css/angular-aside.css" />
-    <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css" />
-    <link rel="stylesheet" href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.css" />
-    <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" />
-    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
-    <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css" />
-    <!-- endbower -->
-    <link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css"/>
-    <!-- endbuild -->
-    <!-- build:css({.tmp,client}) app/app.css -->
-    <link rel="stylesheet" href="app/app.css">
-    <!-- injector:css -->
-    <link rel="stylesheet" href="app/account/bdc/bdc.css">
-    <link rel="stylesheet" href="app/account/customer/home/customer.css">
-    <link rel="stylesheet" href="app/account/customer/home/customers.css">
-    <link rel="stylesheet" href="app/account/customer/profile/tabs/documents/documents.css">
-    <link rel="stylesheet" href="app/account/customer/profile/tabs/images/images.css">
-    <link rel="stylesheet" href="app/account/customer/profile/tabs/messages/messages.css">
-    <link rel="stylesheet" href="app/account/customer/profile/tabs/note/note.css">
-    <link rel="stylesheet" href="app/account/customer/profile/tabs/overview/overview.css">
-    <link rel="stylesheet" href="app/account/customer/profile/tabs/task/task.css">
-    <link rel="stylesheet" href="app/account/customer/sideviews/text/text.css">
-    <link rel="stylesheet" href="app/account/dashboard/dashboard.css">
-    <link rel="stylesheet" href="app/account/email/email.css">
-    <link rel="stylesheet" href="app/account/home/home.css">
-    <link rel="stylesheet" href="app/account/search/search.css">
-    <link rel="stylesheet" href="app/account/team/team.css">
-    <link rel="stylesheet" href="app/admin/admin.css">
-    <link rel="stylesheet" href="app/app.css">
-    <link rel="stylesheet" href="app/crm.css">
-    <link rel="stylesheet" href="app/custom.css">
-    <link rel="stylesheet" href="app/login/login.css">
-    <link rel="stylesheet" href="components/footer/footer.css">
-    <link rel="stylesheet" href="components/modal/modal.css">
-    <link rel="stylesheet" href="components/sidebar/sidebar.css">
-    <!-- endinjector -->
-    <!-- endbuild -->
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <base href="/">
+  <!-- Page title set in pageTitle directive -->
+  <title page-title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  <!-- Google Open Sans -->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+  <!-- build:css(client) app/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
+  <link rel="stylesheet" href="bower_components/metisMenu/dist/metisMenu.css" />
+  <!-- endbower -->
+
+  <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- endbuild -->
+  <!-- build:css({.tmp,client}) app/app.css -->
+  <link rel="stylesheet" href="app/app.css">
+
+  <!-- injector:css -->
+  <link rel="stylesheet" href="app/app.css">
+  <link rel="stylesheet" href="app/styles/animate.css">
+  <link rel="stylesheet" href="app/styles/bootstrap.css">
+  <link rel="stylesheet" href="app/styles/bootstrap.min.css">
+  <link rel="stylesheet" href="app/styles/style.css">
+  <link rel="stylesheet" href="app/styles/style.min.css">
+  <link rel="stylesheet" href="app/views/index/bdc/bdc.css">
+  <link rel="stylesheet" href="app/views/index/customer/home/customer.css">
+  <link rel="stylesheet" href="app/views/index/customer/home/customers.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/documents/documents.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/images/images.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/messages/messages.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/note/note.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/overview/overview.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/task/task.css">
+  <link rel="stylesheet" href="app/views/index/customer/sideviews/text/text.css">
+  <link rel="stylesheet" href="app/views/index/dashboard/dashboard.css">
+  <link rel="stylesheet" href="app/views/index/email/email.css">
+  <link rel="stylesheet" href="app/views/index/home/home.css">
+  <link rel="stylesheet" href="app/views/index/search/search.css">
+  <link rel="stylesheet" href="app/views/index/team/team.css">
+  <link rel="stylesheet" href="app/views/admin/admin.css">
+  <link rel="stylesheet" href="app/views/login/login.css">
+  <!-- endinjector -->
+  <!-- endbuild -->
 </head>
-<body ng-app="dealScanCrmApp" flow-prevent-drop>
+<body ng-controller="MainCtrl as main">
+
 <!--[if lt IE 7]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
+  your browser</a> to improve your experience.</p>
 <![endif]-->
 
 <!-- Add your site or application content here -->
-<div ui-view=""></div>
+<div ui-view></div>
+
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 <script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-XXXXX-X');
-    ga('send', 'pageview');
+  ga('create', 'UA-XXXXX-X');
+  ga('send', 'pageview');
 </script>
 
 <!--[if lt IE 9]>
@@ -90,111 +95,90 @@
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-messages/angular-messages.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/pace/pace.js"></script>
+<script src="bower_components/metisMenu/dist/metisMenu.js"></script>
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/angular-socket-io/socket.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="bower_components/angular-validation-match/dist/angular-validation-match.min.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/angular-aside/dist/js/angular-aside.js"></script>
-<script src="bower_components/Chart.js/Chart.js"></script>
-<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
-<script src="bower_components/moment/moment.js"></script>
-<script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js"></script>
-<script src="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script>
-<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
-<script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
-<script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
-<script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
-<script src="bower_components/lr-sticky-header/lrStickyHeader.js"></script>
-<script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
 <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
-<script src="bower_components/angular-moment/angular-moment.js"></script>
-<script src="bower_components/flow.js/dist/flow.js"></script>
-<script src="bower_components/ng-flow/dist/ng-flow.js"></script>
 <!-- endbower -->
 
-<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
-<script src="bower_components/ngSweetAlert/SweetAlert.min.js"></script>
-<script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
 <script src="http://maps.google.com/maps/api/js"></script>
 <script src="socket.io-client/socket.io.js"></script>
 <!-- endbuild -->
 <!-- build:js(.tmp) app/app.js -->
-
-<script src="assets/scripts/fastclick.js"></script>
-<script src="assets/scripts/select.min.js"></script>
-<script src="assets/scripts/select2.min.js"></script>
 <script src="app/app.js"></script>
 <!-- injector:js -->
-<script src="app/admin/admin.module.js"></script>
+<script src="app/views/admin/admin.module.js"></script>
 <script src="components/auth/auth.module.js"></script>
 <script src="components/util/util.module.js"></script>
-<script src="app/account/search/search.controller.js"></script>
-<script src="app/account/customer/edit/updateCustomer.controller.js"></script>
-<script src="app/account/customer/home/customer.js"></script>
-<script src="app/account/customer/home/customers.controller.js"></script>
-<script src="app/account/customer/profile/customer.controller.js"></script>
-<script src="app/account/customer/profile/customer.resource.js"></script>
-<script src="app/account/customer/profile/customer.service.js"></script>
-<script src="app/account/customer/profile/tabs/documents/documents.controller.js"></script>
-<script src="app/account/customer/profile/tabs/images/images.controller.js"></script>
-<script src="app/account/customer/profile/tabs/images/images.resource.js"></script>
-<script src="app/account/customer/profile/tabs/images/images.service.js"></script>
-<script src="app/account/customer/profile/tabs/messages/messages.controller.js"></script>
-<script src="app/account/customer/profile/tabs/note/addNote.controller.js"></script>
-<script src="app/account/customer/profile/tabs/note/note.controller.js"></script>
-<script src="app/account/customer/profile/tabs/note/note.resource.js"></script>
-<script src="app/account/customer/profile/tabs/note/note.service.js"></script>
-<script src="app/account/customer/profile/tabs/note/updateNote.controller.js"></script>
-<script src="app/account/customer/profile/tabs/overview/overview.controller.js"></script>
-<script src="app/account/customer/profile/tabs/task/task.controller.js"></script>
-<script src="app/account/customer/sideviews/email/email.controller.js"></script>
-<script src="app/account/customer/sideviews/text/text.controller.js"></script>
-<script src="app/account/dashboard/addLead.controller.js"></script>
-<script src="app/account/dashboard/dashboard.controller.js"></script>
-<script src="app/account/dashboard/dashboard.js"></script>
-<script src="app/account/dashboard/dashboard.service.js"></script>
-<script src="app/account/email/email.js"></script>
-<script src="app/account/email/modal/emailModal.controller.js"></script>
-<script src="app/account/home/home.controller.js"></script>
-<script src="app/account/home/home.js"></script>
-<script src="app/account/bdc/bdc.controller.js"></script>
-<script src="app/account/search/search.js"></script>
-<script src="app/account/settings/settings.controller.js"></script>
-<script src="app/account/task/addTask.controller.js"></script>
-<script src="app/account/team/createTeam.controller.js"></script>
-<script src="app/account/team/team.controller.js"></script>
-<script src="app/account/team/team.js"></script>
-<script src="app/account/team/team.resource.js"></script>
-<script src="app/account/team/team.service.js"></script>
-<script src="app/admin/admin.controller.js"></script>
-<script src="app/account/account.js"></script>
-<script src="app/admin/admin.router.js"></script>
+<script src="app/views/index/customer/sideviews/email/email.controller.js"></script>
+<script src="app/dealscan.js"></script>
+<script src="app/views/admin/admin.controller.js"></script>
 <script src="app/app.constant.js"></script>
+<script src="app/views/admin/admin.router.js"></script>
+<script src="app/views/index/bdc/bdc.controller.js"></script>
+<script src="app/views/index/bdc/bdc.js"></script>
+<script src="app/views/index/customer/add/addCustomer.controller.js"></script>
+<script src="app/views/index/customer/edit/updateCustomer.controller.js"></script>
+<script src="app/views/index/customer/home/customer.js"></script>
+<script src="app/views/index/customer/home/customers.controller.js"></script>
+<script src="app/views/index/customer/profile/customer.controller.js"></script>
+<script src="app/views/index/customer/profile/customer.resource.js"></script>
+<script src="app/views/index/customer/profile/customer.service.js"></script>
+<script src="app/views/index/customer/profile/tabs/documents/documents.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/images/images.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/images/images.resource.js"></script>
+<script src="app/views/index/customer/profile/tabs/images/images.service.js"></script>
+<script src="app/views/index/customer/profile/tabs/messages/messages.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/note/addNote.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/note/note.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/note/note.resource.js"></script>
+<script src="app/views/index/customer/profile/tabs/note/note.service.js"></script>
+<script src="app/views/index/customer/profile/tabs/note/updateNote.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/overview/overview.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/task/task.controller.js"></script>
+<script src="app/app.controller.js"></script>
+<script src="app/views/index/customer/sideviews/text/text.controller.js"></script>
+<script src="app/views/index/dashboard/addLead.controller.js"></script>
+<script src="app/views/index/dashboard/dashboard.controller.js"></script>
+<script src="app/views/index/dashboard/dashboard.js"></script>
+<script src="app/views/index/dashboard/dashboard.service.js"></script>
+<script src="app/views/index/email/email.js"></script>
+<script src="app/views/index/email/modal/emailModal.controller.js"></script>
+<script src="app/views/index/home/home.controller.js"></script>
+<script src="app/views/index/home/home.js"></script>
+<script src="app/views/index/search/search.controller.js"></script>
+<script src="app/views/index/search/search.js"></script>
+<script src="app/views/index/settings/settings.controller.js"></script>
+<script src="app/views/index/task/addTask.controller.js"></script>
+<script src="app/views/index/team/createTeam.controller.js"></script>
+<script src="app/views/index/team/team.controller.js"></script>
+<script src="app/views/index/team/team.js"></script>
+<script src="app/views/index/team/team.resource.js"></script>
+<script src="app/views/index/team/team.service.js"></script>
+<script src="app/views/login/login.controller.js"></script>
+<script src="app/views/login/login.js"></script>
+<script src="app/views/routes.js"></script>
 <script src="app/app.directives.js"></script>
-<script src="app/app.filters.js"></script>
-<script src="app/login/login.controller.js"></script>
-<script src="app/login/login.js"></script>
-<script src="app/account/bdc/bdc.js"></script>
 <script src="components/auth/auth.service.js"></script>
 <script src="components/auth/interceptor.service.js"></script>
 <script src="components/auth/router.decorator.js"></script>
 <script src="components/auth/user.service.js"></script>
-<script src="components/footer/footer.directive.js"></script>
-<script src="components/modal/modal.service.js"></script>
-<script src="components/mongoose-error/mongoose-error.directive.js"></script>
-<script src="components/navbar/navbar.controller.js"></script>
-<script src="components/navbar/navbar.directive.js"></script>
-<script src="components/sidebar/sidebar.controller.js"></script>
-<script src="components/sidebar/sidebar.directive.js"></script>
 <script src="components/socket/socket.service.js"></script>
-<script src="app/account/customer/add/addCustomer.controller.js"></script>
+<script src="app/app.filters.js"></script>
 <script src="components/util/util.service.js"></script>
 <!-- endinjector -->
 <!-- endbuild -->
 </body>
 </html>
+
+
