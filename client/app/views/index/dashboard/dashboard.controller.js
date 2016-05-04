@@ -215,13 +215,13 @@ angular.module('dealScanCrmApp')
 
     _dashboard.dataView = 'charts';
 
-    /* Initialize Map Object */
-    NgMap.getMap().then(function (map) {
-      _dashboard.map = map;
-      console.log(console.log(_dashboard.map.center));
-    }).catch(function (err) {
-      console.log(err);
-    });
+    // /* Initialize Map Object */
+    // NgMap.getMap().then(function (map) {
+    //   _dashboard.map = map;
+    //   console.log(console.log(_dashboard.map.center));
+    // }).catch(function (err) {
+    //   console.log(err);
+    // });
 
 
     $scope.itemArray = [

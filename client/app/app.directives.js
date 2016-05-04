@@ -1,4 +1,36 @@
-'use strict';
+/**
+ * INSPINIA - Responsive Admin Theme
+ *
+ * Main directives.js file
+ * Define directives for used plugin
+ *
+ *
+ * Functions (directives)
+ *  - sideNavigation
+ *  - iboxTools
+ *  - minimalizaSidebar
+ *  - vectorMap
+ *  - sparkline
+ *  - icheck
+ *  - ionRangeSlider
+ *  - dropZone
+ *  - responsiveVideo
+ *  - chatSlimScroll
+ *  - customValid
+ *  - fullScroll
+ *  - closeOffCanvas
+ *  - clockPicker
+ *  - landingScrollspy
+ *  - fitHeight
+ *  - iboxToolsFullScreen
+ *  - slimScroll
+ *  - truncate
+ *  - touchSpin
+ *  - markdownEditor
+ *  - resizeable
+ *
+ */
+
 
 /**
  * pageTitle - Directive for set Page title - mata title
@@ -8,7 +40,7 @@ function pageTitle($rootScope, $timeout) {
     link: function(scope, element) {
       var listener = function(event, toState, toParams, fromState, fromParams) {
         // Default title - load on Dashboard 1
-        var title = 'DealScan CRM | DealScan Interactive Center';
+        var title = 'DealScan CRM | A Customer Relationship Management for the Automotive Industry';
         // Create your own title pattern
         if (toState.data && toState.data.pageTitle) title = 'DealScan CRM | ' + toState.data.pageTitle;
         $timeout(function() {
@@ -30,10 +62,36 @@ function sideNavigation($timeout) {
       // Call the metsiMenu plugin and plug it to sidebar navigation
       $timeout(function(){
         element.metisMenu();
+
       });
     }
   };
 };
+
+/**
+ * responsibleVideo - Directive for responsive video
+ */
+function responsiveVideo() {
+  return {
+    restrict: 'A',
+    link:  function(scope, element) {
+      var figure = element;
+      var video = element.children();
+      video
+        .attr('data-aspectRatio', video.height() / video.width())
+        .removeAttr('height')
+        .removeAttr('width')
+
+      //We can use $watch on $window.innerWidth also.
+      $(window).resize(function() {
+        var newWidth = figure.width();
+        video
+          .width(newWidth)
+          .height(newWidth * video.attr('data-aspectRatio'));
+      }).resize();
+    }
+  }
+}
 
 /**
  * iboxTools - Directive for iBox tools elements in right corner of ibox
@@ -57,48 +115,15 @@ function iboxTools($timeout) {
           ibox.resize();
           ibox.find('[id^=map-]').resize();
         }, 50);
-      },
-        // Function for close ibox
-        $scope.closebox = function () {
-          var ibox = $element.closest('div.ibox');
-          ibox.remove();
-        }
-    }
-  };
-};
-
-/**
- * minimalizaSidebar - Directive for minimalize sidebar
- */
-function minimalizaSidebar($timeout) {
-  return {
-    restrict: 'A',
-    template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
-    controller: function ($scope, $element) {
-      $scope.minimalize = function () {
-        $("body").toggleClass("mini-navbar");
-        if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-          // Hide menu in order to smoothly turn on when maximize menu
-          $('#side-menu').hide();
-          // For smoothly turn on menu
-          setTimeout(
-            function () {
-              $('#side-menu').fadeIn(400);
-            }, 200);
-        } else if ($('body').hasClass('fixed-sidebar')){
-          $('#side-menu').hide();
-          setTimeout(
-            function () {
-              $('#side-menu').fadeIn(400);
-            }, 100);
-        } else {
-          // Remove all inline style from jquery fadeIn function to reset menu state
-          $('#side-menu').removeAttr('style');
-        }
+      };
+      // Function for close ibox
+      $scope.closebox = function () {
+        var ibox = $element.closest('div.ibox');
+        ibox.remove();
       }
     }
   };
-};
+}
 
 /**
  * iboxTools with full screen - Directive for iBox tools elements in right corner of ibox with full screen option
@@ -143,7 +168,401 @@ function iboxToolsFullScreen($timeout) {
   };
 }
 
+/**
+ * minimalizaSidebar - Directive for minimalize sidebar
+ */
+function minimalizaSidebar($timeout) {
+  return {
+    restrict: 'A',
+    template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
+    controller: function ($scope, $element) {
+      $scope.minimalize = function () {
+        $("body").toggleClass("mini-navbar");
+        if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+          // Hide menu in order to smoothly turn on when maximize menu
+          $('#side-menu').hide();
+          // For smoothly turn on menu
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(400);
+            }, 200);
+        } else if ($('body').hasClass('fixed-sidebar')){
+          $('#side-menu').hide();
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(400);
+            }, 100);
+        } else {
+          // Remove all inline style from jquery fadeIn function to reset menu state
+          $('#side-menu').removeAttr('style');
+        }
+      }
+    }
+  };
+};
 
+
+function closeOffCanvas() {
+  return {
+    restrict: 'A',
+    template: '<a class="close-canvas-menu" ng-click="closeOffCanvas()"><i class="fa fa-times"></i></a>',
+    controller: function ($scope, $element) {
+      $scope.closeOffCanvas = function () {
+        $("body").toggleClass("mini-navbar");
+      }
+    }
+  };
+}
+
+/**
+ * vectorMap - Directive for Vector map plugin
+ */
+function vectorMap() {
+  return {
+    restrict: 'A',
+    scope: {
+      myMapData: '=',
+    },
+    link: function (scope, element, attrs) {
+      var map = element.vectorMap({
+        map: 'world_mill_en',
+        backgroundColor: "transparent",
+        regionStyle: {
+          initial: {
+            fill: '#e4e4e4',
+            "fill-opacity": 0.9,
+            stroke: 'none',
+            "stroke-width": 0,
+            "stroke-opacity": 0
+          }
+        },
+        series: {
+          regions: [
+            {
+              values: scope.myMapData,
+              scale: ["#1ab394", "#22d6b1"],
+              normalizeFunction: 'polynomial'
+            }
+          ]
+        },
+      });
+      var destroyMap = function(){
+        element.remove();
+      };
+      scope.$on('$destroy', function() {
+        destroyMap();
+      });
+    }
+  }
+}
+
+
+/**
+ * sparkline - Directive for Sparkline chart
+ */
+function sparkline() {
+  return {
+    restrict: 'A',
+    scope: {
+      sparkData: '=',
+      sparkOptions: '=',
+    },
+    link: function (scope, element, attrs) {
+      scope.$watch(scope.sparkData, function () {
+        render();
+      });
+      scope.$watch(scope.sparkOptions, function(){
+        render();
+      });
+      var render = function () {
+        $(element).sparkline(scope.sparkData, scope.sparkOptions);
+      };
+    }
+  }
+};
+
+/**
+ * icheck - Directive for custom checkbox icheck
+ */
+function icheck($timeout) {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function($scope, element, $attrs, ngModel) {
+      return $timeout(function() {
+        var value;
+        value = $attrs['value'];
+
+        $scope.$watch($attrs['ngModel'], function(newValue){
+          $(element).iCheck('update');
+        })
+
+        return $(element).iCheck({
+          checkboxClass: 'icheckbox_square-green',
+          radioClass: 'iradio_square-green'
+
+        }).on('ifChanged', function(event) {
+          if ($(element).attr('type') === 'checkbox' && $attrs['ngModel']) {
+            $scope.$apply(function() {
+              return ngModel.$setViewValue(event.target.checked);
+            });
+          }
+          if ($(element).attr('type') === 'radio' && $attrs['ngModel']) {
+            return $scope.$apply(function() {
+              return ngModel.$setViewValue(value);
+            });
+          }
+        });
+      });
+    }
+  };
+}
+
+/**
+ * ionRangeSlider - Directive for Ion Range Slider
+ */
+function ionRangeSlider() {
+  return {
+    restrict: 'A',
+    scope: {
+      rangeOptions: '='
+    },
+    link: function (scope, elem, attrs) {
+      elem.ionRangeSlider(scope.rangeOptions);
+    }
+  }
+}
+
+/**
+ * dropZone - Directive for Drag and drop zone file upload plugin
+ */
+function dropZone() {
+  return {
+    restrict: 'C',
+    link: function(scope, element, attrs) {
+
+      var config = {
+        url: 'http://localhost:8080/upload',
+        maxFilesize: 100,
+        paramName: "uploadfile",
+        maxThumbnailFilesize: 10,
+        parallelUploads: 1,
+        autoProcessQueue: false
+      };
+
+      var eventHandlers = {
+        'addedfile': function(file) {
+          scope.file = file;
+          if (this.files[1]!=null) {
+            this.removeFile(this.files[0]);
+          }
+          scope.$apply(function() {
+            scope.fileAdded = true;
+          });
+        },
+
+        'success': function (file, response) {
+        }
+
+      };
+
+      dropzone = new Dropzone(element[0], config);
+
+      angular.forEach(eventHandlers, function(handler, event) {
+        dropzone.on(event, handler);
+      });
+
+      scope.processDropzone = function() {
+        dropzone.processQueue();
+      };
+
+      scope.resetDropzone = function() {
+        dropzone.removeAllFiles();
+      }
+    }
+  }
+}
+
+/**
+ * chatSlimScroll - Directive for slim scroll for small chat
+ */
+function chatSlimScroll($timeout) {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      $timeout(function(){
+        element.slimscroll({
+          height: '234px',
+          railOpacity: 0.4
+        });
+
+      });
+    }
+  };
+}
+
+/**
+ * customValid - Directive for custom validation example
+ */
+function customValid(){
+  return {
+    require: 'ngModel',
+    link: function(scope, ele, attrs, c) {
+      scope.$watch(attrs.ngModel, function() {
+
+        // You can call a $http method here
+        // Or create custom validation
+
+        var validText = "Inspinia";
+
+        if(scope.extras == validText) {
+          c.$setValidity('cvalid', true);
+        } else {
+          c.$setValidity('cvalid', false);
+        }
+
+      });
+    }
+  }
+}
+
+
+/**
+ * fullScroll - Directive for slimScroll with 100%
+ */
+function fullScroll($timeout){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      $timeout(function(){
+        element.slimscroll({
+          height: '100%',
+          railOpacity: 0.9
+        });
+
+      });
+    }
+  };
+}
+
+/**
+ * slimScroll - Directive for slimScroll with custom height
+ */
+function slimScroll($timeout){
+  return {
+    restrict: 'A',
+    scope: {
+      boxHeight: '@'
+    },
+    link: function(scope, element) {
+      $timeout(function(){
+        element.slimscroll({
+          height: scope.boxHeight,
+          railOpacity: 0.9
+        });
+
+      });
+    }
+  };
+}
+
+/**
+ * clockPicker - Directive for clock picker plugin
+ */
+function clockPicker() {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      element.clockpicker();
+    }
+  };
+};
+
+
+/**
+ * landingScrollspy - Directive for scrollspy in landing page
+ */
+function landingScrollspy(){
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      element.scrollspy({
+        target: '.navbar-fixed-top',
+        offset: 80
+      });
+    }
+  }
+}
+
+/**
+ * fitHeight - Directive for set height fit to window height
+ */
+function fitHeight(){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      element.css("height", $(window).height() + "px");
+      element.css("min-height", $(window).height() + "px");
+    }
+  };
+}
+
+/**
+ * truncate - Directive for truncate string
+ */
+function truncate($timeout){
+  return {
+    restrict: 'A',
+    scope: {
+      truncateOptions: '='
+    },
+    link: function(scope, element) {
+      $timeout(function(){
+        element.dotdotdot(scope.truncateOptions);
+
+      });
+    }
+  };
+}
+
+
+/**
+ * touchSpin - Directive for Bootstrap TouchSpin
+ */
+function touchSpin() {
+  return {
+    restrict: 'A',
+    scope: {
+      spinOptions: '='
+    },
+    link: function (scope, element, attrs) {
+      scope.$watch(scope.spinOptions, function(){
+        render();
+      });
+      var render = function () {
+        $(element).TouchSpin(scope.spinOptions);
+      };
+    }
+  }
+};
+
+/**
+ * markdownEditor - Directive for Bootstrap Markdown
+ */
+function markdownEditor() {
+  return {
+    restrict: "A",
+    require:  'ngModel',
+    link:     function (scope, element, attrs, ngModel) {
+      $(element).markdown({
+        savable:false,
+        onChange: function(e){
+          ngModel.$setViewValue(e.getContent());
+        }
+      });
+    }
+  }
+};
 
 /**
  *
@@ -155,549 +574,21 @@ angular
   .directive('sideNavigation', sideNavigation)
   .directive('iboxTools', iboxTools)
   .directive('minimalizaSidebar', minimalizaSidebar)
-  .directive('iboxToolsFullScreen', iboxToolsFullScreen);
-
-
-//angular.module('dealScanCrmApp').directive('stStickyHeader', ['$window', function ($window) {
-//  return {
-//    require: '^?stTable',
-//    link: function (scope, element, attr, ctrl) {
-//      var stickyHeader = lrStickyHeader(element[0]);
-//      scope.$on('$destroy', function () {
-//        stickyHeader.clean();
-//      });
-//
-//      scope.$watch(function () {
-//        return ctrl.tableState();
-//      }, function () {
-//        $window.scrollTo(0, lrStickyHeader.treshold);
-//      }, true)
-//    }
-//  }
-//}]);
-
-//angular.module('dealScanCrmApp').directive('crmSidebar', function ($window) {
-//  return {
-//
-//    restrict: 'AE',
-//    link: function (s, e, a) {
-//
-//      $window.onresize = function (event) {
-//        console.log($window.innerWidth);
-//        if ($window.innerWidth < 1200) {
-//          //e.addClass('app-sidebar-closed')
-//
-//        } else {
-//          // e.removeClass('app-sidebar-closed');
-//        }
-//      }
-//
-//    }
-//  }
-//
-//});
-//
-//angular.module('dealScanCrmApp').directive('messageItem', ['$location', function ($location) {
-//  return {
-//    restrict: 'EA',
-//    link: function (scope, elem, attrs) {
-//      elem.on("click tap", function (e) {
-//        var id = attrs.messageItem;
-//      });
-//    }
-//  };
-//}]);
-//
-//
-//angular.module('dealScanCrmApp')
-//  .directive('ctFullheight', ['$window', '$rootScope', '$timeout',
-//    function ($window, $rootScope, $timeout, mq) {
-//      return {
-//        restrict: "AE",
-//        scope: {
-//          ctFullheightIf: '&'
-//        },
-//        link: function (scope, elem, attrs) {
-//          var $win = $($window);
-//          var $document = $(document);
-//          var exclusionItems;
-//          var exclusionHeight;
-//          var setHeight = true;
-//          var page;
-//
-//          scope.initializeWindowSize = function () {
-//            $timeout(function () {
-//              exclusionHeight = 0;
-//              if (attrs.ctFullheightIf) {
-//                scope.$watch(scope.ctFullheightIf, function (newVal, oldVal) {
-//                  if (newVal && !oldVal) {
-//                    setHeight = true;
-//                  } else if (!newVal) {
-//                    $(elem).css('height', 'auto');
-//                    setHeight = false;
-//                  }
-//                });
-//              }
-//
-//              if (attrs.ctFullheightExclusion) {
-//                var exclusionItems = attrs.ctFullheightExclusion.split(',');
-//                angular.forEach(exclusionItems, function (_element) {
-//                  exclusionHeight = exclusionHeight + $(_element).outerHeight(true);
-//                });
-//              }
-//              if (attrs.ctFullheight == 'window') {
-//                page = $win;
-//              } else {
-//                page = $document;
-//              }
-//
-//              scope.$watch(function () {
-//                scope.__height = page.height();
-//              });
-//              if (setHeight) {
-//                $(elem).css('height', 'auto');
-//                if (page.innerHeight() < $win.innerHeight()) {
-//                  page = $win;
-//                }
-//                $(elem).css('height', page.innerHeight() - exclusionHeight);
-//              }
-//            }, 300);
-//          };
-//
-//          scope.initializeWindowSize();
-//          scope.$watch('__height', function (newHeight, oldHeight) {
-//            scope.initializeWindowSize();
-//          });
-//          $win.on('resize', function () {
-//            scope.initializeWindowSize();
-//          });
-//
-//        }
-//      };
-//    }]);
-//
-//angular.module('dealScanCrmApp')
-//  .factory('SelectFx', ["$http",
-//    function ($http) {
-//      function hasParent(e, p) {
-//        if (!e)
-//          return false;
-//        var el = e.target || e.srcElement || e || false;
-//        while (el && el != p) {
-//          el = el.parentNode || false;
-//        }
-//        return (el !== false);
-//      };
-//
-//      /**
-//       * extend obj function
-//       */
-//      function extend(a, b) {
-//        for (var key in b) {
-//          if (b.hasOwnProperty(key)) {
-//            a[key] = b[key];
-//          }
-//        }
-//        return a;
-//      }
-//
-//      /**
-//       * SelectFx function
-//       */
-//      function SelectFx(el, options) {
-//        this.el = el[0];
-//        this.options = extend({}, this.options);
-//        extend(this.options, options);
-//        this._init();
-//      }
-//
-//      function classReg(className) {
-//        return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
-//      }
-//
-//      // classList support for class management
-//      // altho to be fair, the api sucks because it won't accept multiple classes at once
-//      var hasClass, addClass, removeClass;
-//
-//      if ('classList' in document.documentElement) {
-//        hasClass = function (elem, c) {
-//          return elem.classList.contains(c);
-//        };
-//        addClass = function (elem, c) {
-//          elem.classList.add(c);
-//        };
-//        removeClass = function (elem, c) {
-//          elem.classList.remove(c);
-//        };
-//      } else {
-//        hasClass = function (elem, c) {
-//          return classReg(c).test(elem.className);
-//        };
-//        addClass = function (elem, c) {
-//          if (!hasClass(elem, c)) {
-//            elem.className = elem.className + ' ' + c;
-//          }
-//        };
-//        removeClass = function (elem, c) {
-//          elem.className = elem.className.replace(classReg(c), ' ');
-//        };
-//      }
-//
-//      function toggleClass(elem, c) {
-//        var fn = hasClass(elem, c) ? removeClass : addClass;
-//        fn(elem, c);
-//      }
-//
-//      var classie = {
-//        // full names
-//        hasClass: hasClass,
-//        addClass: addClass,
-//        removeClass: removeClass,
-//        toggleClass: toggleClass,
-//        // short names
-//        has: hasClass,
-//        add: addClass,
-//        remove: removeClass,
-//        toggle: toggleClass
-//      };
-//
-//      // transport
-//      if (typeof define === 'function' && define.amd) {
-//        // AMD
-//        define(classie);
-//      } else {
-//        // browser global
-//        window.classie = classie;
-//      }
-//
-//      /**
-//       * SelectFx options
-//       */
-//      SelectFx.prototype.options = {
-//        // if true all the links will open in a new tab.
-//        // if we want to be redirected when we click an option, we need to define a data-link attr on the option of the native select element
-//        newTab: true,
-//        // when opening the select element, the default placeholder (if any) is shown
-//        stickyPlaceholder: true,
-//        // callback when changing the value
-//        onChange: function (val) {
-//          return false;
-//        }
-//      };
-//
-//      /**
-//       * init function
-//       * initialize and cache some vars
-//       */
-//      SelectFx.prototype._init = function () {
-//
-//        var selectDisabled = false;
-//        var createSelect = true;
-//        if (this.el.hasAttribute("disabled")) {
-//          this.el.className = this.el.className + " disabled";
-//          selectDisabled = true;
-//        }
-//        ;
-//
-//        if (this._styleExist(this.el.previousSibling)) {
-//          createSelect = false;
-//        }
-//        // check if we are using a placeholder for the native select box
-//        // we assume the placeholder is disabled and selected by default
-//        var selectedOpt = this.el.querySelectorAll('option[selected]')[this.el.querySelectorAll('option[selected]').length - 1];
-//
-//
-//        this.hasDefaultPlaceholder = selectedOpt && selectedOpt.disabled;
-//
-//        // get selected option (either the first option with attr selected or just the first option)
-//        this.selectedOpt = selectedOpt || this.el.querySelector('option');
-//
-//        // create structure
-//        this._createSelectEl();
-//
-//        // all options
-//        this.selOpts = [].slice.call(this.selEl.querySelectorAll('li[data-option]'));
-//
-//        // total options
-//        this.selOptsCount = this.selOpts.length;
-//
-//        // current index
-//        this.current = this.selOpts.indexOf(this.selEl.querySelector('li.cs-selected')) || -1;
-//
-//        // placeholder elem
-//        this.selPlaceholder = this.selEl.querySelector('span.cs-placeholder');
-//
-//        if (!selectDisabled) {
-//          // init events
-//          this._initEvents(createSelect);
-//        }
-//
-//      };
-//      /**
-//       * creates the structure for the select element
-//       */
-//      SelectFx.prototype._createSelectEl = function () {
-//
-//        var self = this, options = '', createOptionHTML = function (el) {
-//          var optclass = '', classes = '', link = '';
-//
-//          if (el.getAttribute('selected')) {
-//
-//            classes += 'cs-selected ';
-//
-//          }
-//          // extra classes
-//          if (el.getAttribute('data-class')) {
-//            classes += el.getAttribute('data-class');
-//          }
-//          // link options
-//          if (el.getAttribute('data-link')) {
-//            link = 'data-link=' + el.getAttribute('data-link');
-//          }
-//
-//          if (classes !== '') {
-//            optclass = 'class="' + classes + '" ';
-//          }
-//
-//          return '<li ' + optclass + link + ' data-option data-value="' + el.value + '"><span>' + el.textContent + '</span></li>';
-//        };
-//
-//        [].slice.call(this.el.children).forEach(function (el) {
-//          if (el.disabled) {
-//            return;
-//          }
-//
-//          var tag = el.tagName.toLowerCase();
-//
-//          if (tag === 'option') {
-//            options += createOptionHTML(el);
-//          } else if (tag === 'optgroup') {
-//            options += '<li class="cs-optgroup"><span>' + el.label + '</span><ul>';
-//            [].slice.call(el.children).forEach(function (opt) {
-//              options += createOptionHTML(opt);
-//            });
-//            options += '</ul></li>';
-//          }
-//        });
-//
-//        if (this._styleExist(this.el.previousSibling)) {
-//          this.selEl = this.el.parentNode;
-//          this.selEl.tabIndex = this.el.tabIndex;
-//
-//          this.el.previousSibling.innerHTML = '<ul>' + options + '</ul>';
-//
-//          return;
-//        } else {
-//
-//          var opts_el = '<div class="cs-options"><ul>' + options + '</ul></div>';
-//          this.selEl = document.createElement('div');
-//          this.selEl.className = this.el.className;
-//          this.selEl.tabIndex = this.el.tabIndex;
-//          this.selEl.innerHTML = '<span class="cs-placeholder">' + this.selectedOpt.textContent + '</span>' + opts_el;
-//          this.el.parentNode.appendChild(this.selEl);
-//          this.selEl.appendChild(this.el);
-//        }
-//
-//      };
-//      /**
-//       * initialize the events
-//       */
-//      SelectFx.prototype._initEvents = function (a) {
-//
-//        var self = this;
-//        if (a) {
-//          // open/close select
-//          this.selPlaceholder.addEventListener('click', function () {
-//            self._toggleSelect();
-//          });
-//        }
-//        // clicking the options
-//        this.selOpts.forEach(function (opt, idx) {
-//          opt.addEventListener('click', function () {
-//            self.current = idx;
-//            self._changeOption();
-//            // close select elem
-//            self._toggleSelect();
-//          });
-//        });
-//
-//        // close the select element if the target itÂ´s not the select element or one of its descendants..
-//        document.addEventListener('click', function (ev) {
-//          var target = ev.target;
-//          if (self._isOpen() && target !== self.selEl && !hasParent(target, self.selEl)) {
-//            self._toggleSelect();
-//          }
-//        });
-//
-//        // keyboard navigation events
-//        this.selEl.addEventListener('keydown', function (ev) {
-//          var keyCode = ev.keyCode || ev.which;
-//
-//          switch (keyCode) {
-//            // up key
-//            case 38:
-//              ev.preventDefault();
-//              self._navigateOpts('prev');
-//              break;
-//            // down key
-//            case 40:
-//              ev.preventDefault();
-//              self._navigateOpts('next');
-//              break;
-//            // space key
-//            case 32:
-//              ev.preventDefault();
-//              if (self._isOpen() && typeof self.preSelCurrent != 'undefined' && self.preSelCurrent !== -1) {
-//                self._changeOption();
-//              }
-//              self._toggleSelect();
-//              break;
-//            // enter key
-//            case 13:
-//              ev.preventDefault();
-//              if (self._isOpen() && typeof self.preSelCurrent != 'undefined' && self.preSelCurrent !== -1) {
-//                self._changeOption();
-//                self._toggleSelect();
-//              }
-//              break;
-//            // esc key
-//            case 27:
-//              ev.preventDefault();
-//              if (self._isOpen()) {
-//                self._toggleSelect();
-//              }
-//              break;
-//          }
-//        });
-//      };
-//      /**
-//       * navigate with up/dpwn keys
-//       */
-//      SelectFx.prototype._navigateOpts = function (dir) {
-//        if (!this._isOpen()) {
-//          this._toggleSelect();
-//        }
-//
-//        var tmpcurrent = typeof this.preSelCurrent != 'undefined' && this.preSelCurrent !== -1 ? this.preSelCurrent : this.current;
-//
-//        if (dir === 'prev' && tmpcurrent > 0 || dir === 'next' && tmpcurrent < this.selOptsCount - 1) {
-//          // save pre selected current - if we click on option, or press enter, or press space this is going to be the index of the current option
-//          this.preSelCurrent = dir === 'next' ? tmpcurrent + 1 : tmpcurrent - 1;
-//          // remove focus class if any..
-//          this._removeFocus();
-//          // add class focus - track which option we are navigating
-//          classie.add(this.selOpts[this.preSelCurrent], 'cs-focus');
-//        }
-//      };
-//      /**
-//       * open/close select
-//       * when opened show the default placeholder if any
-//       */
-//      SelectFx.prototype._toggleSelect = function () {
-//        // remove focus class if any..
-//        this._removeFocus();
-//
-//        if (this._isOpen()) {
-//          if (this.current !== -1) {
-//            // update placeholder text
-//            this.selPlaceholder.textContent = this.selOpts[this.current].textContent;
-//          }
-//          classie.remove(this.selEl, 'cs-active');
-//        } else {
-//          if (this.hasDefaultPlaceholder && this.options.stickyPlaceholder) {
-//            // everytime we open we wanna see the default placeholder text
-//            this.selPlaceholder.textContent = this.selectedOpt.textContent;
-//          }
-//          classie.add(this.selEl, 'cs-active');
-//        }
-//      };
-//      /**
-//       * detect if .cs-options wrapper is active for each select
-//       */
-//      SelectFx.prototype._styleExist = function (e) {
-//        return (' ' + e.className + ' ').indexOf(' cs-options ') > -1;
-//      };
-//      /**
-//       * change option - the new value is set
-//       */
-//      SelectFx.prototype._changeOption = function () {
-//
-//        // if pre selected current (if we navigate with the keyboard)...
-//        if (typeof this.preSelCurrent != 'undefined' && this.preSelCurrent !== -1) {
-//          this.current = this.preSelCurrent;
-//          this.preSelCurrent = -1;
-//        }
-//
-//        // current option
-//        var opt = this.selOpts[this.current];
-//
-//        // update current selected value
-//        this.selPlaceholder.textContent = opt.textContent;
-//
-//        // change native select elementÂ´s value
-//        this.el.value = opt.getAttribute('data-value');
-//        var event = new Event('change');
-//        this.el.dispatchEvent(event);
-//
-//        // remove class cs-selected from old selected option and add it to current selected option
-//        var oldOpt = this.selEl.querySelector('li.cs-selected');
-//        if (oldOpt) {
-//          classie.remove(oldOpt, 'cs-selected');
-//        }
-//        classie.add(opt, 'cs-selected');
-//
-//        // if thereÂ´s a link defined
-//        if (opt.getAttribute('data-link')) {
-//          // open in new tab?
-//          if (this.options.newTab) {
-//            window.open(opt.getAttribute('data-link'), '_blank');
-//          } else {
-//            window.location = opt.getAttribute('data-link');
-//          }
-//        }
-//
-//        // callback
-//        this.options.onChange(this.el.value);
-//      };
-//      /**
-//       * returns true if select element is opened
-//       */
-//      SelectFx.prototype._isOpen = function (opt) {
-//        return classie.has(this.selEl, 'cs-active');
-//      };
-//      /**
-//       * removes the focus class from the option
-//       */
-//      SelectFx.prototype._removeFocus = function (opt) {
-//        var focusEl = this.selEl.querySelector('li.cs-focus')
-//        if (focusEl) {
-//          classie.remove(focusEl, 'cs-focus');
-//        }
-//      };
-//
-//      return SelectFx;
-//    }]);
-//
-//angular.module('dealScanCrmApp')
-//  .directive('csSelect', ["SelectFx", "$timeout",
-//    function (SelectFx, $timeout) {
-//      return {
-//        restrict: 'AC',
-//        link: function ($scope, $element, $attributes) {
-//
-//          $scope.$watch(function () {
-//            return $element.find('option').length;
-//          }, function (newValue, oldValue) {
-//            if (newValue !== oldValue) {
-//
-//              new SelectFx($element);
-//            }
-//          });
-//          $timeout(function () {
-//            new SelectFx($element);
-//          });
-//
-//
-//        }
-//      };
-//    }]);
+  .directive('vectorMap', vectorMap)
+  .directive('sparkline', sparkline)
+  .directive('icheck', icheck)
+  .directive('ionRangeSlider', ionRangeSlider)
+  .directive('dropZone', dropZone)
+  .directive('responsiveVideo', responsiveVideo)
+  .directive('chatSlimScroll', chatSlimScroll)
+  .directive('customValid', customValid)
+  .directive('fullScroll', fullScroll)
+  .directive('closeOffCanvas', closeOffCanvas)
+  .directive('clockPicker', clockPicker)
+  .directive('landingScrollspy', landingScrollspy)
+  .directive('fitHeight', fitHeight)
+  .directive('iboxToolsFullScreen', iboxToolsFullScreen)
+  .directive('slimScroll', slimScroll)
+  .directive('truncate', truncate)
+  .directive('touchSpin', touchSpin)
+  .directive('markdownEditor', markdownEditor)
