@@ -1,283 +1,549 @@
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content wrapper animated fadeInRight">
+
+  <!-- Top Section ==> metrics -->
   <div class="row">
-    <div class="col-lg-3">
+    <div class="col-lg-4" ng-repeat="m in dashboard.metrics">
       <div class="ibox float-e-margins">
         <div class="ibox-title">
-          <span class="label label-success pull-right">Monthly</span>
-          <h5>Income</h5>
+                    <span class="pull-right">
+                         <div class="stat-percent font-bold"
+                              ng-class="{'text-danger': m.Lost.trend == 'down', 'text-navy': m.Lost.trend == 'up'}">
+                             <span>L</span>{{m.Lost.percentage}}%
+                             <i ng-class="{'fa fa-level-up': m.Lost.trend == 'up', 'fa fa-level-down': m.Lost.trend == 'down'}"></i>
+                         </div>
+                        <div class="stat-percent font-bold margin-right-10"
+                             ng-class="{'text-danger': m.Won.trend == 'down', 'text-navy': m.Won.trend == 'up'}">
+                             <span>W</span>{{m.Won.percentage}}%
+                             <i ng-class="{'fa fa-level-up': m.Won.trend == 'up', 'fa fa-level-down': m.Won.trend == 'down'}"></i>
+                        </div>
+                    </span>
+          <h5>{{m.Category | uppercase}}</h5>
         </div>
         <div class="ibox-content">
-          <h1 class="no-margins">40 886,200</h1>
-
-          <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-          <small>Total income</small>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <div class="ibox float-e-margins">
-        <div class="ibox-title">
-          <span class="label label-info pull-right">Annual</span>
-          <h5>Orders</h5>
-        </div>
-        <div class="ibox-content">
-          <h1 class="no-margins">275,800</h1>
-
-          <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
-          <small>New orders</small>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <div class="ibox float-e-margins">
-        <div class="ibox-title">
-          <span class="label label-primary pull-right">Today</span>
-          <h5>Vistits</h5>
-        </div>
-        <div class="ibox-content">
-          <h1 class="no-margins">106,120</h1>
-
-          <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>
-          <small>New visits</small>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <div class="ibox float-e-margins">
-        <div class="ibox-title">
-          <span class="label label-danger pull-right">Low value</span>
-          <h5>User activity</h5>
-        </div>
-        <div class="ibox-content">
-          <h1 class="no-margins">80,600</h1>
-
-          <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i></div>
-          <small>In first month</small>
+          <div class="row">
+                        <span class="col-lg-6 ">
+                            <h1 class="no-margins">{{m.Won.deals}}</h1>
+                            <h5 class="m-b-md">Won Deals</h5>
+                        </span>
+                        <span class="col-lg-6">
+                            <h1 class="no-margins text-right">{{m.Lost.deals}}</h1>
+                            <h5 class="m-b-md text-right">Lost Deals</h5>
+                        </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- ./Top Sectioon -->
+
+  <!-- Middle section  ==> graph -->
   <div class="row">
     <div class="col-lg-12">
       <div class="ibox float-e-margins">
         <div class="ibox-title">
-          <h5>Orders</h5>
-
-          <div class="pull-right">
-            <div class="btn-group">
-              <button type="button" class="btn btn-xs btn-white active">Today</button>
-              <button type="button" class="btn btn-xs btn-white">Monthly</button>
-              <button type="button" class="btn btn-xs btn-white">Annual</button>
-            </div>
-          </div>
-        </div>
-        <div class="ibox-content">
-          <div class="row">
-            <div class="col-lg-9">
-              <div class="flot-chart" ng-controller="DashboardCharts as chart">
-                <div flot class="flot-chart-content" dataset="chart.flotData" options="chart.flotOptions"></div>
+          <!-- title section -->
+          <div class="row margin-bottom-12 padding-bottom-10" style="border-bottom: 1px #eee solid;">
+            <div class="col-lg-12">
+              <h5 class="m-b-md margin-top-12">{{'Deals' | uppercase}}</h5>
+              <div class="btn-group  pull-right">
+                <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
+                        uib-btn-radio="'chart'"><i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
+                </button>
+                <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
+                        uib-btn-radio="'map'" ng-click="dashboard.refreshMap()"><i
+                  class="fa fa-map-marker">&nbsp;&nbsp;</i> Map
+                </button>
               </div>
             </div>
-            <div class="col-lg-3">
-              <ul class="stat-list">
-                <li>
-                  <h2 class="no-margins">2,346</h2>
-                  <small>Total orders in period</small>
-                  <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
-                  <div class="progress progress-mini">
-                    <div style="width: 48%;" class="progress-bar"></div>
-                  </div>
-                </li>
-                <li>
-                  <h2 class="no-margins ">4,422</h2>
-                  <small>Orders in last month</small>
-                  <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i></div>
-                  <div class="progress progress-mini">
-                    <div style="width: 60%;" class="progress-bar"></div>
-                  </div>
-                </li>
-                <li>
-                  <h2 class="no-margins ">9,180</h2>
-                  <small>Monthly income from orders</small>
-                  <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
-                  <div class="progress progress-mini">
-                    <div style="width: 22%;" class="progress-bar"></div>
-                  </div>
-                </li>
+          </div>
+          <!-- ./title-section -->
+          <!-- Filters -->
+          <div class="row">
+            <div class="col-lg-7">
+              <div class="row">
+                <!-- Data Filters -->
+                <div class="col-lg-2">
+                  <ui-select ng-model="dashboard.selectedType" theme="bootstrap">
+                    <ui-select-match placeholder="Type">{{$select.selected.text}}
+                    </ui-select-match>
+                    <ui-select-choices
+                      repeat="type in dashboard.dealTypes | filter: $select.search">
+                      <div ng-bind-html="type.text | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="col-lg-3">
+                  <ui-select ng-model="dashboard.selectedDealership" theme="bootstrap">
+                    <ui-select-match placeholder="Dealerships">{{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices
+                      repeat="dealership in dashboard.dealerships | filter: $select.search">
+                      <div ng-bind-html="dealership.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="col-lg-3">
+                  <ui-select ng-model="dashboard.selectedTeam" theme="bootstrap">
+                    <ui-select-match placeholder="Teams">{{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices
+                      repeat="team in dashboard.selectedDealership.teams | filter: $select.search">
+                      <div ng-bind-html="team.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="col-lg-3">
+                  <ui-select ng-model="dashboard.selectedEmployee" theme="bootstrap">
+                    <ui-select-match placeholder="Employees">{{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices
+                      repeat="employee in dashboard.selectedTeam.members | filter: $select.search">
+                      <div ng-bind-html="employee.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <!-- ./Data Filters -->
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="form-group pull-left width-50-pct no-margin-bottom">
+                <div class="input-daterange input-group" id="datepicker">
+                  <input date-time view="date" max-view="date" min-view="date"
+                         format="{{dashboard.dateOptions.format}}" type="text"
+                         date-change="dashboard.updateMaxDate" id="startDate"
+                         ng-focus="dashboard.resetRange($event)"
+                         class="input-md form-control" auto-close="true"
+                         ng-model="dashboard.selectedDate.start">
+                  <span class="input-group-addon">to</span>
+                  <input date-time view="date" max-view="date" min-view="date"
+                         format="{{dashboard.dateOptions.format}}"
+                         min-date="dashboard.selectedDate.start" type="text" id="endDate"
+                         ng-focus="dashboard.resetRange($event)"
+                         class="input-md form-control" auto-close="true"
+                         ng-model="dashboard.selectedDate.end">
+                </div>
+              </div>
+              <div class="btn-group pull-right">
+                <button type="button" ng-model="dashboard.presetRange" class="btn btn-white"
+                        uib-btn-radio="'today'"
+                        ng-click="dashboard.updateStats(dashboard.presetRange)">Today
+                </button>
+                <button type="button" ng-model="dashboard.presetRange" class="btn btn-white"
+                        uib-btn-radio="'yesterday'"
+                        ng-click="dashboard.updateStats(dashboard.presetRange)">Yesterday
+                </button>
+                <button type="button" ng-model="dashboard.presetRange" class="btn btn-white"
+                        uib-btn-radio="'mtd'"
+                        ng-click="dashboard.updateStats(dashboard.presetRange)">
+                  MTD
+                </button>
+                <button type="button" ng-model="dashboard.presetRange" class="btn btn-white"
+                        uib-btn-radio="'ytd'"
+                        ng-click="dashboard.updateStats(dashboard.presetRange)">
+                  YTD
+                </button>
+              </div>
             </div>
           </div>
+          <!-- ./filters -->
         </div>
+        <div class="ibox-content">
 
+          <!-- metrics -->
+          <div class="row">
+            <div class="col-lg-2" ng-repeat="s in dashboard.summaryStats">
+              <div class="widget style1 {{s.bgStyle}}">
+                <div class="row vertical-align">
+                  <div class="col-xs-3">
+                    <i ng-class="{'fa fa-phone fa-3x': s.category == 'calls',
+                                        'fa fa-envelope fa-3x': s.category == 'mail',
+                                         'fa fa-commenting-o fa-3x': s.category == 'text',
+                                         'fa fa fa-calendar-o fa-3x': s.category == 'appointment_made',
+                                         'fa fa-calendar-check-o fa-3x': s.category == 'appointment_sold',
+                                         'fa fa-calendar-times-o fa-3x': s.category == 'appointment_missed'}"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <h2 class="font-bold">{{s.value}}</h2>
+                  </div>
+                  <!--<div class="col-xs-12 text-right">-->
+                  <!--<small>Calls</small>-->
+                  <!--</div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.metrics -->
+
+
+          <!-- charts -->
+          <div class="row" style="padding-top:10px !important;" ng-controller="flotChartCtrl as charts">
+            <div class="pull-left"
+                 ng-class="dashboard.showBarChart ? 'col-lg-3': 'col-lg-4'"
+                 ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart">
+              <!-- won stats-->
+              <div class="ibox float-e-margins">
+                <div class="ibox-title" style="border-top-width:1px;">
+                  <div class="row">
+                    <div class="col-lg-12 text-center">
+                      <h2>{{'Won' | uppercase}}
+                                            <span class="btn-group" uib-dropdown auto-close="outsideClick">
+                                                <button type="button" class="btn btn-primary btn-outline btn-xs"
+                                                        uib-dropdown-toggle><span class="caret"></span>
+                                                </button>
+                                                <ul role="menu" uib-dropdown-menu="">
+                                                    <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in dashboard.stats[0].sources">
+                                                        <checkbox ng-model="s.state"></checkbox> {{s.name}}
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li>
+                                                        <div class="row">
+                                                            <button class="btn btn-success btn-xs pull-right "
+                                                                    style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                                    padding-bottom: 3px; padding-right: 10px;">
+                                                            <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                      </h2>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ibox-content">
+                  <table class="table ">
+                    <thead>
+                    <tr>
+                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                          class="text-center">Cars
+                      </th>
+                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                          class="text-center">Trucks
+                      </th>
+                      <th style="border-bottom:none !important;" class="text-center">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                          class="text-center">${{dashboard.stats[0].cars.total}}
+                      </td>
+                      <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                          class="text-center">${{dashboard.stats[0].trucks.total}}
+                      </td>
+                      <td class="text-center" style="border-top:none !important;">${{ dashboard.stats[0].cars.total + dashboard.stats[0].trucks.total}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- ./ won stats -->
+
+              <div class="flot-chart large-pie-chart animated fadeInRight"
+                   ng-show="dashboard.chartView == 'chart'">
+                <div flot class="flot-chart-content" dataset="charts.flotPieData"
+                     options="charts.flotPieOptions"
+                     on-plot-click="dashboard.showDetails($event, pos, item, 'won')"></div>
+              </div>
+            </div>
+
+            <div class="pull-left"
+                 ng-class="dashboard.showBarChart ? 'col-lg-3': 'col-lg-4'"
+                 ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart">
+              <!-- lost stats-->
+              <div class="ibox float-e-margins">
+                <div class="ibox-title" style="border-top-width:1px;">
+                  <div class="row">
+                    <div class="col-lg-12 text-center">
+                      <h2>{{'Lost' | uppercase}}
+                                            <span class="btn-group" uib-dropdown>
+                                                <button type="button" class="btn btn-primary btn-outline btn-xs"
+                                                        uib-dropdown-toggle><span class="caret"></span>
+                                                </button>
+                                                <ul role="menu" uib-dropdown-menu="">
+                                                    <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in dashboard.stats[1].sources">
+                                                        <checkbox ng-model="s.state"></checkbox> {{s.name}}
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li>
+                                                        <div class="row">
+                                                            <button class="btn btn-success btn-xs pull-right "
+                                                                    style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                                    padding-bottom: 3px; padding-right: 10px;">
+                                                            <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                      </h2>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ibox-content">
+                  <table class="table ">
+                    <thead>
+                    <tr>
+                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                          class="text-center">Cars
+                      </th>
+                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                          class="text-center">Trucks
+                      </th>
+                      <th style="border-bottom:none !important;" class="text-center">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                          class="text-center">${{dashboard.stats[1].cars.total}}
+                      </td>
+                      <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                          class="text-center">${{dashboard.stats[1].trucks.total}}
+                      </td>
+                      <td class="text-center" style="border-top:none !important;">${{dashboard.stats[1].cars.total + dashboard.stats[1].trucks.total}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- ./lost stats-->
+              <div class="flot-chart large-pie-chart animated fadeInRight"
+                   ng-show="dashboard.chartView == 'chart'">
+                <div flot class="flot-chart-content" dataset="charts.flotPieData"
+                     options="charts.flotPieOptions"
+                     on-plot-click="dashboard.showDetails($event, pos, item, 'lost')"></div>
+              </div>
+            </div>
+
+            <div class="pull-left"
+                 ng-class="dashboard.showBarChart ? 'col-lg-3': 'col-lg-4'"
+                 ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart">
+              <!-- total stats-->
+              <div class="ibox float-e-margins">
+                <div class="ibox-title" style="border-top-width:1px;">
+                  <div class="row">
+                    <div class="col-lg-12 text-center">
+                      <h2>{{'Total' | uppercase}}
+                                            <span class="btn-group" uib-dropdown>
+                                                <button type="button" class="btn btn-primary btn-outline btn-xs"
+                                                        uib-dropdown-toggle><span class="caret"></span>
+                                                </button>
+                                                <ul role="menu" uib-dropdown-menu="">
+                                                    <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in dashboard.stats[2].sources">
+                                                        <checkbox ng-model="s.state"></checkbox> {{s.name}}
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li>
+                                                        <div class="row">
+                                                            <button class="btn btn-success btn-xs pull-right "
+                                                                    style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                                    padding-bottom: 3px; padding-right: 10px;">
+                                                            <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                      </h2>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="ibox-content">
+                  <table class="table ">
+                    <thead>
+                    <tr>
+                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                          class="text-center">Cars
+                      </th>
+                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                          class="text-center">Trucks
+                      </th>
+                      <th style="border-bottom:none !important;" class="text-center">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                          class="text-center">${{dashboard.stats[0].cars.total +
+                        dashboard.stats[1].cars.total}}
+                      </td>
+                      <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                          class="text-center">${{dashboard.stats[0].trucks.total +
+                        dashboard.stats[1].trucks.total}}
+                      </td>
+                      <td class="text-center" style="border-top:none !important;">
+                        ${{(dashboard.stats[0].cars.total + dashboard.stats[1].cars.total) +
+                        (dashboard.stats[0].trucks.total + dashboard.stats[1].trucks.total)}}
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- ./total stats-->
+              <div class="flot-chart large-pie-chart animated fadeInRight"
+                   ng-show="dashboard.chartView == 'chart'">
+                <div flot class="flot-chart-content" dataset="charts.flotPieData"
+                     options="charts.flotPieOptions"
+                     on-plot-click="dashboard.showDetails($event, pos, item, 'total')"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 pull-left animated fadeInRight" ng-show="dashboard.chartView == 'map'">
+              <section id="map">
+                <div ui-map="dashboard.statsMap" ui-options="dashboard.chartMapOptions"
+                     class="google-map"></div>
+              </section>
+            </div>
+
+            <div class="col-lg-9 pull-left animated fadeInRight" ng-show="dashboard.showBarChart"
+                 style="padding-top:30px !important;">
+              <div class="ibox float-e-margins">
+                <div class="row">
+                  <div class="col-lg-3 pull-right text-right">
+                    <a class="btn btn-link btn-outline"
+                       ng-click="dashboard.showBarChart = false"><strong><i
+                      class="fa fa-times"></i></strong></a>
+                  </div>
+                </div>
+                <div class="ibox-content" style="border-top:none; padding-top:30px !important;">
+                  <div class="flot-chart" style="height:380px;"
+                       ng-controller="dashboardFlotTwo as chart">
+                    <div flot class="flot-chart-content" dataset="chart.flotData"
+                         options="chart.flotOptions"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ./charts -->
+        </div>
       </div>
     </div>
   </div>
+  <!-- ./ graph section -->
 
-
-  <div class="row">
-    <div class="col-lg-4">
+  <!-- data tables-->
+  <div class="row animated fadeInRight" ng-if="dashboard.showTable">
+    <div class="col-lg-12" ng-controller="datatablesCtrl">
       <div class="ibox float-e-margins">
         <div class="ibox-title">
-          <h5>Messages</h5>
-          <div ibox-tools></div>
-        </div>
-        <div class="ibox-content ibox-heading">
-          <h3><i class="fa fa-envelope-o"></i> New messages</h3>
-          <small><i class="fa fa-tim"></i> You have 22 new messages and 16 waiting in draft folder.</small>
+          <h5>Table with data from $scope - <strong>(The angular way)</strong></h5>
+
+          <div ibox-tools on-close="dashboard.showTable = false"></div>
         </div>
         <div class="ibox-content">
-          <div class="feed-activity-list">
-
-            <div class="feed-element">
-              <div>
-                <small class="pull-right text-navy">1m ago</small>
-                <strong>Monica Smith</strong>
-
-                <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</div>
-                <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
-              </div>
-            </div>
-
-            <div class="feed-element">
-              <div>
-                <small class="pull-right">2m ago</small>
-                <strong>Jogn Angel</strong>
-
-                <div>There are many variations of passages of Lorem Ipsum available</div>
-                <small class="text-muted">Today 2:23 pm - 11.06.2014</small>
-              </div>
-            </div>
-
-            <div class="feed-element">
-              <div>
-                <small class="pull-right">5m ago</small>
-                <strong>Jesica Ocean</strong>
-
-                <div>Contrary to popular belief, Lorem Ipsum</div>
-                <small class="text-muted">Today 1:00 pm - 08.06.2014</small>
-              </div>
-            </div>
-
-            <div class="feed-element">
-              <div>
-                <small class="pull-right">5m ago</small>
-                <strong>Monica Jackson</strong>
-
-                <div>The generated Lorem Ipsum is therefore</div>
-                <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-              </div>
-            </div>
+          <table datatable="ng" dt-options="dtOptions"
+                 class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>FirstName</th>
+              <th>LastName</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="person in persons">
+              <td>{{ person.id }}</td>
+              <td>{{ person.firstName }}</td>
+              <td>{{ person.lastName }}</td>
+            </tr>
+            </tbody>
+          </table>
 
 
-            <div class="feed-element">
-              <div>
-                <small class="pull-right">5m ago</small>
-                <strong>Anna Legend</strong>
-
-                <div>All the Lorem Ipsum generators on the Internet tend to repeat</div>
-                <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-              </div>
-            </div>
-            <div class="feed-element">
-              <div>
-                <small class="pull-right">5m ago</small>
-                <strong>Damian Nowak</strong>
-
-                <div>The standard chunk of Lorem Ipsum used</div>
-                <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-              </div>
-            </div>
-            <div class="feed-element">
-              <div>
-                <small class="pull-right">5m ago</small>
-                <strong>Gary Smith</strong>
-
-                <div>200
-                Latin words, combined with a handful</div>
-                <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-              </div>
-            </div>
-
-          </div>
         </div>
       </div>
     </div>
+  </div>
+  <!-- ./data Tables -->
 
+  <!-- /.Middle Section -->
+
+  <!-- Bottom section ==> Timeline, Tasks, Active Users, Social Activities-->
+  <div class="row">
+
+
+    <!-- Left section -->
     <div class="col-lg-8">
-
+      <!-- tasks & active users -->
       <div class="row">
+        <!-- active users -->
         <div class="col-lg-6">
           <div class="ibox float-e-margins">
             <div class="ibox-title">
-              <h5>User project list</h5>
+              <h5>Active Users</h5>
               <div ibox-tools></div>
             </div>
-            <div class="ibox-content">
-              <table class="table table-hover no-margins">
-                <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>User</th>
-                  <th>Value</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>
-                    <small>Pending...</small>
-                  </td>
-                  <td><i class="fa fa-clock-o"></i> 11:20pm</td>
-                  <td>Samantha</td>
-                  <td class="text-navy"><i class="fa fa-level-up"></i> 24%</td>
-                </tr>
-                <tr>
-                  <td><span class="label label-warning">Canceled</span></td>
-                  <td><i class="fa fa-clock-o"></i> 10:40am</td>
-                  <td>Monica</td>
-                  <td class="text-navy"><i class="fa fa-level-up"></i> 66%</td>
-                </tr>
-                <tr>
-                  <td>
-                    <small>Pending...</small>
-                  </td>
-                  <td><i class="fa fa-clock-o"></i> 01:30pm</td>
-                  <td>John</td>
-                  <td class="text-navy"><i class="fa fa-level-up"></i> 54%</td>
-                </tr>
-                <tr>
-                  <td>
-                    <small>Pending...</small>
-                  </td>
-                  <td><i class="fa fa-clock-o"></i> 02:20pm</td>
-                  <td>Agnes</td>
-                  <td class="text-navy"><i class="fa fa-level-up"></i> 12%</td>
-                </tr>
-                <tr>
-                  <td><span class="label label-primary">Completed</span></td>
-                  <td><i class="fa fa-clock-o"></i> 04:10am</td>
-                  <td>Amelia</td>
-                  <td class="text-navy"><i class="fa fa-level-up"></i> 66%</td>
-                </tr>
-                <tr>
-                  <td>
-                    <small>Pending...</small>
-                  </td>
-                  <td><i class="fa fa-clock-o"></i> 12:08am</td>
-                  <td>Damian</td>
-                  <td class="text-navy"><i class="fa fa-level-up"></i> 23%</td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="ibox-content" style="height:365px !important;">
+              <div>
+                <div class="feed-activity-list">
+                  <div class="feed-element">
+                    <a ui-sref="profile" class="pull-left">
+                      <img alt="image" class="img-circle" src="img/profile.jpg">
+                    </a>
+
+                    <div class="media-body ">
+                      <small class="pull-right">5m ago</small>
+                      <strong>Monica Smith</strong> posted a new blog. <br>
+                      <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+
+                    </div>
+                  </div>
+                  <div class="feed-element">
+                    <a ui-sref="profile" class="pull-left">
+                      <img alt="image" class="img-circle" src="img/a4.jpg">
+                    </a>
+
+                    <div class="media-body ">
+                      <small class="pull-right text-navy">5h ago</small>
+                      <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica
+                      Smith</strong>. <br>
+                      <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                    </div>
+                  </div>
+
+                  <div class="feed-element">
+                    <a ui-sref="profile" class="pull-left">
+                      <img alt="image" class="img-circle" src="img/profile.jpg">
+                    </a>
+
+                    <div class="media-body ">
+                      <small class="pull-right">23h ago</small>
+                      <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                      <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                    </div>
+                  </div>
+                  <div class="feed-element">
+                    <a ui-sref="profile" class="pull-left">
+                      <img alt="image" class="img-circle" src="img/a7.jpg">
+                    </a>
+
+                    <div class="media-body ">
+                      <small class="pull-right">46h ago</small>
+                      <strong>Mike Loreipsum</strong> started following <strong>Monica
+                      Smith</strong>. <br>
+                      <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More
+                </button>
+
+              </div>
+
             </div>
           </div>
         </div>
+        <!-- ./active users -->
+
+        <!-- Tasks -->
         <div class="col-lg-6">
           <div class="ibox">
             <div class="ibox-title">
-              <h5>Small todo list</h5>
+              <h5>Tasks</h5>
               <div ibox-tools></div>
             </div>
-            <div class="ibox-content">
+            <div class="ibox-content" style="height:365px !important;">
               <ul class="todo-list m-t small-list">
                 <li>
                   <checkbox ng-model="main.checkOne"></checkbox>
@@ -310,18 +576,26 @@
                   <span class="m-l-xs">Call to Anna for dinner</span>
                 </li>
               </ul>
+              <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More
+              </button>
             </div>
           </div>
         </div>
+        <!-- ./Tasks -->
+
       </div>
+      <!-- ./tasks & active users -->
+
+
+      <!-- social media -->
       <div class="row">
         <div class="col-lg-12">
           <div class="ibox float-e-margins">
             <div class="ibox-title">
-              <h5>Transactions worldwide</h5>
+              <h5>Social Media</h5>
               <div ibox-tools></div>
             </div>
-            <div class="ibox-content">
+            <div class="ibox-content" style="height:365px !important;">
 
               <div class="row">
                 <div class="col-lg-6">
@@ -340,7 +614,8 @@
                       <td> Security doors
                         </small></td>
                       <td class="text-center small">16 Jun 2014</td>
-                      <td class="text-center"><span class="label label-primary">$483.00</span></td>
+                      <td class="text-center"><span class="label label-primary">$483.00</span>
+                      </td>
 
                     </tr>
                     <tr>
@@ -348,7 +623,8 @@
                       <td> Wardrobes
                       </td>
                       <td class="text-center small">10 Jun 2014</td>
-                      <td class="text-center"><span class="label label-primary">$327.00</span></td>
+                      <td class="text-center"><span class="label label-primary">$327.00</span>
+                      </td>
 
                     </tr>
                     <tr>
@@ -356,31 +632,35 @@
                       <td> Set of tools
                       </td>
                       <td class="text-center small">12 Jun 2014</td>
-                      <td class="text-center"><span class="label label-warning">$125.00</span></td>
+                      <td class="text-center"><span class="label label-warning">$125.00</span>
+                      </td>
 
                     </tr>
                     <tr>
                       <td class="text-center">4</td>
                       <td> Panoramic pictures</td>
                       <td class="text-center small">22 Jun 2013</td>
-                      <td class="text-center"><span class="label label-primary">$344.00</span></td>
+                      <td class="text-center"><span class="label label-primary">$344.00</span>
+                      </td>
                     </tr>
                     <tr>
                       <td class="text-center">5</td>
                       <td>Phones</td>
                       <td class="text-center small">24 Jun 2013</td>
-                      <td class="text-center"><span class="label label-primary">$235.00</span></td>
+                      <td class="text-center"><span class="label label-primary">$235.00</span>
+                      </td>
                     </tr>
                     <tr>
                       <td class="text-center">6</td>
                       <td>Monitors</td>
                       <td class="text-center small">26 Jun 2013</td>
-                      <td class="text-center"><span class="label label-primary">$100.00</span></td>
+                      <td class="text-center"><span class="label label-primary">$100.00</span>
+                      </td>
                     </tr>
                     </tbody>
                   </table>
                 </div>
-                <div class="col-lg-6" ng-controller="DashboardMap as map">
+                <div class="col-lg-6" ng-controller="dashboardMap as map">
                   <div vector-map style="height: 300px;" my-map-data="map.data"></div>
                 </div>
               </div>
@@ -388,12 +668,161 @@
           </div>
         </div>
       </div>
-
+      <!-- ./social media -->
     </div>
+    <!-- ./ Left section -->
 
+
+    <!-- Right section -->
+    <div class="col-lg-4">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Recent Activities</h5>
+          <div ibox-tools></div>
+        </div>
+        <div class="ibox-content ibox-heading">
+          <h3>You have meeting today!</h3>
+          <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
+          </small>
+        </div>
+        <div class="ibox-content inspinia-timeline"
+             style="height: 710px; overflow-y:scroll; padding-bottom:20px;">
+
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-briefcase"></i>
+                6:00 am
+                <br/>
+                <small class="text-navy">2 hour ago</small>
+              </div>
+              <div class="col-xs-7 content no-top-border">
+                <p class="m-b-xs"><strong>Meeting</strong></p>
+
+                <p>Conference on the sales results for the previous year. Monica please examine sales
+                  trends in marketing and products. Below please find the current status of the
+                  sale.</p>
+
+                <p>
+                  <bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></bar-chart>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-file-text"></i>
+                7:00 am
+                <br/>
+                <small class="text-navy">3 hour ago</small>
+              </div>
+              <div class="col-xs-7 content">
+                <p class="m-b-xs"><strong>Send documents to Mike</strong></p>
+
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                  Ipsum has been the industry's standard dummy text ever since.</p>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-coffee"></i>
+                8:00 am
+                <br/>
+              </div>
+              <div class="col-xs-7 content">
+                <p class="m-b-xs"><strong>Coffee Break</strong></p>
+
+                <p>
+                  Go to shop and find some products.
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                  Ipsum has been the industry's.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-phone"></i>
+                11:00 am
+                <br/>
+                <small class="text-navy">21 hour ago</small>
+              </div>
+              <div class="col-xs-7 content">
+                <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
+
+                <p>
+                  Lorem Ipsum has been the industry's standard dummy text ever since.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-user-md"></i>
+                09:00 pm
+                <br/>
+                <small>21 hour ago</small>
+              </div>
+              <div class="col-xs-7 content">
+                <p class="m-b-xs"><strong>Go to the doctor dr Smith</strong></p>
+
+                <p>
+                  Find some issue and go to doctor.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-user-md"></i>
+                11:10 pm
+              </div>
+              <div class="col-xs-7 content">
+                <p class="m-b-xs"><strong>Chat with Sandra</strong></p>
+
+                <p>
+                  Lorem Ipsum has been the industry's standard dummy text ever since.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="row">
+              <div class="col-xs-3 date">
+                <i class="fa fa-comments"></i>
+                12:50 pm
+                <br/>
+                <small class="text-navy">48 hour ago</small>
+              </div>
+              <div class="col-xs-7 content">
+                <p class="m-b-xs"><strong>Chat with Monica and Sandra</strong></p>
+
+                <p>
+                  Web sites still in their infancy. Various versions have evolved over the years,
+                  sometimes by accident, sometimes on purpose (injected humour and the like).
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- ./Right section -->
 
   </div>
+  <!-- ./Bottom section -->
+
 </div>
+
+<!-- small chat -->
 <div class="small-chat-box ng-small-chat fadeInRight animated" ng-show="openChat">
 
   <div class="heading" draggable="true">
@@ -479,3 +908,4 @@
 
   </a>
 </div>
+<!-- ./small chat -->
