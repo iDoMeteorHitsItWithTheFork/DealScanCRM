@@ -11,6 +11,7 @@ router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id/teammates', auth.isAuthenticated(), controller.getTeamMates);
+router.get('/:id/metrics', auth.isAuthenticated(), controller.getMetrics);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 

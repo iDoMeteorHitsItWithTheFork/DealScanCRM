@@ -170,6 +170,28 @@ export function me(req, res, next) {
 }
 
 /**
+ * Get a single user metrics
+ */
+export function getMetrics(req, res, next) {
+  // return User.findAll({
+  //   where: {
+  //     userID: {
+  //       $ne: req.user.userID
+  //     },
+  //     role: {
+  //       $lt:config.userRoles.indexOf(req.user.role)
+  //     }
+  //   }
+  // }).then(function (teammates) {
+  //   if (!teammates) return res.status(404).end();
+  //   return res.status(200).json(teammates);
+  // }).catch(function (err) {
+  //   next(err);
+  // });
+
+}
+
+/**
  * Authentication callback
  */
 export function authCallback(req, res, next) {

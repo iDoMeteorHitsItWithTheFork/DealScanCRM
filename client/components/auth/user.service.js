@@ -24,6 +24,13 @@ function UserResource($resource) {
         params: {
             controller:'teammates'
         }
+    },
+    getMetrics: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        controller: 'metrics'
+      }
     }
 
   });

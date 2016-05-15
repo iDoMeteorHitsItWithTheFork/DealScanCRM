@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-    .factory('Dashboard', function (Auth, Util, $q) {
+    .factory('Dashboard', function (Auth, User, Util, $q) {
         // Service logic
         // ...
 
@@ -10,6 +10,55 @@ angular.module('dealScanCrmApp')
         var teamMates = [];
         var safeCb = Util.safeCb;
 
+
+        var _metrics = {};
+
+        function getMetrics(){
+           // var metrics = [ {
+           //       Category: "Cars",
+           //       Won: {
+           //         percentage: 44,
+           //         trend: "up",
+           //         deals: '100,000'
+           //       },
+           //       Lost: {
+           //         percentage: 44,
+           //         trend: "down",
+           //         deals: '30,000'
+           //       }
+           //     },
+           //     {
+           //       Category: "Trucks",
+           //       Won: {
+           //         percentage: 44,
+           //         trend: "up",
+           //         deals: '100,000'
+           //       },
+           //       Lost: {
+           //         percentage: 44,
+           //         trend: "down",
+           //         deals: '20,000'
+           //       }
+           //     },
+           //     {
+           //       Category: "Total",
+           //       Won: {
+           //         percentage: 44,
+           //         trend: "up",
+           //         deals: '100,000'
+           //       },
+           //       Lost: {
+           //         percentage: 44,
+           //         trend: "down",
+           //         deals: '100,000'
+           //       }
+           //     }
+           //   ];
+
+          
+
+           return _metrics;
+        }
 
         function getTeamMates(callback) {
             if (!_user) return;
@@ -29,6 +78,9 @@ angular.module('dealScanCrmApp')
         // Public API here
         return {
             getTeamMates: getTeamMates,
+            metrics: function(){
+              return getMetrics();
+            },
             teamMates: function(){
                 return teamMates;
             }

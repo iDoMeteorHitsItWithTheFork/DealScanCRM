@@ -17,6 +17,14 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/financing/financing.socket').register(socket);
+  require('../api/document/document.socket').register(socket);
+  require('../api/documents/documents.socket').register(socket);
+  require('../api/rebate/rebate.socket').register(socket);
+  require('../api/payment/payment.socket').register(socket);
+  require('../api/trade/trade.socket').register(socket);
+  require('../api/deal/deal.socket').register(socket);
+  require('../api/vehicle/vehicle.socket').register(socket);
   require('../api/upload/upload.socket').register(socket);
   require('../api/image/image.socket').register(socket);
   require('../api/note/note.socket').register(socket);

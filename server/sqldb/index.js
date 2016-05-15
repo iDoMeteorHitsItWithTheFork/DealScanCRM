@@ -19,6 +19,12 @@ var db = {
 
 
 // Insert models below
+db.Financing = db.sequelize.import('../api/financing/financing.model');
+db.Document = db.sequelize.import('../api/document/document.model');
+db.Rebate = db.sequelize.import('../api/rebate/rebate.model');
+db.Trade = db.sequelize.import('../api/trade/trade.model');
+db.Deal = db.sequelize.import('../api/deal/deal.model');
+db.Vehicle = db.sequelize.import('../api/vehicle/vehicle.model');
 db.Upload = db.sequelize.import('../api/upload/upload.model');
 db.Image = db.sequelize.import('../api/image/image.model');
 db.Note = db.sequelize.import('../api/note/note.model');
@@ -51,6 +57,21 @@ db.Team.belongsToMany(db.User, {as:'TeamMembers', through:'TeamMemberships', for
 
 db.Team.belongsToMany(db.User, {as: 'TeamManagers', through: 'Managers', foreignKey:'teamID'});
 db.User.belongsToMany(db.Team, {as: 'ManagesTeams', through: 'Managers', foreignKey:'teamManagerID'});
+
+db.Deal.belongsTo(db.Dealership, {through:'Purchases', foreignKey:'dealershipID'});
+db.Deal.belongsTo(db.User, {as:'SaleRep', through: 'Purchases', foreignKey: 'saleRepID'});
+db.Deal.belongsTo(db.Customer, {as:'Buyer', through:'Purchases', foreignKey:'buyerID'});
+db.Deal.belongsTo(db.Vehicle, {as:'Purchase', through: 'Purchases', foreignKey: 'vehicleID'});
+
+db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'CoBuyerID'});
+db.Customer.belongsToMany(db.Deal, {as:'CoSignedDeals' , through:'CoSigners', foreignKey:'dealID'});
+
+
+db.Financing.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Trade.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Rebate.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Document.belongsTo(db.Deal, {foreignKey:'dealID'});
+
 
 
 export default db;
