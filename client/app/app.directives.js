@@ -99,7 +99,9 @@ function responsiveVideo() {
 function iboxTools($timeout) {
   return {
     restrict: 'A',
-    scope: true,
+    scope: {
+      onClose: '&',
+    },
     templateUrl: 'app/views/common/ibox_tools.html',
     controller: function ($scope, $element) {
       // Function for collapse ibox
@@ -120,6 +122,11 @@ function iboxTools($timeout) {
       $scope.closebox = function () {
         var ibox = $element.closest('div.ibox');
         ibox.remove();
+        if ($scope.onClose){
+          $scope.$applyAsync(function(){
+            $scope.onClose();
+          })
+        }
       }
     }
   };

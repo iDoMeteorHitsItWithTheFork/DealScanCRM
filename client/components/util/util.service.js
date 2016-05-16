@@ -132,10 +132,18 @@
 
       /*** Return the index of the object with proterty value within the array ***/
 
-        indexOfObject(arr, key, value) {
+      indexOfObject(arr, key, value) {
         return arr.map(function (el) {
           return el[key];
         }).indexOf(value);
+      },
+
+        /**
+         * pie charts colors
+         * @returns {string[]}
+         */
+      pieColors(){
+        return ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
       }
 
     };

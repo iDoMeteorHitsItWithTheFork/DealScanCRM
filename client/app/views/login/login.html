@@ -12,9 +12,8 @@
       <div class="form-group">
         <input type="password" class="form-control" placeholder="Password" required="" ng-model="landing.user.password">
       </div>
-      <button type="submit" class="btn btn-primary btn-o full-width m-b"
-              ng-disabled="!loginForm.$valid || loginForm.$pristine || landing.submitted">{{landing.submitted ?
-        'Authenticating...' : 'Login'}}
+      <button type="submit" ladda="landing.submitted" class="ladda-button btn btn-primary btn-o full-width m-b"
+              ng-disabled="!loginForm.$valid || loginForm.$pristine || landing.submitted">Login
       </button>
       <a ui-sref="forgot_password">
         <small>Forgot password?</small>

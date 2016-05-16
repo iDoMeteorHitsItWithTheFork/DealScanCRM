@@ -176,10 +176,12 @@
 
 
           <!-- charts -->
-          <div class="row" style="padding-top:10px !important;" ng-controller="flotChartCtrl as charts">
+          <div class="row" style="padding-top:10px !important;" ng-controller="DealCtrl as charts">
+
+            <!-- Won Pie & Stats -->
             <div class="pull-left"
-                 ng-class="dashboard.showBarChart ? 'col-lg-3': 'col-lg-4'"
-                 ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart">
+                 ng-class="charts.showBarChart ? 'col-lg-3': 'col-lg-4'"
+                 ng-hide="charts.selectedPie != 'won' && charts.showBarChart">
               <!-- won stats-->
               <div class="ibox float-e-margins">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -240,15 +242,18 @@
 
               <div class="flot-chart large-pie-chart animated fadeInRight"
                    ng-show="dashboard.chartView == 'chart'">
-                <div flot class="flot-chart-content" dataset="charts.flotPieData"
-                     options="charts.flotPieOptions"
-                     on-plot-click="dashboard.showDetails($event, pos, item, 'won')"></div>
+                <div flot class="flot-chart-content" dataset="charts.wonDeals.pie"
+                     options="charts.pieOptions"
+                     on-plot-click="charts.showDetails($event, pos, item, 'won'); dashboard.displayTable($event, pos, item)"></div>
               </div>
             </div>
+            <!-- ./Won Pie & Charts -->
 
+
+            <!-- Lost Pie & Stats -->
             <div class="pull-left"
-                 ng-class="dashboard.showBarChart ? 'col-lg-3': 'col-lg-4'"
-                 ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart">
+                 ng-class="charts.showBarChart ? 'col-lg-3': 'col-lg-4'"
+                 ng-hide="charts.selectedPie != 'lost' && charts.showBarChart">
               <!-- lost stats-->
               <div class="ibox float-e-margins">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -308,15 +313,17 @@
               <!-- ./lost stats-->
               <div class="flot-chart large-pie-chart animated fadeInRight"
                    ng-show="dashboard.chartView == 'chart'">
-                <div flot class="flot-chart-content" dataset="charts.flotPieData"
-                     options="charts.flotPieOptions"
-                     on-plot-click="dashboard.showDetails($event, pos, item, 'lost')"></div>
+                <div flot class="flot-chart-content" dataset="charts.lostDeals.pie"
+                     options="charts.pieOptions"
+                     on-plot-click="charts.showDetails($event, pos, item, 'lost'); dashboard.displayTable($event, pos, item)"></div>
               </div>
             </div>
+            <!-- ./Lost Pie & Charts -->
 
+            <!-- Total Pie & Stats -->
             <div class="pull-left"
-                 ng-class="dashboard.showBarChart ? 'col-lg-3': 'col-lg-4'"
-                 ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart">
+                 ng-class="charts.showBarChart ? 'col-lg-3': 'col-lg-4'"
+                 ng-hide="charts.selectedPie != 'total' && charts.showBarChart">
               <!-- total stats-->
               <div class="ibox float-e-margins">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -381,39 +388,51 @@
               <!-- ./total stats-->
               <div class="flot-chart large-pie-chart animated fadeInRight"
                    ng-show="dashboard.chartView == 'chart'">
-                <div flot class="flot-chart-content" dataset="charts.flotPieData"
-                     options="charts.flotPieOptions"
-                     on-plot-click="dashboard.showDetails($event, pos, item, 'total')"></div>
+                <div flot class="flot-chart-content" dataset="charts.totalDeals.pie"
+                     options="charts.pieOptions"
+                     on-plot-click="charts.showDetails($event, pos, item, 'total'); dashboard.displayTable($event, pos, item)"></div>
               </div>
             </div>
+            <!-- ./Total Pie & Stats -->
 
+
+            <!-- map view -->
             <div class="col-lg-12 pull-left animated fadeInRight" ng-show="dashboard.chartView == 'map'">
               <section id="map">
                 <div ui-map="dashboard.statsMap" ui-options="dashboard.chartMapOptions"
                      class="google-map"></div>
               </section>
             </div>
+            <!-- ./map view -->
 
-            <div class="col-lg-9 pull-left animated fadeInRight" ng-show="dashboard.showBarChart"
+
+
+            <!-- bar chart -->
+            <div class="col-lg-9 pull-left animated fadeInRight" ng-if="charts.showBarChart"
                  style="padding-top:30px !important;">
               <div class="ibox float-e-margins">
-                <div class="row">
-                  <div class="col-lg-3 pull-right text-right">
-                    <a class="btn btn-link btn-outline"
-                       ng-click="dashboard.showBarChart = false"><strong><i
-                      class="fa fa-times"></i></strong></a>
+                <div class="row" style="border-top: 1px #d5d5d5 solid; border-bottom:1px #d5d5d5 solid;
+                 margin-top: -31px;margin-right: 17px;margin-left: 5px ">
+                  <div class="col-lg-10">
+                    <h2 style="padding-top: 18px;padding-bottom: 7px;font-size: 22px !important;">{{charts.displayingCategory | uppercase}} - BY MODELS</h2>
+                  </div>
+                 <div class="col-lg-2 text-right" style="padding-top:24px !important;">
+                   <div ibox-tools on-close="charts.showBarChart = false"></div>
                   </div>
                 </div>
                 <div class="ibox-content" style="border-top:none; padding-top:30px !important;">
-                  <div class="flot-chart" style="height:380px;"
-                       ng-controller="dashboardFlotTwo as chart">
-                    <div flot class="flot-chart-content" dataset="chart.flotData"
-                         options="chart.flotOptions"></div>
+                  <div class="flot-chart" style="height:380px;">
+                    <div flot class="flot-chart-content" dataset="charts.barChartData"
+                         options="charts.barChartOptions" on-plot-click="dashboard.displayTable($event, pos, item)"></div>
                   </div>
                 </div>
               </div>
             </div>
+            <!-- ./bar chart -->
+
+
           </div>
+
           <!-- ./charts -->
         </div>
       </div>

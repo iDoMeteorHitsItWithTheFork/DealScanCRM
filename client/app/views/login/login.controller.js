@@ -38,6 +38,7 @@ angular.module('dealScanCrmApp')
      * @param form
      */
     _landing.login = function (form) {
+      if (_landing.submitted) return;
       _landing.submitted = true;
 
       if (form.$valid) {
@@ -50,6 +51,7 @@ angular.module('dealScanCrmApp')
             $state.go(_landing.proceedTo(Auth.getCurrentUser()));
           })
           .catch(err => {
+            _landing.submitted = false;
             _landing.errors.other = err.message;
           });
       }
