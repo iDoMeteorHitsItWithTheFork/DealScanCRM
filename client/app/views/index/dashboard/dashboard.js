@@ -52,6 +52,15 @@ angular.module('dealScanCrmApp')
                         '.resources/plugins/datapicker/angular-datepicker.js']
               },
               {
+                serie: true,
+                files: ['.resources/plugins/daterangepicker/daterangepicker.js',
+                        '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+              },
+              {
+                name: 'daterangepicker',
+                files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
+              },
+              {
                 files: ['.resources/plugins/jasny/jasny-bootstrap.min.js']
               },
               {
@@ -72,6 +81,16 @@ angular.module('dealScanCrmApp')
                 files: ['.resources/bootstrap/angular-bootstrap-checkbox.js']
               },
               {
+                files: ['.styles/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css']
+              },
+              {
+                files: ['.styles/plugins/iCheck/custom.css','.resources/plugins/iCheck/icheck.min.js']
+              },
+              {
+                name: 'ui.sortable',
+                files: ['.resources/plugins/ui-sortable/sortable.js']
+              },
+              {
                 name: 'ui.select',
                 files: ['.resources/plugins/ui-select/select.min.js',
                         '.styles/plugins/ui-select/select.min.css']
@@ -90,6 +109,15 @@ angular.module('dealScanCrmApp')
                 serie: true,
                 name: 'datatables.buttons',
                 files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
+              },
+              {
+                files: ['.styles/plugins/summernote/summernote.css','.styles/plugins/summernote/summernote-bs3.css',
+                        '.resources/plugins/summernote/summernote.min.js']
+              },
+              {
+                name: 'summernote',
+                files: ['.styles/plugins/summernote/summernote.css','.styles/plugins/summernote/summernote-bs3.css',
+                        '.resources/plugins/summernote/summernote.min.js','.resources/plugins/summernote/angular-summernote.min.js']
               }
             ]);
           }

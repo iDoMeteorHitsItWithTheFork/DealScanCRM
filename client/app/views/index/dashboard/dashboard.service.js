@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-    .factory('Dashboard', function (Auth, User, Util, $q) {
+    .factory('Dashboard', function (Auth, User, Util, $q, $filter) {
         // Service logic
         // ...
+
+
 
         var _user = Auth.getCurrentUser();
         var _teamMates = {};
@@ -13,10 +15,49 @@ angular.module('dealScanCrmApp')
         var teamMates = [];
         var safeCb = Util.safeCb;
 
+        var salesData = Util.dummyData();
+        var filteredData = salesData;
+        console.log(salesData);
+
+        function filterData(status, sources){
+            //var df = $q.defer();
+            console.log(status);
+            console.log(sources);
+            filteredData = $filter('filter')(salesData, function(value, index, arr){
+              var filtered = false;
+              for (var i = 0; i < sources.length; i++) {
+                   if (status != 'total') {
+                     if (value.status == status && value.source == sources[i]) {
+                       filtered = true;
+                       break;
+                     } else filtered = false;
+                   }
+                   else {
+                     if (value.source == sources[i]) {
+                       filtered = true;
+                       break;
+                     } else filtered = false;
+                   }
+              }
+              return filtered;
+            });
+            console.log(filteredData);
+            switch(status){
+                case 'won':
+                  wonDeals();
+                  break;
+                case 'lost':
+                  lostDeals();
+                  break;
+                case 'total':
+                  totalDeals();
+            }
+        }
 
         var _metrics = {};
 
         function getMetrics(){
+          //process data to generate metrics
            var metrics = [ {
                  Category: "Cars",
                  Won: {
@@ -76,90 +117,169 @@ angular.module('dealScanCrmApp')
         }
 
 
+        function getCategoryCount(arr, category, status){
+            var count = 0;
+            for(var i = 0; i < arr.length; i++) {
+              if (status) {
+                if (arr[i].category == category && arr[i].status == status) count++;
+              } else {
+                if (arr[i].category == category) count++;
+              }
+            }
+            return count;
+        }
+
+        function getModels(arr, category, status){
+           var models = [];
+           var sales = [];
+           var sources = [];
+           for(var i=0; i < arr.length; i++){
+             if (status){
+               if (sources.indexOf(arr[i].source) == -1 && arr[i].status == status) sources.push(arr[i].source);
+               if (arr[i].category == category && arr[i].status == status && models.indexOf(arr[i].model) == -1){
+                 models.push(arr[i].model);
+                 sales.push(getModelSales(arr, arr[i].model, status));
+               }
+             } else {
+               if (sources.indexOf(arr[i].source) == -1) sources.push(arr[i].source);
+               if (arr[i].category == category  && models.indexOf(arr[i].model) == -1){
+                 models.push(arr[i].model);
+                 sales.push(getModelSales(arr, arr[i].model));
+               }
+             }
+           }
+          return {models: models, sales: sales, data: getCategoryCount(arr, category, status), sources: sources};
+        }
+
+        function getModelSales(arr, model, status){
+          var sales = 0;
+          for(var i=0; i < arr.length; i++){
+            if (status){
+              if (arr[i].model == model && arr[i].status == status) sales++;
+            }
+            else {
+              if (arr[i].model == model) sales++;
+            }
+          }
+          return sales;
+        }
+
         /**
          * generate data for won deals
          */
         function wonDeals(){
-            var wonDeals = [{
+           //process data to generate won deals
+          var cars = getModels(filteredData, "Cars", "won");
+          var trucks = getModels(filteredData, "Trucks", "won");
+          var utilities = getModels(filteredData, "Utilities", "won");
+          var vans = getModels(filteredData, "Vans", "won");
+          var other = getModels(filteredData, "Other", "won");
+          var wonDeals = [{
                 label: "Cars",
-                data: 21,
+                data: cars.data,
                 color: Util.pieColors()[0],//"#d3d3d3",
               },{
                 label: "Trucks",
-                data: 15,
+                data: trucks.data,
                 color: Util.pieColors()[1], //"#79d2c0"
               },{
                 label: "Utilities",
-                data: 3,
+                data: utilities.data,
                 color: Util.pieColors()[2], //"#bababa"
               },{
                 label: "Vans",
-                data: 52,
+                data: vans.data,
                 color: Util.pieColors()[3], //"#1ab394"
               },{
                 label: "Other",
-                data: 52,
+                data: other.data,
                 color: Util.pieColors()[4],//"#1ab380"
-              }];
-            _wonDeals.pie = wonDeals;
+              }]
+          _wonDeals.pie = wonDeals;
            var barData = [
              {
                category: 'Cars',
-               models: ['Fiesta', 'Focus', 'C-Max', 'Fusion' ,'Taurus', 'Police Interceptor Sedan', 'Mustang'],
-               sales: [30, 50, 45, 2, 4, 0, 45],
-               avg_price: [15000, 20000, 22000, 15000, 15000, 20000, 25000]
+               models: cars.models,
+               sales: cars.sales,
              },
              {
                category: 'Trucks',
-               models: ['F-Series', 'E-Series', 'Heavy Trucks', 'Tansit' ,'Transit Connect'],
-               sales: [100, 70, 15, 20, 0],
-               avg_price: [40000, 45000, 30000, 25000, 0]
+               models: trucks.models,
+               sales: trucks.sales,
              },
              {
                category: 'Utilities',
-               models: ['Escape', 'Edge', 'Flex', 'Explorer', 'Expedition'],
-               sales: [78, 19, 40, 29, 40],
-               avg_price: [25000, 20000, 18000, 30000, 40000]
+               models: utilities.models,
+               sales: utilities.sales,
              },
              {
                category: 'Vans',
-               models: [],
-               sales: [],
-               avg_price: []
+               models: vans.models,
+               sales: vans.sales,
              },
              {
                category: 'Other',
-               models: [],
-               sales: [],
-               avg_price: []
+               models: other.models,
+               sales: other.sales,
              }
            ];
            _wonDeals.bar = barData;
+            var tableData = [];
+            angular.forEach(filteredData, function(value, key){
+               if(value.status == 'won'){
+                  tableData.push({
+                   vehicleInformation: {
+                     category: value.category,
+                     year: value.year,
+                     make: 'Ford',
+                     model: value.model,
+                     trim: value.trimLevel,
+                   },
+                   customerDetails: {
+                     name: value.name,
+                     phone: value.phone,
+                     email : value.email,
+                   },
+                   dealDetails: {
+                     date: value.date,
+                     salesman: value.salesman,
+                     source: value.source,
+                     price: value.price
+                   }
+                 });
+               }
+            });
+           _wonDeals.tableData = tableData;
             return _wonDeals;
         }
 
 
 
         function lostDeals(){
+          var cars = getModels(filteredData, "Cars", "lost");
+          var trucks = getModels(filteredData, "Trucks", "lost");
+          var utilities = getModels(filteredData, "Utilities", "lost");
+          var vans = getModels(filteredData, "Vans", "lost");
+          var other = getModels(filteredData, "Other", "lost");
           var lostDeals = [{
             label: "Cars",
-            data: 12,
+            data: cars.data,
             color: Util.pieColors()[0],//"#d3d3d3",
           },{
             label: "Trucks",
-            data: 5,
+            data: trucks.data,
             color: Util.pieColors()[1], //"#79d2c0"
           },{
             label: "Utilities",
-            data: 30,
+            data: utilities.data,
             color: Util.pieColors()[2], //"#bababa"
           },{
             label: "Vans",
-            data: 32,
+            data: vans.data,
             color: Util.pieColors()[3], //"#1ab394"
           },{
             label: "Other",
-            data: 17,
+            data: other.data,
             color: Util.pieColors()[4],//"#1ab380"
           }];
           _lostDeals.pie = lostDeals;
@@ -167,60 +287,87 @@ angular.module('dealScanCrmApp')
           var barData = [
             {
               category: 'Cars',
-              models: ['Fiesta', 'Focus', 'C-Max', 'Fusion' ,'Taurus', 'Police Interceptor Sedan', 'Mustang'],
-              sales: [40, 20, 5, 20, 44, 1, 5],
-              avg_price: [18000, 25000, 20000, 15000, 35000, 25000, 20000]
+              models: cars.models,
+              sales: cars.sales,
             },
             {
               category: 'Trucks',
-              models: ['F-Series', 'E-Series', 'Heavy Trucks', 'Tansit' ,'Transit Connect'],
-              sales: [10, 7, 45, 25, 30],
-              avg_price: [50000, 55000, 40000, 35000, 30000]
+              models:trucks.models,
+              sales: trucks.sales,
             },
             {
               category: 'Utilities',
-              models: ['Escape', 'Edge', 'Flex', 'Explorer', 'Expedition'],
-              sales: [80, 15, 20, 19, 30],
-              avg_price: [35000, 24000, 15000, 35000, 55000]
+              models:utilities.models,
+              sales: trucks.sales,
             },
             {
               category: 'Vans',
-              models: [],
-              sales: [],
-              avg_price: []
+              models: vans.models,
+              sales: vans.sales,
             },
             {
               category: 'Other',
-              models: [],
-              sales: [],
-              avg_price: []
+              models: other.models,
+              sales: other.sales,
             }
           ];
           _lostDeals.bar = barData;
+          var tableData = [];
+          angular.forEach(filteredData, function(value, key){
+            if(value.status == 'lost'){
+              tableData.push({
+                vehicleInformation: {
+                  category: value.category,
+                  year: value.year,
+                  make: 'Ford',
+                  model: value.model,
+                  trim: value.trimLevel,
+                },
+                customerDetails: {
+                  name: value.name,
+                  phone: value.phone,
+                  email : value.email,
+                },
+                dealDetails: {
+                  date: value.date,
+                  salesman: value.salesman,
+                  source: value.source,
+                  price: value.price
+                }
+              });
+            }
+          });
+          _lostDeals.tableData = tableData;
           return _lostDeals;
         }
 
 
         function totalDeals(){
+          var cars = getModels(filteredData, "Cars");
+          var trucks = getModels(filteredData, "Trucks");
+          var utilities = getModels(filteredData, "Utilities");
+          var vans = getModels(filteredData, "Vans");
+          var other = getModels(filteredData, "Other");
+
           var totalDeals = [{
             label: "Cars",
-            data: _wonDeals.pie[0].data + _lostDeals.pie[0].data,
+            data: cars.data,
             color: Util.pieColors()[0],//"#d3d3d3",
           },{
             label: "Trucks",
-            data: _wonDeals.pie[1].data + _lostDeals.pie[1].data,
+            data: trucks.data,
             color: Util.pieColors()[1], //"#79d2c0"
           },{
             label: "Utilities",
-            data: _wonDeals.pie[2].data + _lostDeals.pie[2].data,
+            data: utilities.data,
             color: Util.pieColors()[2], //"#bababa"
           },{
             label: "Vans",
-            data: _wonDeals.pie[3].data + _lostDeals.pie[3].data,
+            data: vans.data,
             color: Util.pieColors()[3], //"#1ab394"
           },{
             label: "Other",
-            data: _wonDeals.pie[4].data + _lostDeals.pie[4].data,
+            data: other.data,
             color: Util.pieColors()[4],//"#1ab380"
           }];
           _totalDeals.pie = totalDeals;
@@ -228,77 +375,56 @@ angular.module('dealScanCrmApp')
           var barData = [
             {
               category: 'Cars',
-              models: ['Fiesta', 'Focus', 'C-Max', 'Fusion' ,'Taurus', 'Police Interceptor Sedan', 'Mustang'],
-              sales: [
-              _wonDeals.bar[0].sales[0]+_lostDeals.bar[0].sales[0],
-              _wonDeals.bar[0].sales[1]+_lostDeals.bar[0].sales[1],
-              _wonDeals.bar[0].sales[2]+_lostDeals.bar[0].sales[2],
-              _wonDeals.bar[0].sales[3]+_lostDeals.bar[0].sales[3],
-              _wonDeals.bar[0].sales[4]+_lostDeals.bar[0].sales[4],
-              _wonDeals.bar[0].sales[5]+_lostDeals.bar[0].sales[5],
-              _wonDeals.bar[0].sales[6]+_lostDeals.bar[0].sales[6]
-              ],
-              avg_price: [
-                  (_wonDeals.bar[0].avg_price[0]+_lostDeals.bar[0].avg_price[0])/2 ,
-                  (_wonDeals.bar[0].avg_price[1]+_lostDeals.bar[0].avg_price[1])/2 ,
-                  (_wonDeals.bar[0].avg_price[2]+_lostDeals.bar[0].avg_price[2])/2 ,
-                  (_wonDeals.bar[0].avg_price[3]+_lostDeals.bar[0].avg_price[3])/2 ,
-                  (_wonDeals.bar[0].avg_price[4]+_lostDeals.bar[0].avg_price[4])/2 ,
-                  (_wonDeals.bar[0].avg_price[5]+_lostDeals.bar[0].avg_price[5])/2 ,
-                  (_wonDeals.bar[0].avg_price[6]+_lostDeals.bar[0].avg_price[6])/2
-              ]
+              models: cars.models,
+              sales:cars.sales,
             },
 
             {
               category: 'Trucks',
-              models: ['F-Series', 'E-Series', 'Heavy Trucks', 'Tansit' ,'Transit Connect'],
-              sales: [
-                _wonDeals.bar[1].sales[0]+_lostDeals.bar[1].sales[0],
-                _wonDeals.bar[1].sales[1]+_lostDeals.bar[1].sales[1],
-                _wonDeals.bar[1].sales[2]+_lostDeals.bar[1].sales[2],
-                _wonDeals.bar[1].sales[3]+_lostDeals.bar[1].sales[3],
-                _wonDeals.bar[1].sales[4]+_lostDeals.bar[1].sales[4]
-              ],
-              avg_price: [
-                (_wonDeals.bar[1].avg_price[0]+_lostDeals.bar[1].avg_price[0])/2,
-                (_wonDeals.bar[1].avg_price[1]+_lostDeals.bar[1].avg_price[1])/2,
-                (_wonDeals.bar[1].avg_price[2]+_lostDeals.bar[1].avg_price[2])/2,
-                (_wonDeals.bar[1].avg_price[3]+_lostDeals.bar[1].avg_price[3])/2,
-                (_wonDeals.bar[1].avg_price[4]+_lostDeals.bar[1].avg_price[4])/2
-              ]
+              models:trucks.models,
+              sales:trucks.sales,
             },
             {
               category: 'Utilities',
-              models: ['Escape', 'Edge', 'Flex', 'Explorer', 'Expedition'],
-              sales: [
-                _wonDeals.bar[2].sales[0]+_lostDeals.bar[2].sales[0],
-                _wonDeals.bar[2].sales[1]+_lostDeals.bar[2].sales[1],
-                _wonDeals.bar[2].sales[2]+_lostDeals.bar[2].sales[2],
-                _wonDeals.bar[2].sales[3]+_lostDeals.bar[2].sales[3],
-                _wonDeals.bar[2].sales[4]+_lostDeals.bar[2].sales[4]
-              ],
-              avg_price: [
-                (_wonDeals.bar[2].avg_price[0]+_lostDeals.bar[2].avg_price[0])/2,
-                (_wonDeals.bar[2].avg_price[1]+_lostDeals.bar[2].avg_price[1])/2,
-                (_wonDeals.bar[2].avg_price[2]+_lostDeals.bar[2].avg_price[2])/2,
-                (_wonDeals.bar[2].avg_price[3]+_lostDeals.bar[2].avg_price[3])/2,
-                (_wonDeals.bar[2].avg_price[4]+_lostDeals.bar[2].avg_price[4])/2
-              ]
+              models: utilities.models,
+              sales: utilities.sales,
             },
             {
               category: 'Vans',
-              models: [],
-              sales: [],
-              avg_price: []
+              models: vans.models,
+              sales: vans.sales,
             },
             {
               category: 'Other',
-              models: [],
-              sales: [],
-              avg_price: []
+              models: other.models,
+              sales: other.sales,
             }
           ];
           _totalDeals.bar = barData;
+          var tableData = [];
+          angular.forEach(filteredData, function(value, key){
+              tableData.push({
+                vehicleInformation: {
+                  category: value.category,
+                  year: value.year,
+                  make: 'Ford',
+                  model: value.model,
+                  trim: value.trimLevel,
+                },
+                customerDetails: {
+                  name: value.name,
+                  phone: value.phone,
+                  email : value.email,
+                },
+                dealDetails: {
+                  date: value.date,
+                  salesman: value.salesman,
+                  source: value.source,
+                  price: value.price
+                }
+              });
+          });
+          _totalDeals.tableData = tableData;
           return _totalDeals;
         }
 
@@ -311,6 +437,7 @@ angular.module('dealScanCrmApp')
             },
             won: wonDeals,
             lost: lostDeals,
-            total: totalDeals
+            total: totalDeals,
+            filter: filterData
         };
     });
