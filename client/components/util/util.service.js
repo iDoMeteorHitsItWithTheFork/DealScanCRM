@@ -285,9 +285,53 @@
           }
         });
         return data;
+      },
+
+      getDayNumber(day){
+        var n;
+        switch(day.toLowerCase()){
+          case 'sunday':
+          case 'sun':
+          case 'su':
+            n = 0;
+            break;
+          case 'monday':
+          case 'mon':
+          case 'm':
+            n = 1;
+            break;
+          case 'tuesday':
+          case 'tues':
+          case 'tue':
+          case 't':
+            n = 2;
+            break;
+          case 'wednesday':
+          case 'wed':
+          case 'w':
+            n = 3;
+            break;
+          case 'thursday':
+          case 'thurs':
+          case  'tr':
+            n = 4;
+            break;
+          case 'friday':
+          case 'fri':
+          case 'fr':
+          case 'f':
+            n = 5;
+            break;
+          case 'saturday':
+          case 'sat':
+          case 'sa':  
+            n = 6;
+            break;
+        }
+        return n;
       }
 
-    };
+    }
 
     return Util;
   }

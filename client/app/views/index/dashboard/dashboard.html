@@ -2,33 +2,37 @@
 
   <!-- Top Section ==> metrics -->
   <div class="row">
-    <div class="col-lg-4" ng-repeat="m in dashboard.metrics">
+    <div class="col-lg-3" ng-repeat="m in dashboard.metrics">
       <div class="ibox float-e-margins">
         <div class="ibox-title">
                     <span class="pull-right">
-                         <div class="stat-percent font-bold"
-                              ng-class="{'text-danger': m.Lost.trend == 'down', 'text-navy': m.Lost.trend == 'up'}">
-                             <span>L</span>{{m.Lost.percentage}}%
-                             <i ng-class="{'fa fa-level-up': m.Lost.trend == 'up', 'fa fa-level-down': m.Lost.trend == 'down'}"></i>
-                         </div>
-                        <div class="stat-percent font-bold margin-right-10"
-                             ng-class="{'text-danger': m.Won.trend == 'down', 'text-navy': m.Won.trend == 'up'}">
-                             <span>W</span>{{m.Won.percentage}}%
-                             <i ng-class="{'fa fa-level-up': m.Won.trend == 'up', 'fa fa-level-down': m.Won.trend == 'down'}"></i>
-                        </div>
+                        <span class="label label-info metric-label">4</span>
+                        <span class="label label-info metric-label">$30,400.00</span>
                     </span>
-          <h5>{{m.Category | uppercase}}</h5>
+          <h5>{{m.Category | uppercase}}</h5><br/>
+          <div class="row margin-top-10 padding-left-15 padding-right-15">
+            <small class="pull-left">Days Left: {{m.remainingDays}}</small>
+            <span class="pull-right text-navy">
+              <i class="fa fa-play fa-rotate-270 middle-text-align">&nbsp;</i>45%
+            </span>
+          </div>
         </div>
         <div class="ibox-content">
-          <div class="row">
-                        <span class="col-lg-6 ">
-                            <h1 class="no-margins">{{m.Won.deals}}</h1>
-                            <h5 class="m-b-md">Won Deals</h5>
-                        </span>
-                        <span class="col-lg-6">
-                            <h1 class="no-margins text-right">{{m.Lost.deals}}</h1>
-                            <h5 class="m-b-md text-right">Lost Deals</h5>
-                        </span>
+          <div class="row p-l-r-15">
+            <div>
+              <span>Units</span>
+              <small class="pull-right">10/120</small>
+            </div>
+            <div class="progress progress-mini">
+              <div style="width: 60%;" class="progress-bar"></div>
+            </div>
+            <div class="margin-top-10">
+              <span>Gross[$]</span>
+              <small class="pull-right">1500/200000</small>
+            </div>
+            <div class="progress progress-mini">
+              <div style="width: 60%;" class="progress-bar"></div>
+            </div>
           </div>
         </div>
       </div>

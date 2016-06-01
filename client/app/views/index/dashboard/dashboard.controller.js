@@ -367,10 +367,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
 
 
-
-
-
-
     /**
      * Stats Display Mode
      * @type {string}
@@ -432,9 +428,10 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
      * @param map
      */
     _dashboard.refreshMap = function (map) {
-      $scope.$applyAsync(function(){
+      $scope.$applyAsync(function(map){
         var m = map || _dashboard.statsMap;
         if (m) google.maps.event.trigger(m, 'resize');
+        console.log('*** Refresh Map ***');
       })
     }
 

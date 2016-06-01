@@ -1,11 +1,14 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-    .factory('Dashboard', function (Auth, User, Util, $q, $filter) {
+    .factory('Dashboard', function (Auth, User, Util, $q, $filter, $resource) {
         // Service logic
         // ...
 
-
+        $resource('app/views/index/dashboard/customers.json')
+          .query().$promise.then(function(sales){
+            console.log(sales);
+        });
 
         var _user = Auth.getCurrentUser();
         var _teamMates = {};
@@ -14,6 +17,8 @@ angular.module('dealScanCrmApp')
         var _totalDeals = {};
         var teamMates = [];
         var safeCb = Util.safeCb;
+
+
 
         var salesData = Util.dummyData();
         var filteredData = salesData;
@@ -84,6 +89,19 @@ angular.module('dealScanCrmApp')
                    deals: '20,000'
                  }
                },
+             {
+               Category: "Used",
+               Won: {
+                 percentage: 44,
+                 trend: "up",
+                 deals: '100,000'
+               },
+               Lost: {
+                 percentage: 44,
+                 trend: "down",
+                 deals: '20,000'
+               }
+             },
                {
                  Category: "Total",
                  Won: {
@@ -100,6 +118,122 @@ angular.module('dealScanCrmApp')
              ];
            _metrics = metrics;
            return _metrics;
+        }
+
+        /**
+         *
+         * @returns {{remainingDays: number, workingDays: number}}
+         */
+        function computeWorkingWeeks(options){
+          var workWeek = {start:'Monday', end: 'Saturday'};
+          if (options) {
+            if (options.workWeek) workWeek = options.workWeek;
+          }
+          var firstWorkWeekStartDay = moment().startOf('month').day(workWeek.start);
+          var firstWorkWeekEndDay = moment().startOf('month').day(workWeek.end);
+          if (!firstWorkWeekEndDay.isAfter(firstWorkWeekStartDay)) firstWorkWeekEndDay.add(7, 'd');
+
+          var startOfWeek = firstWorkWeekStartDay; //start of week
+          var endOfWeek = firstWorkWeekEndDay;// end of week
+          var lastDayOfMonth = moment().endOf('month');//end of month
+
+          var workWeeks = [];
+          var idx = 1;
+
+          while(!startOfWeek.isAfter(lastDayOfMonth) && !endOfWeek.isAfter(lastDayOfMonth)){
+              workWeeks.push({name: 'Week '+idx, start: startOfWeek.clone(), end: endOfWeek.clone()});
+              startOfWeek.add(7, 'd');
+              endOfWeek.add(7, 'd');
+              idx++;
+          }
+
+          if (!startOfWeek.isAfter(lastDayOfMonth) && endOfWeek.isAfter(lastDayOfMonth))
+              workWeeks.push({name: 'Week '+idx, start:startOfWeek.clone(), end: lastWorkingDay(lastDayOfMonth, workWeek).clone()})
+
+
+          return workWeeks;
+        }
+
+      /**
+       *  Return the last working of the month based on the work week and the last day of the month
+       * @param lastDay
+       * @param workWeek
+       * @returns {*}
+         */
+        function lastWorkingDay(lastDay, workWeek){
+          while(!(lastDay.weekday() >= Util.getDayNumber(workWeek.start)
+                && lastDay.weekday() <= Util.getDayNumber(workWeek.end)))
+            lastDay.subtract(1, 'd');
+          return lastDay;
+        }
+
+        function computeWorkingDays(options){
+          var workingWeeks = computeWorkingWeeks(options);
+          var workingDays = 0;
+          var currentWeekIdx, located = false, daysWorked = 0;
+          for(var i = 0; i < workingWeeks.length; i++) {
+            workingDays += (Math.abs(workingWeeks[i].end.diff(workingWeeks[i].start, 'days')) + 1);
+            if (!located && moment().isBetween(workingWeeks[i].start, workingWeeks[i].end)){
+              currentWeekIdx = i;
+              located = true;
+            }
+          }
+
+
+          if (located){
+            for(var i=0; i <= currentWeekIdx; i++){
+              daysWorked += (i == currentWeekIdx ? Math.abs(moment().diff(workingWeeks[i].start, 'days') + 1)
+                : (Math.abs(workingWeeks[i].end.diff(workingWeeks[i].start, 'days')) + 1));
+            }
+            --daysWorked; //current day is excluded
+          } else {
+            for(var i=0; i < workingWeeks.length; i++) {
+              if (!moment().isAfter(workingWeeks[i].start)) {
+                currentWeekIdx = i;
+                break;
+              }
+            }
+            var remainingWorkDays = 0;
+            for(var i = currentWeekIdx; i < workingWeeks.length; i++)
+               remainingWorkDays +=  (Math.abs(workingWeeks[i].end.diff(workingWeeks[i].start, 'days')) + 1)
+            daysWorked = workingDays - remainingWorkDays;
+            --daysWorked; //current day is excluded
+          }
+
+          console.log('*** Working Weeks ***');
+          console.log(workingWeeks);
+
+          console.log('*** Working Days ***');
+          console.log(workingDays);
+
+          console.log('*** Days Worked ****');
+          console.log(daysWorked);
+
+          console.log('*** Days Left ***');
+          console.log(workingDays - daysWorked);
+        }
+
+
+        console.log('\n\n\n[ --------------------- START ------------------------ ]');
+        console.log("Default WorkWeek: Monday - Saturday ");
+        computeWorkingDays();
+        console.log('[ ---------------------- END ------------------------ ]\n\n\n');
+
+        console.log('\n\n\n[ --------------------- START ------------------------ ]');
+        console.log("WorkWeek: Monday - Friday");
+        computeWorkingDays({workWeek: {start: 'Monday', end: 'Friday'}});
+        console.log('[ ---------------------- END ------------------------ ]\n\n\n');
+
+
+        console.log('\n\n\n[ --------------------- START ------------------------ ]');
+        console.log("WorkWeek: Monday - Thursday");
+        computeWorkingDays({workWeek: {start: 'Monday', end: 'Thursday'}});
+        console.log('[ ---------------------- END ------------------------ ]\n\n\n');
+
+
+
+        function getTrend(){
+
         }
 
         function getTeamMates(callback) {
