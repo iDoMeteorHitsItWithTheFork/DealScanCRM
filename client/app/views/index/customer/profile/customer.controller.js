@@ -14,7 +14,11 @@ angular.module('dealScanCrmApp')
       name: _customer.thisCustomer.profile.name,
       phone: _customer.thisCustomer.profile.phone,
       email: _customer.thisCustomer.profile.email,
-      address: _customer.thisCustomer.profile.address
+      address: _customer.thisCustomer.profile.address,
+      streetAddress: _customer.thisCustomer.streetAddress,
+      city: _customer.thisCustomer.city,
+      state: _customer.thisCustomer.state,
+      zipCode: _customer.thisCustomer.postalCode,
     }
 
     _customer.purchases = [{

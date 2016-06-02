@@ -31,11 +31,11 @@ angular.module('dealScanCrmApp')
       var menu;
       if (debug) return menu = [
         {title: 'Dashboard', alias: 'D', state: 'index.dashboard', icon: 'fa fa-th-large'},
-        {title: 'Leads', alias: 'L', state: 'index.bdc', icon: 'fa fa-users'},
+        {title: 'Leads', alias: 'L', state: 'index.bdc', icon: 'fa fa-th-list'},
         {title: 'Customers', alias: 'C', state: 'index.customer', icon: 'fa fa-users'},
-        {title: 'Team Management', alias: 'M', state: 'index.team', icon: 'fa fa-users'},
-        {title: 'Tasks', alias: 'T', state: 'index.tasks', icon: 'fa fa-tasks'},
         {title: 'Social Media', alias: 'S', state: 'index.ecampaign', icon: 'fa fa-globe'},
+        {title: 'Tasks', alias: 'T', state: 'index.tasks', icon: 'fa fa-tasks'},
+        {title: 'Messages', alias: 'M', state: 'index.mailbox', icon: 'fa fa-envelope'},
       ];
       switch (_navigation.user.role) {
         case appConfig.userRoles[0]:

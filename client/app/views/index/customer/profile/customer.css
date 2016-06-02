@@ -1,0 +1,567 @@
+/*.user-left {*/
+  /*width: 20%; !important;*/
+/*}*/
+/*.list-group-item:first-child {*/
+  /*border: none; !important;*/
+/*}*/
+/*.list-group-item {*/
+  /*border: none; !important;*/
+/*}*/
+/*.list-group-item:last-child {*/
+  /*border: none; !important;*/
+/*}*/
+
+/*.cs-placeholder {*/
+  /*margin-left: 70px;*/
+  /*margin-top: -42px;*/
+  /*font-size: 11px;*/
+/*}*/
+.customer-photo {
+      height: 80px;
+      display: inline;
+  cursor:pointer;
+      margin: 3px;
+}
+.document-photo{
+  height:48px;
+  cursor:pointer;
+}
+
+.document-item {
+    width: 300px;
+    max-width: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    text-align: center;
+}
+.scroll-300 {
+    height: 300px;
+    max-height: 300px !important;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+}
+.cusTab {
+  margin-bottom: 20px;
+}
+
+.actvityPanel {
+  height: 275px;
+  max-height: 275px !important;
+  overflow-y: scroll;
+  overflow-x: hidden !important;
+}
+
+.customPanelHeight {
+  min-height: 0px !important;
+  height: 30px;
+  padding: 10px 0px 27px 10px !important;
+}
+.menuText {
+  font-size: 11px;
+  border-width: 10px;
+  align-content: center;
+  box-shadow: none;
+}
+
+.morePhotos {
+  border-style: solid !important;
+  border-width: 1px;
+}
+.ul {
+  margin-top: -5px;
+}
+
+.tabMenu {
+  margin-top: -5px;
+}
+
+.navButtons {
+  margin-top: 15px;
+}
+.tabbable {
+  margin-top: -20px;
+  box-shadow: none;
+}
+
+.cusRow {
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+}
+
+.butt {
+  height: 50px;
+  width: 50px;
+}
+
+.docPanel {
+  max-height: 75px;
+}
+
+/* Experiences */
+ul.experiences li {
+  position:relative; /* so that pseudoelements are positioned relatively to their "li"s*/
+  /* use padding-bottom instead of margin-bottom.*/
+  margin-bottom: 0; /* This overrides previously specified margin-bottom */
+  padding-bottom: 0.5em;
+}
+
+ul.experiences li:after {
+  /* bullets */
+  content: url('https://qph.is.quoracdn.net/main-qimg-e9c30971d9aedf18db1a3f6419fb0dd8?convert_to_webp=true');
+  position: absolute;
+  left: -24px; /*adjust manually*/
+  top: 0px;
+}
+
+ul.experiences li:before {
+  /* lines */
+  content:"";
+  position: absolute;
+  left: -16px; /* adjust manually */
+  border-left: 1px solid #5FA5E7;
+  height: 100%;
+  width: 1px;
+}
+
+ul.experiences li:first-child:before {
+  /* first li's line */
+  top: 6px; /* moves the line down so that it disappears under the bullet. Adjust manually */
+}
+
+ul.experiences li:last-child:before {
+  /* last li's line */
+  height: 6px; /* shorten the line so it goes only up to the bullet. Is equal to first-child:before's top */
+}
+
+.margin-negative-top-20 {
+  margin-top: -20px !important;
+}
+
+
+.ft-sz-12 {
+  font-size:12px !important;
+}
+
+.span-height-25 > span {
+  height: 27px !important;
+  padding-top: 3px !important;
+}
+
+.btn-rounded-20 {
+  width: 30px !important;
+  border-radius: 20px !important;
+}
+
+.height-50 {
+  height: 50px !important;
+}
+
+.background-white {
+  background: #fff !important;
+}
+
+.st-sort-ascent:before {
+  content: '\25B2';
+}
+
+.st-sort-descent:before {
+  content: '\25BC';
+}
+
+
+.tc-pagination {
+  background: #fff !important;
+  border: none !important;
+  text-align: center !important;
+}
+
+.customer-info-header {
+  font-size: 11px !important;
+  margin-bottom: 0 !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  padding-left:10px !important;
+}
+
+.purchase-vehicle-header {
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+
+.cusData {
+  /*padding-bottom: 0px !important;*/
+  border: none;
+  /*color: darkslategray;*/
+}
+
+.socialRow {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.dProgressBar {
+  height: 4px;
+}
+
+.cusHead {
+  padding: 20px;
+}
+
+.dealIcons {
+  margin-top: -7px;
+}
+.nameCol {
+  padding-left: 0px;
+  margin-right: -75px;
+}
+
+.vehicleRow {
+  padding-bottom: 5px;
+}
+
+.tradeIcon {
+  padding-left: 5px;
+}
+
+.trades {
+  font-size: 12px;
+}
+
+.fileContainer {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-left: 25px;
+  width: auto;
+  white-space: nowrap;
+}
+
+.cusProgressBar {
+  height: 3px;
+}
+
+.cusDocs {
+  padding-right: 20px;
+}
+
+.btn-circle {
+  padding: 5px !important;
+  font-size: 13px !important;
+}
+
+.disabledBtn {
+  margin-bottom: 0px;
+  background-color: lightgrey;
+  border: none;
+}
+
+.timeline-item .content{
+  min-height: 75px !important;
+}
+
+.timelineIcons {
+  color: #4A6F91;
+}
+
+.timelinePhone {
+  color: #355FAE;
+}
+.timelineTweet {
+  color: #8EBDF3;
+}
+
+.timelineTask {
+  color: #F2AE3E;
+}
+
+.timelineMessage {
+  color: #4BB346;
+}
+
+.profile-tab {
+  margin-top: 0;
+  margin-bottom: -10px;
+  padding: 15px;
+  height: 85px;
+  box-shadow: 0px 10px 0px 0px #d5d5d5;
+  border-right:2px solid;
+}
+.profile-tab:hover {
+  position: relative;
+  top: 10px;
+}
+.profile-tab-icon {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 16px;
+  border: 3px solid #f1f1f1;
+  text-align: center;
+  padding-top:5px;
+}
+.no-border-right {
+  border-right: none !important;
+}
+
+.customer-cover-photo {
+  position: relative;
+  height: 200px;
+}
+.customer-cover-photo:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.6;
+  background-image: url('/assets/images/profile_big.jpg');
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+.customer-cover-photo > img {
+  box-shadow: 0px 0px 1px 2px #d5d5d5;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+}
+.address-li {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+.address-li-c-s-z {
+  display: block;
+  position: relative;
+  left: 24px;
+}
+.customer-social-media-feed {
+  margin-top:30px;
+  margin-bottom: 20px;
+  border-top: 1px solid #d5d5d5;
+  border-bottom: 1px solid #d5d5d5;
+  padding-top: 7px;
+  margin-left: -20px !important;
+  margin-right: -20px !important;
+  padding-left: 20px;
+  padding-right:20px;
+  position:relative;
+}
+.m-t-10 {
+  margin-top: 10px !important;
+}
+.m-b-18 {
+  margin-bottom: 18px !important;
+}
+.m-t-ng-5 {
+  margin-top: -5px !important;
+}
+.social-feed-icons {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+}
+
+.btn-twitter {
+  background: #00aced;
+  color: #fff;
+  border: 1px solid #00aced;
+}
+.btn-twitter:hover, .twitter {
+  background: none;
+  color: #00aced;
+}
+.btn-facebook {
+  color: #fff;
+  background: #3b5998;
+  border:1px solid #3b5998;
+}
+.btn-facebook:hover,
+.facebook {
+  background:none;
+  color: #3b5998;
+}
+.btn-google-plus {
+  color: #fff;
+  background: #dd4b39;
+  border:1px solid #dd4b39;
+}
+.btn-google-plus:hover,
+.google-plus {
+  background: none;
+  color: #dd4b39;
+}
+.btn-linked-in {
+  color: #fff;
+  background: #007bb6;
+  border:1px solid #007bb6;
+}
+.btn-linked-in:hover,
+.linked-in {
+  background: none;
+  color: #007bb6;
+}
+.btn-youtube {
+  color: #fff;
+  background: #bb0000;
+  border:1px solid #bb0000;
+}
+.btn-youtube:hover,
+.youtube {
+  background: none;
+  color: #bb0000;
+}
+.btn-instagram {
+  color: #fff;
+  background: #517fa4;
+  border:1px solid #517fa4;
+}
+.btn-instagram:hover,
+.instagram {
+  background: none;
+  color: #517fa4;
+}
+.btn-pinterest {
+  color: #fff;
+  background: #cb2027;
+  border:1px solid #cb2027;
+}
+.btn-pinterest:hover {
+  background:none;
+  color: #cb2027;
+}
+.btn-vimeo {
+  color: #fff;
+  background: #aad450;
+  border:1px solid #aad450;
+}
+.btn-vimeo:hover {
+  background:none;
+  color: #aad450;
+}
+.btn-tumblr {
+  color: #fff;
+  background: #32506d;
+  border:1px solid #32506d;
+}
+.btn-tumblr:hover {
+  background:none;
+  color: #32506d;
+}
+.btn-flickr {
+  color: #fff;
+  background: #ff0084;
+  border:1px solid #ff0084;
+}
+.btn-flickr:hover {
+  background: none;
+  color: #ff0084;
+}
+.btn-dribbble {
+  color: #fff;
+  background: #ea4c89;
+  border:1px solid #ea4c89;
+}
+.btn-dribbble:hover {
+  background: none;
+  color: #ea4c89;
+}
+.btn-quora {
+  color: #fff;
+  background: #a82400;
+  border:1px solid #a82400;
+}
+.btn-quora:hover {
+  background:none;
+  color: #a82400;
+}
+.btn-foursquare {
+  color: #fff;
+  background:#0072b1;
+  border:1px solid #0072b1;
+}
+.btn-foursquare:hover {
+  background: none;
+  color:#0072b1;
+}
+.btn-forrst {
+  color: #fff;
+  background: #5B9A68;
+  border:1px solid #5B9A68;
+}
+.btn-forrst:hover {
+  background:none;
+  color: #5B9A68;
+}
+.btn-vk {
+  color: #fff;
+  background: #45668e;
+  border:1px solid #45668e;
+}
+.btn-vk:hover {
+  background: none;
+  color: #45668e;
+}
+.btn-wordpress {
+  color: #fff;
+  background: #21759b;
+  border:1px solid #21759b;
+}
+.btn-wordpress:hover {
+  background:none;
+  color: #21759b;
+}
+.btn-stumbleupon {
+  color: #fff;
+  background:#EB4823;
+  border:1px solid #EB4823;
+}
+.btn-stumbleupon:hover {
+  background:none;
+  color:#EB4823;
+}
+.btn-yahoo {
+  color: #fff;
+  background: #7B0099;
+  border:1px solid #7B0099;
+}
+.btn-yahoo:hover {
+  background: none;
+  color: #7B0099;
+}
+.btn-blogger {
+  color: #fff;
+  background: #fb8f3d;
+  border:1px solid #fb8f3d;
+}
+.btn-blogger:hover {
+  background:none;
+  color: #fb8f3d;
+}
+.btn-soundcloud {
+  color: #fff;
+  background: #ff3a00;
+  border:1px solid #ff3a00;
+}
+.btn-soundcloud:hover {
+  background: none;
+  color: #ff3a00;
+}
+.p-r-0 {
+ padding-right: 0 !important;
+}
+.p-b-0 {
+  padding-bottom: 0 !important;
+}

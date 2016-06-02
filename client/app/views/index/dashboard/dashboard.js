@@ -20,7 +20,8 @@ angular.module('dealScanCrmApp')
         authenticate: true,
         templateUrl: 'app/views/index/dashboard/dashboard.html',
         controller: 'DashboardCtrl as dashboard',
-        data: {pageTitle: 'Dashboard'},
+        data: {pageTitle: 'Dashboard', navbarColor: 'white-bg'},
+        // specialClass:'fixed-nav fixed-nav-basic fixed-sidebar'
         resolve: {
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
