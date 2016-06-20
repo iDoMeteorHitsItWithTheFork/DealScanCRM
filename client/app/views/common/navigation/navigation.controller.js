@@ -33,7 +33,7 @@ angular.module('dealScanCrmApp')
         {title: 'Dashboard', alias: 'D', state: 'index.dashboard', icon: 'fa fa-th-large'},
         {title: 'Leads', alias: 'L', state: 'index.bdc', icon: 'fa fa-th-list'},
         {title: 'Customers', alias: 'C', state: 'index.customer', icon: 'fa fa-users'},
-        {title: 'Social Media', alias: 'S', state: 'index.ecampaign', icon: 'fa fa-globe'},
+        {title: 'Social Media', alias: 'S', state: 'index.socialMedia', icon: 'fa fa-globe'},
         {title: 'Tasks', alias: 'T', state: 'index.tasks', icon: 'fa fa-tasks'},
         {title: 'Messages', alias: 'M', state: 'index.mailbox', icon: 'fa fa-envelope'},
       ];
@@ -45,7 +45,7 @@ angular.module('dealScanCrmApp')
             {title: 'Dashboard', alias: 'd', state: 'home.dashboard', icon: ''},
             {title: 'Customers', alias: 'c', state: 'home.customer', icon: ''},
             {title: 'Tasks', alias: 't', state: 'home.tasks', icon: ''},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign', icon: ''},
+            {title: 'Social Media', alias: 'e', state: 'home.socialMedia', icon: ''},
           ];
           break;
         case appConfig.userRoles[1]:
@@ -55,7 +55,7 @@ angular.module('dealScanCrmApp')
             {title: 'Dashboard', alias: 'd', state: 'home.bdc', icon: ''},
             {title: 'Customers', alias: 'c', state: 'home.customer', icon: ''},
             {title: 'Tasks', alias: 't', state: 'home.tasks', icon: ''},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign', icon: ''},
+            {title: 'Social Media', alias: 'e', state: 'home.socialMedia', icon: ''},
           ];
           break;
         case appConfig.userRoles[5]:
@@ -66,7 +66,7 @@ angular.module('dealScanCrmApp')
             {title: 'Sales Dashboard', alias: 'd', state: 'home.dashboard', icon: ''},
             {title: 'Customers', alias: 'c', state: 'home.customer', icon: ''},
             {title: 'Tasks', alias: 't', state: 'home.tasks', icon: ''},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign', icon: ''},
+            {title: 'Social Media', alias: 'e', state: 'home.socialMedia', icon: ''},
           ];
           break;
         default:
@@ -77,7 +77,7 @@ angular.module('dealScanCrmApp')
             {title: 'Lead Management', alias: 'l', state: 'home.bdc', icon: ''},
             {title: 'Customers', alias: 'c', state: 'home.customer', icon: ''},
             {title: 'Tasks', alias: 't', state: 'home.tasks', icon: ''},
-            {title: 'Email Campaign', alias: 'e', state: 'home.ecampaign', icon: ''},
+            {title: 'Social Media', alias: 'e', state: 'home.socialMedia', icon: ''},
           ];
           break;
       }

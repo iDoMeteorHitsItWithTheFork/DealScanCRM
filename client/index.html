@@ -27,6 +27,7 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
   <link rel="stylesheet" href="bower_components/metisMenu/dist/metisMenu.css" />
+  <link rel="stylesheet" href="bower_components/angular-aside/dist/css/angular-aside.css" />
   <!-- endbower -->
 
 
@@ -41,8 +42,8 @@
   <link rel="stylesheet" href="app/app.css">
   <link rel="stylesheet" href="app/views/admin/admin.css">
   <link rel="stylesheet" href="app/views/index/bdc/bdc.css">
-  <link rel="stylesheet" href="app/views/index/customer/profile/customer.css">
   <link rel="stylesheet" href="app/views/index/customer/index/customers.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/customer.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/documents/documents.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/images/images.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/messages/messages.css">
@@ -54,12 +55,14 @@
   <link rel="stylesheet" href="app/views/index/email/email.css">
   <link rel="stylesheet" href="app/views/index/home/home.css">
   <link rel="stylesheet" href="app/views/index/search/search.css">
+  <link rel="stylesheet" href="app/views/index/socialMedia/socialMedia.broadcast.css">
+  <link rel="stylesheet" href="app/views/index/socialMedia/socialMedia.css">
   <link rel="stylesheet" href="app/views/index/team/team.css">
   <link rel="stylesheet" href="app/views/login/login.css">
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
-<body ng-controller="MainCtrl as main"  class="{{$state.current.data.specialClass}}" landing-scrollspy id="page-top">
+<body ng-controller="MainCtrl as main"  class="{{$state.current.data.specialClass}}" landing-scrollspy id="page-top" style="height: 100%; overflow:hidden;">
 
 <!--[if lt IE 7]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -67,7 +70,7 @@
 <![endif]-->
 
 <!-- Add your site or application content here -->
-<div ui-view></div>
+<div ui-view full-scroll></div>
 
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -111,6 +114,7 @@
 <script src="bower_components/metisMenu/dist/metisMenu.js"></script>
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/angular-socket-io/socket.js"></script>
+<script src="bower_components/angular-aside/dist/js/angular-aside.js"></script>
 <!-- endbower -->
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
@@ -130,7 +134,7 @@
 <script src="app/views/admin/admin.module.js"></script>
 <script src="components/auth/auth.module.js"></script>
 <script src="components/util/util.module.js"></script>
-<script src="app/views/index/customer/profile/tabs/overview/overview.controller.js"></script>
+<script src="app/views/index/customer/sideviews/email/email.controller.js"></script>
 <script src="app/dealscan.js"></script>
 <script src="app/views/admin/admin.controller.js"></script>
 <script src="app/app.constant.js"></script>
@@ -158,9 +162,9 @@
 <script src="app/views/index/customer/profile/tabs/note/note.resource.js"></script>
 <script src="app/views/index/customer/profile/tabs/note/note.service.js"></script>
 <script src="app/views/index/customer/profile/tabs/note/updateNote.controller.js"></script>
-<script src="app/app.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/overview/overview.controller.js"></script>
 <script src="app/views/index/customer/profile/tabs/task/task.controller.js"></script>
-<script src="app/views/index/customer/sideviews/email/email.controller.js"></script>
+<script src="app/app.controller.js"></script>
 <script src="app/views/index/customer/sideviews/text/text.controller.js"></script>
 <script src="app/views/index/dashboard/addLead.controller.js"></script>
 <script src="app/views/index/dashboard/dashboard.controller.js"></script>
@@ -173,6 +177,9 @@
 <script src="app/views/index/search/search.controller.js"></script>
 <script src="app/views/index/search/search.js"></script>
 <script src="app/views/index/settings/settings.controller.js"></script>
+<script src="app/views/index/socialMedia/socialMedia.broadcast.controller.js"></script>
+<script src="app/views/index/socialMedia/socialMedia.controller.js"></script>
+<script src="app/views/index/socialMedia/socialMedia.js"></script>
 <script src="app/views/index/task/addTask.controller.js"></script>
 <script src="app/views/index/team/createTeam.controller.js"></script>
 <script src="app/views/index/team/team.controller.js"></script>

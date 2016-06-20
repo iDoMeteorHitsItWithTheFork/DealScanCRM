@@ -86,8 +86,14 @@
           <div class="ibox-content profile-content p-b-0">
             <ul class="list-unstyled m-t-xs">
               <li class="address-li">
-                <span class="fa fa-home m-r-sm"></span>
-                <span class="m-r-sm" >{{customer.info.address}}</span>
+                <div class="row">
+                  <div class="col-lg-1">
+                    <span class="fa fa-home m-r-sm"></span>
+                  </div>
+                  <div class="col-lg-11 p-l-2">
+                    <span>{{customer.info.address}}</span>
+                  </div>
+                </div>
               </li>
               <li class="address-li">
                 <span class="fa fa-phone m-r-sm"></span>
@@ -197,31 +203,6 @@
 
             </div>
 
-
-            <!--<div class="row m-t-lg">-->
-              <!--<div class="col-md-4">-->
-                <!--<bar-chart data="main.BarChart3.data" options="main.BarChart3.options"></line-bar>-->
-                  <!--<h5><strong>169</strong> Posts</h5>-->
-              <!--</div>-->
-              <!--<div class="col-md-4">-->
-                <!--<line-chart data="main.LineChart.data" options="main.LineChart.options"></line-bar>-->
-                  <!--<h5><strong>28</strong> Following</h5>-->
-              <!--</div>-->
-              <!--<div class="col-md-4">-->
-                <!--<bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></line-bar>-->
-                  <!--<h5><strong>240</strong> Followers</h5>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<div class="user-button">-->
-              <!--<div class="row">-->
-                <!--<div class="col-md-6">-->
-                  <!--<button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-envelope"></i> Send Message</button>-->
-                <!--</div>-->
-                <!--<div class="col-md-6">-->
-                  <!--<button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
           </div>
         </div>
         <!-- ./section content -->
@@ -235,17 +216,120 @@
       <div class="ibox float-e-margins">
         <div class="ibox-title">
           <h5>Activites</h5>
-
-          <div ibox-tools></div>
         </div>
+
         <div class="ibox-content">
-
           <div>
+            <div class="deals-activity">
+              <div class="deal">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="media">
+                      <div class="media-left pull-left vehicle-of-interest">
+                        <a href="#">
+                          <img class="media-object" src="http://67.media.tumblr.com/793ddbefed69c85bf663ca653b3727cd/tumblr_n57kfgYQz91sbyy0vo1_500.png" alt="Generic placeholder image">
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading f-s-13 m-t-0">2017 Ford F-150 Raptor &nbsp;&nbsp;<span class="badge badge-primary source-badge-align">Walk In</span></h4>
+                        <ul class="unstyled p-l-0 p-t-5">
+                          <li>
+                            <div class="feed-element">
+                              <a href="" class="pull-left">
+                                <img alt="image" class="img-circle" src="assets/images/a1.jpg">
+                              </a>
+                              <div class="media-body ">
+                                <small class="pull-right text-navy">1m ago</small>
+                                <strong>John Smith</strong> sold this truck to <strong>Aaron Ferguson</strong>.<br>
+                                Aaron traded 2 cars in for this deal, a <a>2015 Ford Mustang</a>, and a <a>2011 Honda Civic SE</a>.<br/>
+                                <small class="text-muted">Thrusday 4:21 pm - 12.06.2016</small><br>
+                                <div class="actions">
+                                  <a class="btn btn-xs btn-warning" tooltip-placement="top" uib-tooltip="Email John"><i class="fa fa-envelope-o"></i> Email </a>
+                                  <a class="btn btn-xs btn-primary" tooltip-placement="top" uib-tooltip="Text John"><i class="fa fa-comments-o"></i> Chat</a>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="m-b-25">
+                          <div>
+                            <span>Deal Progress</span>
+                            <small class="pull-right">60% (Documents Required)</small>
+                          </div>
+                          <div class="progress progress-mini">
+                            <div style="width: 60%;" class="progress-bar"></div>
+                          </div>
+                        </div>
+                        <div class="media">
+                          <a class="media-left pull-left" href="#">
+                            <img class="media-object deal-poster" src="http://66.media.tumblr.com/f6d6f342afcc8fc6aa6318768a2f4942/tumblr_n57kfgYQz91sbyy0vo2_500.png" alt="Generic placeholder image">
+                          </a>
+                          <div class="media-body">
+                            <h4 class="media-heading">Financial Sheet</h4>
+                            <table class="table table-condensed no-margin-bottom m-t-10">
+                              <tbody>
+                                <tr>
+                                  <td>Sale Price</td>
+                                  <td class="success text-right">
+                                    <strong>$50,0000</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Rebate</td>
+                                  <td class="success text-right">
+                                    <strong>$2,500</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Trade Allowance</td>
+                                  <td class="success text-right">
+                                    <strong>$15,000</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Trade Payoff</td>
+                                  <td class="success text-right">
+                                    <strong>$12,000</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Amount Financed</td>
+                                  <td class="success text-right">
+                                    <strong>$40,000</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Interest Rate</td>
+                                  <td class="success text-right">
+                                    <strong>7.5%</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Terms</td>
+                                  <td class="success text-right">
+                                    <strong>60</strong>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Payment</td>
+                                  <td class="success text-right">
+                                    <strong>$450</strong>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="feed-activity-list">
-
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/a1.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/a1.jpg">
                 </a>
 
                 <div class="media-body ">
@@ -258,10 +342,9 @@
                   </div>
                 </div>
               </div>
-
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/profile.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/profile.jpg">
                 </a>
 
                 <div class="media-body ">
@@ -271,12 +354,10 @@
 
                 </div>
               </div>
-
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/a2.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/a2.jpg">
                 </a>
-
                 <div class="media-body ">
                   <small class="pull-right">2h ago</small>
                   <strong>Mark Johnson</strong> posted message on <strong>Monica Smith</strong> site. <br>
@@ -294,24 +375,21 @@
               </div>
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/a3.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/a3.jpg">
                 </a>
-
                 <div class="media-body ">
                   <small class="pull-right">2h ago</small>
                   <strong>Janet Rosowski</strong> add 1 photo on <strong>Monica Smith</strong>. <br>
                   <small class="text-muted">2 days ago at 8:30am</small>
                   <div class="photos">
-                    <a target="_blank" href="http://24.media.tumblr.com/20a9c501846f50c1271210639987000f/tumblr_n4vje69pJm1st5lhmo1_1280.jpg"> <img alt="image" class="feed-photo"
-                                                                                                                                                    src="img/p1.jpg"></a>
-                    <a target="_blank" href="http://37.media.tumblr.com/9afe602b3e624aff6681b0b51f5a062b/tumblr_n4ef69szs71st5lhmo1_1280.jpg"> <img alt="image" class="feed-photo"
-                                                                                                                                                    src="img/p3.jpg"></a>
+                    <a target="_blank" href="http://24.media.tumblr.com/20a9c501846f50c1271210639987000f/tumblr_n4vje69pJm1st5lhmo1_1280.jpg"> <img alt="image" class="feed-photo" src="assets/images/p1.jpg"></a>
+                    <a target="_blank" href="http://37.media.tumblr.com/9afe602b3e624aff6681b0b51f5a062b/tumblr_n4ef69szs71st5lhmo1_1280.jpg"> <img alt="image" class="feed-photo" src="assets/images/p3.jpg"></a>
                   </div>
                 </div>
               </div>
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/a4.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/a4.jpg">
                 </a>
 
                 <div class="media-body ">
@@ -326,7 +404,7 @@
               </div>
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/a5.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/a5.jpg">
                 </a>
 
                 <div class="media-body ">
@@ -344,7 +422,7 @@
               </div>
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/profile.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/profile.jpg">
                 </a>
 
                 <div class="media-body ">
@@ -355,7 +433,7 @@
               </div>
               <div class="feed-element">
                 <a href="" class="pull-left">
-                  <img alt="image" class="img-circle" src="img/a7.jpg">
+                  <img alt="image" class="img-circle" src="assets/images/a7.jpg">
                 </a>
 
                 <div class="media-body ">
