@@ -71,6 +71,15 @@ var Deal = sqldb.Deal;
           provider: 'local',
         },
           {
+            firstName: 'Cary-Lee',
+            lastName: 'Gaskell',
+            email: 'carylgaskell@gmail.com',
+            phone: '5713289692',
+            password: 'Baiser12!',
+            role: 'admin',
+            provider: 'local',
+          },
+          {
             firstName: 'Marcus',
             lastName: 'Finley',
             email: 'finley.marcus@gmail.com',
