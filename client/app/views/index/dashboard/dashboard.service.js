@@ -1,14 +1,12 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-    .factory('Dashboard', function (Auth, User, Util, $q, $filter, $resource) {
+    .factory('Dashboard', function (Auth, User, Util, $q, $filter, $resource, DataSync) {
         // Service logic
         // ...
 
-        $resource('app/views/index/dashboard/customers.json')
-          .query().$promise.then(function(sales){
-            console.log(sales);
-        });
+        var sales = DataSync.processAndSync();
+        console.log(sales);
 
         var _user = Auth.getCurrentUser();
         var _teamMates = {};

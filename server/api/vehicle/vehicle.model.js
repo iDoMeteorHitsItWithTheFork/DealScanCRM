@@ -24,21 +24,23 @@ export default function(sequelize, DataTypes) {
     },
     invoice: {
       type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true, //false
+      defaultValue: 0,
       validate: {
         notEmpty: true
       }
     },
     retailValue: {
       type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true, //false
+      defaultValue: 0,
       validate: {
         notEmpty: true
       }
     },
     make: {
       type: DataTypes.STRING(45),
-      allowNull: false,
+      allowNull: false, //false
       validate: {
         notEmpty: true
       }
@@ -63,13 +65,6 @@ export default function(sequelize, DataTypes) {
       defaultValue: 'new',
       allowNull: false,
     },
-    mileage: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
     color: {
       type: DataTypes.STRING(45),
       allowNull: false,
@@ -79,24 +74,15 @@ export default function(sequelize, DataTypes) {
     },
     bodyStyle: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true,
     },
     trimLevel: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate:{
-        notEmpty: true
-      }
+      allowNull: true
     },
     package: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true
     }
   }, {
       /**
@@ -131,5 +117,68 @@ export default function(sequelize, DataTypes) {
         }
       },
 
+      classMethods: {
+         dscUpsert: function(data){
+           var searchOptions = {};
+           //Vehicle Identifiers
+           if (data.VIN) searchOptions.VIN = data.VIN;
+           if (data.StockNumber) searchOptions.stockNumber = data.StockNumber;
+
+           //vehicle values to upsert
+           console.log(data);
+           var upsertValues = {
+             VIN: data.VIN,
+             stockNumber: data.StockNumber,
+             invoice: data.Invoice,
+             retailValue: data.Retail,
+             make: data.Make,
+             model: data.Model,
+             year: data.Year,
+             state: (data.New || data.New == 'true') ? 'new' : 'used', //new or used
+             mileage: data,
+             color: data.Color,
+             bodyStyle: data.BodyStyle,
+             trimLevel: data.TrimLevel,
+             package: data.Package,
+             createdAt: data.DateCreated
+           };
+
+
+           //find existing vehicle or create
+           return this.findOrCreate({
+             where: searchOptions,
+             defaults: upsertValues
+           }).spread(function (vehicle, created) {
+             if (!created) {
+               return vehicle.update(upsertValues,
+                 {
+                   fields: [
+                     'VIN',
+                     'stockNumber',
+                     'invoice',
+                     'retailValue',
+                     'make',
+                     'model',
+                     'year',
+                     'state', //new or used
+                     'mileage',
+                     'color',
+                     'bodyStyle',
+                     'trimLevel',
+                     'package'
+                   ]
+                 })
+                 .then(function () {
+                   return vehicle;
+                 })
+             }
+             else return vehicle;
+           }).catch(function (err) {
+             console.log(err);
+             return err;
+           });
+
+         }
+      }
   });
 }

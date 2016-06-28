@@ -15,4 +15,5 @@ router.get('/:id/metrics', auth.isAuthenticated(), controller.getMetrics);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 
+
 export default router;

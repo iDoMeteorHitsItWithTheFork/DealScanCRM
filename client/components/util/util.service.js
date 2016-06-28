@@ -62,7 +62,7 @@
        * @param  {String|String[]}  [origins] - additional origins to test against
        * @return {String}                    - trimmed string
        */
-        slimTrim(string) {
+      slimTrim(string) {
         return string.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ") || string;
       },
 
@@ -329,8 +329,8 @@
             break;
         }
         return n;
-      }
-
+      },
+      
     }
 
     return Util;

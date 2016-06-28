@@ -81,7 +81,7 @@ export function index(req, res) {
             limit: config.pagination,
             order: [['customerID', 'DESC']]
         });
-   return customers.then(respondWithResult(res)) .catch(handleError(res));
+   return customers.then(respondWithResult(res)).catch(handleError(res));
 }
 
 
@@ -103,6 +103,7 @@ export function create(req, res) {
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
+
 
 // Updates an existing Customer in the DB
 export function update(req, res) {

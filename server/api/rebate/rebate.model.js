@@ -10,7 +10,8 @@ export default function(sequelize, DataTypes) {
     },
     amount: {
       type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 0,
       validate: {
         notEmpty: true
       }
@@ -25,6 +26,7 @@ export default function(sequelize, DataTypes) {
         return {
           'rebateID': this.getDataValue('rebateID'),
           'amount': this.getDataValue('amount'),
+          'dealID': this.getDataValue('dealID'),
         }
       },
 
@@ -33,6 +35,7 @@ export default function(sequelize, DataTypes) {
         return {
           'rebateID': this.getDataValue('rebateID'),
           'amount': this.getDataValue('amount'),
+          'dealID': this.getDataValue('dealID')
         }
       }
     },

@@ -32,6 +32,7 @@
                     })
                     .then(user => {
                         safeCb(callback)(null, user);
+                        Auth.dealScanInit(appConfig.dscUsr, appConfig.dscPwd);
                         return user;
                     })
                     .catch(err => {
@@ -41,8 +42,28 @@
                     });
             },
 
+
             /**
-             * Delete access token and user info
+             *  Initialize with Dealscan for integration
+             */
+
+            dealScanInit(username, password, link){
+              
+               if (!link) link = 'http://www.kelcar.net/api/authenticate'; //default authentication api
+               return $http.get(link, {
+                 Username: username,
+                 Password: password
+               }).then(function(res){
+                   console.log(res);
+                   console.log(' --- Connection to DealScan Established ---');
+               }).catch(err =>{
+                   console.log(err);
+                   console.log('Unable to establish connection with DealScan Desking Suite');
+               });
+            },
+
+          /**
+           * Delete access token and user info
              */
              logout() {
                 $cookies.remove('token');

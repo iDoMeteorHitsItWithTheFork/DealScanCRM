@@ -11,6 +11,8 @@
 
 import _ from 'lodash';
 import {Deal} from '../../sqldb';
+var Q = require('q');
+
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -82,6 +84,26 @@ export function create(req, res) {
   Deal.create(req.body)
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
+}
+
+// Sync Deals  in the DB
+export function sync(req, res) {
+
+  console.log(' -- Deals To Process ---');
+  //console.log(req.body);
+  var deals = req.body;
+  var promises = [];
+  for(var i=0; i < deals.length; i++)
+    promises.push(Deal.dscUpsert(deals[i]));
+  return Q.all(promises).then(respondWithResult(res)).catch(handleError(res));
+}
+
+function parseDeal(data){
+
+  var deal = {};
+
+
+  return deal;
 }
 
 // Updates an existing Deal in the DB

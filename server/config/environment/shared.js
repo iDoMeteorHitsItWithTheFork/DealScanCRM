@@ -6,6 +6,8 @@ exports = module.exports = {
   pagination: 1000,
   paginationMaxSize: 5,
   paginationItemsPerPage: 20,
+  dscUsr: 'dscrm_',
+  dscPwd: 'Baiser12!',
   getDisplayRole: function(role){
       if (!role) return;
       switch(role){

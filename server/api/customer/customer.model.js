@@ -10,7 +10,7 @@ export default function (sequelize, DataTypes) {
     },
     driverLicenseID: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     firstName: {
       type: DataTypes.STRING(45),
@@ -27,7 +27,7 @@ export default function (sequelize, DataTypes) {
     },
     phone: {
       type: DataTypes.STRING(30),
-      allowNull: false,
+      allowNull: true,
       validate: {
         isNumeric: {
           msg: 'Phone number must be numeric'
@@ -36,10 +36,11 @@ export default function (sequelize, DataTypes) {
     },
     dateOfBirth: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING(45),
+      allowNull: true,
       validate: {
         isEmail: true
       }
@@ -66,7 +67,7 @@ export default function (sequelize, DataTypes) {
     },
     source: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: 'walkIn'
     }
   }, {
@@ -76,8 +77,9 @@ export default function (sequelize, DataTypes) {
     getterMethods: {
       // Public profile information
       profile: function () {
-        var middleInitial = this.getDataValue('middleInitial');
+        var middleInitial = this.getDataValue('middleInitial') ? this.getDataValue('middleInitial') : '';
         if (middleInitial.length > 0) middleInitial += '.';
+
         return {
           'customerID': this.getDataValue('customerID'),
           'driverLicenseID': this.getDataValue('driverLicenceID'),
@@ -108,7 +110,75 @@ export default function (sequelize, DataTypes) {
       }
     },
 
-    instanceMethods: {}
+    classMethods : {
+
+      dscUpsert: function(data){
+
+        var searchOptions = {};
+        //Customer Identifiers
+        if (data.FirstName) searchOptions.firstName = data.FirstName;
+        if (data.LastName) searchOptions.lastName = data.LastName;
+        if (data.MiddleInitial) searchOptions.middleInitial = data.MiddleInitial;
+        if (data.PhoneNumber) searchOptions.phone = data.PhoneNumber;
+        if (data.EmailAddress) searchOptions.email = data.EmailAddress;
+
+
+        //console.log(searchOptions);
+
+        //customer values to upsert
+        var upsertValues = {
+          driverLicenseID: data.DriversLicenseNo,
+          firstName: data.FirstName,
+          middleInitial: data.MiddleInitial,
+          lastName: data.LastName,
+          phone:data.PhoneNumber,
+          dateOfBirth: data.Birthday,
+          email:data.EmailAddress,
+          streetAddress:data.AddressLine1 + '' + ((data.AddressLine2 !== null ) ? data.AddressLine2 : '') ,
+          city:data.City,
+          state:data.StateName,
+          country: data.Country,
+          postalCode:data.PostalCode,
+          createdAt: data.DateCreated
+        };
+
+        //find existing customer or create
+        return this.findOrCreate({
+          where: searchOptions,
+          defaults: upsertValues
+        }).spread(function(customer, created){
+          if (!created){
+            //console.log(' *** I am updated the customer data ****');
+            return customer.update(upsertValues,
+              { fields: [
+                'driverLicenseID',
+                'firstName',
+                'middleInitial',
+                'lastName',
+                'phone',
+                'dateOfBirth',
+                'email',
+                'streetAddress',
+                'city',
+                'state',
+                'country',
+                'postalCode',
+              ] })
+              .then(function(customer){
+                return customer;
+              })
+          } else return customer;
+        }).catch(function(err){
+            console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);
+            console.log(err);
+            return err;
+        });
+      }
+    },
+
+    instanceMethods: {
+
+    }
 
   });
 

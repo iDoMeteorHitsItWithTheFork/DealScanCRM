@@ -9,7 +9,6 @@ var validatePresenceOf = function (value) {
 
 module.exports = function (sequelize, DataTypes) {
     var User = sequelize.define('User', {
-
         userID: {
             type: DataTypes.BIGINT,
             allowNull: false,
@@ -257,6 +256,9 @@ module.exports = function (sequelize, DataTypes) {
                     fn(null);
                 }
             }
+        },
+        classMethods: {
+
         }
     });
 

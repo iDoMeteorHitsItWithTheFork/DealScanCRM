@@ -6,11 +6,11 @@ module.exports = {
 
   // Sequelize connection opions
   sequelize: {
-    database: 'ALVDealScanCRM',
-    username: 'ALVDealScanCRM',
+    database: 'DealScanCRM',
+    username: 'DealScanCRM',
     password: 'Baiser12!',
     options: {
-      host:'ALVDealScanCRM.db.3266541.hostedresource.com', //
+      host:'DealScanCRM.db.3266541.hostedresource.com', //DealScanCRM.db.3266541.hostedresource.com
       dialect: 'mysql',
       pool: {
           max: 5,

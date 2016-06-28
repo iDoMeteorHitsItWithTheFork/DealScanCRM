@@ -17,21 +17,24 @@ export default function(sequelize, DataTypes) {
     },
     actualCashValue: {
       type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 0,
       validate: {
         notEmpty: true
       }
     },
     payOffAmount: {
       type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 0,
       validate: {
         notEmpty: true
       }
     },
     tradeAllowance: {
       type: DataTypes.DOUBLE,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 0,
       validate: {
         notEmpty: true
       }
@@ -57,13 +60,6 @@ export default function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    mileage: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
     color: {
       type: DataTypes.STRING(45),
       allowNull: false,
@@ -73,7 +69,7 @@ export default function(sequelize, DataTypes) {
     },
     bodyStyle: {
       type: DataTypes.STRING(45),
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true
       }
@@ -113,5 +109,67 @@ export default function(sequelize, DataTypes) {
         }
       }
     },
+
+    classMethods: {
+      dscUpsert:function(data){
+
+        // var searchOptions = {};
+        // //Vehicle Identifiers
+        // if (data.VIN) searchOptions.VIN = data.VIN;
+        //
+        // //vehicle values to upsert
+        // console.log(data);
+        // var upsertValues = {
+        //   VIN: data.VehicleUpdate.VIN,
+        //   actualCashValue:data.ActualCashValue,
+        //   payOffAmount: data.BalanceOwed,
+        //   tradeAllowance: '',
+        //   make: '',
+        //   model: '',
+        //   year: '',
+        //   color: '',
+        //   bodyStyle: '',
+        //   createdAt: '',
+        // };
+        //
+        //
+        // //find existing vehicle or create
+        // return this.findOrCreate({
+        //   where: searchOptions,
+        //   defaults: upsertValues
+        // }).spread(function (vehicle, created) {
+        //   if (!created) {
+        //     return vehicle.update(upsertValues,
+        //       {
+        //         fields: [
+        //           'VIN',
+        //           'stockNumber',
+        //           'invoice',
+        //           'retailValue',
+        //           'make',
+        //           'model',
+        //           'year',
+        //           'state', //new or used
+        //           'mileage',
+        //           'color',
+        //           'bodyStyle',
+        //           'trimLevel',
+        //           'package'
+        //         ]
+        //       })
+        //       .then(function () {
+        //         return vehicle;
+        //       })
+        //   }
+        //   else return vehicle;
+        // }).catch(function (err) {
+        //   console.log(err);
+        //   return err;
+        // });
+
+      }
+
+    }
+
   });
 }

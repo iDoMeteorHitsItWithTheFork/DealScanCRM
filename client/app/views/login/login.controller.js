@@ -44,7 +44,7 @@ angular.module('dealScanCrmApp')
       if (form.$valid) {
         _landing.Auth.login({
           email: _landing.user.email,
-          password: _landing.user.password
+          password: _landing.user.password,
         })
           .then(() => {
             console.log('login successfull');
