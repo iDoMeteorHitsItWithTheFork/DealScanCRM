@@ -501,6 +501,17 @@ function landingScrollspy(){
   }
 }
 
+var addEvent = function(object, type, callback) {
+  if (object == null || typeof(object) == 'undefined') return;
+  if (object.addEventListener) {
+    object.addEventListener(type, callback, false);
+  } else if (object.attachEvent) {
+    object.attachEvent("on" + type, callback);
+  } else {
+    object["on"+type] = callback;
+  }
+};
+
 /**
  * fitHeight - Directive for set height fit to window height
  */
@@ -510,6 +521,32 @@ function fitHeight(){
     link: function(scope, element) {
       element.css("height", $(window).height() + "px");
       element.css("min-height", $(window).height() + "px");
+
+      addEvent(window, "resize", function(event) {
+        element.css("height", $(window).height() + "px");
+        element.css("min-height", $(window).height() + "px");
+      });
+
+    }
+  };
+}
+
+/**
+ * mapHeight - Directive for set height fit to window height
+ */
+function mapHeight(){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+
+      element.css("height", $(window).height() - 196 + "px");
+      element.css("min-height", $(window).height() - 196 + "px");
+
+      addEvent(window, "resize", function(event) {
+        element.css("height", $(window).height() - 196 + "px");
+        element.css("min-height", $(window).height() - 196 + "px");
+      });
+
     }
   };
 }
@@ -594,6 +631,7 @@ angular
   .directive('clockPicker', clockPicker)
   .directive('landingScrollspy', landingScrollspy)
   .directive('fitHeight', fitHeight)
+  .directive('mapHeight', mapHeight)
   .directive('iboxToolsFullScreen', iboxToolsFullScreen)
   .directive('slimScroll', slimScroll)
   .directive('truncate', truncate)
