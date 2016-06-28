@@ -1,0 +1,244 @@
+.p-t-42 {
+  top:42px;
+  position:relative;
+}
+.p-r-0 {
+ padding-right: 0 !important;
+}
+.p-l-15 {
+  padding-left: 15px !important;
+}
+.p-r-15 {
+  padding-right: 15px !important;
+}
+.p-b-5 {
+  padding-bottom: 5px !important;
+}
+.p-b-14 {
+  padding-bottom:14px !important;
+}
+.m-l-5 {
+  margin-left: 5px;
+}
+.m-l-10 {
+  margin-left: 10px;
+}
+.m-l-15 {
+  margin-left: 15px;
+}
+.m-l-40 {
+  margin-left: 40px;
+}
+.m-l-20 {
+  margin-left: 20px;
+}
+.m-l-ng-10 {
+  margin-left: -10px !important;
+}
+.m-r-ng-10 {
+  margin-right: -10px !important;
+}
+.p-t-5 {
+  padding-top:5px !important;
+}
+.m-l-15 {
+  margin-left:15px;
+}
+.m-l-55 {
+ margin-left: 55px;
+}
+.m-l-61 {
+  margin-left: 61px;
+}
+.m-l-33-pct {
+  margin-left: 33.333333333%;
+}
+.no-border {
+  border: none !important;
+}
+
+.f-sz-22 {
+  font-size: 22px !important;
+}
+
+.width-250 {
+  width: 250px !important;
+}
+.width-350 {
+  width: 350px !important;
+}
+
+
+.social-row {
+  position: relative;
+}
+.social-map {
+  width: 100%;
+  padding: 0 !important;
+  padding-bottom: 38px !important;
+  position: relative;
+}
+
+.social-map > .google-map {
+  width: 100%;
+  height: 100%;
+}
+
+.social-search-options {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1 !important;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.social-search-results,
+.live-monitoring-list {
+  max-height:765px;
+  min-height: 685px;
+  overflow: auto;
+}
+
+.monitoring-details-pane {
+  height: 685px;
+  padding-left: 0px;
+  margin-left: 0px;
+  z-index:1 !important;
+  background: #fff;
+}
+
+
+.live-monitoring-list {
+
+}
+
+.monitoring-items-list {
+  padding: 0;
+}
+
+.monitoring-items-list li:first-child {
+  border-top: 1px solid #d5d5d5;
+}
+.monitoring-items-list li {
+  border-bottom: 1px solid #d5d5d5;
+  padding:15px 25px 15px 15px;
+  margin-left: -10px;
+  margin-right: -15px;
+  cursor: pointer;
+  background: #f6f6f6;
+}
+.monitoring-items-list li:hover,
+.monitoring-items-list li.active {
+  background: #fefefe;
+}
+
+
+
+
+
+
+input[type="checkbox"].dataSource {
+  display:none !important;
+}
+
+/* Checkbox Icons */
+.dataSource > label {
+  position:relative;
+  padding-left:30px;
+  font-size:30px;
+  cursor:pointer;
+  color:#fff;
+  padding:17px 28px 0 0;
+}
+
+.dataSource.label:before {
+  content:'\f1db'
+}
+label:after {
+  content:'\f111';
+  width:25px;
+  overflow:hidden;
+  font-size:27px;
+  top:18px;
+  left:-39px;
+  color:#6CFF4C;
+  -webkit-animation:bounceout .4s;
+  -webkit-animation-iteration-count:1;
+  -webkit-animation-fill-mode:forwards;
+
+  -moz-animation:bounceout .4s;
+  -moz-animation-iteration-count:1;
+  -moz-animation-fill-mode:forwards;
+
+  animation:bounceout .4s;
+  animation-iteration-count:1;
+  animation-fill-mode:forwards;
+
+}
+
+@-moz-document url-prefix() {
+  label:after {
+    content:'\f111';
+    width:25px;
+    overflow:hidden;
+    font-size:27px;
+    top:17px !important;
+    left:-39px;
+    color:#6CFF4C;
+    -webkit-animation:bounceout .4s;
+    -webkit-animation-iteration-count:1;
+    -webkit-animation-fill-mode:forwards;
+
+    -moz-animation:bounceout .4s;
+    -moz-animation-iteration-count:1;
+    -moz-animation-fill-mode:forwards;
+
+    animation:bounceout .4s;
+    animation-iteration-count:1;
+    animation-fill-mode:forwards;
+  }
+}
+
+/* Animating the Checkbox Icon */
+input[type="checkbox"].dataSource:checked + label:after {
+  -webkit-animation:bounce .4s;
+  -webkit-animation-iteration-count:1;
+
+  -moz-animation:bounce .4s;
+  -moz-animation-iteration-count:1;
+
+  animation:bounce .4s;
+  animation-iteration-count:1;
+}
+
+/* @Keyframes for Chrome and Safari */
+@-webkit-keyframes bounce {
+  0%  { -webkit-transform:scale(.8); opacity:.8}
+  25% { -webkit-transform:scale(.25); opacity:.25}
+  50% { -webkit-transform:scale(1.4); opacity:1.4}
+  75% { -webkit-transform:scale(.8); opacity:.8}
+  100%{ -webkit-transform:scale(1); opacity:1}
+}
+@keyframes bounce {
+  0%  { transform:scale(.8); opacity:.8}
+  25% { transform:scale(.25); opacity:.25}
+  50% { transform:scale(1.4); opacity:1.4}
+  75% { transform:scale(.8); opacity:.8}
+  100%{ transform:scale(1); opacity:1}
+}
+@-webkit-keyframes bounceout {
+  0%  { -webkit-transform:scale(0)}
+  25% { -webkit-transform:scale(.8)}
+  50% { -webkit-transform:scale(1.4)}
+  75% { -webkit-transform:scale(.25)}
+  100%{ -webkit-transform:scale(0)}
+}
+@keyframes bounceout {
+  0%  { transform:scale(0)}
+  25% { transform:scale(.8)}
+  50% { transform:scale(1.4)}
+  75% { transform:scale(.25)}
+  100%{ transform:scale(0)}
+}
+

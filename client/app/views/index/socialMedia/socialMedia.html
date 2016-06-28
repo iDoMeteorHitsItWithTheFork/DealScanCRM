@@ -1,0 +1,625 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <!-- breadcrumns -->
+  <div class="col-lg-4">
+    <h2>{{sm.currentView.name}}</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a>Social feed</a>
+      </li>
+      <li class="active">
+        <strong class="text-capitalize">{{sm.currentView.id}}</strong>
+      </li>
+    </ol>
+  </div>
+  <!-- /. breadcrumbs -->
+
+  <!-- tabs -->
+  <div class="col-lg-8 p-r-0">
+    <div class="col-lg-4 no-padding">
+
+    </div>
+    <div class="col-lg-8">
+      <div class="col-lg-4 no-margins no-padding text-center">
+        <div class="profile-tab yellow-bg" ng-click="sm.setCurrentView('discover')">
+          <div class="profile-tab-icon m-t-5 m-l-33-pct no-border">
+            <i class="fa fa-search f-sz-22"></i>
+          </div>
+          <small class="p-t-42">Search Social Media</small>
+        </div>
+      </div>
+      <div class="col-lg-4 no-margins no-padding text-center">
+        <div class="profile-tab navy-bg" ng-click="sm.setCurrentView('monitor')">
+          <div class="profile-tab-icon m-t-5 m-l-33-pct no-border">
+            <i class="fa fa-play f-sz-22"></i>
+          </div>
+          <small class="p-t-42">Live Monitoring</small>
+        </div>
+      </div>
+      <div class="col-lg-4 no-margins no-padding text-center">
+        <div class="profile-tab blue-bg no-border-right" ng-click="sm.broadcast()">
+          <div class="profile-tab-icon m-t-5 m-l-33-pct no-border">
+            <i class="fa fa-wifi f-sz-22"></i>
+          </div>
+          <small class="p-t-42">Broadcast Social Media</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./ tabs -->
+</div>
+
+
+<div class="wrapper wrapper-content  animated fadeInRight no-margins no-padding">
+
+  <div class="row social-row">
+
+    <!-- social map -->
+    <div id="map" class="col-lg-12 social-map" fit-height>
+      <div ui-map="sm.map" ui-options="sm.mapOptions"
+           class="google-map"></div>
+    </div>
+    <!-- /.social map -->
+
+    <!-- social discovery -->
+    <div ng-show="sm.currentView.id == 'discover'" class="ibox float-e-margins col-lg-5 social-search-options animated fadeInRight">
+      <div class="ibox-title p-b-14">
+        <div class="row">
+          <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
+            <div class="input-group" style="padding-right: 10px; margin-right:20px;">
+              <input type="text" class="form-control width-250" placeholder="Username">
+              <div class="input-group-addon">
+                  <span uib-dropdown on-toggle="toggled(open)">
+                    <span id="simple-dropdown text-muted" uib-dropdown-toggle>
+                      <i class="fa fa-user">&nbsp;&nbsp;</i>
+                      <i class="fa fa-caret-down pull-right"></i>
+                    </span>
+                    <ul class="dropdown-menu" uib-dropdown-menu >
+                      <li><a href><i class="fa fa-user">&nbsp;&nbsp;</i>Username</a></li>
+                      <li><a href><i class="fa fa-tags">&nbsp;&nbsp;</i>Keywords</a></li>
+                    </ul>
+                  </span>
+              </div>
+            </div>
+            <div class="form-group pull-right">
+              <button class="btn btn-facebook" type="button"><i class="fa fa-facebook"></i></button>
+              <button class="btn btn-twitter" type="button"><i class="fa fa-twitter"></i></button>
+              <button class="btn btn-instagram" type="button"><i class="fa fa-instagram"></i></button>
+              <button class="btn btn-primary m-l-15" type="button">
+                <i class="fa fa-search">&nbsp;&nbsp;</i>Search
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="ibox-content social-search-results" slim-scroll box-height="785">
+
+        <div class="social-feed-box">
+
+          <div class="pull-right social-action">
+            <button class="btn btn-twitter btn-circle">
+              <i class="fa fa-twitter"></i>
+            </button>
+          </div>
+          <div class="social-avatar">
+            <a href="" class="pull-left">
+              <img alt="image" src="assets/images/a6.jpg">
+            </a>
+            <div class="media-body">
+              <a href="#">
+                Andrew Williams
+              </a>
+              <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+            </div>
+          </div>
+          <div class="social-body">
+            <p>
+              Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+              default model text, and a search for 'lorem ipsum' will uncover many web sites still
+              in their infancy. Packages and web page editors now use Lorem Ipsum as their
+              default model text.
+            </p>
+            <p>
+              Lorem Ipsum as their
+              default model text, and a search for 'lorem ipsum' will uncover many web sites still
+              in their infancy. Packages and web page editors now use Lorem Ipsum as their
+              default model text.
+            </p>
+            <img src="assets/images/gallery/11.jpg" class="img-responsive">
+            <div class="btn-group">
+              <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+              <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+              <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+            </div>
+          </div>
+          <div class="social-footer">
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a1.jpg">
+              </a>
+              <div class="media-body">
+                <a href="#">
+                  Andrew Williams
+                </a>
+                Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                <br/>
+                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                <small class="text-muted">12.06.2014</small>
+              </div>
+            </div>
+
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a2.jpg">
+              </a>
+              <div class="media-body">
+                <a href="#">
+                  Andrew Williams
+                </a>
+                Making this the first true generator on the Internet. It uses a dictionary of.
+                <br/>
+                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                <small class="text-muted">10.07.2014</small>
+              </div>
+            </div>
+
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a8.jpg">
+              </a>
+              <div class="media-body">
+                <a href="#">
+                  Andrew Williams
+                </a>
+                Making this the first true generator on the Internet. It uses a dictionary of.
+                <br/>
+                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                <small class="text-muted">10.07.2014</small>
+              </div>
+            </div>
+
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a3.jpg">
+              </a>
+              <div class="media-body">
+                <textarea class="form-control" placeholder="Write comment..."></textarea>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="social-feed-box">
+
+          <div class="pull-right social-action" >
+            <button class="btn btn-facebook btn-circle">
+              <i class="fa fa-facebook"></i>
+            </button>
+          </div>
+          <div class="social-avatar">
+            <a href="" class="pull-left">
+              <img alt="image" src="assets/images/a1.jpg">
+            </a>
+            <div class="media-body">
+              <a href="#">
+                Andrew Williams
+              </a>
+              <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+            </div>
+          </div>
+          <div class="social-body">
+            <p>
+              Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+              default model text, and a search for 'lorem ipsum' will uncover many web sites still
+              in their infancy. Packages and web page editors now use Lorem Ipsum as their
+              default model text.
+            </p>
+
+            <div class="btn-group">
+              <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+              <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+              <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+            </div>
+          </div>
+          <div class="social-footer">
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a1.jpg">
+              </a>
+              <div class="media-body">
+                <a href="#">
+                  Andrew Williams
+                </a>
+                Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                <br/>
+                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                <small class="text-muted">12.06.2014</small>
+              </div>
+            </div>
+
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a2.jpg">
+              </a>
+              <div class="media-body">
+                <a href="#">
+                  Andrew Williams
+                </a>
+                Making this the first true generator on the Internet. It uses a dictionary of.
+                <br/>
+                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                <small class="text-muted">10.07.2014</small>
+              </div>
+            </div>
+
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a3.jpg">
+              </a>
+              <div class="media-body">
+                <textarea class="form-control" placeholder="Write comment..."></textarea>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="social-feed-box">
+
+          <div class="pull-right social-action">
+            <button class="btn btn-instagram btn-circle">
+              <i class="fa fa-instagram"></i>
+            </button>
+          </div>
+          <div class="social-avatar">
+            <a href="" class="pull-left">
+              <img alt="image" src="assets/images/a4.jpg">
+            </a>
+            <div class="media-body">
+              <a href="#">
+                Andrew Williams
+              </a>
+              <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+            </div>
+          </div>
+          <div class="social-body">
+            <p>
+              Packages and web page editors now use Lorem Ipsum as their
+              default model text. Page editors now use Lorem Ipsum as their
+              default model text.
+            </p>
+            <div class="btn-group">
+              <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+              <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+              <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+            </div>
+          </div>
+          <div class="social-footer">
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a8.jpg">
+              </a>
+              <div class="media-body">
+                <a href="#">
+                  Andrew Williams
+                </a>
+                Making this the first true generator on the Internet. It uses a dictionary of.
+                <br/>
+                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                <small class="text-muted">10.07.2014</small>
+              </div>
+            </div>
+            <div class="social-comment">
+              <a href="" class="pull-left">
+                <img alt="image" src="assets/images/a3.jpg">
+              </a>
+              <div class="media-body">
+                <textarea class="form-control" placeholder="Write comment..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./social discovery -->
+
+    <!-- live monitoring -->
+    <div ng-show="sm.currentView.id == 'monitor'" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
+      <div class="ibox-title p-b-14">
+        <div class="row">
+          <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
+            <div class="input-group pull-right" style="padding-right: 10px;">
+              <input class="form-control width-350 m-l-20 " type="text" placeholder="enter keywords or username">
+              <span class="input-group-addon navy-bg cursor-pointer">
+                <i class="fa fa-television">&nbsp;&nbsp;</i>Add To List
+              </span>
+            </div>
+            <div class="form-group pull-left">
+              <button class="btn btn-facebook" type="button"><i class="fa fa-facebook"></i></button>
+              <button class="btn btn-twitter" type="button"><i class="fa fa-twitter"></i></button>
+              <button class="btn btn-instagram" type="button"><i class="fa fa-instagram"></i></button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="ibox-content live-monitoring-list">
+        <div class="row">
+          <!-- monitoring list -->
+          <div class="col-lg-4 no-margins no-padding">
+              <ul class="unstyled monitoring-items-list">
+                  <li class="active">
+                    <strong>#HagerstownFord</strong><br/>
+                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                    <span class="badge badge-info pull-right">50</span>
+                  </li>
+                  <li>
+                    <strong>#FordFocus</strong><br/>
+                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                    <span class="badge badge-warning pull-right">15</span>
+                  </li>
+                  <li>
+                    <strong>#FuckHagerstown</strong><br/>
+                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                    <span class="badge badge-info pull-right">25</span>
+                  </li>
+                  <li>
+                    <strong>#DealScan</strong><br/>
+                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                    <span class="badge badge-info pull-right">20</span>
+                  </li>
+                  <li>
+                    <strong>#HagerstownHotList</strong><br/>
+                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                    <span class="badge badge-warning pull-right">15</span>
+                  </li>
+                  <li>
+                    <strong>#DigitalDealer2016</strong><br/>
+                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                    <span class="badge badge-warning pull-right">35</span>
+                  </li>
+              </ul>
+          </div>
+          <!-- /. monitoring list -->
+          <!-- Monitoring Details Pane -->
+          <div class="col-lg-8 monitoring-details-pane" slim-scroll box-height="685">
+            <div class="social-feed-box">
+
+              <div class="pull-right social-action">
+                <button class="btn btn-twitter btn-circle">
+                  <i class="fa fa-twitter"></i>
+                </button>
+              </div>
+              <div class="social-avatar">
+                <a href="" class="pull-left">
+                  <img alt="image" src="assets/images/a6.jpg">
+                </a>
+                <div class="media-body">
+                  <a href="#">
+                    Andrew Williams
+                  </a>
+                  <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                </div>
+              </div>
+              <div class="social-body">
+                <p>
+                  Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                  default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                  in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                  default model text.
+                </p>
+                <p>
+                  Lorem Ipsum as their
+                  default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                  in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                  default model text.
+                </p>
+                <img src="assets/images/gallery/11.jpg" class="img-responsive">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a1.jpg">
+                  </a>
+                  <div class="media-body">
+                    <a href="#">
+                      Andrew Williams
+                    </a>
+                    Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                    <br/>
+                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                    <small class="text-muted">12.06.2014</small>
+                  </div>
+                </div>
+
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a2.jpg">
+                  </a>
+                  <div class="media-body">
+                    <a href="#">
+                      Andrew Williams
+                    </a>
+                    Making this the first true generator on the Internet. It uses a dictionary of.
+                    <br/>
+                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                    <small class="text-muted">10.07.2014</small>
+                  </div>
+                </div>
+
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a8.jpg">
+                  </a>
+                  <div class="media-body">
+                    <a href="#">
+                      Andrew Williams
+                    </a>
+                    Making this the first true generator on the Internet. It uses a dictionary of.
+                    <br/>
+                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                    <small class="text-muted">10.07.2014</small>
+                  </div>
+                </div>
+
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a3.jpg">
+                  </a>
+                  <div class="media-body">
+                    <textarea class="form-control" placeholder="Write comment..."></textarea>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="social-feed-box">
+
+              <div class="pull-right social-action" >
+                <button class="btn btn-facebook btn-circle">
+                  <i class="fa fa-facebook"></i>
+                </button>
+              </div>
+              <div class="social-avatar">
+                <a href="" class="pull-left">
+                  <img alt="image" src="assets/images/a1.jpg">
+                </a>
+                <div class="media-body">
+                  <a href="#">
+                    Andrew Williams
+                  </a>
+                  <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                </div>
+              </div>
+              <div class="social-body">
+                <p>
+                  Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                  default model text, and a search for 'lorem ipsum' will uncover many web sites still
+                  in their infancy. Packages and web page editors now use Lorem Ipsum as their
+                  default model text.
+                </p>
+
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a1.jpg">
+                  </a>
+                  <div class="media-body">
+                    <a href="#">
+                      Andrew Williams
+                    </a>
+                    Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.
+                    <br/>
+                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                    <small class="text-muted">12.06.2014</small>
+                  </div>
+                </div>
+
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a2.jpg">
+                  </a>
+                  <div class="media-body">
+                    <a href="#">
+                      Andrew Williams
+                    </a>
+                    Making this the first true generator on the Internet. It uses a dictionary of.
+                    <br/>
+                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                    <small class="text-muted">10.07.2014</small>
+                  </div>
+                </div>
+
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a3.jpg">
+                  </a>
+                  <div class="media-body">
+                    <textarea class="form-control" placeholder="Write comment..."></textarea>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="social-feed-box">
+
+              <div class="pull-right social-action">
+                <button class="btn btn-instagram btn-circle">
+                  <i class="fa fa-instagram"></i>
+                </button>
+              </div>
+              <div class="social-avatar">
+                <a href="" class="pull-left">
+                  <img alt="image" src="assets/images/a4.jpg">
+                </a>
+                <div class="media-body">
+                  <a href="#">
+                    Andrew Williams
+                  </a>
+                  <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                </div>
+              </div>
+              <div class="social-body">
+                <p>
+                  Packages and web page editors now use Lorem Ipsum as their
+                  default model text. Page editors now use Lorem Ipsum as their
+                  default model text.
+                </p>
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a8.jpg">
+                  </a>
+                  <div class="media-body">
+                    <a href="#">
+                      Andrew Williams
+                    </a>
+                    Making this the first true generator on the Internet. It uses a dictionary of.
+                    <br/>
+                    <a href="#" class="small"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                    <small class="text-muted">10.07.2014</small>
+                  </div>
+                </div>
+                <div class="social-comment">
+                  <a href="" class="pull-left">
+                    <img alt="image" src="assets/images/a3.jpg">
+                  </a>
+                  <div class="media-body">
+                    <textarea class="form-control" placeholder="Write comment..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ./monitoring Details Pane -->
+        </div>
+      </div>
+    </div>
+    <!-- ./live monitoring -->
+
+  </div>
+
+
+</div>
