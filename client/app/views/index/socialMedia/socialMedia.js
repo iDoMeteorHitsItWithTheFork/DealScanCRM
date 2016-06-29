@@ -4,6 +4,7 @@ angular.module('dealScanCrmApp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('index.socialMedia', {
+        title: 'social_media',
         url: '/socialMedia',
         templateUrl: 'app/views/index/socialMedia/socialMedia.html',
         controller: 'SocialMediaCtrl as sm',

@@ -514,6 +514,23 @@ function fitHeight(){
   };
 }
 
+function pageHeight(){
+  return {
+    restrict: 'AE',
+    scope: {
+      text: "@text"
+    },
+    link: function(scope, element) {
+
+      if (scope.text === 'social_media'){
+        console.log("setting height for social media page...");
+        element.css("height", $(window).height() + "px");
+        element.css("min-height", $(window).height() + "px");
+      }
+    }
+  };
+}
+
 /**
  * truncate - Directive for truncate string
  */
@@ -594,6 +611,7 @@ angular
   .directive('clockPicker', clockPicker)
   .directive('landingScrollspy', landingScrollspy)
   .directive('fitHeight', fitHeight)
+  .directive('pageHeight', pageHeight)
   .directive('iboxToolsFullScreen', iboxToolsFullScreen)
   .directive('slimScroll', slimScroll)
   .directive('truncate', truncate)
