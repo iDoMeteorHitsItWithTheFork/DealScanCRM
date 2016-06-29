@@ -54,14 +54,14 @@
   <div class="row social-row">
 
     <!-- social map -->
-    <div id="map" class="col-lg-12 social-map" fit-height>
+    <div id="map" class="col-lg-12 social-map" fit-map>
       <div ui-map="sm.map" ui-options="sm.mapOptions"
            class="google-map"></div>
     </div>
     <!-- /.social map -->
 
     <!-- social discovery -->
-    <div ng-show="sm.currentView.id == 'discover'" class="ibox float-e-margins col-lg-5 social-search-options animated fadeInRight">
+    <div fit-map ng-show="sm.currentView.id == 'discover'" class="ibox float-e-margins col-lg-5 social-search-options animated fadeInRight">
       <div class="ibox-title p-b-14">
         <div class="row">
           <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
@@ -91,7 +91,7 @@
           </form>
         </div>
       </div>
-      <div class="ibox-content social-search-results" slim-scroll box-height="785">
+      <div class="ibox-content social-search-results" slim-scroll box-height="auto">
 
         <div class="social-feed-box">
 
