@@ -27,7 +27,8 @@ module.exports = function(config) {
       'client/bower_components/metisMenu/dist/metisMenu.js',
       'client/bower_components/lodash/dist/lodash.compat.js',
       'client/bower_components/angular-socket-io/socket.js',
-      'client/bower_components/moment-recur/moment-recur.js',
+      'client/bower_components/angular-aside/dist/js/angular-aside.js',
+      'client/bower_components/angular-easyfb/build/angular-easyfb.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

@@ -18,8 +18,10 @@ angular.module('dealScanCrmApp')
         }
       })
   })
-  .run(function ($rootScope, $state) {
+  .run(function ($rootScope, $state, ezfb) {
     $rootScope.$state = $state;
+
+
     $rootScope.$on('$stateChangeStart', function (event, next, nextParams, current) {
       console.log(' ** going to state --> ['+next.name+'] From state -> ['+current.name+']');
       if (next.name === 'logout' && current && current.name && !current.authenticate) {
@@ -27,11 +29,13 @@ angular.module('dealScanCrmApp')
       }
     });
 
+
     $rootScope.$on('$stateChangeSuccess', function (event, next, nextParams, prev, prevParams) {
       console.log(' --- state change success ---> Current State: '+next.name);
       console.log(next);
       console.log(prev);
     });
+
 
     $rootScope.$on('$stateChangeError', function (event, next, nextParams, prev, prevParams, error) {
       event.preventDefault();
@@ -42,4 +46,12 @@ angular.module('dealScanCrmApp')
       console.log('___FromState___');
       console.log(prev)
     });
+
+
+    //Initialize Facebook Client
+    ezfb.init({
+      //App ID From Facebook App Dashboard
+      appId: '126507794443463'
+    });
+
   });
