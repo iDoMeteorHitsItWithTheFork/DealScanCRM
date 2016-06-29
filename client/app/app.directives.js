@@ -444,7 +444,7 @@ function fullScroll($timeout){
       $timeout(function(){
         element.slimscroll({
           height: '100%',
-          railOpacity: 0.9
+          railOpacity: 0.9,
         });
 
       });
@@ -529,12 +529,31 @@ function fitMap(){
   return {
     restrict: 'A',
     link: function(scope, element) {
+
       element.css("height", $(window).height() - 157 + "px");
       element.css("min-height", $(window).height() - 157 + "px");
+
+      addEvent(window, "resize", function(event) {
+        element.css("height", $(window).height() - 157 + "px");
+        element.css("min-height", $(window).height() - 157 + "px");
+      });
+
     }
   };
 }
-
+function scrollHeight(){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      element.css("height", $(window).height() - 216 + "px");
+      element.css("min-height", $(window).height() - 216 + "px");
+      addEvent(window, "resize", function(event) {
+        element.css("height", $(window).height() - 216 + "px");
+        element.css("min-height", $(window).height() -216 + "px");
+      });
+    }
+  };
+}
 function pageHeight(){
   return {
     restrict: 'AE',
@@ -548,10 +567,12 @@ function pageHeight(){
         element.css("height", $(window).height() + "px");
         element.css("min-height", $(window).height() + "px");
         element.css("overflow", "hidden");
+
         addEvent(window, "resize", function(event) {
           element.css("height", $(window).height() + "px");
           element.css("min-height", $(window).height() + "px");
         });
+        
       }
     }
   };
@@ -637,6 +658,7 @@ angular
   .directive('clockPicker', clockPicker)
   .directive('landingScrollspy', landingScrollspy)
   .directive('fitHeight', fitHeight)
+  .directive('scrollHeight', scrollHeight)
   .directive('pageHeight', pageHeight)
   .directive('fitMap', fitMap)
   .directive('iboxToolsFullScreen', iboxToolsFullScreen)
