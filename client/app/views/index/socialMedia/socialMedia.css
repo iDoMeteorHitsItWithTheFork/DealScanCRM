@@ -5,6 +5,9 @@
 .p-r-0 {
  padding-right: 0 !important;
 }
+.p-l-10 {
+  padding-left: 10px !important;
+}
 .p-l-15 {
   padding-left: 15px !important;
 }
@@ -44,6 +47,12 @@
 .m-l-15 {
   margin-left:15px;
 }
+.m-l-26 {
+  margin-left: 26px;
+}
+.m-l-25 {
+  margin-left: 25px;
+}
 .m-l-55 {
  margin-left: 55px;
 }
@@ -71,8 +80,55 @@
 .width-350 {
   width: 350px !important;
 }
+.fs-15 {
+  font-size: 15px;
+}
+.fb-selected {
+  background-color:#3b5998!important;
+  color: #fff!important;
+  border: 1px solid #3b5998;
+}
 
+.fb-not-selected {
+  background-color:#fff;
+  color: #3b5998!important;
+  border: 1px solid #3b5998;
+}
 
+.circle-selected {
+  background-color:#1ab394!important;
+  color: #fff!important;
+  border: 1px solid #1ab394;
+}
+
+.circle-not-selected {
+  background-color:#fff;
+  color: #1ab394!important;
+  border: 1px solid #1ab394;
+}
+
+.twt-selected {
+  background-color:#00aced!important;
+  color: #fff!important;
+  border: 1px solid #00aced;
+}
+
+.twt-not-selected {
+  background-color:#fff;
+  color: #00aced!important;
+  border: 1px solid #00aced;
+}
+.ig-selected {
+  background-color:#517fa4!important;
+  color: #fff!important;
+  border: 1px solid #517fa4;
+}
+
+.ig-not-selected {
+  background-color:#fff;
+  color: #517fa4!important;
+  border: 1px solid #517fa4;
+}
 .social-row {
   position: relative;
 }
@@ -96,6 +152,7 @@
   margin-left: 0;
   margin-top: 0;
   padding-left: 0 !important;
+  padding-right: 0 !important;
   overflow: hidden;
   bottom: 39px;
   margin-bottom: 0;
