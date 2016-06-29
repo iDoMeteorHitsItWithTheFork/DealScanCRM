@@ -61,7 +61,7 @@
     <!-- /.social map -->
 
     <!-- social discovery -->
-    <div fit-map ng-show="sm.currentView.id == 'discover'" class="ibox float-e-margins col-lg-5 social-search-options animated fadeInRight">
+    <div ng-show="sm.currentView.id == 'discover'" class="ibox float-e-margins col-lg-5 social-search-options animated fadeInRight">
       <div class="ibox-title p-b-14">
         <div class="row">
           <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
@@ -91,8 +91,8 @@
           </form>
         </div>
       </div>
-      <div class="ibox-content social-search-results" slim-scroll box-height="auto">
-
+      <div class="ibox-content social-search-results" style="padding:0">
+        <div slim-scroll style="padding: 15px;">
         <div class="social-feed-box">
 
           <div class="pull-right social-action">
@@ -320,6 +320,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
