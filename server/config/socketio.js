@@ -17,6 +17,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/socialMedia/socialMedia.socket').register(socket);
   require('../api/financing/financing.socket').register(socket);
   require('../api/document/document.socket').register(socket);
   require('../api/documents/documents.socket').register(socket);

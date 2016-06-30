@@ -5,6 +5,9 @@
 .p-r-0 {
  padding-right: 0 !important;
 }
+.p-r-16 {
+  padding-right: 16px;
+}
 .p-l-10 {
   padding-left: 10px !important;
 }
@@ -201,110 +204,4 @@
 
 
 
-
-
-
-/*input[type="checkbox"].dataSource {*/
-  /*display:none !important;*/
-/*}*/
-
-/*!* Checkbox Icons *!*/
-/*.dataSource > label {*/
-  /*position:relative;*/
-  /*padding-left:30px;*/
-  /*font-size:30px;*/
-  /*cursor:pointer;*/
-  /*color:#fff;*/
-  /*padding:17px 28px 0 0;*/
-/*}*/
-
-/*.dataSource.label:before {*/
-  /*content:'\f1db'*/
-/*}*/
-/*label:after {*/
-  /*content:'\f111';*/
-  /*width:25px;*/
-  /*overflow:hidden;*/
-  /*font-size:27px;*/
-  /*top:18px;*/
-  /*left:-39px;*/
-  /*color:#6CFF4C;*/
-  /*-webkit-animation:bounceout .4s;*/
-  /*-webkit-animation-iteration-count:1;*/
-  /*-webkit-animation-fill-mode:forwards;*/
-
-  /*-moz-animation:bounceout .4s;*/
-  /*-moz-animation-iteration-count:1;*/
-  /*-moz-animation-fill-mode:forwards;*/
-
-  /*animation:bounceout .4s;*/
-  /*animation-iteration-count:1;*/
-  /*animation-fill-mode:forwards;*/
-
-/*}*/
-
-/*@-moz-document url-prefix() {*/
-  /*label:after {*/
-    /*content:'\f111';*/
-    /*width:25px;*/
-    /*overflow:hidden;*/
-    /*font-size:27px;*/
-    /*top:17px !important;*/
-    /*left:-39px;*/
-    /*color:#6CFF4C;*/
-    /*-webkit-animation:bounceout .4s;*/
-    /*-webkit-animation-iteration-count:1;*/
-    /*-webkit-animation-fill-mode:forwards;*/
-
-    /*-moz-animation:bounceout .4s;*/
-    /*-moz-animation-iteration-count:1;*/
-    /*-moz-animation-fill-mode:forwards;*/
-
-    /*animation:bounceout .4s;*/
-    /*animation-iteration-count:1;*/
-    /*animation-fill-mode:forwards;*/
-  /*}*/
-/*}*/
-
-/*!* Animating the Checkbox Icon *!*/
-/*input[type="checkbox"].dataSource:checked + label:after {*/
-  /*-webkit-animation:bounce .4s;*/
-  /*-webkit-animation-iteration-count:1;*/
-
-  /*-moz-animation:bounce .4s;*/
-  /*-moz-animation-iteration-count:1;*/
-
-  /*animation:bounce .4s;*/
-  /*animation-iteration-count:1;*/
-/*}*/
-
-/*!* @Keyframes for Chrome and Safari *!*/
-/*@-webkit-keyframes bounce {*/
-  /*0%  { -webkit-transform:scale(.8); opacity:.8}*/
-  /*25% { -webkit-transform:scale(.25); opacity:.25}*/
-  /*50% { -webkit-transform:scale(1.4); opacity:1.4}*/
-  /*75% { -webkit-transform:scale(.8); opacity:.8}*/
-  /*100%{ -webkit-transform:scale(1); opacity:1}*/
-/*}*/
-/*@keyframes bounce {*/
-  /*0%  { transform:scale(.8); opacity:.8}*/
-  /*25% { transform:scale(.25); opacity:.25}*/
-  /*50% { transform:scale(1.4); opacity:1.4}*/
-  /*75% { transform:scale(.8); opacity:.8}*/
-  /*100%{ transform:scale(1); opacity:1}*/
-/*}*/
-/*@-webkit-keyframes bounceout {*/
-  /*0%  { -webkit-transform:scale(0)}*/
-  /*25% { -webkit-transform:scale(.8)}*/
-  /*50% { -webkit-transform:scale(1.4)}*/
-  /*75% { -webkit-transform:scale(.25)}*/
-  /*100%{ -webkit-transform:scale(0)}*/
-/*}*/
-/*@keyframes bounceout {*/
-  /*0%  { transform:scale(0)}*/
-  /*25% { transform:scale(.8)}*/
-  /*50% { transform:scale(1.4)}*/
-  /*75% { transform:scale(.25)}*/
-  /*100%{ transform:scale(0)}*/
-/*}*/
 
