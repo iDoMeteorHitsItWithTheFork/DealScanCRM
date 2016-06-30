@@ -118,7 +118,7 @@ angular.module('dealScanCrmApp')
     //Search Twitter
     _sm.searchTwitter = function(){
 
-         var searchOptions = {term: 'luda'}; //search for luda on twitter
+         var searchOptions = {term: 'luda', location:{ lat: '', lon: '', radius: '', type: ''}}; //search for luda on twitter
          SocialMedia.searchTwitter(searchOptions).then(function(data){
            console.log('\n *** Printing Results ***\n');
            console.log(data);
