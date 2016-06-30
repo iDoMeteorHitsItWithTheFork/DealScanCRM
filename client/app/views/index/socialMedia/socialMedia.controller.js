@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside) {
+  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia) {
 
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
@@ -172,5 +172,25 @@ angular.module('dealScanCrmApp')
         }
       });
     }
+
+
+
+    //Search Twitter
+    _sm.searchTwitter = function(){
+
+         var searchOptions = {term: 'luda', location:{ lat: '', lon: '', radius: '', type: ''}}; //search for luda on twitter
+         SocialMedia.searchTwitter(searchOptions).then(function(data){
+           console.log('\n *** Printing Results ***\n');
+           console.log(data);
+           console.log('\n ************************\n');
+         })
+           .catch(function(err){
+             console.log('\n*** Printing Error ***\n');
+             console.log(err);
+             console.log('****************************');
+         })
+    }
+
+    _sm.searchTwitter();
 
   });

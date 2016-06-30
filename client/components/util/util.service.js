@@ -130,13 +130,35 @@
         ];
       },
 
-      /*** Return the index of the object with proterty value within the array ***/
-
+      /**
+       *  Return the index of the object with proterty value within the array
+       *  */
       indexOfObject(arr, key, value) {
         return arr.map(function (el) {
           return el[key];
         }).indexOf(value);
       },
+
+      /**
+       * Determine if a point is within  a geospacial polygon
+       * */
+      pointInPoly(lat, lng, poly){
+        return poly ? google.maps.geometry.poly.containsLocation(new google.maps.LatLng(lat, lng), poly) : null;
+      },
+
+    /**
+     *  Determines if a point is within a geospacial circle
+     *  */
+    pointInCircle(p1, p2, r) {
+      return (google.maps.geometry.spherical.computeDistanceBetween(p1, p2) <= r);
+    },
+
+    /**
+     * Replace All occurences of 'find' within 'str'
+     */
+    replaceAll(find, replace, str){
+      return str.replace(new RegExp(find, 'g'), replace);
+    },
 
         /**
          * pie charts colors
@@ -324,14 +346,30 @@
             break;
           case 'saturday':
           case 'sat':
-          case 'sa':  
+          case 'sa':
             n = 6;
             break;
         }
         return n;
       },
       
+      searchPath(searchOptions){
+
+        var term = (searchOptions.term && searchOptions.term.trim().length > 0) ? searchOptions.term : null; //search term
+        var location = (searchOptions.location) ? searchOptions.location : null; //location filter
+        var locationBounds = location && searchOptions.bounds ? searchOptions.bounds : null;  //boundary type [circle, polygon]
+
+        var path = null;
+        if (term && location) path = 'TermAndLocation';
+        else {
+          if (term) path = 'Term';
+          else if (location) path = 'Location';
+        }
+        return path;
+      }
+
     }
+    
 
     return Util;
   }
