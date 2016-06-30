@@ -26,6 +26,12 @@ angular.module('dealScanCrmApp')
     }
 
     _sm.sources = {twt: false, ig: true, fb: false};
+    _sm.searchObj = {text: null,
+                    sources: [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
+                              {id: 'ig', name: 'instagram', selected: false, iconStyle: 'margin-left: -2px', buttonStyle:''},
+                              {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
+
+    _sm.missingAvatar = 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png';
 
     _sm.data = [
       {
@@ -55,7 +61,7 @@ angular.module('dealScanCrmApp')
           },
           {
             from: 'Andrew Williams',
-            avatar: 'assets/images/a2.jpg',
+            avatar: null,
             text: 'Internet tend to s a dictionary of over 200 Latin words.',
             created_at: '12.06.2014',
             like_count: 0,
@@ -65,7 +71,7 @@ angular.module('dealScanCrmApp')
       {
         datasource: 'twitter',
         username: 'Andrew Williams',
-        avatar: 'assets/images/a6.jpg',
+        avatar: null,
         text: 'Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Packages and web page editors now use Lorem Ipsum as their default model text.',
         image: null,
         created_at: 'Today 4:21 pm - 12.06.2014',

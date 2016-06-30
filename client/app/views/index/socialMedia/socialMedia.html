@@ -70,20 +70,17 @@
             </div>
 
             <div class="form-group" style="display:inline;">
-              <button class="btn" ng-class="sm.sources.fb ? 'fb-selected' : 'fb-not-selected'" ng-click="sm.sources.fb = !sm.sources.fb" type="button"><i class="fa fa-facebook fs-15"></i></button>
-              <button class="btn" ng-class="sm.sources.twt ? 'twt-selected' : 'twt-not-selected'" ng-click="sm.sources.twt = !sm.sources.twt" type="button" style="width:34px;"><i class="fa fa-twitter fs-15" style="margin-left: -2px;"></i></button>
-              <button class="btn" ng-class="sm.sources.ig ? 'ig-selected' : 'ig-not-selected'" ng-click="sm.sources.ig = !sm.sources.ig" type="button" style="width:34px;"><i class="fa fa-instagram fs-15" style="margin-left: -2px;"></i></button>
-              <button class="btn" ng-class="sm.drawing ? 'circle-selected' : 'circle-not-selected'" ng-click="sm.drawing = !sm.drawing" type="button" style="width:34px; height: 34px;">
+              <button ng-repeat="source in sm.searchObj.sources" class="btn" ng-class="source.selected ? '{{source.id}}-selected' : '{{source.id}}-not-selected'" ng-click="source.selected = !source.selected"  style="width:34px; height: 34px; margin-right:3px; {{source.buttonStyle}}" type="button">
+                <i class="fa fa-{{source.name}} fs-15" style="{{source.iconStyle}}"></i>
+              </button>
+              <button class="btn m-l-0" ng-class="sm.drawing ? 'circle-selected' : 'circle-not-selected'" ng-click="sm.drawing = !sm.drawing" type="button" style="width:34px; height: 34px;">
                 <i class="fa fa-map-marker" style="font-size: 20px; margin-left:-2px"></i>
                 <i class="fa fa-plus" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
               </button>
               <button class="btn btn-primary m-l-5" style="height: 34px;" type="button">
                 <i class="fa fa-search">&nbsp;&nbsp;</i>Search
               </button>
-
-
             </div>
-
           </form>
         </div>
       </div>
@@ -98,7 +95,7 @@
           </div>
           <div class="social-avatar">
             <a href="" class="pull-left">
-              <img alt="image" ng-src="{{::item.avatar}}">
+              <img alt="image" ng-src="{{::item.avatar || sm.missingAvatar}}">
             </a>
             <div class="media-body">
               <a href="#">
@@ -109,18 +106,17 @@
           </div>
           <div class="social-body">
             <p>{{::item.text}}</p>
-            <img ng-if="item.image" ng-src="{{::item.image || 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png'}}" class="img-responsive">
+            <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
             <div class="btn-group">
               <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
               <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
               <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
             </div>
           </div>
-          <div class="social-footer">
-
-            <div class="social-comment" ng-repeat="comment in items.comments">
+          <div ng-if="item.comments.length > 0" class="social-footer">
+            <div class="social-comment" ng-repeat="comment in item.comments">
               <a href="" class="pull-left">
-                <img alt="image" src="{{::comment.avatar || 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png'}}">
+                <img alt="image" src="{{::comment.avatar || sm.missingAvatar}}">
               </a>
               <div class="media-body">
                 <a href="#">
