@@ -444,7 +444,7 @@ function fullScroll($timeout){
       $timeout(function(){
         element.slimscroll({
           height: '100%',
-          railOpacity: 0.9
+          railOpacity: 0.9,
         });
 
       });
@@ -501,6 +501,17 @@ function landingScrollspy(){
   }
 }
 
+var addEvent = function(object, type, callback) {
+  if (object == null || typeof(object) == 'undefined') return;
+  if (object.addEventListener) {
+    object.addEventListener(type, callback, false);
+  } else if (object.attachEvent) {
+    object.attachEvent("on" + type, callback);
+  } else {
+    object["on"+type] = callback;
+  }
+};
+
 /**
  * fitHeight - Directive for set height fit to window height
  */
@@ -510,6 +521,59 @@ function fitHeight(){
     link: function(scope, element) {
       element.css("height", $(window).height() + "px");
       element.css("min-height", $(window).height() + "px");
+    }
+  };
+}
+
+function fitMap(){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+
+      element.css("height", $(window).height() - 157 + "px");
+      element.css("min-height", $(window).height() - 157 + "px");
+
+      addEvent(window, "resize", function(event) {
+        element.css("height", $(window).height() - 157 + "px");
+        element.css("min-height", $(window).height() - 157 + "px");
+      });
+
+    }
+  };
+}
+function scrollHeight(){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      element.css("height", $(window).height() - 216 + "px");
+      element.css("min-height", $(window).height() - 216 + "px");
+      addEvent(window, "resize", function(event) {
+        element.css("height", $(window).height() - 216 + "px");
+        element.css("min-height", $(window).height() -216 + "px");
+      });
+    }
+  };
+}
+function pageHeight(){
+  return {
+    restrict: 'AE',
+    scope: {
+      text: "@text"
+    },
+    link: function(scope, element) {
+
+      if (scope.text === 'social_media'){
+        console.log("setting height for social media page...");
+        element.css("height", $(window).height() + "px");
+        element.css("min-height", $(window).height() + "px");
+        element.css("overflow", "hidden");
+
+        addEvent(window, "resize", function(event) {
+          element.css("height", $(window).height() + "px");
+          element.css("min-height", $(window).height() + "px");
+        });
+        
+      }
     }
   };
 }
@@ -594,6 +658,9 @@ angular
   .directive('clockPicker', clockPicker)
   .directive('landingScrollspy', landingScrollspy)
   .directive('fitHeight', fitHeight)
+  .directive('scrollHeight', scrollHeight)
+  .directive('pageHeight', pageHeight)
+  .directive('fitMap', fitMap)
   .directive('iboxToolsFullScreen', iboxToolsFullScreen)
   .directive('slimScroll', slimScroll)
   .directive('truncate', truncate)

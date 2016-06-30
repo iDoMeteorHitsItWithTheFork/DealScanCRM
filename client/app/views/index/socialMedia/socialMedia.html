@@ -1,6 +1,6 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading p-r-0">
   <!-- breadcrumns -->
-  <div class="col-lg-4">
+  <div class="col-md-4">
     <h2>{{sm.currentView.name}}</h2>
     <ol class="breadcrumb">
       <li>
@@ -14,33 +14,33 @@
   <!-- /. breadcrumbs -->
 
   <!-- tabs -->
-  <div class="col-lg-8 p-r-0">
-    <div class="col-lg-4 no-padding">
+  <div class="col-sm-8 p-r-0">
+    <div class="col-sm-4 no-padding">
 
     </div>
-    <div class="col-lg-8">
-      <div class="col-lg-4 no-margins no-padding text-center">
-        <div class="profile-tab yellow-bg" ng-click="sm.setCurrentView('discover')">
-          <div class="profile-tab-icon m-t-5 m-l-33-pct no-border">
-            <i class="fa fa-search f-sz-22"></i>
-          </div>
-          <small class="p-t-42">Search Social Media</small>
-        </div>
-      </div>
-      <div class="col-lg-4 no-margins no-padding text-center">
-        <div class="profile-tab navy-bg" ng-click="sm.setCurrentView('monitor')">
-          <div class="profile-tab-icon m-t-5 m-l-33-pct no-border">
-            <i class="fa fa-play f-sz-22"></i>
-          </div>
-          <small class="p-t-42">Live Monitoring</small>
-        </div>
-      </div>
-      <div class="col-lg-4 no-margins no-padding text-center">
+    <div class="col-sm-8 no-padding">
+      <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
         <div class="profile-tab blue-bg no-border-right" ng-click="sm.broadcast()">
-          <div class="profile-tab-icon m-t-5 m-l-33-pct no-border">
+          <div class="profile-tab-icon m-t-5 m-l-26 no-border">
             <i class="fa fa-wifi f-sz-22"></i>
           </div>
-          <small class="p-t-42">Broadcast Social Media</small>
+          <small class="p-t-42">BROADCAST</small>
+        </div>
+      </div>
+      <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
+        <div class="profile-tab navy-bg" ng-click="sm.setCurrentView('monitor')">
+          <div class="profile-tab-icon m-t-5 m-l-26 no-border">
+            <i class="fa fa-play f-sz-22"></i>
+          </div>
+          <small class="p-t-42">MONITOR</small>
+        </div>
+      </div>
+      <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
+        <div class="profile-tab yellow-bg" ng-click="sm.setCurrentView('discover')">
+          <div class="profile-tab-icon m-t-5 m-l-25 no-border">
+            <i class="fa fa-search f-sz-22"></i>
+          </div>
+          <small class="p-t-42">SEARCH</small>
         </div>
       </div>
     </div>
@@ -54,45 +54,42 @@
   <div class="row social-row">
 
     <!-- social map -->
-    <div id="map" class="col-lg-12 social-map" fit-height>
+    <div id="map" class="col-lg-12 social-map" fit-map>
       <div ui-map="sm.map" ui-options="sm.mapOptions"
            class="google-map"></div>
     </div>
     <!-- /.social map -->
 
     <!-- social discovery -->
-    <div ng-show="sm.currentView.id == 'discover'" class="ibox float-e-margins col-lg-5 social-search-options animated fadeInRight">
-      <div class="ibox-title p-b-14">
+    <div ng-show="sm.currentView.id == 'discover'" style="min-width:500px" class="ibox float-e-margins col-sm-5 social-search-options animated fadeInRight" id="discover-ibox">
+      <div class="ibox-title p-b-14" id="discover-ibox-sub">
         <div class="row">
-          <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
-            <div class="input-group" style="padding-right: 10px; margin-right:20px;">
-              <input type="text" class="form-control width-220" placeholder="Username">
-              <div class="input-group-addon">
-                  <span uib-dropdown on-toggle="toggled(open)">
-                    <span id="simple-dropdown text-muted" uib-dropdown-toggle>
-                      <i class="fa fa-user">&nbsp;&nbsp;</i>
-                      <i class="fa fa-caret-down pull-right"></i>
-                    </span>
-                    <ul class="dropdown-menu" uib-dropdown-menu >
-                      <li><a href><i class="fa fa-user">&nbsp;&nbsp;</i>Username</a></li>
-                      <li><a href><i class="fa fa-tags">&nbsp;&nbsp;</i>Keywords</a></li>
-                    </ul>
-                  </span>
-              </div>
+          <form class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
+            <div class="input-group col-sm-4 col-md-5 col-lg-5" style="padding-right: 6px; min-width: 229px;">
+              <input type="text" class="form-control " placeholder="Enter keyword or username...">
             </div>
-            <div class="form-group pull-right">
-              <button class="btn btn-facebook" type="button"><i class="fa fa-facebook"></i></button>
-              <button class="btn btn-twitter" type="button"><i class="fa fa-twitter"></i></button>
-              <button class="btn btn-instagram" type="button"><i class="fa fa-instagram"></i></button>
-              <button class="btn btn-primary m-l-15" type="button">
+
+            <div class="form-group" style="display:inline;">
+              <button class="btn" ng-class="sm.sources.fb ? 'fb-selected' : 'fb-not-selected'" ng-click="sm.sources.fb = !sm.sources.fb" type="button"><i class="fa fa-facebook fs-15"></i></button>
+              <button class="btn" ng-class="sm.sources.twt ? 'twt-selected' : 'twt-not-selected'" ng-click="sm.sources.twt = !sm.sources.twt" type="button" style="width:34px;"><i class="fa fa-twitter fs-15" style="margin-left: -2px;"></i></button>
+              <button class="btn" ng-class="sm.sources.ig ? 'ig-selected' : 'ig-not-selected'" ng-click="sm.sources.ig = !sm.sources.ig" type="button" style="width:34px;"><i class="fa fa-instagram fs-15" style="margin-left: -2px;"></i></button>
+              <button class="btn" ng-class="sm.drawing ? 'circle-selected' : 'circle-not-selected'" ng-click="sm.drawing = !sm.drawing" type="button" style="width:34px; height: 34px;">
+                <i class="fa fa-map-marker" style="font-size: 20px; margin-left:-2px"></i>
+                <i class="fa fa-plus" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
+              </button>
+              <button class="btn btn-primary m-l-5" style="height: 34px;" type="button">
                 <i class="fa fa-search">&nbsp;&nbsp;</i>Search
               </button>
+
+
             </div>
+
           </form>
         </div>
       </div>
-      <div class="ibox-content social-search-results" slim-scroll box-height="785">
 
+      <div class="ibox-content" style="  position: absolute; bottom: 0;left:0;right:0;top:75px;padding: 0;">
+        <div full-scroll style="padding:15px;">
         <div class="social-feed-box">
 
           <div class="pull-right social-action">
@@ -320,6 +317,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
