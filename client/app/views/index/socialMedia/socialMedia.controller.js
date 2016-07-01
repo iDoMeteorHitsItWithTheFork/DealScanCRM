@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia) {
+  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, $q) {
 
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
+    _sm.searchResults = {};
 
 
     _sm.views  = [{id:'discover', name:'Social Media Discovery', active: true},
@@ -24,6 +25,17 @@ angular.module('dealScanCrmApp')
              _sm.views[i].active = false;
        }
     }
+
+
+
+
+    _sm.sources = {twt: false, ig: true, fb: false};
+    _sm.searchObj = {text: null,
+      sources: [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
+        {id: 'ig', name: 'instagram', selected: false, iconStyle: 'margin-left: -2px', buttonStyle:''},
+        {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
+
+    _sm.missingAvatar = 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png';
 
 
     /**
@@ -115,22 +127,29 @@ angular.module('dealScanCrmApp')
 
 
 
-    //Search Twitter
-    _sm.searchTwitter = function(){
 
-         var searchOptions = {term: 'luda', location:{ lat: '', lon: '', radius: '', type: ''}}; //search for luda on twitter
+    _sm.searchSocialMedia = function(){
+        if (_sm.searchObj.sources[0].selected){
+            //var _location = {lat: '38.95606601970584', lon: '-77.03687070000001', distance: '4', metrics: 'mi'};
+            // if (polySearch) location.poly = poly;
+           _sm.searchTwitter(_sm.searchObj.text);
+        }
+    }
+
+
+    //Search Twitter
+    _sm.searchTwitter = function(term, location, next){
+
+         var searchOptions = {term: term, location: location, bounds: 'circle'}; //search for luda on twitter
+         //loading indicator
          SocialMedia.searchTwitter(searchOptions).then(function(data){
-           console.log('\n *** Printing Results ***\n');
            console.log(data);
-           console.log('\n ************************\n');
-         })
-           .catch(function(err){
-             console.log('\n*** Printing Error ***\n');
+           _sm.searchResults = data;
+           //loading indicator
+         }).catch(function(err){
              console.log(err);
-             console.log('****************************');
          })
     }
 
-    _sm.searchTwitter();
 
   });

@@ -352,7 +352,7 @@
         }
         return n;
       },
-      
+
       searchPath(searchOptions){
 
         var term = (searchOptions.term && searchOptions.term.trim().length > 0) ? searchOptions.term : null; //search term
@@ -369,7 +369,7 @@
       }
 
     }
-    
+
 
     return Util;
   }

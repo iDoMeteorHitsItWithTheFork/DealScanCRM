@@ -67,16 +67,8 @@ function handleError(res, statusCode) {
 
 //search twitter for username, keywords & filter by location
 export function searchTwitter(req, res){
-  console.log('***** Twitter Search Called ******');
-  console.log('\n*** Params ***\n');
-  console.log(req.params);
-  console.log("\n**************\n")
-  console.log('\n*** Query ***\n');
-  console.log(req.query);
-  console.log('\n*****************\n');
   if (!req.query) return res.status(404).end();
   var params = req.query;
-  // request data
   twitter.get(TWITTER_SEARCH_URL, params)
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
