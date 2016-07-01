@@ -66,9 +66,10 @@
         <div class="row">
           <form class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
             <div class="input-group col-sm-4 col-md-5 col-lg-5" style="padding-right: 6px; min-width: 229px;">
-              <input type="text" class="form-control " placeholder="Enter keyword or username...">
+              <input type="text" class="form-control " placeholder="Enter keyword or username..." ng-model="sm.searchObj.text">
             </div>
-            <div class="form-group" style="display:inline;">
+
+            <div class="form-group pull-right p-r-16" style="display:inline;">
               <button ng-repeat="source in sm.searchObj.sources" class="btn" ng-class="source.selected ? '{{source.id}}-selected' : '{{source.id}}-not-selected'" ng-click="source.selected = !source.selected"  style="width:34px; height: 34px; margin-right:3px; {{source.buttonStyle}}" type="button">
                 <i class="fa fa-{{source.name}} fs-15" style="{{source.iconStyle}}"></i>
               </button>
@@ -76,7 +77,7 @@
                 <i class="fa fa-map-marker" style="font-size: 20px; margin-left:-2px"></i>
                 <i class="fa fa-plus" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
               </button>
-              <button class="btn btn-primary m-l-5" style="height: 34px;" type="button">
+              <button class="btn btn-primary m-l-5" style="height: 34px;" type="button" ng-click="sm.searchSocialMedia();">
                 <i class="fa fa-search">&nbsp;&nbsp;</i>Search
               </button>
             </div>
@@ -86,49 +87,49 @@
 
       <div class="ibox-content" style="  position: absolute; bottom: 0;left:0;right:0;top:75px;padding: 0;">
         <div full-scroll style="padding:15px;">
-        <div class="social-feed-box" ng-repeat="item in sm.data">
-          <div class="pull-right social-action">
-            <button class="btn btn-{{::item.datasource}} btn-circle">
-              <i class="fa fa-{{::item.datasource}}"></i>
-            </button>
-          </div>
-          <div class="social-avatar">
-            <a href="" class="pull-left">
-              <img alt="image" ng-src="{{::item.avatar || sm.missingAvatar}}">
-            </a>
-            <div class="media-body">
-              <a href="#">
-                {{::item.username}}
-              </a>
-              <small class="text-muted">{{::item.created_at}}</small>
+          <div class="social-feed-box" ng-repeat="item in sm.searchResults.data">
+            <div class="pull-right social-action">
+              <button class="btn btn-{{::item.datasource}} btn-circle">
+                <i class="fa fa-{{::item.datasource}}"></i>
+              </button>
             </div>
-          </div>
-          <div class="social-body">
-            <p>{{::item.text}}</p>
-            <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
-            <div class="btn-group">
-              <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
-              <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
-              <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
-            </div>
-          </div>
-          <div ng-if="item.comments.length > 0" class="social-footer">
-            <div class="social-comment" ng-repeat="comment in item.comments">
+            <div class="social-avatar">
               <a href="" class="pull-left">
-                <img alt="image" src="{{::comment.avatar || sm.missingAvatar}}">
+                <img alt="image" ng-src="{{::item.avatar || sm.missingAvatar}}">
               </a>
               <div class="media-body">
                 <a href="#">
-                  {{::comment.from}}
+                  {{::item.username}}
                 </a>
-                {{::comment.text}}
-                <br/>
-                <a href="#" class="small"><i class="fa fa-thumbs-up"></i> {{::comment.like_count}} Like this!</a> -
-                <small class="text-muted">{{::comment.created_at}}</small>
+                <small class="text-muted">{{::item.created_at}}</small>
+              </div>
+            </div>
+            <div class="social-body">
+              <p>{{::item.text}}</p>
+              <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
+              <div class="btn-group">
+                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+              </div>
+            </div>
+            <div ng-if="item.comments.length > 0" class="social-footer">
+              <div class="social-comment" ng-repeat="comment in item.comments">
+                <a href="" class="pull-left">
+                  <img alt="image" src="{{::comment.avatar || sm.missingAvatar}}">
+                </a>
+                <div class="media-body">
+                  <a href="#">
+                    {{::comment.from}}
+                  </a>
+                  {{::comment.text}}
+                  <br/>
+                  <a href="#" class="small"><i class="fa fa-thumbs-up"></i> {{::comment.like_count}} Like this!</a> -
+                  <small class="text-muted">{{::comment.created_at}}</small>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
@@ -157,38 +158,38 @@
         <div class="row">
           <!-- monitoring list -->
           <div class="col-lg-4 no-margins no-padding">
-              <ul class="unstyled monitoring-items-list">
-                  <li class="active">
-                    <strong>#HagerstownFord</strong><br/>
-                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
-                    <span class="badge badge-info pull-right">50</span>
-                  </li>
-                  <li>
-                    <strong>#FordFocus</strong><br/>
-                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
-                    <span class="badge badge-warning pull-right">15</span>
-                  </li>
-                  <li>
-                    <strong>#FuckHagerstown</strong><br/>
-                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
-                    <span class="badge badge-info pull-right">25</span>
-                  </li>
-                  <li>
-                    <strong>#DealScan</strong><br/>
-                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
-                    <span class="badge badge-info pull-right">20</span>
-                  </li>
-                  <li>
-                    <strong>#HagerstownHotList</strong><br/>
-                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
-                    <span class="badge badge-warning pull-right">15</span>
-                  </li>
-                  <li>
-                    <strong>#DigitalDealer2016</strong><br/>
-                    <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
-                    <span class="badge badge-warning pull-right">35</span>
-                  </li>
-              </ul>
+            <ul class="unstyled monitoring-items-list">
+              <li class="active">
+                <strong>#HagerstownFord</strong><br/>
+                <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                <span class="badge badge-info pull-right">50</span>
+              </li>
+              <li>
+                <strong>#FordFocus</strong><br/>
+                <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                <span class="badge badge-warning pull-right">15</span>
+              </li>
+              <li>
+                <strong>#FuckHagerstown</strong><br/>
+                <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                <span class="badge badge-info pull-right">25</span>
+              </li>
+              <li>
+                <strong>#DealScan</strong><br/>
+                <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                <span class="badge badge-info pull-right">20</span>
+              </li>
+              <li>
+                <strong>#HagerstownHotList</strong><br/>
+                <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                <span class="badge badge-warning pull-right">15</span>
+              </li>
+              <li>
+                <strong>#DigitalDealer2016</strong><br/>
+                <small><a><i class="fa fa-pause text-warning">&nbsp;&nbsp;</i>Pause</a> | <a> <i class="fa fa-stop text-danger">&nbsp;&nbsp;</i>Stop</a></small>
+                <span class="badge badge-warning pull-right">35</span>
+              </li>
+            </ul>
           </div>
           <!-- /. monitoring list -->
           <!-- Monitoring Details Pane -->

@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, NgMap) {
-    $("#page-wrapper").css("overflow-x", "hidden");
+  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, $q) {
+          $("#page-wrapper").css("overflow-x", "hidden");
+
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
-
-
+    _sm.searchResults = {};
+    
     _sm.views  = [{id:'discover', name:'Social Media Discovery', active: true},
                   {id: 'monitor', name: 'Social Media Monitoring', active: false}];
 
@@ -85,6 +86,17 @@ angular.module('dealScanCrmApp')
         comments: []
       }
     ]
+
+
+
+    _sm.sources = {twt: false, ig: true, fb: false};
+    _sm.searchObj = {text: null,
+      sources: [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
+        {id: 'ig', name: 'instagram', selected: false, iconStyle: 'margin-left: -2px', buttonStyle:''},
+        {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
+
+    _sm.missingAvatar = 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png';
+
 
     /**
      * StatsMap & Options
@@ -180,22 +192,23 @@ angular.module('dealScanCrmApp')
 
 
 
-    //Search Twitter
-    _sm.searchTwitter = function(){
-
-         var searchOptions = {term: 'luda', location:{ lat: '', lon: '', radius: '', type: ''}}; //search for luda on twitter
-         SocialMedia.searchTwitter(searchOptions).then(function(data){
-           console.log('\n *** Printing Results ***\n');
-           console.log(data);
-           console.log('\n ************************\n');
-         })
-           .catch(function(err){
-             console.log('\n*** Printing Error ***\n');
-             console.log(err);
-             console.log('****************************');
-         })
+    //search media
+    _sm.searchSocialMedia = function(bounds){
+        var searchOptions = {};
+        var location = null;
+        //location = {lat: '38.95606601970584', lon: '-77.03687070000001', distance: '4', metrics: 'mi'};
+         // if (polySearch) location.poly = poly;
+        if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
+        if (location) searchOptions.location = location;
+        if (location) searchOptions.bounds = bounds;
+        searchOptions.sources = _sm.searchObj.sources;
+        SocialMedia.search(searchOptions).then(function(res){
+          console.log(res);
+          _sm.searchResults = res;
+        }).catch(function(err){
+            console.log(err);
+      });
     }
 
-    _sm.searchTwitter();
 
   });
