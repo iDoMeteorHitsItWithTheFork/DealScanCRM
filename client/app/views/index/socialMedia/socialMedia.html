@@ -64,7 +64,7 @@
     <div ng-show="sm.currentView.id == 'discover'" style="min-width:500px" class="ibox float-e-margins col-sm-5 social-search-options animated fadeInRight" id="discover-ibox">
       <div class="ibox-title p-b-14" id="discover-ibox-sub">
         <div class="row">
-          <form class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
+          <form name="socialMediaSearchFrom" class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
             <div class="input-group col-sm-4 col-md-5 col-lg-5" style="padding-right: 6px; min-width: 229px;">
               <input type="text" class="form-control " placeholder="Enter keyword or username..." ng-model="sm.searchObj.text">
             </div>
@@ -76,7 +76,7 @@
                 <i class="fa fa-map-marker" style="font-size: 20px; margin-left:-2px"></i>
                 <i class="fa fa-plus" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
               </button>
-              <button class="btn btn-primary m-l-5" style="height: 34px;" type="button" ng-click="sm.searchSocialMedia();">
+              <button ng-disabled="!sm.searchObj.sources[0].selected && !sm.searchObj.sources[1].selected" class="btn btn-primary m-l-5" style="height: 34px;" type="submit" ng-click="sm.searchSocialMedia();">
                 <i class="fa fa-search">&nbsp;&nbsp;</i>Search
               </button>
             </div>

@@ -193,22 +193,25 @@ angular.module('dealScanCrmApp')
 
 
     //search media
-    _sm.searchSocialMedia = function(bounds){
+    _sm.searchSocialMedia = function(bounds, next){
         var searchOptions = {};
         var location = null;
         //location = {lat: '38.95606601970584', lon: '-77.03687070000001', distance: '4', metrics: 'mi'};
-         // if (polySearch) location.poly = poly;
+        // if (polySearch) location.poly = poly;
+        if (location == null  && (!_sm.searchObj.text || _sm.searchObj.text.trim() == '')) return;
         if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
         if (location) searchOptions.location = location;
         if (location) searchOptions.bounds = bounds;
         searchOptions.sources = _sm.searchObj.sources;
-        SocialMedia.search(searchOptions).then(function(res){
+        SocialMedia.search(searchOptions, next).then(function(res){
           console.log(res);
           _sm.searchResults = res;
         }).catch(function(err){
             console.log(err);
       });
     }
+
+
 
 
   });

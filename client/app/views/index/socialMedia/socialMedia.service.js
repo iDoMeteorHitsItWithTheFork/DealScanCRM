@@ -23,6 +23,7 @@ angular.module('dealScanCrmApp')
         result_type: 'recent',
         count: 100
       }
+      if (searchOptions.max_id) params.max_id = searchOptions.max_id;
       if (searchOptions.location) {
         if (searchOptions.location.metrics != 'km' && searchOptions.location.metrics != 'mi')
           return {errorCode:'', errorMessage: 'Invalid Metric Parameter'};
@@ -37,7 +38,7 @@ angular.module('dealScanCrmApp')
               errorMessage: res.data.errors[0].message};
           if (res.data.statuses.length > 0) {
             var _res = res.data.statuses;
-            var _data = [], dataModel;
+            var _data = [], dataModel, max_id = (res.data.search_metadata.max_id) ? res.data.search_metadata.max_id : null;
             for (var i = 0; i < _res.length; i++) {
               dataModel = {
                 datasource: 'twitter',
@@ -72,7 +73,7 @@ angular.module('dealScanCrmApp')
                  }
               } else _data.push(dataModel);
 
-            } return _socialSearchResults = {data: _data, searchParams: params};
+            } return _socialSearchResults = {data: _data, searchParams: params, next: max_id};
           } else return [];
         }).catch(function (err) {
           console.log(err);
@@ -83,7 +84,7 @@ angular.module('dealScanCrmApp')
 
 
     //Search social
-    function searchSocialMedia(searchOptions){
+    function searchSocialMedia(searchOptions, next){
       if (!searchOptions) return;
       if (!searchOptions.sources && searchOptions.sources.length == 0)
         return {errorCode:'',
@@ -91,15 +92,17 @@ angular.module('dealScanCrmApp')
       console.log(searchOptions);
       var searches = [];
       for(var i = 0; i < searchOptions.sources.length; i++){
-          switch(searchOptions.sources[i].name){
-            case 'twitter':
-              console.log('*** Searching Twitter ***');
-              searches.push(twtSearch(searchOptions));
-                  break;
-            case 'facebook':
-              console.log('*** Searching Facebook ***');
-              searches.push(fbSearch(searchOptions));
-                  break;
+          if (searchOptions.sources[i].selected) {
+            switch (searchOptions.sources[i].name) {
+              case 'twitter':
+                console.log('*** Searching Twitter ***');
+                searches.push(twtSearch(searchOptions));
+                break;
+              case 'facebook':
+                console.log('*** Searching Facebook ***');
+                searches.push(fbSearch(searchOptions));
+                break;
+            }
           }
       }
 
@@ -107,6 +110,8 @@ angular.module('dealScanCrmApp')
         var resData = {data:[], searchParams:{}};
         console.log(res);
         for(var i = 0; i < res.length; i++){
+          if (res[i].errorCode || res[i].errorMessage)
+            throw {errorCode:res[i].errorCode, errorMessage:res[i].errorMessage};
           resData.data = resData.data.concat(res[i].data);
           resData.searchParams[searchOptions.sources[i].name+'Params'] = res[i].searchParams;
         } return resData;
