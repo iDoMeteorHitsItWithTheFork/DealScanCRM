@@ -5,7 +5,15 @@ angular.module('dealScanCrmApp')
     // Service logic
     var _socialSearchResults = { data: [], searchParams: {}};
 
-
+    //get Stored results
+    function getSocialSearchResults(){
+      return _socialSearchResults;
+    }
+    
+    //clear stored results
+    function clearResults(){
+      _socialSearchResults = {data: [], searchParams: {}};
+    }
 
     //Search facebook
     function fbSearch(searchOptions) {
@@ -15,21 +23,41 @@ angular.module('dealScanCrmApp')
 
     }
 
+
+    //parse next_results string from twitter queries
+    function parseNextTwitterResultsParams(next_results){
+       if (next_results) return;
+       next_results = next_results.substr(1);
+       var q = str.split('&'), params = {};
+       for(var i= 0; i < q.length; i++){
+         var p = q[i].split('=');
+         params[p[0]] = p[1];
+       } return params;
+    }
+
+
+
     //Search Twitter
     function twtSearch(searchOptions){
 
-      var params = {
+      //get new results or next results
+      var params = (searchOptions.next) ? parseNextTwitterResultsParams(searchOptions.next) : {
         q: searchOptions.term,
         result_type: 'recent',
         count: 100
-      }
-      if (searchOptions.max_id) params.max_id = searchOptions.max_id;
+      };
+      
+      console.log(params);
+
+      //if location available, validate metric parameters
       if (searchOptions.location) {
         if (searchOptions.location.metrics != 'km' && searchOptions.location.metrics != 'mi')
           return {errorCode:'', errorMessage: 'Invalid Metric Parameter'};
         params.geocode = [searchOptions.location.lat, searchOptions.location.lon,
         searchOptions.location.distance+searchOptions.location.metrics];
       }
+
+      //perform search
       return SocialMediaResource.twitterSearch(params)
         .$promise.then(function (res) {
           console.log(res);
@@ -38,7 +66,7 @@ angular.module('dealScanCrmApp')
               errorMessage: res.data.errors[0].message};
           if (res.data.statuses.length > 0) {
             var _res = res.data.statuses;
-            var _data = [], dataModel, max_id = (res.data.search_metadata.max_id) ? res.data.search_metadata.max_id : null;
+            var _data = [], dataModel, next = (res.data.search_metadata.next_results) ? res.data.search_metadata.next_results : null;
             for (var i = 0; i < _res.length; i++) {
               dataModel = {
                 datasource: 'twitter',
@@ -73,7 +101,7 @@ angular.module('dealScanCrmApp')
                  }
               } else _data.push(dataModel);
 
-            } return _socialSearchResults = {data: _data, searchParams: params, next: max_id};
+            } return _socialSearchResults = {data: _data, searchParams: params, next: next};
           } else return [];
         }).catch(function (err) {
           console.log(err);
@@ -134,7 +162,9 @@ angular.module('dealScanCrmApp')
 
     // Public API here
     return {
-        search:searchSocialMedia
+        search:searchSocialMedia,
+        searchResults: getSocialSearchResults,
+        clear: clearResults
     };
 
   });
