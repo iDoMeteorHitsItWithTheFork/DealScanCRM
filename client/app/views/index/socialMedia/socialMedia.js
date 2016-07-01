@@ -18,14 +18,6 @@ angular.module('dealScanCrmApp')
               },
               {
                 files: ['.styles/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css']
-              },
-              {
-                name: 'ui.event',
-                files: ['.resources/plugins/uievents/event.js']
-              },
-              {
-                name: 'ui.map',
-                files: ['.resources/plugins/uimaps/ui-map.js']
               }
             ])
           }
