@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, $q) {
-          $("#page-wrapper").css("overflow-x", "hidden");
+  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q) {
+    $("#page-wrapper").css("overflow-x", "hidden");
 
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
     _sm.searchResults = {};
-    
+
     _sm.views  = [{id:'discover', name:'Social Media Discovery', active: true},
                   {id: 'monitor', name: 'Social Media Monitoring', active: false}];
 

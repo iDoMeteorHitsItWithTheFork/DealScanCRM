@@ -68,7 +68,6 @@
             <div class="input-group col-sm-4 col-md-5 col-lg-5" style="padding-right: 6px; min-width: 229px;">
               <input type="text" class="form-control " placeholder="Enter keyword or username..." ng-model="sm.searchObj.text">
             </div>
-
             <div class="form-group pull-right p-r-16" style="display:inline;">
               <button ng-repeat="source in sm.searchObj.sources" class="btn" ng-class="source.selected ? '{{source.id}}-selected' : '{{source.id}}-not-selected'" ng-click="source.selected = !source.selected"  style="width:34px; height: 34px; margin-right:3px; {{source.buttonStyle}}" type="button">
                 <i class="fa fa-{{source.name}} fs-15" style="{{source.iconStyle}}"></i>
