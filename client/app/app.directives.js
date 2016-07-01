@@ -566,13 +566,25 @@ function pageHeight(){
         console.log("setting height for social media page...");
         element.css("height", $(window).height() + "px");
         element.css("min-height", $(window).height() + "px");
-        element.css("overflow", "hidden");
+        //element.css("overflow", "hidden");
 
         addEvent(window, "resize", function(event) {
           element.css("height", $(window).height() + "px");
           element.css("min-height", $(window).height() + "px");
+          //element.css("overflow", "hidden");
         });
-        
+      }
+      console.log(scope.text);
+      if (scope.text === 'Dashboard'){
+        console.log("setting overflow for dashboard...");
+        element.css("height", $(window).height() + "px");
+        element.css("min-height", $(window).height() + "px");
+       // element.css("overflow", "scroll");
+        addEvent(window, "resize", function(event) {
+          element.css("height", $(window).height() + "px");
+          element.css("min-height", $(window).height() + "px");
+          //element.css("overflow", "scroll");
+        });
       }
     }
   };

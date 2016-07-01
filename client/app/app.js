@@ -8,6 +8,7 @@ angular.module('dealScanCrmApp', [
   'ngResource',
   'ngSanitize',
   'ngAnimate',
+  'ngMap',
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
