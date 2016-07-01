@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('SocialMedia', function (Auth, Util, ezfb, $resource, $filter, appConfig, SocialMediaResource) {
+  .factory('SocialMedia', function (Auth, Util, ezfb, $resource, $filter, $q, appConfig, SocialMediaResource) {
     // Service logic
     var _socialSearchResults = { data: [], searchParams: {}};
 
@@ -82,6 +82,43 @@ angular.module('dealScanCrmApp')
     }
 
 
+    //Search social
+    function searchSocialMedia(searchOptions){
+      if (!searchOptions) return;
+      if (!searchOptions.sources && searchOptions.sources.length == 0)
+        return {errorCode:'',
+          errorMessage:'there were no selected networks to search from. Please select a network and try again.'};
+      console.log(searchOptions);
+      var searches = [];
+      for(var i = 0; i < searchOptions.sources.length; i++){
+          switch(searchOptions.sources[i].name){
+            case 'twitter':
+              console.log('*** Searching Twitter ***');
+              searches.push(twtSearch(searchOptions));
+                  break;
+            case 'facebook':
+              console.log('*** Searching Facebook ***');
+              searches.push(fbSearch(searchOptions));
+                  break;
+          }
+      }
+
+      return $q.all(searches).then(function(res){
+        var resData = {data:[], searchParams:{}};
+        console.log(res);
+        for(var i = 0; i < res.length; i++){
+          resData.data = resData.data.concat(res[i].data);
+          resData.searchParams[searchOptions.sources[i].name+'Params'] = res[i].searchParams;
+        } return resData;
+      })
+        .catch(function(err){
+        console.log(err);
+        return err;
+      });
+
+    }
+
+
     //search Instagram
     function igSearch(term){
 
@@ -92,7 +129,7 @@ angular.module('dealScanCrmApp')
 
     // Public API here
     return {
-        searchTwitter: twtSearch
+        search:searchSocialMedia
     };
 
   });

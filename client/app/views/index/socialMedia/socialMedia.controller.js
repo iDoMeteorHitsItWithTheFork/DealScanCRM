@@ -127,28 +127,22 @@ angular.module('dealScanCrmApp')
 
 
 
-
-    _sm.searchSocialMedia = function(){
-        if (_sm.searchObj.sources[0].selected){
-            //var _location = {lat: '38.95606601970584', lon: '-77.03687070000001', distance: '4', metrics: 'mi'};
-            // if (polySearch) location.poly = poly;
-           _sm.searchTwitter(_sm.searchObj.text);
-        }
-    }
-
-
-    //Search Twitter
-    _sm.searchTwitter = function(term, location, next){
-
-         var searchOptions = {term: term, location: location, bounds: 'circle'}; //search for luda on twitter
-         //loading indicator
-         SocialMedia.searchTwitter(searchOptions).then(function(data){
-           console.log(data);
-           _sm.searchResults = data;
-           //loading indicator
-         }).catch(function(err){
-             console.log(err);
-         })
+    //search media
+    _sm.searchSocialMedia = function(bounds){
+        var searchOptions = {};
+        var location = null;
+        //location = {lat: '38.95606601970584', lon: '-77.03687070000001', distance: '4', metrics: 'mi'};
+         // if (polySearch) location.poly = poly;
+        if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
+        if (location) searchOptions.location = location;
+        if (location) searchOptions.bounds = bounds;
+        searchOptions.sources = _sm.searchObj.sources;
+        SocialMedia.search(searchOptions).then(function(res){
+          console.log(res);
+          _sm.searchResults = res;
+        }).catch(function(err){
+            console.log(err);
+      });
     }
 
 
