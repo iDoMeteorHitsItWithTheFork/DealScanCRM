@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia) {
-
+  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, NgMap) {
+    $("#page-wrapper").css("overflow-x", "hidden");
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
 
@@ -137,6 +137,11 @@ angular.module('dealScanCrmApp')
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
+    NgMap.getMap().then(function(map) {
+      console.log(map.getCenter());
+      console.log('markers', map.markers);
+      console.log('shapes', map.shapes);
+    });
 
     /**
      * Refresh Map on hide and show
