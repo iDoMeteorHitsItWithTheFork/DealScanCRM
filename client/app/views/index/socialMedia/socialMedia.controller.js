@@ -28,8 +28,12 @@ angular.module('dealScanCrmApp')
 
     _sm.searchObj = {text: _sm.searchResults.searchParams.q, radius: null, geo: {lat: null, lng: null},
                     sources: [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
-                              // {id: 'ig', name: 'instagram', selected: false, iconStyle: 'margin-left: -2px', buttonStyle:''},
                               {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
+
+    _sm.monitorList = [{text: '#hagerstownford', count: 0}, {text: '#FordFocus', count: 5}, {text: '#DealScan', count: 50}];
+
+    _sm.monitorButtons = [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
+      {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]
 
     _sm.missingAvatar = 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png';
 
@@ -142,12 +146,15 @@ angular.module('dealScanCrmApp')
         if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
         if (location) searchOptions.location = location;
         if (location) searchOptions.bounds = bounds;
+        _sm.searchLoading = true;
         searchOptions.sources = _sm.searchObj.sources;
         SocialMedia.search(searchOptions, next).then(function(res){
           console.log(res);
           _sm.searchResults = res;
+          _sm.searchLoading = false;
         }).catch(function(err){
             console.log(err);
+            _sm.searchLoading = false;
       });
     }
 
