@@ -117,16 +117,16 @@
             <div ng-if="item.comments.length > 0" class="social-footer">
               <div class="social-comment" ng-repeat="comment in item.comments">
                 <a href="" class="pull-left">
-                  <img alt="image" src="{{::comment.avatar || sm.missingAvatar}}">
+                  <img alt="image" src="{{::comment.from.picture.data.url || sm.missingAvatar}}">
                 </a>
                 <div class="media-body">
                   <a href="#">
-                    {{::comment.from}}
+                    {{::comment.from.name}}
                   </a>
-                  {{::comment.text}}
+                  {{::comment.message}}
                   <br/>
                   <a href="#" class="small"><i class="fa fa-thumbs-up"></i> {{::comment.like_count}} Like this!</a> -
-                  <small class="text-muted">{{::comment.created_at}}</small>
+                  <small class="text-muted">{{::comment.created_time}}</small>
                 </div>
               </div>
             </div>

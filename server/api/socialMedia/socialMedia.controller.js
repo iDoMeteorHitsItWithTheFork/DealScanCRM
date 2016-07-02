@@ -13,11 +13,25 @@ import _ from 'lodash';
 
 var Twit = require('twit');
 var config = require('../../socialConfig');
+var Promise = require('bluebird');
+var Q = require('q');
+
 
 // instantiate Twit module
 var twitter = new Twit(config.twitter);
 var TWITTER_SEARCH_URL = 'search/tweets';
 
+
+//instantiate Facebook module
+var facebook = require('fbgraph');
+Promise.promisifyAll(facebook);
+facebook.setVersion('2.6');
+var isFbTokenSet = false;
+
+/**
+ *
+ * Utilities functions
+ */
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
@@ -64,6 +78,11 @@ function handleError(res, statusCode) {
   };
 }
 
+/**
+ *
+ * Functional Methods
+ */
+
 
 //search twitter for username, keywords & filter by location
 export function searchTwitter(req, res){
@@ -73,6 +92,67 @@ export function searchTwitter(req, res){
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
+}
+
+
+//Set Facebook Access Token
+export function setFbToken(req, res){
+  if (!req.body.accessToken)
+    return res.status(404).end();
+  var token = req.body.accessToken;
+  facebook.setAccessToken(token); //set access token
+  isFbTokenSet = true;
+  facebook.getAsync('/me')
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+//search facebook for name, posts, place, page
+export function searchFacebook(req, res){
+  var q = req.query.q;
+  //var location = req.query.location;
+  // var searchOptions = [
+  //   { "method":"GET",   "relative_url":"search?q="+q+"&type=user"},
+  //   { "method":"GET",   "relative_url":"search?q="+q+"&type=page"},
+  //   // { "method":"GET",   "relative_url":"search?q="+q+"&type=group&limit=50"},
+  //   // { "method":"GET",   "relative_url":"search?q="+q+"&type=place&limit=50"},
+  //   // { "method":"GET",   "relative_url":"search?q="+q+"&type=event&limit=50"},
+  // ];
+  if (!isFbTokenSet) {
+    var token = res.cookie('fbToken') ? res.cookie('fbToken'): null;
+    if (!token) res.status(403).end();
+    facebook.setAccessToken(token);
+    isFbTokenSet = true;
+  }
+  var searchOptions = {
+    q: q,
+    type: 'page',
+    limit: 25
+  };
+  var feed ='/feed?fields=from{name, picture},created_time,coordinates,' +
+    'attachments,comments.limit(3).summary(true){attachment,like_count,from{name, picture},' +
+    'created_time,message},likes.limit(3).summary(true),actions';
+  facebook.searchAsync(searchOptions)
+    .then(handleEntityNotFound(res))
+    .then(function(results){
+        if (results.data && results.data.length > 0){
+          var ps = [];
+          for(var i=0; i < results.data.length; i++)
+            ps.push(facebook.getAsync(results.data[i].id+feed));
+          return Q.all(ps).then(function(posts){
+             var _res = {data:[], paging:[]};
+             // console.log(posts);
+             for(var i=0; i < posts.length; i++){
+               _res.data = _res.data.concat(posts[i].data);
+               _res.paging.push(posts[i].paging);
+             }
+             res.json(_res);
+          }).catch(function(err){ return err;});
+        }
+    })
+    .catch(handleError(res));
+
 }
 
 

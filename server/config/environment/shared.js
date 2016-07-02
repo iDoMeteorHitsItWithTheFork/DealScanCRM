@@ -8,7 +8,6 @@ exports = module.exports = {
   paginationItemsPerPage: 20,
   dscUsr: 'dscrm_',
   dscPwd: 'Baiser12!',
-  TwitterAPIToken:'4873289201-g32RVWdcapVPBbLugJGqZKuUHGfTLKi8lI2Ht6x',
   getDisplayRole: function(role){
       if (!role) return;
       switch(role){

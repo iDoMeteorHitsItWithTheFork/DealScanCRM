@@ -2,9 +2,10 @@
 
 (function () {
 
-    function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
+    function AuthService($location, $http, $cookies, $q, appConfig, Util, User, ezfb, SocialMediaResource) {
         var safeCb = Util.safeCb;
         var currentUser = {};
+        var fbStatus = {};
         var userRoles = appConfig.userRoles || [];
 
         if ($cookies.get('token') && $location.path() !== '/logout') {
@@ -24,7 +25,7 @@
                 return $http.post('/auth/local', {
                     email: email,
                     password: password
-                })
+                }, {})
                     .then(res => {
                         $cookies.put('token', res.data.token);
                         currentUser = User.get();
@@ -32,6 +33,7 @@
                     })
                     .then(user => {
                         safeCb(callback)(null, user);
+                        Auth.facebookInit();
                         Auth.dealScanInit(appConfig.dscUsr, appConfig.dscPwd);
                         return user;
                     })
@@ -41,14 +43,73 @@
                         return $q.reject(err.data);
                     });
             },
+          /**
+           * Update Facebook login Status
+           * @param status
+           */
+            updateFb(status){
+             if (status == 'disconnected') Auth.facebookLogout();
+             else fbStatus = status;
+            },
 
+            /**
+             * get loging Status from Facebook
+             * @param more
+             */
+            getStatusFromFb(more){
+              ezfb.getLoginStatus(function (res) {
+                fbStatus = res;
+                (more || angular.noop)();
+              });
+            },
+
+            /**
+             * Intialize Facebook oAuth flow and obtain access_token
+             * @param callback
+             */
+            facebookInit(callback){
+              ezfb.login(function (res) {
+                if (res.authResponse) {
+                   $cookies.put('fbToken', res.authResponse.accessToken);
+                   fbStatus = res.authResponse.status;
+                   Auth.setFbAccessToken(res.authResponse.accessToken);
+                }
+              }, {scope: 'email,user_likes,user_about_me, user_birthday, user_location,user_posts, publish_actions, user_friends'});
+            },
+
+            /**
+             *  logout from Facebook Server
+             */
+            facebookLogout(){
+              ezfb.logout(function(res){
+                $cookies.remove('fbToken');
+                fbStatus = null;
+              });
+            },
+
+            /**
+             * Pass Access Token to Back end facebook module
+             * @param token
+             */
+            setFbAccessToken(token){
+              var token  = token ? token : $cookies.get('fbToken');
+              if (token && token.trim() != '' && token != 'null') {
+                 SocialMediaResource.setFbToken({accessToken: token})
+                   .$promise.then(function(res){
+                    console.log(res);
+                 }).catch(function(err){
+                     console.log(err);
+                     return err;
+                 });
+              }
+            },
 
             /**
              *  Initialize with Dealscan for integration
              */
 
             dealScanInit(username, password, link){
-              
+
                if (!link) link = 'http://www.kelcar.net/api/authenticate'; //default authentication api
                return $http.get(link, {
                  Username: username,
@@ -68,6 +129,7 @@
              logout() {
                 $cookies.remove('token');
                 currentUser = {};
+                //facebookLogout();
             },
 
             /**

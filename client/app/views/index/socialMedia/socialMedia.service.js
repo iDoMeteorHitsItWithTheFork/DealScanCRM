@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('SocialMedia', function (Auth, Util, ezfb, $resource, $filter, $q, appConfig, SocialMediaResource) {
+  .factory('SocialMedia', function (Auth, Util, $resource, $filter, $q, appConfig, SocialMediaResource) {
     // Service logic
     var _socialSearchResults = { data: [], searchParams: {}};
 
@@ -9,30 +9,112 @@ angular.module('dealScanCrmApp')
     function getSocialSearchResults(){
       return _socialSearchResults;
     }
-    
+
     //clear stored results
     function clearResults(){
       _socialSearchResults = {data: [], searchParams: {}};
     }
 
+
+    function deDupPosts(arr) {
+      var u = {}, a = [];
+      for(var i = 0; i < arr.length; i++){
+        if (!u.hasOwnProperty(arr[i].id)){
+          a.push(arr[i]);
+          u[arr[i].id] = 1;
+        }
+      }
+      console.log(u);
+      return a;
+    }
+
     //Search facebook
-    function fbSearch(searchOptions) {
+    function fbSearch(searchOptions, next) {
 
+       var params = {
+         q: searchOptions.term
+       }
+       if (searchOptions.location) {
+        if (searchOptions.location.metrics != 'km' && searchOptions.location.metrics != 'mi')
+          return {errorCode:'', errorMessage: 'Invalid Metric Parameter'};
+        params.geocode = [searchOptions.location.lat, searchOptions.location.lon,
+          (searchOptions.location.metrics == 'km' ?
+          searchOptions.location.distance * 1000 : searchOptions.location.distance * 1000 * 1.6)];
+       }
 
+       //Perform search
+       return SocialMediaResource
+         .facebookSearch(params).$promise
+         .then(function(res){
+            console.log(res);
+            res.data = deDupPosts(res.data);
+            var _res = res.data, _data = [], dataModel;
+           for (var i = 0; i < _res.length; i++) {
 
+             dataModel = {
+               datasource: 'facebook',
+               username: _res[i].from.name,
+               avatar: _res[i].from.picture.data.url,
+               created_at: _res[i].created_time,
+               geo: _res[i].coordinates,
+               comments: _res[i].comments && _res[i].comments.data.length > 0 ? _res[i].comments.data : [],
+               counts: {
+                 share_count: 0, //retweet count / share count for facebook
+                 like_count: _res[i].likes ? _res[i].likes.summary.total_count : 0,
+                 comment_count: _res[i].comments ? _res[i].comments.summary.total_count: 0,
+               }
+             }
+
+             // if (_res[i].comments && _res[i].comments.data.length > 0){
+             //    var _comments = [], comments = _res[i].comments;
+             //    for(var c=0; c < comments.data.length; i++){
+             //        _comments.push({
+             //           from: comments.data[c].from.name,
+             //           avatar: comments.data[c].from.picture.data.url,
+             //           text: comments.data[c].message,
+             //           created_at: comments.data[c].created_time,
+             //           like_count: comments.data[c].like_count
+             //        });
+             //    }
+             //   dataModel.comments = _comments;
+             // }
+
+             if (_res[i].attachments && _res[i].attachments.data[0]){
+               dataModel.text = _res[i].attachments.data[0].description ? _res[i].attachments.data[0].description : null;
+               if (_res[i].attachments.data[0].media && _res[i].attachments.data[0].media.image){
+                 dataModel.image = _res[i].attachments.data[0].media.image.src; //if empty null
+               } else dataModel.image = null;
+             }
+             _data.push(dataModel);
+           }
+           return _socialSearchResults = {data: _data, searchParams: params, next: next};;
+         })
+         .catch(function(err){
+            console.log(err);
+            return err;
+         });
 
     }
 
 
     //parse next_results string from twitter queries
-    function parseNextTwitterResultsParams(next_results){
-       if (next_results) return;
-       next_results = next_results.substr(1);
-       var q = str.split('&'), params = {};
-       for(var i= 0; i < q.length; i++){
-         var p = q[i].split('=');
-         params[p[0]] = p[1];
-       } return params;
+    function getNextParams(next_results, source){
+       if (!next_results) return;
+       if (!source) return;
+       switch(source){
+         case 'twitter':
+           next_results = next_results.substr(1);
+           var q = next_results.split('&'), params = {};
+           for(var i= 0; i < q.length; i++){
+             var p = q[i].split('=');
+             params[p[0]] = p[1];
+           }
+           break;
+         case 'facebook':
+               break;
+
+       }
+       return params;
     }
 
 
@@ -41,12 +123,12 @@ angular.module('dealScanCrmApp')
     function twtSearch(searchOptions){
 
       //get new results or next results
-      var params = (searchOptions.next) ? parseNextTwitterResultsParams(searchOptions.next) : {
+      var params = (searchOptions.next) ? getNextParams(searchOptions.next, 'twitter') : {
         q: searchOptions.term,
         result_type: 'recent',
         count: 100
       };
-      
+
       console.log(params);
 
       //if location available, validate metric parameters

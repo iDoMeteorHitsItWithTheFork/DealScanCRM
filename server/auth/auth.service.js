@@ -11,6 +11,7 @@ var validateJwt = expressJwt({
   secret: config.secrets.session
 });
 
+
 /**
  * Attaches the user object to the request if authenticated
  * Otherwise returns 403
@@ -42,6 +43,7 @@ export function isAuthenticated() {
         .catch(err => next(err));
     });
 }
+
 
 /**
  * Checks if the user role meets the minimum requirements of the route

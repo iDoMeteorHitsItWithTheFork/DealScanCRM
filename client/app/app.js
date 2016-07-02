@@ -15,7 +15,7 @@ angular.module('dealScanCrmApp', [
   'oc.lazyLoad',                  // ocLazyLoad,
   'ngIdle',                       // Idle timer
   'ngAside',                      //page aside
-  'ezfb'                          //facebook
+  'ezfb'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('login');

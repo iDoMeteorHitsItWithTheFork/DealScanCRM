@@ -15,7 +15,9 @@ var router = express.Router();
 
 
 //Customs Social Media functions
-router.get('/:id/search', auth.isAuthenticated(), controller.searchTwitter);
+router.get('/twitter/search', auth.isAuthenticated(), controller.searchTwitter);
+router.put('/facebook/setToken', auth.isAuthenticated(), controller.setFbToken);
+router.get('/facebook/search', auth.isAuthenticated(), controller.searchFacebook);
 
 
 module.exports = router;

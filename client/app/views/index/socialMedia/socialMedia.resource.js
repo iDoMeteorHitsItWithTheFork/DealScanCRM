@@ -17,6 +17,21 @@
             controller: 'search'
           }
         },
+        setFbToken: {
+          method: 'PUT',
+          params: {
+            id: 'facebook',
+            controller: 'setToken'
+          }
+        },
+        facebookSearch: {
+          method: 'GET',
+          // isArray: true,
+          params: {
+            id:'facebook',
+            controller: 'search'
+          }
+        },
       });
   }
 
