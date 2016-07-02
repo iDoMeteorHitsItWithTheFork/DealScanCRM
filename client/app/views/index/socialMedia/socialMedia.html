@@ -82,7 +82,11 @@
       </div>
 
       <div class="ibox-content" style="  position: absolute; bottom: 0;left:0;right:0;top:75px;padding: 0;">
-        <div full-scroll style="padding:15px;">
+          <div ng-hide="!sm.searchLoading">
+              <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px"></i>
+              <span class="sr-only">Loading...</span>
+          </div>
+        <div ng-hide="sm.searchLoading" full-scroll style="padding:15px;">
           <div class="social-feed-box" ng-repeat="item in sm.searchResults.data">
             <div class="pull-right social-action">
               <button class="btn btn-{{::item.datasource}} btn-circle">

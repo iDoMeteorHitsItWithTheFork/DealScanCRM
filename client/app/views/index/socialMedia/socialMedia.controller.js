@@ -142,12 +142,15 @@ angular.module('dealScanCrmApp')
         if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
         if (location) searchOptions.location = location;
         if (location) searchOptions.bounds = bounds;
+        _sm.searchLoading = true;
         searchOptions.sources = _sm.searchObj.sources;
         SocialMedia.search(searchOptions, next).then(function(res){
           console.log(res);
           _sm.searchResults = res;
+          _sm.searchLoading = false;
         }).catch(function(err){
             console.log(err);
+            _sm.searchLoading = false;
       });
     }
 
