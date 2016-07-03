@@ -86,7 +86,7 @@ function handleError(res, statusCode) {
 
 //search twitter for username, keywords & filter by location
 export function searchTwitter(req, res){
-  if (!req.query) return res.status(404).end();
+  if (!req.query) return res.status(404).send('Error[]: Query Parameters are required!');
   var params = req.query;
   twitter.get(TWITTER_SEARCH_URL, params)
     .then(handleEntityNotFound(res))
@@ -98,11 +98,11 @@ export function searchTwitter(req, res){
 //Set Facebook Access Token
 export function setFbToken(req, res){
   if (!req.body.accessToken)
-    return res.status(404).end();
+    return res.status(404).send('Error[]: Access Token is required!');
   var token = req.body.accessToken;
   facebook.setAccessToken(token); //set access token
   isFbTokenSet = true;
-  facebook.getAsync('/me')
+  facebook.getAsync('/me?fields=name,email,picture')
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -110,29 +110,35 @@ export function setFbToken(req, res){
 
 //search facebook for name, posts, place, page
 export function searchFacebook(req, res){
+
   var q = req.query.q;
-  //var location = req.query.location;
-  // var searchOptions = [
-  //   { "method":"GET",   "relative_url":"search?q="+q+"&type=user"},
-  //   { "method":"GET",   "relative_url":"search?q="+q+"&type=page"},
-  //   // { "method":"GET",   "relative_url":"search?q="+q+"&type=group&limit=50"},
-  //   // { "method":"GET",   "relative_url":"search?q="+q+"&type=place&limit=50"},
-  //   // { "method":"GET",   "relative_url":"search?q="+q+"&type=event&limit=50"},
-  // ];
+  var location  = req.query.geocode;
+  if (!q && !location) res.status(404).send('Error[]: Query Parameters are required!');
+
   if (!isFbTokenSet) {
     var token = res.cookie('fbToken') ? res.cookie('fbToken'): null;
-    if (!token) res.status(403).end();
+    if (!token) res.status(403).send('Error[]: No Available Access Token. Please check facebook login status.');
     facebook.setAccessToken(token);
     isFbTokenSet = true;
   }
+
   var searchOptions = {
     q: q,
     type: 'page',
-    limit: 25
+    limit: 25,
   };
-  var feed ='/feed?fields=from{name, picture},created_time,coordinates,' +
+
+  if (location){
+    searchOptions.center = [req.query.geocode.lat, req.query.geocode.lon];
+    searchOptions.distance = req.query.geocode.distance;
+  }
+
+  var feed ='/feed?';
+  if (location && location.enforce) feed +='with=location&';
+  feed += 'fields=from{name, picture},message,created_time,coordinates,' +
     'attachments,comments.limit(3).summary(true){attachment,like_count,from{name, picture},' +
     'created_time,message},likes.limit(3).summary(true),actions';
+
   facebook.searchAsync(searchOptions)
     .then(handleEntityNotFound(res))
     .then(function(results){

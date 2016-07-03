@@ -102,22 +102,28 @@
                 <a href="#">
                   {{::item.username}}
                 </a>
-                <small class="text-muted">{{::item.created_at}}</small>
+                <small class="text-muted">{{::item.time_ago}}</small>
               </div>
             </div>
             <div class="social-body">
               <p>{{::item.text}}</p>
               <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
               <div class="btn-group">
-                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
-                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
-                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                <button class="btn btn-white btn-xs">
+                  <i ng-class="::{'fa fa-thumbs-up' : item.datasource =='facebook', 'fa fa-heart' : item.datasource == 'twitter'}"></i>
+                  {{::item.datasource == 'facebook' ? ' Like this!' : ''}}{{::item.datasource == 'twitter' ? ' Add to Favs' : ''}}</button>
+                <button class="btn btn-white btn-xs" ng-click="item.write_comment = !item.write_comment">
+                  <i ng-class="::{'fa fa-comments' : item.datasource == 'facebook', 'fa fa-reply': item.datasource == 'twitter'}"></i>
+                  {{::item.datasource == 'facebook' ? ' Comment' : ''}}{{::item.datasource == 'twitter' ? ' Reply' : ''}}</button>
+                <button class="btn btn-white btn-xs">
+                  <i ng-class="{'fa fa-share' : item.datasource == 'facebook', 'fa fa-retweet': item.datasource == 'twitter'}"></i>
+                  {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
               </div>
             </div>
-            <div ng-if="item.comments.length > 0" class="social-footer">
-              <div class="social-comment" ng-repeat="comment in item.comments">
+            <div  class="social-footer">
+              <div ng-if="item.comments.length > 0" class="social-comment" ng-repeat="comment in item.comments">
                 <a href="" class="pull-left">
-                  <img alt="image" src="{{::comment.from.picture.data.url || sm.missingAvatar}}">
+                  <img alt="image" ng-src="{{comment.from.picture.data.url || sm.missingAvatar}}">
                 </a>
                 <div class="media-body">
                   <a href="#">
@@ -126,7 +132,15 @@
                   {{::comment.message}}
                   <br/>
                   <a href="#" class="small"><i class="fa fa-thumbs-up"></i> {{::comment.like_count}} Like this!</a> -
-                  <small class="text-muted">{{::comment.created_time}}</small>
+                  <small class="text-muted">{{::sm.momentAgo(comment.created_time)}}</small>
+                </div>
+              </div>
+              <div class="social-comment animated fadeInDown" ng-show="item.write_comment">
+                <a href="" class="pull-left">
+                  <img alt="image" ng-src="{{(item.datasource == 'facebook' ? sm.user.fbProfile.picture.data.url : sm.missingAvatar) || sm.missingAvatar}}">
+                </a>
+                <div class="media-body">
+                  <textarea class="form-control" placeholder="Write comment..."></textarea>
                 </div>
               </div>
             </div>

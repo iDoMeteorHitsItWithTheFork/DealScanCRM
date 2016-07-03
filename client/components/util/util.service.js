@@ -160,6 +160,38 @@
       return str.replace(new RegExp(find, 'g'), replace);
     },
 
+
+      /* Validate Link as Img Url */
+      parseUrlLink(url){
+        var validExt = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'];
+        var valid = false, ext = '';
+        if (url) {
+          for (var i = 0; i < validExt.length; i++) {
+            if (url.toLowerCase().indexOf(validExt[i]) != -1) {
+              valid = true;
+              ext = validExt[i];
+              break;
+            }
+          }
+        }
+        return {ext: ext, valid: valid};
+      },
+
+      /*** Normalize Url ***/
+      trimImgUrl(url){
+        if (url) {
+          var validExt = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'];
+          var lk = this.parseUrlLink(url);
+          if (lk.valid) {
+            var idx = url.toLowerCase().indexOf(lk.ext);
+            // console.log('__befr___: ' + url);
+            url = url.substring(0, idx + (lk.ext.length));
+            // console.log('___after___: ' + url);
+          }
+          return url;
+        }
+      },
+
         /**
          * pie charts colors
          * @returns {string[]}

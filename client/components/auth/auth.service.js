@@ -5,6 +5,7 @@
     function AuthService($location, $http, $cookies, $q, appConfig, Util, User, ezfb, SocialMediaResource) {
         var safeCb = Util.safeCb;
         var currentUser = {};
+        var fbProfile = null;
         var fbStatus = {};
         var userRoles = appConfig.userRoles || [];
 
@@ -34,7 +35,7 @@
                     .then(user => {
                         safeCb(callback)(null, user);
                         Auth.facebookInit();
-                        Auth.dealScanInit(appConfig.dscUsr, appConfig.dscPwd);
+                        //Auth.dealScanInit(appConfig.dscUsr, appConfig.dscPwd);
                         return user;
                     })
                     .catch(err => {
@@ -97,6 +98,7 @@
                  SocialMediaResource.setFbToken({accessToken: token})
                    .$promise.then(function(res){
                     console.log(res);
+                    if (currentUser) currentUser.fbProfile = res;
                  }).catch(function(err){
                      console.log(err);
                      return err;
@@ -128,6 +130,7 @@
              */
              logout() {
                 $cookies.remove('token');
+                $cookies.remove('fbToken');
                 currentUser = {};
                 //facebookLogout();
             },
@@ -187,8 +190,20 @@
                     currentUser.$promise : currentUser;
                 return $q.when(value)
                     .then(user => {
-                        safeCb(callback)(user);
-                        return user;
+                       if (user.fbProfile){
+                         safeCb(callback)(user);
+                         return user;
+                       } else {
+                          return $q.when(ezfb.api('/me?fields=name,email,picture'))
+                            .then(function(res){
+                              if (res) user.fbProfile = res;
+                              safeCb(callback)(user);
+                              return user;
+                          }).catch(function(err){
+                               console.log(err);
+                               return err;
+                            });
+                       }
                     }, () => {
                         safeCb(callback)({});
                         return {};

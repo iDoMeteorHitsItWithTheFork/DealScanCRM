@@ -46,6 +46,7 @@ angular.module('dealScanCrmApp')
        return SocialMediaResource
          .facebookSearch(params).$promise
          .then(function(res){
+
             console.log(res);
             res.data = deDupPosts(res.data);
             var _res = res.data, _data = [], dataModel;
@@ -54,8 +55,11 @@ angular.module('dealScanCrmApp')
              dataModel = {
                datasource: 'facebook',
                username: _res[i].from.name,
+               posterID: _res[i].from.id,
+               postID: _res[i].id,
                avatar: _res[i].from.picture.data.url,
-               created_at: _res[i].created_time,
+               created_at: moment(_res[i].created_time),
+               time_ago: moment(_res[i].created_time).fromNow(),
                geo: _res[i].coordinates,
                comments: _res[i].comments && _res[i].comments.data.length > 0 ? _res[i].comments.data : [],
                counts: {
@@ -65,29 +69,21 @@ angular.module('dealScanCrmApp')
                }
              }
 
-             // if (_res[i].comments && _res[i].comments.data.length > 0){
-             //    var _comments = [], comments = _res[i].comments;
-             //    for(var c=0; c < comments.data.length; i++){
-             //        _comments.push({
-             //           from: comments.data[c].from.name,
-             //           avatar: comments.data[c].from.picture.data.url,
-             //           text: comments.data[c].message,
-             //           created_at: comments.data[c].created_time,
-             //           like_count: comments.data[c].like_count
-             //        });
-             //    }
-             //   dataModel.comments = _comments;
-             // }
-
+             if (_res[i].message && _res[i].message.trim() != '') dataModel.text = _res[i].message;
              if (_res[i].attachments && _res[i].attachments.data[0]){
                dataModel.text = _res[i].attachments.data[0].description ? _res[i].attachments.data[0].description : null;
                if (_res[i].attachments.data[0].media && _res[i].attachments.data[0].media.image){
                  dataModel.image = _res[i].attachments.data[0].media.image.src; //if empty null
+               } else if (_res[i].attachments.data[0].subattachments){
+                    if (_res[i].attachments.data[0].subattachments.data && _res[i].attachments.data[0].subattachments.data[0].media) {
+                      dataModel.image = _res[i].attachments.data[0].subattachments.data[0].media.image.src;
+                    } else dataModel.image = null;
                } else dataModel.image = null;
              }
+
              _data.push(dataModel);
            }
-           return _socialSearchResults = {data: _data, searchParams: params, next: next};;
+           return {data: _data, searchParams: params, next: res.paging};
          })
          .catch(function(err){
             console.log(err);
@@ -112,7 +108,6 @@ angular.module('dealScanCrmApp')
            break;
          case 'facebook':
                break;
-
        }
        return params;
     }
@@ -154,9 +149,12 @@ angular.module('dealScanCrmApp')
                 datasource: 'twitter',
                 username: _res[i].user.screen_name,
                 avatar: _res[i].user.profile_image_url,
+                posterID: _res[i].user.id_str,
+                postID: _res[i].id_str,
                 text: _res[i].text,
                 image: _res[i].entities.media ? _res[i].entities.media[0].media_url : null,
-                created_at: _res[i].created_at,
+                created_at: moment(_res[i].created_at),
+                time_ago: moment(_res[i].created_at).fromNow(),
                 geo: _res[i].coordinates ? [_res[i].coordinates.coordinates[1],_res[i].coordinates.coordinates[0]]: null, //FYI: coordinates is formatted in geoJSON [longitude, latitude]
                 counts: {
                   share_count: _res[i].retweet_count,
@@ -183,7 +181,7 @@ angular.module('dealScanCrmApp')
                  }
               } else _data.push(dataModel);
 
-            } return _socialSearchResults = {data: _data, searchParams: params, next: next};
+            } return {data: _data, searchParams: params, next: next};
           } else return [];
         }).catch(function (err) {
           console.log(err);
@@ -217,14 +215,18 @@ angular.module('dealScanCrmApp')
       }
 
       return $q.all(searches).then(function(res){
-        var resData = {data:[], searchParams:{}};
+        _socialSearchResults = {data:[], searchParams:{}};
         console.log(res);
         for(var i = 0; i < res.length; i++){
           if (res[i].errorCode || res[i].errorMessage)
             throw {errorCode:res[i].errorCode, errorMessage:res[i].errorMessage};
-          resData.data = resData.data.concat(res[i].data);
-          resData.searchParams[searchOptions.sources[i].name+'Params'] = res[i].searchParams;
-        } return resData;
+          _socialSearchResults.data = _socialSearchResults.data.concat(res[i].data);
+          _socialSearchResults.searchParams[searchOptions.sources[i].name+'Params'] = res[i].searchParams;
+        }
+
+        /* filter results */
+        _socialSearchResults.data = $filter('orderBy')(_socialSearchResults.data, "created_at", true);
+        return _socialSearchResults;
       })
         .catch(function(err){
         console.log(err);

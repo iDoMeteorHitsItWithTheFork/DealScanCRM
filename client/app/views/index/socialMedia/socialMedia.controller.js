@@ -134,7 +134,14 @@ angular.module('dealScanCrmApp')
       });
     }
 
-
+     /* Trim And Normalize Image Url */
+    _sm.trimImgUrl = function(url){
+       return Util.trimImgUrl(url);
+    }
+    /* Time Ago */
+    _sm.momentAgo = function(time){
+        return moment(time).fromNow();
+    }
     //search media
     _sm.searchSocialMedia = function(bounds, next){
       console.log(_sm.searchObj);
