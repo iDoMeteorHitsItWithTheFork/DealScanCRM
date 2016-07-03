@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('SocialMedia', function (Auth, Util, $resource, $filter, $q, appConfig, SocialMediaResource) {
+  .factory('SocialMedia', function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource) {
     // Service logic
     var _socialSearchResults = { data: [], searchParams: {}};
 
@@ -67,6 +67,10 @@ angular.module('dealScanCrmApp')
                  like_count: _res[i].likes ? _res[i].likes.summary.total_count : 0,
                  comment_count: _res[i].comments ? _res[i].comments.summary.total_count: 0,
                }
+             }
+
+             if (_res[i].likes && _res[i].likes.summary){
+               dataModel.likes = {has_liked: _res[i].likes.summary.has_liked, can_like: _res[i].likes.summary.can_like};
              }
 
              if (_res[i].message && _res[i].message.trim() != '') dataModel.text = _res[i].message;
@@ -235,6 +239,53 @@ angular.module('dealScanCrmApp')
 
     }
 
+    /**
+     * Like Facebook Post
+     * @param post
+     * @returns {*}
+       */
+    function likeFbPost(post){
+      if (!post || !post.postID || post.likes.has_liked) return;
+      return ezfb.api('/'+post.postID+'/likes', 'POST').then(function(res){
+         console.log(res);
+         if (res.success){
+            post.likes.has_liked = true;
+            return post;
+         } else return {errorCode: '', errorMessage:'Error[]: Unbale to Like Post!'};
+      }).catch(function(err){
+          console.log(err);
+          return err;
+      });
+    }
+
+      /**
+       * Add comment to fb posts
+       * @param post
+       */
+    function addCommentFbPost(post){
+       if (!post || !post.postID || !post.new_message || post.new_message.trim() == '') return;
+       return ezfb.api('/'+post.postID+'/comments',{message: post.new_message}, 'POST')
+         .then(function(res){
+           console.log(res);
+          if (res && res.id){
+             return ezfb.api('/'+res.id+'?fields=attachment,like_count,from{name, picture},created_time,message')
+               .then(function(res){
+                 if(res && !res.error){
+                    if (post.comments) post.comments.unshift(res);
+                    else post.comments = ([]).push(res);
+                    post.counts.comment_count++;
+                    return post;
+                 } else return {errorCode:'', errorMessage: 'Error[]: unable to retrieve posts comments'}
+             }).catch(function(err){
+                 console.log(err);
+                 return err;
+             })
+          } else return {errorCode: '', errorMessage: 'Error[]: unable to update post comments'}
+       }).catch(function(err){
+          console.log(err);
+          return err;
+       });
+    }
 
     //search Instagram
     function igSearch(term){
@@ -247,6 +298,8 @@ angular.module('dealScanCrmApp')
     // Public API here
     return {
         search:searchSocialMedia,
+        like: likeFbPost,
+        comment: addCommentFbPost,
         searchResults: getSocialSearchResults,
         clear: clearResults
     };

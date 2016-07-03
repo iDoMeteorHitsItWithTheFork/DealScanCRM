@@ -35,7 +35,7 @@ angular.module('dealScanCrmApp')
     _sm.monitorButtons = [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
       {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]
 
-    _sm.missingAvatar = 'http://www.marineinsurance-ircm.co.uk/wp-content/uploads/2015/12/img-profile-missing.png';
+    _sm.missingAvatar = 'assets/images/img-profile-missing.png';
 
     _sm.drawing = false;
 
@@ -165,7 +165,88 @@ angular.module('dealScanCrmApp')
       });
     }
 
+      /**
+       * Like or Favs a Post depending on Source
+       * @param post
+       */
+    _sm.likeOrFavs = function(post){
+        if (!post) return;
+        switch(post.datasource){
+          case 'facebook':
+            _sm.likePost(post);
+            break;
+          case 'twitter':
+                break;
+        }
+    }
 
+    _sm.likePost = function(post){
+      if (post.processing) return;
+      post.processing = true;
+      SocialMedia.like(post).then(function(res){
+        post.processing = false;
+        delete post.processing;
+        if (res.errorCode) {
+
+          //display error cod
+        } else post = res;
+      }).catch(function(err){
+        post.processing = false;
+        delete post.processing;
+        console.log(err);
+        //toaster err
+      });
+    }
+
+      /**
+       * Comment or Reply to Post
+       * @param post
+       */
+    _sm.commentOrReply = function(post, form){
+      if (!post || !post.new_message || !form) return;
+      switch(post.datasource){
+        case 'facebook':
+          _sm.commentOnPost(post, form);
+          break;
+        case 'twitter':
+          break;
+      }
+    }
+
+    /**
+     * Add comment to facebook post
+     * @param post
+     * @param message
+       */
+    _sm.commentOnPost = function(post, form){
+      if (post.processingMsg) return;
+      post.processingMsg = true;
+      SocialMedia.comment(post).then(function(res){
+        post.processingMsg = false;
+        delete post.processingMsg;
+        if (res.errorCode) {
+          //display error cod
+        } else {
+          post = res;
+          post.new_message = '';
+          form.$setPristine();
+        }
+      }).catch(function(err){
+        post.processing = false;
+        delete post.processingMsg;
+        console.log(err);
+        //toaster err
+      });
+
+    }
+
+    /**
+     * Share or Retweet a Post
+     * @param item
+       */
+    _sm.shareOrRetweet = function(item){
+
+    }
 
 
   });
