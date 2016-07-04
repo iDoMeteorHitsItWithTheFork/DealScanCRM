@@ -445,6 +445,8 @@ function fullScroll($timeout){
         element.slimscroll({
           height: '100%',
           railOpacity: 0.9,
+          touchScrollStep: 1,
+          wheelStep: 1
         });
       });
     }
