@@ -54,13 +54,13 @@
   <div class="row social-row">
 
     <!-- social map -->
-        <ng-map class="col-lg-12 social-map" center="[38.9072, -77.0369]" fit-map>
+        <ng-map class="col-sm-7 social-map" ng-class="sm.currentView.id == 'discover' ? 'social-map-discover' : 'social-map-monitor'" center="[38.9072, -77.0369]" fit-map>
             <marker ng-repeat="post in sm.searchResults.data" ng-if="post.geo.lat" position="{{::post.geo.lat}}, {{::post.geo.lng}}"></marker>
         </ng-map>
     <!-- /.social map -->
 
     <!-- social discovery -->
-    <div ng-show="sm.currentView.id == 'discover'" style="min-width:500px" class="ibox float-e-margins col-sm-5 social-search-options animated fadeInRight" id="discover-ibox">
+    <div ng-show="sm.currentView.id == 'discover'" style="width:500px" class="ibox float-e-margins col-sm-5 social-search-options animated fadeInRight" id="discover-ibox">
       <div class="ibox-title p-b-14" id="discover-ibox-sub">
         <div class="row">
           <form name="socialMediaSearchFrom" role="form" class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
@@ -162,7 +162,7 @@
     <!-- ./social discovery -->
 
     <!-- live monitoring -->
-    <div ng-show="sm.currentView.id == 'monitor'" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
+    <div ng-show="sm.currentView.id == 'monitor'" style="width:577px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
       <div class="ibox-title p-b-14">
         <div class="row">
           <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
