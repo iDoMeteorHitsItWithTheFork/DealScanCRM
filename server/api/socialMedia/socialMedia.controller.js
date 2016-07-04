@@ -160,8 +160,8 @@ export function searchFacebook(req, res){
     'created_time,message},likes.limit(3).summary(true),actions';
 
   facebook.searchAsync(searchOptions)
+    .then(handleEntityNotFound(res))
     .then(function(results){
-        console.log(results);
         if (results.data && results.data.length > 0){
           var ps = [];
           for(var i=0; i < results.data.length; i++)
