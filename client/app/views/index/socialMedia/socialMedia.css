@@ -44,6 +44,9 @@
 .m-r-ng-10 {
   margin-right: -10px !important;
 }
+.m-r-5 {
+  margin-right:5px;
+}
 .p-t-5 {
   padding-top:5px !important;
 }
@@ -85,6 +88,9 @@
 }
 .fs-15 {
   font-size: 15px;
+}
+.cursor {
+  cursor: pointer;
 }
 .fb-selected {
   background-color:#3b5998!important;
@@ -142,6 +148,19 @@
   position: relative;
 }
 
+.social-map-discover {
+  padding-left: 500px!important;
+}
+
+.social-map-monitor {
+  padding-left:500px!important
+}
+tags-input .host {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 5px;
+  height: 100%;
+}
 .social-map > .google-map {
   width: 100%;
   height: 100%;

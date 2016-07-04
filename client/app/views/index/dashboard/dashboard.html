@@ -729,11 +729,11 @@
 
 
     <!-- Left section -->
-    <div class="col-lg-8">
+    <div class="col-lg-12">
       <!-- tasks & active users -->
       <div class="row">
         <!-- active users -->
-        <div class="col-lg-6">
+        <div class="col-lg-5">
           <div class="ibox float-e-margins">
             <div class="ibox-title">
               <h5>Active Users</h5>
@@ -799,11 +799,6 @@
 
             </div>
           </div>
-        </div>
-        <!-- ./active users -->
-
-        <!-- Tasks -->
-        <div class="col-lg-6">
           <div class="ibox">
             <div class="ibox-title">
               <h5>Tasks</h5>
@@ -847,6 +842,151 @@
             </div>
           </div>
         </div>
+        <!-- ./active users -->
+
+        <!-- Tasks -->
+        <div class="col-lg-7">
+          <div class="ibox float-e-margins">
+            <div class="ibox-title">
+              <h5>Recent Activities</h5>
+              <div ibox-tools></div>
+            </div>
+            <div class="ibox-content ibox-heading">
+              <h3>You have meeting today!</h3>
+              <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
+              </small>
+            </div>
+            <div class="ibox-content inspinia-timeline"
+                 style="height: 710px; overflow-y:scroll; padding-bottom:20px;">
+
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-briefcase"></i>
+                    6:00 am
+                    <br/>
+                    <small class="text-navy">2 hour ago</small>
+                  </div>
+                  <div class="col-xs-7 content no-top-border">
+                    <p class="m-b-xs"><strong>Meeting</strong></p>
+
+                    <p>Conference on the sales results for the previous year. Monica please examine sales
+                      trends in marketing and products. Below please find the current status of the
+                      sale.</p>
+
+                    <p>
+                      <bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></bar-chart>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-file-text"></i>
+                    7:00 am
+                    <br/>
+                    <small class="text-navy">3 hour ago</small>
+                  </div>
+                  <div class="col-xs-7 content">
+                    <p class="m-b-xs"><strong>Send documents to Mike</strong></p>
+
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                      Ipsum has been the industry's standard dummy text ever since.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-coffee"></i>
+                    8:00 am
+                    <br/>
+                  </div>
+                  <div class="col-xs-7 content">
+                    <p class="m-b-xs"><strong>Coffee Break</strong></p>
+
+                    <p>
+                      Go to shop and find some products.
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                      Ipsum has been the industry's.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-phone"></i>
+                    11:00 am
+                    <br/>
+                    <small class="text-navy">21 hour ago</small>
+                  </div>
+                  <div class="col-xs-7 content">
+                    <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
+
+                    <p>
+                      Lorem Ipsum has been the industry's standard dummy text ever since.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-user-md"></i>
+                    09:00 pm
+                    <br/>
+                    <small>21 hour ago</small>
+                  </div>
+                  <div class="col-xs-7 content">
+                    <p class="m-b-xs"><strong>Go to the doctor dr Smith</strong></p>
+
+                    <p>
+                      Find some issue and go to doctor.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-user-md"></i>
+                    11:10 pm
+                  </div>
+                  <div class="col-xs-7 content">
+                    <p class="m-b-xs"><strong>Chat with Sandra</strong></p>
+
+                    <p>
+                      Lorem Ipsum has been the industry's standard dummy text ever since.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="row">
+                  <div class="col-xs-3 date">
+                    <i class="fa fa-comments"></i>
+                    12:50 pm
+                    <br/>
+                    <small class="text-navy">48 hour ago</small>
+                  </div>
+                  <div class="col-xs-7 content">
+                    <p class="m-b-xs"><strong>Chat with Monica and Sandra</strong></p>
+
+                    <p>
+                      Web sites still in their infancy. Various versions have evolved over the years,
+                      sometimes by accident, sometimes on purpose (injected humour and the like).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
         <!-- ./Tasks -->
 
       </div>
@@ -854,84 +994,85 @@
 
 
       <!-- social media -->
-      <div class="row">
+      <div class="row" style="display:none;">
         <div class="col-lg-12">
-          <div class="ibox float-e-margins">
-            <div class="ibox-title">
-              <h5>Social Media</h5>
-              <div ibox-tools></div>
-            </div>
-            <div class="ibox-content" style="height:365px !important;">
 
-              <div class="row">
-                <div class="col-lg-6">
-                  <table class="table table-hover margin bottom">
-                    <thead>
-                    <tr>
-                      <th style="width: 1%" class="text-center">No.</th>
-                      <th>Transaction</th>
-                      <th class="text-center">Date</th>
-                      <th class="text-center">Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td class="text-center">1</td>
-                      <td> Security doors
-                        </small></td>
-                      <td class="text-center small">16 Jun 2014</td>
-                      <td class="text-center"><span class="label label-primary">$483.00</span>
-                      </td>
+          <!--<div class="ibox float-e-margins">-->
+            <!--<div class="ibox-title">-->
+              <!--<h5>Social Media</h5>-->
+              <!--<div ibox-tools></div>-->
+            <!--</div>-->
+            <!--<div class="ibox-content" style="height:365px !important;">-->
 
-                    </tr>
-                    <tr>
-                      <td class="text-center">2</td>
-                      <td> Wardrobes
-                      </td>
-                      <td class="text-center small">10 Jun 2014</td>
-                      <td class="text-center"><span class="label label-primary">$327.00</span>
-                      </td>
+              <!--<div class="row">-->
+                <!--<div class="col-lg-6">-->
+                  <!--<table class="table table-hover margin bottom">-->
+                    <!--<thead>-->
+                    <!--<tr>-->
+                      <!--<th style="width: 1%" class="text-center">No.</th>-->
+                      <!--<th>Transaction</th>-->
+                      <!--<th class="text-center">Date</th>-->
+                      <!--<th class="text-center">Amount</th>-->
+                    <!--</tr>-->
+                    <!--</thead>-->
+                    <!--<tbody>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center">1</td>-->
+                      <!--<td> Security doors-->
+                        <!--</small></td>-->
+                      <!--<td class="text-center small">16 Jun 2014</td>-->
+                      <!--<td class="text-center"><span class="label label-primary">$483.00</span>-->
+                      <!--</td>-->
 
-                    </tr>
-                    <tr>
-                      <td class="text-center">3</td>
-                      <td> Set of tools
-                      </td>
-                      <td class="text-center small">12 Jun 2014</td>
-                      <td class="text-center"><span class="label label-warning">$125.00</span>
-                      </td>
+                    <!--</tr>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center">2</td>-->
+                      <!--<td> Wardrobes-->
+                      <!--</td>-->
+                      <!--<td class="text-center small">10 Jun 2014</td>-->
+                      <!--<td class="text-center"><span class="label label-primary">$327.00</span>-->
+                      <!--</td>-->
 
-                    </tr>
-                    <tr>
-                      <td class="text-center">4</td>
-                      <td> Panoramic pictures</td>
-                      <td class="text-center small">22 Jun 2013</td>
-                      <td class="text-center"><span class="label label-primary">$344.00</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-center">5</td>
-                      <td>Phones</td>
-                      <td class="text-center small">24 Jun 2013</td>
-                      <td class="text-center"><span class="label label-primary">$235.00</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-center">6</td>
-                      <td>Monitors</td>
-                      <td class="text-center small">26 Jun 2013</td>
-                      <td class="text-center"><span class="label label-primary">$100.00</span>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="col-lg-6" ng-controller="dashboardMap as map">
-                  <div vector-map style="height: 300px;" my-map-data="map.data"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+                    <!--</tr>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center">3</td>-->
+                      <!--<td> Set of tools-->
+                      <!--</td>-->
+                      <!--<td class="text-center small">12 Jun 2014</td>-->
+                      <!--<td class="text-center"><span class="label label-warning">$125.00</span>-->
+                      <!--</td>-->
+
+                    <!--</tr>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center">4</td>-->
+                      <!--<td> Panoramic pictures</td>-->
+                      <!--<td class="text-center small">22 Jun 2013</td>-->
+                      <!--<td class="text-center"><span class="label label-primary">$344.00</span>-->
+                      <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center">5</td>-->
+                      <!--<td>Phones</td>-->
+                      <!--<td class="text-center small">24 Jun 2013</td>-->
+                      <!--<td class="text-center"><span class="label label-primary">$235.00</span>-->
+                      <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                      <!--<td class="text-center">6</td>-->
+                      <!--<td>Monitors</td>-->
+                      <!--<td class="text-center small">26 Jun 2013</td>-->
+                      <!--<td class="text-center"><span class="label label-primary">$100.00</span>-->
+                      <!--</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                  <!--</table>-->
+                <!--</div>-->
+                <!--<div class="col-lg-6" ng-controller="dashboardMap as map">-->
+                  <!--<div vector-map style="height: 300px;" my-map-data="map.data"></div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
         </div>
       </div>
       <!-- ./social media -->
@@ -941,145 +1082,7 @@
 
     <!-- Right section -->
     <div class="col-lg-4">
-      <div class="ibox float-e-margins">
-        <div class="ibox-title">
-          <h5>Recent Activities</h5>
-          <div ibox-tools></div>
-        </div>
-        <div class="ibox-content ibox-heading">
-          <h3>You have meeting today!</h3>
-          <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
-          </small>
-        </div>
-        <div class="ibox-content inspinia-timeline"
-             style="height: 710px; overflow-y:scroll; padding-bottom:20px;">
 
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-briefcase"></i>
-                6:00 am
-                <br/>
-                <small class="text-navy">2 hour ago</small>
-              </div>
-              <div class="col-xs-7 content no-top-border">
-                <p class="m-b-xs"><strong>Meeting</strong></p>
-
-                <p>Conference on the sales results for the previous year. Monica please examine sales
-                  trends in marketing and products. Below please find the current status of the
-                  sale.</p>
-
-                <p>
-                  <bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></bar-chart>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-file-text"></i>
-                7:00 am
-                <br/>
-                <small class="text-navy">3 hour ago</small>
-              </div>
-              <div class="col-xs-7 content">
-                <p class="m-b-xs"><strong>Send documents to Mike</strong></p>
-
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                  Ipsum has been the industry's standard dummy text ever since.</p>
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-coffee"></i>
-                8:00 am
-                <br/>
-              </div>
-              <div class="col-xs-7 content">
-                <p class="m-b-xs"><strong>Coffee Break</strong></p>
-
-                <p>
-                  Go to shop and find some products.
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                  Ipsum has been the industry's.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-phone"></i>
-                11:00 am
-                <br/>
-                <small class="text-navy">21 hour ago</small>
-              </div>
-              <div class="col-xs-7 content">
-                <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
-
-                <p>
-                  Lorem Ipsum has been the industry's standard dummy text ever since.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-user-md"></i>
-                09:00 pm
-                <br/>
-                <small>21 hour ago</small>
-              </div>
-              <div class="col-xs-7 content">
-                <p class="m-b-xs"><strong>Go to the doctor dr Smith</strong></p>
-
-                <p>
-                  Find some issue and go to doctor.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-user-md"></i>
-                11:10 pm
-              </div>
-              <div class="col-xs-7 content">
-                <p class="m-b-xs"><strong>Chat with Sandra</strong></p>
-
-                <p>
-                  Lorem Ipsum has been the industry's standard dummy text ever since.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="row">
-              <div class="col-xs-3 date">
-                <i class="fa fa-comments"></i>
-                12:50 pm
-                <br/>
-                <small class="text-navy">48 hour ago</small>
-              </div>
-              <div class="col-xs-7 content">
-                <p class="m-b-xs"><strong>Chat with Monica and Sandra</strong></p>
-
-                <p>
-                  Web sites still in their infancy. Various versions have evolved over the years,
-                  sometimes by accident, sometimes on purpose (injected humour and the like).
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
     </div>
     <!-- ./Right section -->
 
