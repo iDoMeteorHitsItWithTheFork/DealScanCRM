@@ -5,17 +5,26 @@ angular.module('dealScanCrmApp')
     // Service logic
     var _socialSearchResults = { data: [], searchParams: {}};
 
-    //get Stored results
+    /**
+     * Get stored search results
+     * @returns {{data: Array, searchParams: {}}}
+       */
     function getSocialSearchResults(){
       return _socialSearchResults;
     }
 
-    //clear stored results
+    /**
+     * Clear search results
+     */
     function clearResults(){
       _socialSearchResults = {data: [], searchParams: {}};
     }
 
-
+    /**
+     * Remove Duplicate from Results
+     * @param arr
+     * @returns {Array}
+       */
     function deDupPosts(arr) {
       var u = {}, a = [];
       for(var i = 0; i < arr.length; i++){
@@ -28,7 +37,12 @@ angular.module('dealScanCrmApp')
       return a;
     }
 
-    //Search facebook
+    /**
+     * Search Facebook
+     * @param searchOptions
+     * @param next
+     * @returns {*}
+       */
     function fbSearch(searchOptions, next) {
 
        var params = {
@@ -97,7 +111,12 @@ angular.module('dealScanCrmApp')
     }
 
 
-    //parse next_results string from twitter queries
+    /**
+     * get Next Results Parameters
+     * @param next_results
+     * @param source
+     * @returns {{}}
+       */
     function getNextParams(next_results, source){
        if (!next_results) return;
        if (!source) return;
@@ -117,8 +136,11 @@ angular.module('dealScanCrmApp')
     }
 
 
-
-    //Search Twitter
+    /**
+     * Search {query} on Twitter
+     * @param searchOptions
+     * @returns {*}
+       */
     function twtSearch(searchOptions){
 
       //get new results or next results
@@ -167,6 +189,10 @@ angular.module('dealScanCrmApp')
                 },
                 comments: []
               };
+
+              if (angular.isDefined(_res[i].retweeted)) dataModel.retweeted = _res[i].retweeted;
+              if (angular.isDefined(_res[i].favorited)) dataModel.favorited = _res[i].favorited;
+
               if (searchOptions.location) {
                  var ref = new google.maps.LatLng(searchOptions.location.lat, searchOptions.location.lon);
                  switch(searchOptions.bounds){
@@ -195,7 +221,12 @@ angular.module('dealScanCrmApp')
     }
 
 
-    //Search social
+    /**
+     * Search {query} on social media
+     * @param searchOptions
+     * @param next
+     * @returns {*}
+       */
     function searchSocialMedia(searchOptions, next){
       if (!searchOptions) return;
       if (!searchOptions.sources && searchOptions.sources.length == 0)
@@ -259,6 +290,48 @@ angular.module('dealScanCrmApp')
     }
 
       /**
+       * Like a Tweet
+       * @param post
+       * @returns {*}
+       */
+    function likeTweet(post){
+      if (!post || !post.postID || post.favorited) return;
+      return SocialMediaResource.
+      likeTweet({postID: post.postID}).$promise
+        .then(function(res){
+          console.log(res);
+          if (res && (res.resp.statusCode == 200 || res.resp.statusCode == 403)){
+              post.favorited = true;
+              return post;
+           } else return {errorCode: '', errorMessage: 'Error[]: Unbale to like tweet!'};
+      }).catch(function(err){
+           console.log(err);
+           return err;
+        })
+    }
+
+    /**
+     * Retweet a tweet
+     * @param post
+     * @returns {*}
+       */
+    function reTweet(post){
+      if (!post || !post.postID || post.retweeted == true) return;
+      return SocialMediaResource.
+      reTweet({postID: post.postID}).$promise
+        .then(function(res){
+           console.log(res);
+           if (res && (res.resp.statusCode == 200 || res.resp.statusCode == 403)){
+              post.retweeted = true;
+              return post;
+           } else return {errorCode: '', errorMessage: 'Error[]: Unable to reTweet!'};
+      }).catch(function(err){
+           console.log(err);
+           return err;
+        });
+    }
+
+      /**
        * Add comment to fb posts
        * @param post
        */
@@ -298,6 +371,8 @@ angular.module('dealScanCrmApp')
     // Public API here
     return {
         search:searchSocialMedia,
+        reTweet: reTweet,
+        favs: likeTweet,
         like: likeFbPost,
         comment: addCommentFbPost,
         searchResults: getSocialSearchResults,

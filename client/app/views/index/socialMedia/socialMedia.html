@@ -88,7 +88,7 @@
               <span class="sr-only">Loading...</span>
           </div>
         <div ng-hide="sm.searchLoading" full-scroll style="padding:15px;">
-          <div class="social-feed-box" ng-repeat="item in sm.searchResults.data | limitTo:50">
+          <div class="social-feed-box" ng-repeat="item in sm.searchResults.data">
             <div class="pull-right social-action">
               <button class="btn btn-{{::item.datasource}} btn-circle">
                 <i class="fa fa-{{::item.datasource}}"></i>
@@ -109,16 +109,16 @@
               <p>{{::item.text}}</p>
               <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
               <div class="btn-group">
-                <button ladda="item.processing" ng-disabled="item.processing || (item.datasource == 'facebook' && item.likes.has_liked)"
-                        class="ladda-button btn btn-white btn-xs" ng-click="sm.likeOrFavs(item);" ng-if="::(item.datasource == 'facebook' && item.likes.can_like)">
+                <button ladda="item.processing" ng-disabled="item.processing || (item.datasource == 'facebook' && item.likes.has_liked) || (item.datasource == 'twitter' && item.favorited)"
+                        class="ladda-button btn btn-white btn-xs" ng-click="sm.likeOrFavs(item);" ng-if="::((item.datasource == 'facebook' && item.likes.can_like) || item.datasource != 'facebook')">
                   <i ng-class="::{'fa fa-thumbs-up' : item.datasource =='facebook', 'fa fa-heart' : item.datasource == 'twitter'}"></i>
                   {{(item.datasource == 'facebook' && !item.likes.has_liked) ? ' Like this!' : ''}}
                   {{(item.datasource == 'facebook' && item.likes.has_liked) ? ' Remove Like' : ''}}
-                  {{item.datasource == 'twitter' ? ' Add to Favs' : ''}}</button>
-                <button class="btn btn-white btn-xs" ng-click="item.write_comment = !item.write_comment">
-                  <i ng-class="::{'fa fa-comments' : item.datasource == 'facebook', 'fa fa-reply': item.datasource == 'twitter'}"></i>
-                  {{::item.datasource == 'facebook' ? ' Comment' : ''}}{{::item.datasource == 'twitter' ? ' Reply' : ''}}</button>
-                <button class="btn btn-white btn-xs" ng-click="sm.shareOrRetweet(item);">
+                  {{::item.datasource == 'twitter' ? ' Add to Favs' : ''}}</button>
+                <button ng-if="item.datasource != 'twitter'" class="btn btn-white btn-xs" ng-click="item.write_comment = !item.write_comment">
+                  <i ng-class="::{'fa fa-comments' : item.datasource == 'facebook'}"></i>
+                  {{::item.datasource == 'facebook' ? ' Comment' : ''}}</button>
+                <button ladda="item.retweeting" ng-disabled="item.retweeting || (item.datasource == 'twitter' && item.retweeted)" class="btn btn-white btn-xs" ng-click="sm.shareOrRetweet(item);">
                   <i ng-class="{'fa fa-share' : item.datasource == 'facebook', 'fa fa-retweet': item.datasource == 'twitter'}"></i>
                   {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
               </div>
@@ -138,14 +138,14 @@
                   <small class="text-muted">{{::sm.momentAgo(comment.created_time)}}</small>
                 </div>
               </div>
-              <div class="social-comment animated fadeInDown" ng-show="item.write_comment">
+              <div ng-if="item.datasource != 'twitter'" class="social-comment animated fadeInDown" ng-show="item.write_comment">
                 <a href="" class="pull-left">
                   <img alt="image" ng-src="{{(item.datasource == 'facebook' ? sm.user.fbProfile.picture.data.url : sm.missingAvatar) || sm.missingAvatar}}">
                 </a>
                 <div class="media-body">
                   <form name="commentOrReplyForm" role="form">
                     <input type="text" ng-model="item.new_message" required ng-disabled="item.processingMsg"
-                           class="form-control" placeholder="Write {{::item.datasource == 'facebook' ? 'comment': ''}}{{::item.datasource == 'twitter' ? 'reply': ''}}..."/>
+                           class="form-control" placeholder="Write comment..."/>
                     <button ng-click="sm.commentOrReply(item, commentOrReplyForm);" type="submit" ng-hide="true"
                             class="btn btn-class" ng-disabled="item.processingMsg || commentOrReplyForm.$pristine || !commentOrReplyForm.$valid"></button>
                   </form>

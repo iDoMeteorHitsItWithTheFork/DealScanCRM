@@ -17,6 +17,20 @@
             controller: 'search'
           }
         },
+        likeTweet: {
+          method: 'POST',
+          params: {
+            id:'twitter',
+            controller: 'like'
+          }
+        },
+        reTweet: {
+          method: 'POST',
+          params: {
+            id:'twitter',
+            controller: 'reTweet'
+          }
+        },
         setFbToken: {
           method: 'PUT',
           params: {

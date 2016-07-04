@@ -173,14 +173,19 @@ angular.module('dealScanCrmApp')
         if (!post) return;
         switch(post.datasource){
           case 'facebook':
-            _sm.likePost(post);
+            likePost(post);
             break;
           case 'twitter':
-                break;
+            favoritedTweet(post);
+            break;
         }
     }
 
-    _sm.likePost = function(post){
+      /**
+       * like a facebook post
+       * @param post
+       */
+    function likePost(post){
       if (post.processing) return;
       post.processing = true;
       SocialMedia.like(post).then(function(res){
@@ -206,7 +211,7 @@ angular.module('dealScanCrmApp')
       if (!post || !post.new_message || !form) return;
       switch(post.datasource){
         case 'facebook':
-          _sm.commentOnPost(post, form);
+          commentOnPost(post, form);
           break;
         case 'twitter':
           break;
@@ -218,7 +223,7 @@ angular.module('dealScanCrmApp')
      * @param post
      * @param message
        */
-    _sm.commentOnPost = function(post, form){
+     function commentOnPost(post, form){
       if (post.processingMsg) return;
       post.processingMsg = true;
       SocialMedia.comment(post).then(function(res){
@@ -240,12 +245,64 @@ angular.module('dealScanCrmApp')
 
     }
 
+
+    /**
+     * Retweet a post
+     * @param post
+       */
+    function reTweet(post){
+      if (!post || !post.postID || post.retweeted) return;
+      if (post.retweeting) return;
+      post.retweeting = true;
+      SocialMedia.reTweet(post).then(function(res){
+        console.log(res);
+        post.retweeting = false;
+        delete post.retweeting;
+        if (res && !res.errorCode){
+           post = res;
+        } else {
+          //handle error
+        }
+      }).catch(function(err){
+          delete post.retweeting
+          console.log(err);
+          //toaster err;
+      });
+    }
+
+    function favoritedTweet(post){
+      if (!post || !post.postID || post.favorited) return;
+      if (post.processing) return;
+      post.processing = true;
+      SocialMedia.favs(post).then(function(res){
+        console.log(res);
+        post.processing = false;
+        delete post.processing;
+        if (res && !res.errorCode){
+          post = res;
+        } else {
+          //handle error
+        }
+      }).catch(function(err){
+        delete post.processing
+        console.log(err);
+        //toaster err;
+      });
+    }
+
     /**
      * Share or Retweet a Post
-     * @param item
+     * @param post
        */
-    _sm.shareOrRetweet = function(item){
-
+    _sm.shareOrRetweet = function(post){
+        if (!post) return;
+        switch(post.datasource){
+          case 'twitter':
+            reTweet(post);
+            break;
+          case 'facebook':
+            break;
+        }
     }
 
 

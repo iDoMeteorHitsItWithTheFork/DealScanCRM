@@ -20,6 +20,8 @@ var Q = require('q');
 // instantiate Twit module
 var twitter = new Twit(config.twitter);
 var TWITTER_SEARCH_URL = 'search/tweets';
+var TWITTER_LIKE_URL = 'favorites/create';
+var TWITTER_RETWEET_URL = 'statuses/retweet/:id';
 
 
 //instantiate Facebook module
@@ -86,7 +88,7 @@ function handleError(res, statusCode) {
 
 //search twitter for username, keywords & filter by location
 export function searchTwitter(req, res){
-  if (!req.query) return res.status(404).send('Error[]: Query Parameters are required!');
+  if (!req.query) return res.status(500).send('Error[]: Query Parameters are required!');
   var params = req.query;
   twitter.get(TWITTER_SEARCH_URL, params)
     .then(handleEntityNotFound(res))
@@ -95,10 +97,28 @@ export function searchTwitter(req, res){
 }
 
 
+// like a tweet
+export function likeTweet(req, res){
+  if (!req.body.postID) return res.status(500).send('Error[]: PostID is required!');
+  twitter.post(TWITTER_LIKE_URL, { id: req.body.postID })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+//retweet
+export function reTweet(req, res){
+   if (!req.body.postID) return res.status(500).send('Error[]: PostID is required');
+   twitter.post(TWITTER_RETWEET_URL, {id: req.body.postID })
+     .then(handleEntityNotFound(res))
+     .then(respondWithResult(res))
+     .catch(handleError(res));
+}
+
 //Set Facebook Access Token
 export function setFbToken(req, res){
   if (!req.body.accessToken)
-    return res.status(404).send('Error[]: Access Token is required!');
+    return res.status(500).send('Error[]: Access Token is required!');
   var token = req.body.accessToken;
   facebook.setAccessToken(token); //set access token
   isFbTokenSet = true;
@@ -113,11 +133,11 @@ export function searchFacebook(req, res){
 
   var q = req.query.q;
   var location  = req.query.geocode;
-  if (!q && !location) res.status(404).send('Error[]: Query Parameters are required!');
+  if (!q && !location) res.status(500).send('Error[]: Query Parameters are required!');
 
   if (!isFbTokenSet) {
     var token = res.cookie('fbToken') ? res.cookie('fbToken'): null;
-    if (!token) res.status(403).send('Error[]: No Available Access Token. Please check facebook login status.');
+    if (!token) res.status(500).send('Error[]: No Available Access Token. Please check facebook login status.');
     facebook.setAccessToken(token);
     isFbTokenSet = true;
   }
