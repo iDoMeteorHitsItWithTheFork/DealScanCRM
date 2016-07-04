@@ -41,6 +41,8 @@ angular.module('dealScanCrmApp')
 
     _sm.newText = {text: ''};
 
+    _sm.lists = [{title: 'Luda List'}, {title: 'Cary List'}, {title: 'Another list'}];
+    
     _sm.addToList = function (){
       var newObj = _sm.newText;
       _sm.tags.push(newObj);
@@ -132,8 +134,10 @@ angular.module('dealScanCrmApp')
           google.maps.event.trigger(m, 'resize');
           console.log('*** Refreshed Map ***');
         }
-      })
-    }
+      });
+
+
+    };
 
     _sm.refreshMap();
 

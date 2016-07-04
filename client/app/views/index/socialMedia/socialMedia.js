@@ -18,7 +18,12 @@ angular.module('dealScanCrmApp')
               },
               {
                 files: ['.styles/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css']
-              }
+              },
+              {
+                name: 'ui.select',
+                files: ['.resources/plugins/ui-select/select.min.js',
+                  '.styles/plugins/ui-select/select.min.css']
+              },
             ])
           }
         }

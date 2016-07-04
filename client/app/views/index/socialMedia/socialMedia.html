@@ -163,113 +163,123 @@
 
 
     <!-- live monitoring -->
-      <div ng-show="sm.currentView.id == 'monitor'" style="width:500px" class="ibox float-e-margins col-sm-5 social-search-options animated fadeInRight" id="discover-ibox">
-          <div class="ibox-title p-b-14" id="discover-ibox-sub">
+      <!-- live monitoring -->
+      <div ng-show="sm.currentView.id == 'monitor'" style="width:577px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
+          <div class="ibox-title p-b-14">
               <div class="row">
-                  <form name="socialMediaSearchFrom" role="form" class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
-                      <div class="input-group col-sm-6 col-md-7 col-lg-7" style="padding-right: 6px; min-width: 229px;">
-                          <input type="text" class="form-control " placeholder="Enter keyword or username..." ng-model="sm.newText.text">
-                      </div>
-                      <div class="form-group pull-right p-r-16" style="display:inline;">
-                          <button class="btn btn-primary m-l-5" style="height: 34px;" type="submit" ng-click="sm.addToList();">
-                              <i class="fa fa-plus">&nbsp;&nbsp;</i>Add to list
-                          </button>
+                  <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
+                      <div class="input-group " style="padding-right: 10px;">
+                          <input class="form-control m-l-20 " style="width:350px;" type="text" placeholder="enter keywords or username">
+              <span class="input-group-addon navy-bg cursor-pointer">
+                <i class="fa fa-television">&nbsp;&nbsp;</i>Add To List
+              </span>
                       </div>
                   </form>
               </div>
           </div>
-          <div class="ibox-content" style="  position: absolute; bottom: 0;left:0;right:0;top:75px;padding: 0;">
-              <div class="col-xs-6 p-t-10">
-                  <span ng-repeat="tag in sm.tags" class="badge m-r-5">{{tag.text}}<i class="fa fa-times m-l-5 cursor" ng-click="sm.removeFromList(tag)"></i></span>
-              </div>
-              <div class="col-xs-6 p-t-10">
-                  <button ng-repeat="source in sm.searchObj.sources" uib-tooltip="{{source.name}}" tooltip-placement="bottom" class="btn" ng-class="source.selected ? '{{source.id}}-selected' : '{{source.id}}-not-selected'" ng-click="source.selected = !source.selected"  style="width:34px; height: 34px; margin-right:3px; {{source.buttonStyle}}" type="button">
-                      <i class="fa fa-{{source.name}} fs-15" style="{{source.iconStyle}}"></i>
-                  </button>
-                  <button uib-tooltip="Add location filter" tooltip-placement="bottom" class="btn m-l-0" ng-class="sm.drawing ? 'circle-selected' : 'circle-not-selected'" ng-click="sm.setLocation()" type="button" style="width:34px; height: 34px;">
-                      <i class="fa fa-map-marker" style="font-size: 20px; margin-left:-2px"></i>
-                      <i class="fa fa-plus" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
-                  </button>
-                  <button class="btn btn-primary m-l-5" style="height: 34px;" type="submit" ng-click="sm.searchSocialMedia();">
-                      <i class="fa fa-play">&nbsp;&nbsp;</i>Play
-                  </button>
-              </div>
-              <div ng-hide="!sm.searchLoading">
-                  <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px"></i>
-                  <span class="sr-only">Loading...</span>
-              </div>
-              <div ng-hide="sm.searchLoading" full-scroll style="padding:15px;">
-                  <div ng-if="sm.searchResults.data && sm.searchResults.data.length == 0 && sm.searchResults.searchParams">
-                      <p>No Results Found. Please adjust your search criteria and try again. Thanks</p>
+          <div class="ibox-content live-monitoring-list">
+
+              <div class="row">
+                  <!-- monitoring list -->
+                  <div class="col-lg-5 no-margins no-padding">
+                      <ui-select ng-model="sm.selectedList" theme="bootstrap" style="margin-bottom:10px;">
+                          <ui-select-match placeholder="Select Watchlist...">{{$select.selected.title}}
+                          </ui-select-match>
+                          <ui-select-choices repeat="list in sm.lists | filter: $select.search">
+                              <div ng-bind-html="list.title | highlight: $select.search"></div>
+                          </ui-select-choices>
+                      </ui-select>
+
+                      <ul class="unstyled monitoring-items-list">
+                          <li class="active">
+                              <strong>All Keywords and Users</strong>
+                              <span class="badge badge-warning pull-right">315</span>
+                          </li>
+                          <li ng-repeat="item in sm.monitorList">
+                              <strong>{{item.text}}</strong>
+                              <button class="btn pull-right" ng-class="item.fb ? 'fb-selected' : 'fb-not-selected'" ng-click="item.fb = !item.fb"  style="width:25px; height: 25px; margin-right:3px; padding:0;" type="button">
+                                  <i class="fa fa-facebook fs-15" style="margin-top: 1px;margin-left: 0px;"></i>
+                              </button>
+                              <button class="btn pull-right" ng-class="item.twt ? 'twt-selected' : 'twt-not-selected'" ng-click="item.twt = !item.twt"  style="width:25px; height: 25px; margin-right:3px; padding:0;" type="button">
+                                  <i class="fa fa-twitter fs-15" style=""></i>
+                              </button>
+                          </li>
+                      </ul>
                   </div>
-                  <div ng-if="sm.searchResults.data.length > 0" class="social-feed-box" ng-repeat="item in sm.searchResults.data">
-                      <div class="pull-right social-action">
-                          <button class="btn btn-{{::item.datasource}} btn-circle">
-                              <i class="fa fa-{{::item.datasource}}"></i>
-                          </button>
-                      </div>
-                      <div class="social-avatar">
-                          <a href="" class="pull-left">
-                              <img alt="image" ng-src="{{::item.avatar || sm.missingAvatar}}">
-                          </a>
-                          <div class="media-body">
-                              <a href="#">
-                                  {{::item.username}}
-                              </a>
-                              <small class="text-muted">{{::item.time_ago}}</small>
+                  <!-- /. monitoring list -->
+                  <!-- Monitoring Details Pane -->
+                  <div class="col-lg-7 monitoring-details-pane" slim-scroll box-height="685">
+                      <div ng-if="sm.searchResults.data.length > 0" class="social-feed-box" ng-repeat="item in sm.searchResults.data">
+                          <div class="pull-right social-action">
+                              <button class="btn btn-{{::item.datasource}} btn-circle">
+                                  <i class="fa fa-{{::item.datasource}}"></i>
+                              </button>
                           </div>
-                      </div>
-                      <div class="social-body">
-                          <p>{{::item.text}}</p>
-                          <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
-                          <div class="btn-group">
-                              <button ladda="item.processing" ng-disabled="item.processing || (item.datasource == 'facebook' && item.likes.has_liked) || (item.datasource == 'twitter' && item.favorited)"
-                                      class="ladda-button btn btn-white btn-xs" ng-click="sm.likeOrFavs(item);" ng-if="::((item.datasource == 'facebook' && item.likes.can_like) || item.datasource != 'facebook')">
-                                  <i ng-class="::{'fa fa-thumbs-up' : item.datasource =='facebook', 'fa fa-heart' : item.datasource == 'twitter'}"></i>
-                                  {{(item.datasource == 'facebook' && !item.likes.has_liked) ? ' Like this!' : ''}}
-                                  {{(item.datasource == 'facebook' && item.likes.has_liked) ? ' Remove Like' : ''}}
-                                  {{::item.datasource == 'twitter' ? ' Add to Favs' : ''}}</button>
-                              <button ng-if="item.datasource != 'twitter'" class="btn btn-white btn-xs" ng-click="item.write_comment = !item.write_comment">
-                                  <i ng-class="::{'fa fa-comments' : item.datasource == 'facebook'}"></i>
-                                  {{::item.datasource == 'facebook' ? ' Comment' : ''}}</button>
-                              <button ladda="item.retweeting" ng-disabled="item.retweeting || (item.datasource == 'twitter' && item.retweeted)" class="btn btn-white btn-xs" ng-click="sm.shareOrRetweet(item);">
-                                  <i ng-class="{'fa fa-share' : item.datasource == 'facebook', 'fa fa-retweet': item.datasource == 'twitter'}"></i>
-                                  {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
-                          </div>
-                      </div>
-                      <div  class="social-footer">
-                          <div ng-if="item.comments.length > 0" class="social-comment" ng-repeat="comment in item.comments | limitTo:3">
+                          <div class="social-avatar">
                               <a href="" class="pull-left">
-                                  <img alt="image" ng-src="{{comment.from.picture.data.url || sm.missingAvatar}}">
+                                  <img alt="image" ng-src="{{::item.avatar || sm.missingAvatar}}">
                               </a>
                               <div class="media-body">
                                   <a href="#">
-                                      {{::comment.from.name}}
+                                      {{::item.username}}
                                   </a>
-                                  {{::comment.message}}
-                                  <br/>
-                                  <a href="#" class="small"><i class="fa fa-thumbs-up"></i> {{::comment.like_count}} Like this!</a> -
-                                  <small class="text-muted">{{::sm.momentAgo(comment.created_time)}}</small>
+                                  <small class="text-muted">{{::item.time_ago}}</small>
                               </div>
                           </div>
-                          <div ng-if="item.datasource != 'twitter'" class="social-comment animated fadeInDown" ng-show="item.write_comment">
-                              <a href="" class="pull-left">
-                                  <img alt="image" ng-src="{{(item.datasource == 'facebook' ? sm.user.fbProfile.picture.data.url : sm.missingAvatar) || sm.missingAvatar}}">
-                              </a>
-                              <div class="media-body">
-                                  <form name="commentOrReplyForm" role="form">
-                                      <input type="text" ng-model="item.new_message" required ng-disabled="item.processingMsg"
-                                             class="form-control" placeholder="Write comment..."/>
-                                      <button ng-click="sm.commentOrReply(item, commentOrReplyForm);" type="submit" ng-hide="true"
-                                              class="btn btn-class" ng-disabled="item.processingMsg || commentOrReplyForm.$pristine || !commentOrReplyForm.$valid"></button>
-                                  </form>
+                          <div class="social-body">
+                              <p>{{::item.text}}</p>
+                              <img ng-if="item.image" ng-src="{{::item.image}}" class="img-responsive">
+                              <div class="btn-group">
+                                  <button ladda="item.processing" ng-disabled="item.processing || (item.datasource == 'facebook' && item.likes.has_liked) || (item.datasource == 'twitter' && item.favorited)"
+                                          class="ladda-button btn btn-white btn-xs" ng-click="sm.likeOrFavs(item);" ng-if="::((item.datasource == 'facebook' && item.likes.can_like) || item.datasource != 'facebook')">
+                                      <i ng-class="::{'fa fa-thumbs-up' : item.datasource =='facebook', 'fa fa-heart' : item.datasource == 'twitter'}"></i>
+                                      {{(item.datasource == 'facebook' && !item.likes.has_liked) ? ' Like this!' : ''}}
+                                      {{(item.datasource == 'facebook' && item.likes.has_liked) ? ' Remove Like' : ''}}
+                                      {{::item.datasource == 'twitter' ? ' Add to Favs' : ''}}</button>
+                                  <button ng-if="item.datasource != 'twitter'" class="btn btn-white btn-xs" ng-click="item.write_comment = !item.write_comment">
+                                      <i ng-class="::{'fa fa-comments' : item.datasource == 'facebook'}"></i>
+                                      {{::item.datasource == 'facebook' ? ' Comment' : ''}}</button>
+                                  <button ladda="item.retweeting" ng-disabled="item.retweeting || (item.datasource == 'twitter' && item.retweeted)" class="btn btn-white btn-xs" ng-click="sm.shareOrRetweet(item);">
+                                      <i ng-class="{'fa fa-share' : item.datasource == 'facebook', 'fa fa-retweet': item.datasource == 'twitter'}"></i>
+                                      {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
+                              </div>
+                          </div>
+                          <div  class="social-footer">
+                              <div ng-if="item.comments.length > 0" class="social-comment" ng-repeat="comment in item.comments | limitTo:3">
+                                  <a href="" class="pull-left">
+                                      <img alt="image" ng-src="{{comment.from.picture.data.url || sm.missingAvatar}}">
+                                  </a>
+                                  <div class="media-body">
+                                      <a href="#">
+                                          {{::comment.from.name}}
+                                      </a>
+                                      {{::comment.message}}
+                                      <br/>
+                                      <a href="#" class="small"><i class="fa fa-thumbs-up"></i> {{::comment.like_count}} Like this!</a> -
+                                      <small class="text-muted">{{::sm.momentAgo(comment.created_time)}}</small>
+                                  </div>
+                              </div>
+                              <div ng-if="item.datasource != 'twitter'" class="social-comment animated fadeInDown" ng-show="item.write_comment">
+                                  <a href="" class="pull-left">
+                                      <img alt="image" ng-src="{{(item.datasource == 'facebook' ? sm.user.fbProfile.picture.data.url : sm.missingAvatar) || sm.missingAvatar}}">
+                                  </a>
+                                  <div class="media-body">
+                                      <form name="commentOrReplyForm" role="form">
+                                          <input type="text" ng-model="item.new_message" required ng-disabled="item.processingMsg"
+                                                 class="form-control" placeholder="Write comment..."/>
+                                          <button ng-click="sm.commentOrReply(item, commentOrReplyForm);" type="submit" ng-hide="true"
+                                                  class="btn btn-class" ng-disabled="item.processingMsg || commentOrReplyForm.$pristine || !commentOrReplyForm.$valid"></button>
+                                      </form>
+                                  </div>
                               </div>
                           </div>
                       </div>
                   </div>
+                  <!-- ./monitoring Details Pane -->
               </div>
           </div>
       </div>
+      <!-- ./live monitoring -->
     <!-- ./live monitoring -->
 
   </div>
