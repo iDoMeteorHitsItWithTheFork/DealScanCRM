@@ -36,7 +36,10 @@ db.Upload = db.sequelize.import('../api/upload/upload.model');
 db.Image = db.sequelize.import('../api/image/image.model');
 db.Note = db.sequelize.import('../api/note/note.model');
 db.Deal = db.sequelize.import('../api/deal/deal.model');
-
+db.Watchlist = db.sequelize.import('../api/watchlist/watchlist.model');
+db.Keyword = db.sequelize.import('../api/watchlist/watchlist.keyword.model');
+db.Source = db.sequelize.import('../api/watchlist/watchlist.source.model');
+db.Monitoring = db.sequelize.import('../api/socialMedia/socialMedia.monitoring.model');
 
 db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
 db.Note.belongsTo(db.Customer, {as: 'CustomerNotes', foreignKey:'customerID'});
@@ -83,6 +86,15 @@ db.Rebate.belongsTo(db.Deal, {foreignKey:'dealID'});
 db.Document.belongsTo(db.Deal, {foreignKey:'dealID'});
 
 
+
+db.Watchlist.belongsTo(db.Dealership, {foreignKey: 'dealershipID'});
+db.Watchlist.belongsTo(db.User, {as:'ListOwner', foreignKey: 'UserID'});
+db.Keyword.belongsTo(db.Watchlist, {foreignKey: 'watchlistID'});
+
+//
+
+db.Source.belongsToMany(db.Watchlist, {as:'MonitoringWatchlists', through:db.Monitoring, foreignKey:'SourceID'});
+db.Watchlist.belongsToMany(db.Source, {as:'MonitoringSources', through:db.Monitoring, foreignKey:'WatchlistID'});
 
 
 export default db;
