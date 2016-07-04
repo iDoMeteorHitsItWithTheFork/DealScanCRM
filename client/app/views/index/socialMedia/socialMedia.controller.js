@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q) {
+  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q, toaster) {
     $("#page-wrapper").css("overflow-x", "hidden");//little hack for scroll issue
 
     var _sm =this;
@@ -161,6 +161,7 @@ angular.module('dealScanCrmApp')
           _sm.searchLoading = false;
         }).catch(function(err){
             console.log(err);
+            toaster.error({title:'Social Media Error', body: err});
             _sm.searchLoading = false;
       });
     }
@@ -199,7 +200,7 @@ angular.module('dealScanCrmApp')
         post.processing = false;
         delete post.processing;
         console.log(err);
-        //toaster err
+        toaster.error({title:'Facebook Like Error', body: err});
       });
     }
 
@@ -240,7 +241,7 @@ angular.module('dealScanCrmApp')
         post.processing = false;
         delete post.processingMsg;
         console.log(err);
-        //toaster err
+        toaster.error({title:'Facebook Comment Error', body: err});
       });
 
     }
@@ -261,12 +262,12 @@ angular.module('dealScanCrmApp')
         if (res && !res.errorCode){
            post = res;
         } else {
-          //handle error
+          toaster.error({title:'Twitter ReTweet Error ('+res.errorCode+')', body: res.errorMessage});
         }
       }).catch(function(err){
           delete post.retweeting
           console.log(err);
-          //toaster err;
+          toaster.error({title:'Twitter ReTweet Error', body: err});
       });
     }
 
@@ -281,12 +282,12 @@ angular.module('dealScanCrmApp')
         if (res && !res.errorCode){
           post = res;
         } else {
-          //handle error
+          toaster.error({title:'Twitter Favs Error ('+res.errorCode+')', body: res.errorMessage});
         }
       }).catch(function(err){
         delete post.processing
         console.log(err);
-        //toaster err;
+        toaster.error({title:'Twitter Favs Error', body: err});
       });
     }
 
