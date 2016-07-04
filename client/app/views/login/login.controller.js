@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('LoginCtrl', function ($scope, Auth, $state, appConfig) {
+  .controller('LoginCtrl', function ($scope, Auth, $state, appConfig, toaster) {
 
 
     var _landing = this;
@@ -53,6 +53,7 @@ angular.module('dealScanCrmApp')
           .catch(err => {
             _landing.submitted = false;
             _landing.errors.other = err.message;
+             toaster.error({title: "Login Failed!", body:"Invalid Username and Password."});
           });
       }
     }
