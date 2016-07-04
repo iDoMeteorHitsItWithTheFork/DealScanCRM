@@ -3,7 +3,7 @@
 angular.module('dealScanCrmApp')
   .factory('SocialMedia', function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource) {
     // Service logic
-    var _socialSearchResults = { data: [], searchParams: {}};
+    var _socialSearchResults = { data: null, searchParams: null};
 
     /**
      * Get stored search results
@@ -17,7 +17,7 @@ angular.module('dealScanCrmApp')
      * Clear search results
      */
     function clearResults(){
-      _socialSearchResults = {data: [], searchParams: {}};
+      _socialSearchResults = {data: [], searchParams: null};
     }
 
     /**
@@ -212,7 +212,7 @@ angular.module('dealScanCrmApp')
               } else _data.push(dataModel);
 
             } return {data: _data, searchParams: params, next: next};
-          } else return [];
+          } else return {data:[], searchParams: params, next: null};
         }).catch(function (err) {
           console.log(err);
           return err;
@@ -253,8 +253,8 @@ angular.module('dealScanCrmApp')
         _socialSearchResults = {data:[], searchParams:{}};
         console.log(res);
         for(var i = 0; i < res.length; i++){
-          if (res[i].errorCode || res[i].errorMessage)
-            throw {errorCode:res[i].errorCode, errorMessage:res[i].errorMessage};
+          if (res[i].errorCode || res[i].errorMessage || (res[i].headers && res[i].status && res[i].statusText))
+            throw {errorCode:(res[i].errorCode || res[i].status), errorMessage: (res[0].errorMessage || res[i].statusText)};
           _socialSearchResults.data = _socialSearchResults.data.concat(res[i].data);
           _socialSearchResults.searchParams[searchOptions.sources[i].name+'Params'] = res[i].searchParams;
         }
@@ -294,10 +294,10 @@ angular.module('dealScanCrmApp')
        * @param post
        * @returns {*}
        */
-    function likeTweet(post){
+    function favTweet(post){
       if (!post || !post.postID || post.favorited) return;
       return SocialMediaResource.
-      likeTweet({postID: post.postID}).$promise
+      favTweet({postID: post.postID}).$promise
         .then(function(res){
           console.log(res);
           if (res && (res.resp.statusCode == 200 || res.resp.statusCode == 403)){
@@ -372,7 +372,7 @@ angular.module('dealScanCrmApp')
     return {
         search:searchSocialMedia,
         reTweet: reTweet,
-        favs: likeTweet,
+        favs: favTweet,
         like: likeFbPost,
         comment: addCommentFbPost,
         searchResults: getSocialSearchResults,

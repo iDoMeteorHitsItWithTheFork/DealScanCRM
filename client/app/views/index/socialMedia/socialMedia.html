@@ -63,7 +63,7 @@
     <div ng-show="sm.currentView.id == 'discover'" style="min-width:500px" class="ibox float-e-margins col-sm-5 social-search-options animated fadeInRight" id="discover-ibox">
       <div class="ibox-title p-b-14" id="discover-ibox-sub">
         <div class="row">
-          <form name="socialMediaSearchFrom" class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
+          <form name="socialMediaSearchFrom" role="form" class="form-inline p-l-10 p-r-0 p-t-5 p-b-5">
             <div class="input-group col-sm-4 col-md-5 col-lg-5" style="padding-right: 6px; min-width: 229px;">
               <input type="text" class="form-control " placeholder="Enter keyword or username..." ng-model="sm.searchObj.text">
             </div>
@@ -88,7 +88,10 @@
               <span class="sr-only">Loading...</span>
           </div>
         <div ng-hide="sm.searchLoading" full-scroll style="padding:15px;">
-          <div class="social-feed-box" ng-repeat="item in sm.searchResults.data">
+          <div ng-if="sm.searchResults.data && sm.searchResults.data.length == 0 && sm.searchResults.searchParams">
+            <p>No Results Found. Please adjust your search criteria and try again. Thanks</p>
+          </div>
+          <div ng-if="sm.searchResults.data.length > 0" class="social-feed-box" ng-repeat="item in sm.searchResults.data">
             <div class="pull-right social-action">
               <button class="btn btn-{{::item.datasource}} btn-circle">
                 <i class="fa fa-{{::item.datasource}}"></i>

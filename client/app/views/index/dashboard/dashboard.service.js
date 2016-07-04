@@ -5,8 +5,8 @@ angular.module('dealScanCrmApp')
         // Service logic
         // ...
 
-        var sales = DataSync.processAndSync();
-        console.log(sales);
+       // var sales = DataSync.processAndSync();
+        //console.log(sales);
 
         var _user = Auth.getCurrentUser();
         var _teamMates = {};

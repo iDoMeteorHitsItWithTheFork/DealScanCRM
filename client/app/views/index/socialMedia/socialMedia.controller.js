@@ -26,7 +26,7 @@ angular.module('dealScanCrmApp')
        }
     }
 
-    _sm.searchObj = {text: _sm.searchResults.searchParams.q, radius: null, geo: {lat: null, lng: null},
+    _sm.searchObj = {text: (_sm.searchResults.searchParams) ?_sm.searchResults.searchParams.q : null, radius: null, geo: {lat: null, lng: null},
                     sources: [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
                               {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
 

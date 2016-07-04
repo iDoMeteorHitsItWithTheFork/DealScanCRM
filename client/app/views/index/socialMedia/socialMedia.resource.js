@@ -17,11 +17,11 @@
             controller: 'search'
           }
         },
-        likeTweet: {
+        favTweet: {
           method: 'POST',
           params: {
             id:'twitter',
-            controller: 'like'
+            controller: 'favs'
           }
         },
         reTweet: {

@@ -98,7 +98,7 @@ export function searchTwitter(req, res){
 
 
 // like a tweet
-export function likeTweet(req, res){
+export function favTweet(req, res){
   if (!req.body.postID) return res.status(500).send('Error[]: PostID is required!');
   twitter.post(TWITTER_LIKE_URL, { id: req.body.postID })
     .then(handleEntityNotFound(res))
@@ -160,8 +160,8 @@ export function searchFacebook(req, res){
     'created_time,message},likes.limit(3).summary(true),actions';
 
   facebook.searchAsync(searchOptions)
-    .then(handleEntityNotFound(res))
     .then(function(results){
+        console.log(results);
         if (results.data && results.data.length > 0){
           var ps = [];
           for(var i=0; i < results.data.length; i++)
@@ -175,7 +175,7 @@ export function searchFacebook(req, res){
              }
              res.json(_res);
           }).catch(function(err){ return err;});
-        }
+        } else res.json(results);
     })
     .catch(handleError(res));
 
