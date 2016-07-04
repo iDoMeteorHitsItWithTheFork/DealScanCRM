@@ -31,6 +31,27 @@ angular.module('dealScanCrmApp')
                               {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
 
     _sm.monitorList = [{text: '#hagerstownford', count: 0}, {text: '#FordFocus', count: 5}, {text: '#DealScan', count: 50}];
+    _sm.sources = [{name: 'All'}, {name: 'Twitter'}, {name: 'Facebook'}];
+
+    _sm.tags = [
+      { text: '#hagerstownford' },
+      { text: '#FordFocus' },
+      { text: '#DealScan' }
+    ];
+
+    _sm.newText = {text: ''};
+
+    _sm.addToList = function (){
+      var newObj = _sm.newText;
+      _sm.tags.push(newObj);
+    }
+
+    _sm.removeFromList = function (obj){
+      var index = _sm.tags.indexOf(obj);
+      if (index > -1) {
+        _sm.tags.splice(index, 1);
+      }
+    }
 
     _sm.monitorButtons = [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
       {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]

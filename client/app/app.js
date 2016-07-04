@@ -10,6 +10,7 @@ angular.module('dealScanCrmApp', [
   'ngAnimate',
   'ngMap',
   'btford.socket-io',
+  'ngTagsInput',
   'ui.router',
   'ui.bootstrap',
   'oc.lazyLoad',                  // ocLazyLoad,
