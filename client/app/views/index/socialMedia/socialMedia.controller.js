@@ -30,7 +30,8 @@ angular.module('dealScanCrmApp')
        }
     }
 
-    _sm.searchObj = {text: (_sm.searchResults.searchParams) ?_sm.searchResults.searchParams.q : null, radius: null, geo: {lat: null, lng: null},
+    _sm.searchObj = {text: (_sm.searchResults.searchParams) ?_sm.searchResults.searchParams.q : null,
+                    geo: {lat: null, lon: null, distance: null},
                     sources: [{id: 'twt', name: 'twitter', selected: true, iconStyle: 'margin-left: -2px;', buttonStyle:''},
                               {id: 'fb', name: 'facebook', selected: false, iconStyle: '', buttonStyle: 'margin-right:0;'}]};
 
@@ -99,16 +100,16 @@ angular.module('dealScanCrmApp')
       _sm.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.CIRCLE);
       google.maps.event.addListener(_sm.drawingManager, 'circlecomplete', function(circle) {
         _sm.drawingManager.setDrawingMode(null);
-        _sm.shapes[1].shape = circle;
-        google.maps.event.addListener(_sm.shapes[1].shape, 'radius_changed', function(){
+        _sm.shape = circle;
+        google.maps.event.addListener(_sm.shape, 'radius_changed', function(){
           $scope.$applyAsync(function(){
-            _sm.searchObj.radius = _sm.shapes[1].shape.radius;
+            _sm.searchObj.geo.distance = _sm.shape.radius;
           });
         })
-        google.maps.event.addListener(_location.shapes[1].shape, 'center_changed', function(){
+        google.maps.event.addListener(_sm.shape, 'center_changed', function(){
           $scope.$applyAsync(function(){
-            _sm.searchObj.geo.lat = _sm.shapes[1].shape.getCenter().lat();
-            _sm.searchObj.geo.lng = _sm.shapes[1].shape.getCenter().lng();
+            _sm.searchObj.geo.lat = _sm.shape.getCenter().lat();
+            _sm.searchObj.geo.lon = _sm.shape.getCenter().lng();
           });
         });
         $scope.$applyAsync(function(){
@@ -121,8 +122,8 @@ angular.module('dealScanCrmApp')
     var setCircleDetails = function(circle){
       if(circle){
         _sm.searchObj.geo.lat = circle.getCenter().lat();
-        _sm.searchObj.geo.lng = circle.getCenter().lng();
-        _sm.searchObj.radius = circle.getRadius();
+        _sm.searchObj.geo.lon = circle.getCenter().lng();
+        _sm.searchObj.geo.distance = circle.getRadius();
       }
     }
 
@@ -173,25 +174,33 @@ angular.module('dealScanCrmApp')
     }
     //search media
     _sm.searchSocialMedia = function(bounds, next){
+      if (!bounds) bounds = 'circle';
       console.log(_sm.searchObj);
-        var searchOptions = {};
-        var location = null;
-        //location = {lat: '38.95606601970584', lon: '-77.03687070000001', distance: '4', metrics: 'mi'};
-        // if (polySearch) location.poly = poly;
-        if (location == null  && (!_sm.searchObj.text || _sm.searchObj.text.trim() == '')) return;
-        if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
-        if (location) searchOptions.location = location;
-        if (location) searchOptions.bounds = bounds;
-        _sm.searchLoading = true;
-        searchOptions.sources = _sm.searchObj.sources;
-        SocialMedia.search(searchOptions, next).then(function(res){
+      var searchOptions = {};
+      // if (polySearch) location.poly = poly;
+      if (_sm.searchObj.geo.lat == null &&
+        _sm.searchObj.geo.lon == null &&
+        _sm.searchObj.geo.distance == null &&
+        (!_sm.searchObj.text || _sm.searchObj.text.trim() == '')) return;
+      if (_sm.searchObj.text && _sm.searchObj.text.trim().length > 0) searchOptions.term = _sm.searchObj.text;
+      if (_sm.searchObj.geo.lat && _sm.searchObj.geo.lon  && _sm.searchObj.geo.distance ) {
+        searchOptions.location = _sm.searchObj.geo;
+        searchOptions.location.distance = Math.ceil(searchOptions.location.distance /1000);
+        searchOptions.location.metrics = 'km';
+      }
+      if (_sm.searchObj.geo.lat && _sm.searchObj.geo.lon) searchOptions.bounds = bounds;
+      _sm.searchLoading = true;
+      searchOptions.sources = _sm.searchObj.sources;
+      console.log(searchOptions);
+      SocialMedia.search(searchOptions, next)
+        .then(function (res) {
           console.log(res);
           _sm.searchResults = res;
           _sm.searchLoading = false;
-        }).catch(function(err){
-            console.log(err);
-            toaster.error({title:'Social Media Error', body: err});
-            _sm.searchLoading = false;
+        }).catch(function (err) {
+        console.log(err);
+        toaster.error({title: 'Social Media Error', body: err});
+        _sm.searchLoading = false;
       });
     }
 
@@ -336,7 +345,7 @@ angular.module('dealScanCrmApp')
     }
 
     _sm.startMonitoring = function(){
-      var keywords = ['Donald Trump',' Hillary cliton','big booty judy'];
+      var keywords = ['Donald','Trump', 'Clinton', 'big booty judy'];
       SocialMedia.monitor(keywords).then(function(res){
          console.log(res);
       }).catch(function(err){

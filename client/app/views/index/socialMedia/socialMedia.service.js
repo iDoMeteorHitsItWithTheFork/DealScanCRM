@@ -55,11 +55,9 @@ angular.module('dealScanCrmApp')
          q: searchOptions.term
        }
        if (searchOptions.location) {
-        if (searchOptions.location.metrics != 'km' && searchOptions.location.metrics != 'mi')
+        if (searchOptions.location.metrics != 'm' && searchOptions.location.metrics != 'mi')
           return {errorCode:'', errorMessage: 'Invalid Metric Parameter'};
-        params.geocode = [searchOptions.location.lat, searchOptions.location.lon,
-          (searchOptions.location.metrics == 'km' ?
-          searchOptions.location.distance * 1000 : searchOptions.location.distance * 1000 * 1.6)];
+        params.geocode = [searchOptions.location.lat, searchOptions.location.lon, searchOptions.location.distance];
        }
 
        //Perform search
@@ -148,7 +146,7 @@ angular.module('dealScanCrmApp')
         var since = '';
         var q = keywords.join(' OR ');
         var params = {
-          q: keywords,
+          q: q,
           result_type:'recent',
           count: 100
         }
@@ -178,7 +176,7 @@ angular.module('dealScanCrmApp')
         count: 100
       };
 
-      console.log(params);
+
 
       //if location available, validate metric parameters
       if (searchOptions.location) {
@@ -187,6 +185,8 @@ angular.module('dealScanCrmApp')
         params.geocode = [searchOptions.location.lat, searchOptions.location.lon,
         searchOptions.location.distance+searchOptions.location.metrics];
       }
+
+      console.log(params);
 
       //perform search
       return SocialMediaResource.twitterSearch(params)
@@ -227,8 +227,7 @@ angular.module('dealScanCrmApp')
                    case 'circle':
                      if (dataModel.geo)
                         if (Util.pointInCircle(new google.maps.LatLng(dataModel.geo[0],
-                           dataModel.geo[1]), ref, (searchOptions.location.metrics == 'km' ?
-                          searchOptions.location.distance * 1000 : searchOptions.location.distance * 1000 * 1.6)))
+                           dataModel.geo[1]), ref, (searchOptions.location.distance * 1000)))
                           _data.push(dataModel);
                       break;
                    case 'polygon':
