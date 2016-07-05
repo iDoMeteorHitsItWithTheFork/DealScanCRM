@@ -336,7 +336,7 @@ angular.module('dealScanCrmApp')
     }
 
     _sm.startMonitoring = function(){
-      var keywords = ['Donald Trump','f 150','ford focus',' hagerstown Ford',' Hillary cliton','big booty judy'];
+      var keywords = ['Donald Trump',' Hillary cliton','big booty judy'];
       SocialMedia.monitor(keywords).then(function(res){
          console.log(res);
       }).catch(function(err){
@@ -344,7 +344,9 @@ angular.module('dealScanCrmApp')
           toaster.error({title:'Social Monitor Error',  body: err});
       })
     }
-    
+
+    _sm.startMonitoring();
+
       /**
        * Twitter status update
        * @param message
