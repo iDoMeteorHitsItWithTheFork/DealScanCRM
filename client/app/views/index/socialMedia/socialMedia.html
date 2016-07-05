@@ -55,7 +55,7 @@
 
     <!-- social map -->
         <ng-map class="col-sm-7 social-map" ng-class="sm.currentView.id == 'discover' ? 'social-map-discover' : 'social-map-monitor'" center="[38.9072, -77.0369]" fit-map>
-            <marker ng-repeat="post in sm.searchResults.data" ng-if="post.geo.lat" position="{{::post.geo.lat}}, {{::post.geo.lng}}"></marker>
+            <marker ng-repeat="post in sm.searchResults.data" position="{{::post.geo[0]}}, {{::post.geo[1]}}"></marker>
         </ng-map>
     <!-- /.social map -->
 
