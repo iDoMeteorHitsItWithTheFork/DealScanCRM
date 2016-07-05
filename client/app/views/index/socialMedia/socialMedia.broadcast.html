@@ -31,7 +31,20 @@
     </li>
   </ul>
   <!-- ./ Source Selection -->
-
+  <ul class="unstyled social-broadcast-targets" ng-hide="!smBroadcast.broadcastObj.fb">
+    <li class="section-caption gray-bg">
+      Select Facebook Page
+    </li>
+    <li>
+      <ui-select ng-model="smBroadcast.selectedPage" theme="bootstrap" style="margin-bottom:10px; margin-right:0; margin-left:5px; margin-top:10px;">
+        <ui-select-match placeholder="Select page...">{{$select.selected.name | cut:true:25}}
+        </ui-select-match>
+        <ui-select-choices repeat="page in smBroadcast.pages| filter: $select.search">
+          <div ng-bind-html="page.name | highlight: $select.search"></div>
+        </ui-select-choices>
+      </ui-select>
+    </li>
+  </ul>
   <!-- Target Selection -->
   <ul class="unstyled social-broadcast-targets">
     <li class="section-caption gray-bg">
@@ -57,6 +70,6 @@
   <!-- ./ Target selection -->
 </div>
 <div class="modal-footer">
-  <button class="btn btn-block btn-info" ng-click="smBroadcast.tweet()">
+  <button class="btn btn-block btn-info" ng-click="smBroadcast.postToFb()">
     <i ng-class="smBroadcast.broadcasting ? 'fa fa-spinner fa-pulse': 'fa fa-arrow-right'">&nbsp;&nbsp;</i>Publish{{smBroadcast.broadcasting ? 'ing' : ''}}</button>
 </div>
