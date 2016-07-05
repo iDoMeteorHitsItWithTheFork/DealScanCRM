@@ -25,7 +25,6 @@ export default function (sequelize, DataTypes) {
             'sourceID': this.getDataValue('sourceID'),
             'source': this.getDataValue('source'),
             'sourceInfo': this.getDataValue('sourceInfo'),
-            'status': this.getDataValue('status'),
           }
         },
 
@@ -35,7 +34,6 @@ export default function (sequelize, DataTypes) {
             'sourceID': this.getDataValue('sourceID'),
             'source': this.getDataValue('source'),
             'sourceInfo': this.getDataValue('sourceInfo'),
-            'status': this.getDataValue('status'),
           }
         }
       }

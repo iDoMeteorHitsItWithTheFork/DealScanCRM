@@ -10,6 +10,11 @@
 'use strict';
 
 import _ from 'lodash';
+import {User} from  '../../sqldb';
+import {Dealership} from '../../sqldb';
+import {Watchlist} from '../../sqldb';
+import {Source} from '../../sqldb';
+import {Keyword} from '../../sqldb';
 
 var Twit = require('twit');
 var config = require('../../socialConfig');
@@ -29,6 +34,19 @@ var facebook = require('fbgraph');
 Promise.promisifyAll(facebook);
 facebook.setVersion('2.6');
 var isFbTokenSet = false;
+
+
+/**
+ * Update Stream with keywords
+ * @param keywords
+ */
+function updateStreamManager(keywords){
+
+  
+  
+  
+}
+
 
 /**
  *
@@ -179,15 +197,88 @@ export function searchFacebook(req, res){
     })
     .catch(handleError(res));
 
+
+
 }
 
 
+/**
+ * Initialize a social monitoring session
+ * @param req
+ * @param res
+ */
+export function startMonitoring(req, res) {
+
+  
+}
 
 
+/**
+ * stop a social monitoring session
+ * @param req
+ * @param res
+ */
+export function stopMonitoring(req, res){
+
+}
+
+/**
+ * Resume a social monitoring session
+ * @param req
+ * @param res
+ */
+export function resumeMonitoring(req, res){
+
+}
 
 
-
-
+// var watchlists = [
+//   {
+//     watchlistID: 1,
+//     watchlistName: 'Online Reputation Management',
+//     Dealership: {
+//       dealershipID: 1,
+//       dealershipName: 'Hagerstown Ford',
+//     },
+//     ListOwner: {
+//       OwnerID: 1
+//       email: 'ecarper@hagestownford.com',
+//       role: 'General Manager',
+//       name: 'Eric Carper'
+//     },
+//     Keywords: [
+//       {
+//         keywordID: 1,
+//         keyword: 'Fuck hagerstown ford'
+//       },
+//       {
+//         keywordID: 2,
+//         keyword: 'hagerstown ford ripped off'
+//       },
+//       {
+//         keywordID: 3,
+//         keyword: 'hagerstown ford thieves'
+//       },
+//       {
+//         keywordID: 1,
+//         keyword: 'hagerstown ford assholes'
+//       }
+//     ],
+//     Sources: [
+//       {
+//         sourceID: 1,
+//         source: 'facebook'
+//       },
+//       {
+//         sourceID: 2,
+//         source: 'twitter'
+//       },
+//     ],
+//     data: {
+//       //this here will contains whatever the stream is returning....
+//     }
+//   }
+// ]
 
 
 
@@ -249,3 +340,4 @@ export function searchFacebook(req, res){
 //     .then(removeEntity(res))
 //     .catch(handleError(res));
 // }
+

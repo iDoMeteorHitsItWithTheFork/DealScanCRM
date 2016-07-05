@@ -13,7 +13,30 @@ var User = sqldb.User;
 var Team = sqldb.Team;
 var Customer = sqldb.Customer;
 var Deal = sqldb.Deal;
+var Source = sqldb.Source;
 
+
+
+
+Source.sync()
+  .then(() => Source.destroy({where: {}}))
+  .then(() => {
+    Source.bulkCreate([{
+      source: 'facebook',
+      sourceInfo: 'Facebook Social Media Platform'
+    },
+      {
+        source: 'twitter',
+        sourceInfo: 'Twitter Social Media Platform'
+      },
+      {
+        source: 'Instagram',
+        sourceInfo: 'Instagram Social Media Platform'
+      },
+    ]).then(() => {
+      console.log('>> Finished creating Social Media Sources...');
+    });
+  });
 
 //sqldb.sequelize.sync()
   //.then(function(){
@@ -449,6 +472,7 @@ var Deal = sqldb.Deal;
             })
           })
       });
+
 
 
     /*Customer.sync()

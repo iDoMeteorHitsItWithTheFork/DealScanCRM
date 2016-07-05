@@ -61,8 +61,8 @@ db.User.belongsToMany(db.Dealership, {as:'ManagesDealerships', through:'Dealersh
 db.Dealership.belongsToMany(db.User, {as: 'GeneralManagers', through:'DealershipManagers', foreignKey:'dealershipID'});
 //
 
-db.Dealership.belongsToMany(db.User, {as: 'Employees', through: 'Employment', foreignKey: 'organizationID'});
-db.User.belongsToMany(db.Dealership, {as:'Organizations', through: 'Employment', foreignKey: 'employeeID'});
+db.Dealership.belongsToMany(db.User, {as: 'Employees', through: 'Employment', foreignKey: 'employerID'});
+db.User.belongsToMany(db.Dealership, {as:'Employer', through: 'Employment', foreignKey: 'employeeID'});
 
 //
 db.User.belongsToMany(db.Team, {as:'MyTeams', through:'TeamMemberships', foreignKey:'memberID'});
@@ -88,8 +88,13 @@ db.Document.belongsTo(db.Deal, {foreignKey:'dealID'});
 
 
 db.Watchlist.belongsTo(db.Dealership, {foreignKey: 'dealershipID'});
-db.Watchlist.belongsTo(db.User, {as:'ListOwner', foreignKey: 'UserID'});
+db.Watchlist.belongsTo(db.User, {as:'ListOwner', foreignKey: 'ownerID'});
+
+db.Dealership.hasMany(db.Watchlist,{foreignKey:'dealershipID'});
+db.User.hasMany(db.Watchlist, {as:'UserWatchlists', foreignKey:'ownerID'});
+
 db.Keyword.belongsTo(db.Watchlist, {foreignKey: 'watchlistID'});
+db.Watchlist.hasMany(db.Keyword, {foreignKey:'watchlistID'});
 
 //
 

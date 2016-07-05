@@ -46,6 +46,27 @@
             controller: 'search'
           }
         },
+        startMonitoring: {
+          method: 'POST',
+          params:{
+            id: 'monitoring',
+            controller: 'start'
+          }
+        },
+        stopMonitoring: {
+          method: 'GET',
+          params:{
+            id: 'monitoring',
+            controller: 'stop'
+          }
+        },
+        resumeMonitoring: {
+          method:'GET',
+          params: {
+            id: 'monitoring',
+            controller: 'resume'
+          }
+        }
       });
   }
 

@@ -25,6 +25,9 @@ angular.module('dealScanCrmApp')
                   '.styles/plugins/ui-select/select.min.css']
               },
             ])
+          },
+          watchlists: function(SocialMedia){
+              return SocialMedia.loadWatchlists('hagerstown ford').$promise;
           }
         }
       });

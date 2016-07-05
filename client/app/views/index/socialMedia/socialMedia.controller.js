@@ -7,6 +7,10 @@ angular.module('dealScanCrmApp')
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
     _sm.searchResults = SocialMedia.searchResults();
+    _sm.watchlists = SocialMedia.watchlists();
+
+    console.log(_sm.watchlists);
+
 
     _sm.views  = [{id:'discover', name:'Social Media Discovery', active: true},
                   {id: 'monitor', name: 'Social Media Monitoring', active: false}];
@@ -42,7 +46,7 @@ angular.module('dealScanCrmApp')
     _sm.newText = {text: ''};
 
     _sm.lists = [{title: 'Luda List'}, {title: 'Cary List'}, {title: 'Another list'}];
-    
+
     _sm.addToList = function (){
       var newObj = _sm.newText;
       _sm.tags.push(newObj);

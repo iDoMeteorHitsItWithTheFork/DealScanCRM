@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('SocialMedia', function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource) {
+  .factory('SocialMedia',
+    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, toaster, WatchlistResource) {
     // Service logic
     var _socialSearchResults = { data: null, searchParams: null};
+    var _watchlists = [];
 
     /**
      * Get stored search results
@@ -11,6 +13,10 @@ angular.module('dealScanCrmApp')
        */
     function getSocialSearchResults(){
       return _socialSearchResults;
+    }
+
+    function getWatchlists(){
+      return _watchlists;
     }
 
     /**
@@ -367,10 +373,91 @@ angular.module('dealScanCrmApp')
     }
 
 
+    function createWatchlist(details){
+
+      try {
+
+        if (!details) throw {errorCode: '', errorMessage: 'Error[]: Monitoring Details are required'};
+        if (!details.Watchlist) throw {errorCode: '', errorMessage: 'Error[]: Watchlist Details are required'};
+        if (!details.Watchlist.WatchlistName || details.Watchlist.WatchlistName.trim() == '') throw {
+          errorCode: '',
+          errorMessage: 'Error[]: WatchlistName is required'
+        };
+        if (!details.Watchlist.dealershipName || details.Watchlist.dealershipName.trim() == '') throw {
+          errorCode: '',
+          errorMessage: 'Error[]: DealershipName is required'
+        };
+        if (!details.Keywords || !Array.isArray(details.Keywords) ||
+          (Array.isArray(details.Keywords) && details.Keywords.length == 0)) throw {
+          errorCode: '',
+          errorMessage: 'Error[]: Keywords Array is required and cannot be empty'
+        };
+        if (!details.Sources || !Array.isArray(details.Sources) ||
+          (Array.isArray(details.Sources) && details.Sources.length == 0)) throw {
+          errorCode: '',
+          errorMessage: 'Error[]: Sources Array is required and cannot be empty'
+        };
+
+        //Start monitoring social media
+        return WatchlistResource.save(details).$promise
+          .then(function (res) {
+            console.log(res);
+            toaster.success({
+              title: 'Monitoring Started!',
+              body: 'The watchlist was created and is currently being monitored!'
+            });
+          })
+          .catch(function (err) {
+            console.log(err);
+            return err;
+          });
+
+      }
+      catch(err) {
+        return err;
+      }
+
+
+    }
+
+
+      /**
+       * getWatchlists
+       * @param dealershipName
+       * @returns {*}
+       */
+    function getWatchlistsByDealer(dealershipName){
+        return WatchlistResource.query({dealershipName: dealershipName}).$promise
+          .then(function (watchlists) {
+            if (watchlists) {
+              _watchlists = watchlists;
+            } else return _watchlists = [];
+          }).catch(function (err) {
+            console.log(err);
+            return err;
+          });
+    }
+
+    // console.log(startMonitoring({
+    //   Watchlist: {
+    //     WatchlistName: 'Online Reputation Monitoring',
+    //     WatchlistInfo: 'Monitor negative online activities pertaining to dealership',
+    //     dealershipName: 'Hagerstown Ford'
+    //   },
+    //   Keywords: [
+    //     {keyword: 'Fuck Hagerstown Ford'},
+    //     {keyword: 'Hagerstown Ford is horrible'},
+    //     {keyword: 'Hagerstown Ford sucks'},
+    //     {keyword: 'Hagerstown Ford ripped me off'}
+    //   ],
+    //   Sources: ['facebook', 'twitter']
+    // }));
 
     // Public API here
     return {
         search:searchSocialMedia,
+        loadWatchlists: getWatchlistsByDealer,
+        watchlists: getWatchlists,
         reTweet: reTweet,
         favs: favTweet,
         like: likeFbPost,
