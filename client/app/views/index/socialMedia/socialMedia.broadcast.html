@@ -57,6 +57,6 @@
   <!-- ./ Target selection -->
 </div>
 <div class="modal-footer">
-  <button class="btn btn-block btn-info" ng-click="smBroadcast.ok()">
-    <i class="fa fa-arrow-right">&nbsp;&nbsp;</i>Publish</button>
+  <button class="btn btn-block btn-info" ng-click="smBroadcast.tweet()">
+    <i ng-class="smBroadcast.broadcasting ? 'fa fa-spinner fa-pulse': 'fa fa-arrow-right'">&nbsp;&nbsp;</i>Publish{{smBroadcast.broadcasting ? 'ing' : ''}}</button>
 </div>
