@@ -14,6 +14,10 @@ angular.module('dealScanCrmApp')
       $uibModalInstance.dismiss('cancel');
     };
 
+    _smBroadcast.broadcastObj = {text: '', fb: false, twt: true};
+    
+    
+
   });
 /**
  * Created by ludovicagodio on 6/18/16.

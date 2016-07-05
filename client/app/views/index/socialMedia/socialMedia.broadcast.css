@@ -13,6 +13,9 @@
   font-weight: normal;
 }
 
+.red-text {
+  color: #ed5565;
+}
 .social-broadcast-networks,
 .social-broadcast-targets {
   padding: 0;
