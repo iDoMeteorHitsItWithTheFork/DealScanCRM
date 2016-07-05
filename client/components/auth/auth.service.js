@@ -75,7 +75,7 @@
                    fbStatus = res.authResponse.status;
                    Auth.setFbAccessToken(res.authResponse.accessToken);
                 }
-              }, {scope: 'email,user_likes,user_about_me, user_birthday, user_location,user_posts, publish_actions, user_friends'});
+              }, {scope: 'email,user_likes,user_about_me, user_birthday, user_location,user_posts, publish_actions, publish_pages, user_friends, manage_pages, pages_show_list'});
             },
 
             /**

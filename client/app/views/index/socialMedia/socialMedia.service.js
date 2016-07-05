@@ -316,6 +316,46 @@ angular.module('dealScanCrmApp')
       });
     }
 
+      function getFbPages(){
+        return ezfb.api('/me/accounts').then(function(res){
+          if (res.data){
+            //console.log(res);
+            return res;
+          } else {
+            console.log(res);
+          return {errorCode: '', errorMessage:'Error[]: Unbale to Like Post!'};
+          }
+        }).catch(function(err){
+          console.log(err);
+          return err;
+        });
+      }
+
+      function postToFb(post, page){
+        console.log(page);
+        console.log(post);
+        if (page.id === 1) {
+          var fbPage = 'me';
+        } else {
+          var fbPage = page.id;
+        }
+        console.log(fbPage);
+        return ezfb.api('/'+fbPage+'/feed/', 'POST', {
+          "message": post.text,
+          "access_token": page.access_token
+        }).then(function(res){
+          if (res.data){
+            console.log(res);
+            return res;
+          } else {
+            console.log(res);
+            return {errorCode: '', errorMessage:'Error[]: Unbale to Like Post!'};
+          }
+        }).catch(function(err){
+          console.log(err);
+          return err;
+        });
+      }
       /**
        * Like a Tweet
        * @param post
@@ -512,7 +552,9 @@ angular.module('dealScanCrmApp')
         comment: addCommentFbPost,
         searchResults: getSocialSearchResults,
         clear: clearResults,
-        monitor:statMonitoring
+        monitor:statMonitoring,
+        postToFb: postToFb,
+        getFbPages: getFbPages
     };
 
   });

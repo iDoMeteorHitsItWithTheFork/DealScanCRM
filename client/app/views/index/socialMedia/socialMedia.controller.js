@@ -670,4 +670,6 @@ angular.module('dealScanCrmApp')
       }
     ];
 
+
+
   });
