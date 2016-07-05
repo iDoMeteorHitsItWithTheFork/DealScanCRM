@@ -82,7 +82,7 @@
           </form>
         </div>
       </div>
-      <div class="ibox-content" style="  position: absolute; bottom: 0;left:0;right:0;top:75px;padding: 0;">
+      <div class="ibox-content" style="position: absolute; bottom: 0;left:0;right:0;top:75px;padding: 0;">
           <div ng-hide="!sm.searchLoading">
               <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px"></i>
               <span class="sr-only">Loading...</span>
@@ -126,8 +126,8 @@
                   {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
               </div>
             </div>
-            <div  class="social-footer">
-              <div ng-if="item.comments.length > 0" class="social-comment" ng-repeat="comment in item.comments | limitTo:3">
+            <div  ng-if="item.comments.length > 0" class="social-footer">
+              <div class="social-comment" ng-repeat="comment in item.comments | limitTo:3">
                 <a href="" class="pull-left">
                   <img alt="image" ng-src="{{comment.from.picture.data.url || sm.missingAvatar}}">
                 </a>
@@ -164,7 +164,7 @@
 
     <!-- live monitoring -->
       <!-- live monitoring -->
-      <div ng-show="sm.currentView.id == 'monitor'" style="width:577px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
+      <div ng-show="sm.currentView.id == 'monitor'" id="monitor-pane" style="width:577px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
           <div class="ibox-title p-b-14">
               <div class="row">
                   <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
@@ -177,13 +177,11 @@
                   </form>
               </div>
           </div>
-          <div class="ibox-content live-monitoring-list" >
-
-              <div class="row">
+          <div class="ibox-content" full-scroll style="position: absolute; bottom: 40px;left:0;right:0;top:0;padding: 0;">
                   <!-- monitoring list -->
-                  <div class="col-lg-5 no-margins no-padding">
+                  <div class="col-lg-5 no-margins" style="position: absolute; bottom: 40px;left:0; top:0; padding: 0;">
                       <span class="p-r-5">
-                      <ui-select ng-model="sm.displayingList" theme="bootstrap" style="margin-bottom:10px; margin-right:5px;">
+                      <ui-select ng-model="sm.displayingList" theme="bootstrap" style="margin-bottom:10px; margin-right:0; margin-left:5px; margin-top:10px;">
                           <ui-select-match placeholder="Select Watchlist...">{{$select.selected.watchlistName | cut:true:25}}
                           </ui-select-match>
                           <ui-select-choices repeat="list in sm.watchlists| filter: $select.search">
@@ -209,8 +207,8 @@
                   </div>
                   <!-- /. monitoring list -->
                   <!-- Monitoring Details Pane -->
-                  <div class="col-lg-7 monitoring-details-pane" full-scroll style="padding-left:0; margin-left:22px;">
-                      <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="min-width: 299px;">
+                  <div class="col-lg-7" style="position:absolute; left:254px; top:0; right:0; bottom:40px; padding:10px; padding-right:25px;">
+                      <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="min-width: 295px;">
                           <div class="pull-right social-action">
                               <button class="btn btn-{{::item.datasource}} btn-circle">
                                   <i class="fa fa-{{::item.datasource}}"></i>
@@ -277,7 +275,7 @@
                       </div>
                   </div>
                   <!-- ./monitoring Details Pane -->
-              </div>
+
           </div>
       </div>
       <!-- ./live monitoring -->
