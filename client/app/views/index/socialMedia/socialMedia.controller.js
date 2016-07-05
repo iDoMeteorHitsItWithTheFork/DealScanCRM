@@ -43,7 +43,7 @@ angular.module('dealScanCrmApp')
       { text: '#FordFocus' },
       { text: '#DealScan' }
     ];
-
+    var infoWindow = null;
     _sm.newText = {text: ''};
 
     _sm.lists = [{title: 'Luda List'}, {title: 'Cary List'}, {title: 'Another list'}];
@@ -202,6 +202,59 @@ angular.module('dealScanCrmApp')
         toaster.error({title: 'Social Media Error', body: err});
         _sm.searchLoading = false;
       });
+    }
+
+    _sm.showInfoWindow = function(event, post, map, center, scrollOption){
+
+      var username = post.username;
+      var time_ago = post.time_ago;
+      var text = post.text;
+      var img = post.image;
+
+      if (post.avatar === null) {
+        var avatar = _sm.missingAvatar;
+      } else {
+        var avatar = post.avatar;
+      }
+
+      if (center) map.setCenter(new google.maps.LatLng(post.geo[0], post.geo[1]));
+
+      if (img === null){
+        var content = "<div class='info-window'>" +
+            "<a href='http://google.com' target='_blank'></a>" +
+            "<ul class='info-list'>" +
+            "<li><img class='avatar img-circle' src='"+avatar+"' alt=''/><a class='user_name'>@"+username+"</a></li>" +
+            "<li>"+text+"</li>" +
+            "<i class='fa fa-clock-o'></i>&nbsp;&nbsp;"+time_ago+
+            "<li><i class='fa fa-map-marker'></i>&nbsp;&nbsp;"+post.geo[0]+","+post.geo[1]+" </li></ul></div>";
+      } else {
+        var content = "<div class='info-window'>" +
+            "<a href='http://google.com' target='_blank'></a>" +
+            "<ul class='info-list'>" +
+            "<li><img class='avatar img-circle' src='"+avatar+"' alt=''/><a class='user_name'>@"+username+"</a></li>" +
+            "<li>"+text+"</li>" +
+            "<i class='fa fa-clock-o'></i>&nbsp;&nbsp;"+time_ago+
+            "<li><img class='img-responsive' src='"+image+"' alt=''/></li>" +
+            "<li><i class='fa fa-map-marker'></i>&nbsp;&nbsp;"+post.geo[0]+","+post.geo[1]+" </li></ul></div>";
+      }
+
+      if (infoWindow === null){
+        infoWindow = new google.maps.InfoWindow({
+          content: content,
+          position: new google.maps.LatLng(post.geo[0], post.geo[1]),
+          pixelOffset: new google.maps.Size(-2, -37),
+        });
+      } else {
+        infoWindow.setContent(content);
+        infoWindow.setPosition(new google.maps.LatLng(post.geo[0], post.geo[1]));
+      }
+     // <img class='img-responsive' src="+md+" alt=''/>
+
+
+      infoWindow.open(map);
+
+      google.maps.event.addListener(infoWindow,'closeclick',function(){});
+
     }
 
       /**

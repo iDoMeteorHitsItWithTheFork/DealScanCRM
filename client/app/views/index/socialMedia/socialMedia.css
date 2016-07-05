@@ -132,7 +132,23 @@
   color: #fff!important;
   border: 1px solid #517fa4;
 }
+.info-list{
+  padding-left:10px;
+  padding-right:10px;
+  list-style: none;
+  font-size:16px;
+}
+.info-list li {
+  margin-bottom:10px;
+}
 
+.info-window {
+  max-width: 400px;
+}
+.user_name {
+  font-size:18px;
+  margin-left:5px;
+}
 .ig-not-selected {
   background-color:#fff;
   color: #517fa4!important;
