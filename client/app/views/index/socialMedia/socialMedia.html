@@ -177,26 +177,27 @@
                   </form>
               </div>
           </div>
-          <div class="ibox-content live-monitoring-list">
+          <div class="ibox-content live-monitoring-list" >
 
               <div class="row">
                   <!-- monitoring list -->
                   <div class="col-lg-5 no-margins no-padding">
-                      <ui-select ng-model="sm.selectedList" theme="bootstrap" style="margin-bottom:10px;">
-                          <ui-select-match placeholder="Select Watchlist...">{{$select.selected.title}}
+                      <span class="p-r-5">
+                      <ui-select ng-model="sm.displayingList" theme="bootstrap" style="margin-bottom:10px; margin-right:5px;">
+                          <ui-select-match placeholder="Select Watchlist...">{{$select.selected.watchlistName | cut:true:25}}
                           </ui-select-match>
-                          <ui-select-choices repeat="list in sm.lists | filter: $select.search">
-                              <div ng-bind-html="list.title | highlight: $select.search"></div>
+                          <ui-select-choices repeat="list in sm.watchlists| filter: $select.search">
+                              <div ng-bind-html="list.watchlistName | highlight: $select.search"></div>
                           </ui-select-choices>
                       </ui-select>
-
+                      </span>
                       <ul class="unstyled monitoring-items-list">
                           <li class="active">
                               <strong>All Keywords and Users</strong>
                               <span class="badge badge-warning pull-right">315</span>
                           </li>
-                          <li ng-repeat="item in sm.monitorList">
-                              <strong>{{item.text}}</strong>
+                          <li ng-repeat="item in sm.displayingList.Keywords">
+                              <strong>{{item.keyword}}</strong>
                               <button class="btn pull-right" ng-class="item.fb ? 'fb-selected' : 'fb-not-selected'" ng-click="item.fb = !item.fb"  style="width:25px; height: 25px; margin-right:3px; padding:0;" type="button">
                                   <i class="fa fa-facebook fs-15" style="margin-top: 1px;margin-left: 0px;"></i>
                               </button>
@@ -208,8 +209,8 @@
                   </div>
                   <!-- /. monitoring list -->
                   <!-- Monitoring Details Pane -->
-                  <div class="col-lg-7 monitoring-details-pane" slim-scroll box-height="685">
-                      <div ng-if="sm.searchResults.data.length > 0" class="social-feed-box" ng-repeat="item in sm.searchResults.data">
+                  <div class="col-lg-7 monitoring-details-pane" full-scroll style="padding-left:0; margin-left:22px;">
+                      <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="min-width: 299px;">
                           <div class="pull-right social-action">
                               <button class="btn btn-{{::item.datasource}} btn-circle">
                                   <i class="fa fa-{{::item.datasource}}"></i>
@@ -244,8 +245,8 @@
                                       {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
                               </div>
                           </div>
-                          <div  class="social-footer">
-                              <div ng-if="item.comments.length > 0" class="social-comment" ng-repeat="comment in item.comments | limitTo:3">
+                          <div  ng-if="item.comments.length > 0" class="social-footer">
+                              <div class="social-comment" ng-repeat="comment in item.comments | limitTo:3">
                                   <a href="" class="pull-left">
                                       <img alt="image" ng-src="{{comment.from.picture.data.url || sm.missingAvatar}}">
                                   </a>
