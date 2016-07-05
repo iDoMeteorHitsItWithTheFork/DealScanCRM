@@ -335,5 +335,32 @@ angular.module('dealScanCrmApp')
         }
     }
 
+    _sm.startMonitoring = function(){
+      var keywords = ['Donald Trump','f 150','ford focus',' hagerstown Ford',' Hillary cliton','big booty judy'];
+      SocialMedia.monitor(keywords).then(function(res){
+         console.log(res);
+      }).catch(function(err){
+          console.log(err);
+          toaster.error({title:'Social Monitor Error',  body: err});
+      })
+    }
+    
+      /**
+       * Twitter status update
+       * @param message
+       */
+     _sm.tweet = function(message){
+        if (!message) return;
+        SocialMedia.tweet(message).then(function(res){
+           if (res && res.success){
+              toaster.success({title:'Twitter Status Update', body: res.message});
+           } else toaster.error({title: 'Twitter Status Update', body: 'Unable to post status update'});
+        }).catch(function(err){
+           console.log(err);
+           toaster.error({title: 'Twiiter Status Update', body: err});
+        });
+     }
+
+
 
   });

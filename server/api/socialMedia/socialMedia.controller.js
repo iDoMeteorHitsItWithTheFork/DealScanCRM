@@ -27,6 +27,7 @@ var twitter = new Twit(config.twitter);
 var TWITTER_SEARCH_URL = 'search/tweets';
 var TWITTER_LIKE_URL = 'favorites/create';
 var TWITTER_RETWEET_URL = 'statuses/retweet/:id';
+var TWITTER_TWEET_URL= 'statuses/update';
 
 
 //instantiate Facebook module
@@ -42,9 +43,9 @@ var isFbTokenSet = false;
  */
 function updateStreamManager(keywords){
 
-  
-  
-  
+
+
+
 }
 
 
@@ -119,6 +120,15 @@ export function searchTwitter(req, res){
 export function favTweet(req, res){
   if (!req.body.postID) return res.status(500).send('Error[]: PostID is required!');
   twitter.post(TWITTER_LIKE_URL, { id: req.body.postID })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+//retweet
+export function tweet(req, res){
+  if (!req.body.message) return res.status(500).send('Error[]:Tweet body is required');
+  twitter.post(TWITTER_TWEET_URL, {status: req.body.message })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -209,7 +219,7 @@ export function searchFacebook(req, res){
  */
 export function startMonitoring(req, res) {
 
-  
+
 }
 
 

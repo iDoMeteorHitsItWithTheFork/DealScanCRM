@@ -17,6 +17,13 @@
             controller: 'search'
           }
         },
+        twitterSearch: {
+          method: 'POST',
+          params: {
+            id:'twitter',
+            controller: 'tweet'
+          }
+        },
         favTweet: {
           method: 'POST',
           params: {

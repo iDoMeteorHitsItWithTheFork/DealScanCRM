@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
   .factory('SocialMedia',
-    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, toaster, WatchlistResource) {
+    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, toaster, WatchlistResource, $interval) {
     // Service logic
     var _socialSearchResults = { data: null, searchParams: null};
     var _watchlists = [];
@@ -141,6 +141,28 @@ angular.module('dealScanCrmApp')
        return params;
     }
 
+
+
+      function statMonitoring(keywords){
+        if (!Array.isArray(keywords)) throw {errorCode: '', errorMessage: 'Keywords should be an array'};
+        var since = '';
+        var q = keywords.join(' OR ');
+        var params = {
+          q: keywords,
+          result_type:'recent',
+          count: 100
+        }
+        console.log(params);
+        return SocialMediaResource.twitterSearch(params)
+          .$promise.then(function(res){
+           console.log(res);
+
+        }).catch(function(err){
+             console.log(err);
+             return err;
+        })
+
+      }
 
     /**
      * Search {query} on Twitter
@@ -316,6 +338,27 @@ angular.module('dealScanCrmApp')
         })
     }
 
+        /**
+         * Post a Twitter status update
+         * @param message
+         * @returns {*}
+         */
+    function tweet(message){
+      if (!message || message.trim() == '' || message.length > 140)
+        throw {errorCode: '', errorMessage: 'Tweet can not be empty or more than 140 characters'};
+      return SocialMediaResource
+        .tweet({message: message}).$promise
+        .then(function(res){
+          console.log(res);
+           if (res && res.resp.statusCode == 200){
+             return {success: true, message: 'your tweet was successfully posted'};
+           } else return {success: false};
+      }).catch(function(err){
+            console.log(err);
+            return err;
+        })
+    }
+
     /**
      * Retweet a tweet
      * @param post
@@ -438,6 +481,11 @@ angular.module('dealScanCrmApp')
           });
     }
 
+
+
+
+
+
     // console.log(startMonitoring({
     //   Watchlist: {
     //     WatchlistName: 'Online Reputation Monitoring',
@@ -458,12 +506,14 @@ angular.module('dealScanCrmApp')
         search:searchSocialMedia,
         loadWatchlists: getWatchlistsByDealer,
         watchlists: getWatchlists,
+        tweet: tweet,
         reTweet: reTweet,
         favs: favTweet,
         like: likeFbPost,
         comment: addCommentFbPost,
         searchResults: getSocialSearchResults,
-        clear: clearResults
+        clear: clearResults,
+        monitor:statMonitoring
     };
 
   });
