@@ -17,7 +17,7 @@
             controller: 'search'
           }
         },
-        twitterSearch: {
+        tweet: {
           method: 'POST',
           params: {
             id:'twitter',
