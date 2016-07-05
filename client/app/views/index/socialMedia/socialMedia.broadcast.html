@@ -8,7 +8,6 @@
   </h4>
 </div>
 <div class="modal-body no-padding">
-
   <!-- Source Selection -->
   <ul class="unstyled social-broadcast-networks">
     <li class="section-caption gray-bg">
@@ -18,7 +17,7 @@
       <button class="btn btn-facebook">&nbsp;<i class="fa fa-facebook"></i></button>
       &nbsp;&nbsp;Facebook
       <div class="pull-right m-t-7">
-        <label> <input icheck type="checkbox" ng-model="main.check2">
+        <label> <input icheck type="checkbox" ng-model="smBroadcast.broadcastObj.fb">
         </label>
       </div>
     </li>
@@ -26,15 +25,7 @@
       <button class="btn btn-twitter"><i class="fa fa-twitter"></i></button>
       &nbsp;&nbsp;Twitter
       <div class="pull-right m-t-7">
-        <label> <input icheck type="checkbox" ng-model="main.check2">
-        </label>
-      </div>
-    </li>
-    <li>
-      <button class="btn btn-instagram"><i class="fa fa-instagram"></i></button>
-      &nbsp;&nbsp;Instagram
-      <div class="pull-right m-t-7">
-        <label> <input icheck type="checkbox" ng-model="main.check2">
+        <label> <input icheck type="checkbox" ng-model="smBroadcast.broadcastObj.twt">
         </label>
       </div>
     </li>
@@ -44,36 +35,28 @@
   <!-- Target Selection -->
   <ul class="unstyled social-broadcast-targets">
     <li class="section-caption gray-bg">
-      Set your target audience
+      What would you like to say?
     </li>
-    <li>
-      <div>
-        <label> <input icheck type="checkbox" ng-model="main.check2">
-            &nbsp;&nbsp;My Customers
-        </label>
+    <li style="padding-bottom: 25px;">
+      <div class="media-body">
+        <textarea ng-model="smBroadcast.broadcastObj.text" class="form-control" rows="4" placeholder="Write message..."></textarea>
+      </div>
+      <div style="margin-top:10px; margin-bottom:10px;">
+        <span class="pull-right m-r-10 m-b-5" style="margin-left:10px;" ng-if="smBroadcast.broadcastObj.fb">
+          <i class="fa fa-facebook"></i>
+          <span class="m-l-5" ng-class="smBroadcast.broadcastObj.text.length > 1401 ? 'red-text' : ''">{{1400 - smBroadcast.broadcastObj.text.length || 0}}</span>
+        </span>
+        <span class="pull-right m-r-10 m-b-5" style="margin-left:10px;" ng-if="smBroadcast.broadcastObj.twt">
+          <i class="fa fa-twitter"></i>
+          <span class="m-l-5" ng-class="smBroadcast.broadcastObj.text.length > 141 ? 'red-text' : ''">{{140 - smBroadcast.broadcastObj.text.length || 0}}</span>
+        </span>
       </div>
     </li>
-
-    <li>
-      <div>
-        <label> <input icheck type="checkbox" ng-model="main.check2">
-          &nbsp;&nbsp;Current Search Results
-        </label>
-      </div>
-    </li>
-
-    <li>
-      <div>
-        <label> <input icheck type="checkbox" ng-model="main.check2">
-          &nbsp;&nbsp;Everyone
-        </label>
-      </div>
-    </li>
-
   </ul>
+
   <!-- ./ Target selection -->
 </div>
 <div class="modal-footer">
   <button class="btn btn-block btn-info" ng-click="smBroadcast.ok()">
-    <i class="fa fa-arrow-right">&nbsp;&nbsp;</i>Proceed</button>
+    <i class="fa fa-arrow-right">&nbsp;&nbsp;</i>Publish</button>
 </div>
