@@ -141,6 +141,9 @@
 .social-row {
   position: relative;
 }
+#monitor-pane .slimScrollDiv {
+height:76%!important;
+}
 .social-map {
   width: 100%;
   padding: 0 !important;
