@@ -1,7 +1,13 @@
+
+.w-34-h-34 {
+  width: 34px;
+  height:34px;
+}
 .p-t-42 {
   top:42px;
   position:relative;
 }
+
 .p-r-0 {
  padding-right: 0 !important;
 }
@@ -116,6 +122,13 @@
   border: 1px solid #1ab394;
 }
 
+.twt-color {
+  color:#00aced!important;
+}
+
+.fb-color {
+  color: #3b5998!important;
+}
 .twt-selected {
   background-color:#00aced!important;
   color: #fff!important;

@@ -13,16 +13,16 @@
     <li class="section-caption gray-bg">
       Select Social Networks
     </li>
-    <li>
-      <button class="btn btn-facebook">&nbsp;<i class="fa fa-facebook"></i></button>
+    <li class="fs-15">
+      <button class="btn btn-facebook w-34-h-34" style="background-color: transparent!important">&nbsp;<i class="fa fa-facebook fb-color" style="margin-left:-3px;"></i></button>
       &nbsp;&nbsp;Facebook
       <div class="pull-right m-t-7">
         <label> <input icheck type="checkbox" ng-model="smBroadcast.broadcastObj.fb">
         </label>
       </div>
     </li>
-    <li>
-      <button class="btn btn-twitter"><i class="fa fa-twitter"></i></button>
+    <li class="fs-15">
+      <button class="btn btn-twitter w-34-h-34" style="background-color: transparent!important"><i class="fa fa-twitter twt-color" style="margin-left:-2px;"></i></button>
       &nbsp;&nbsp;Twitter
       <div class="pull-right m-t-7">
         <label> <input icheck type="checkbox" ng-model="smBroadcast.broadcastObj.twt">
@@ -33,13 +33,13 @@
   <!-- ./ Source Selection -->
   <ul class="unstyled social-broadcast-targets" ng-hide="!smBroadcast.broadcastObj.fb">
     <li class="section-caption gray-bg">
-      Select Facebook Page
+      <i class="fa fa-facebook fb-color"></i>
+      &nbsp;Select Facebook Page
     </li>
     <li>
-      <ui-select ng-model="smBroadcast.selectedPage" theme="bootstrap" style="margin-bottom:10px; margin-right:0; margin-left:5px; margin-top:10px;">
-        <ui-select-match placeholder="Select page...">{{$select.selected.name | cut:true:25}}
-        </ui-select-match>
-        <ui-select-choices repeat="page in smBroadcast.pages| filter: $select.search">
+      <ui-select multiple ng-model="smBroadcast.selectedPages" theme="bootstrap" sortable="true" close-on-select="false" style="">
+        <ui-select-match placeholder="Select pages...">{{$item.name}}</ui-select-match>
+        <ui-select-choices repeat="page in smBroadcast.pages | filter: $select.search">
           <div ng-bind-html="page.name | highlight: $select.search"></div>
         </ui-select-choices>
       </ui-select>
@@ -70,6 +70,6 @@
   <!-- ./ Target selection -->
 </div>
 <div class="modal-footer">
-  <button class="btn btn-block btn-info" ng-click="smBroadcast.postToFb()">
-    <i ng-class="smBroadcast.broadcasting ? 'fa fa-spinner fa-pulse': 'fa fa-arrow-right'">&nbsp;&nbsp;</i>Publish{{smBroadcast.broadcasting ? 'ing' : ''}}</button>
+  <button class="btn btn-block btn-info" ng-click="smBroadcast.broadcastSocial()">
+    <i ng-class="smBroadcast.broadcasting ? 'fa fa-spinner fa-pulse': 'fa fa-arrow-right'">&nbsp;&nbsp;</i>Broadcast{{smBroadcast.broadcasting ? 'ing' : ''}}</button>
 </div>

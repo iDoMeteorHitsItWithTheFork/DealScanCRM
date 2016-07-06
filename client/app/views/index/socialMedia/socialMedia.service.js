@@ -331,31 +331,6 @@ angular.module('dealScanCrmApp')
         });
       }
 
-      function postToFb(post, page){
-        console.log(page);
-        console.log(post);
-        if (page.id === 1) {
-          var fbPage = 'me';
-        } else {
-          var fbPage = page.id;
-        }
-        console.log(fbPage);
-        return ezfb.api('/'+fbPage+'/feed/', 'POST', {
-          "message": post.text,
-          "access_token": page.access_token
-        }).then(function(res){
-          if (res.data){
-            console.log(res);
-            return res;
-          } else {
-            console.log(res);
-            return {errorCode: '', errorMessage:'Error[]: Unbale to Like Post!'};
-          }
-        }).catch(function(err){
-          console.log(err);
-          return err;
-        });
-      }
       /**
        * Like a Tweet
        * @param post
@@ -377,26 +352,6 @@ angular.module('dealScanCrmApp')
         })
     }
 
-        /**
-         * Post a Twitter status update
-         * @param message
-         * @returns {*}
-         */
-    function tweet(message){
-      if (!message || message.trim() == '' || message.length > 140)
-        throw {errorCode: '', errorMessage: 'Tweet can not be empty or more than 140 characters'};
-      return SocialMediaResource
-        .tweet({message: message}).$promise
-        .then(function(res){
-          console.log(res);
-           if (res && res.resp.statusCode == 200){
-             return {success: true, message: 'your tweet was successfully posted'};
-           } else return {success: false};
-      }).catch(function(err){
-            console.log(err);
-            return err;
-        })
-    }
 
     /**
      * Retweet a tweet
@@ -520,8 +475,80 @@ angular.module('dealScanCrmApp')
           });
     }
 
+      /**
+       * Post a Twitter status update
+       * @param message
+       * @returns {*}
+       */
+      function tweet(message){
+        if (!message || message.trim() == '' || message.length > 140){
+          toaster.error({title:'Tweet can not be empty or more than 140 characters'});
+          console.log('Tweet can not be empty or more than 140 characters');
+          return {success: false};
+        }
+        return SocialMediaResource
+            .tweet({message: message}).$promise
+            .then(function(res){
+              console.log(res);
+              if (res && res.resp.statusCode == 200){
+                toaster.success({title:'Tweet Successful!', timeout: 3000});
+                return {success: true, message: 'your tweet was successfully posted'};
+              } else {
+                toaster.error({title:'Tweet Failed!', timeout: 3000});
+                return {success: false};
+              }
+            }).catch(function(err){
+              console.log(err);
+              return err;
+            })
+      }
 
+      function postToFb(post, page){
+        if (page.id === 1) {
+          var fbPage = 'me';
+        } else {
+          var fbPage = page.id;
+        }
+        console.log(fbPage);
+        return ezfb.api('/'+fbPage+'/feed/', 'POST', {
+          "message": post.text,
+          "access_token": page.access_token
+        }).then(function(res){
+          if (res.id){
+            console.log(res);
+            toaster.success({title:'Successful post to '+page.name+'!', timeout: 3000});
+            return res;
+          } else {
+            console.log(res);
+            toaster.error({title:'Unable to post to facebook page '+page.name+'!', body: 'Please resubmit your post'});
+            return {errorCode: '', errorMessage:'Error[]: Unable to post to facebook page '+page.name+'!'};
+          }
+        }).catch(function(err){
+          console.log(err);
+          return err;
+        });
+      }
 
+      function broadcastSocial(post, pages){
+        var searches =[];
+        if (post.fb) {
+          for (var i = 0; i < pages.length; i++) {
+            searches.push(postToFb(post, pages[i]));
+          }
+        }
+        if (post.twt){
+          searches.push(tweet(post.text));
+        }
+
+        return $q.all(searches).then(function(res){
+          console.log(res);
+          return res;
+        }).catch(function(err){
+              console.log(err);
+              return err;
+        });
+
+      }
 
 
 
@@ -554,7 +581,8 @@ angular.module('dealScanCrmApp')
         clear: clearResults,
         monitor:statMonitoring,
         postToFb: postToFb,
-        getFbPages: getFbPages
+        getFbPages: getFbPages,
+        broadcastSocial: broadcastSocial
     };
 
   });

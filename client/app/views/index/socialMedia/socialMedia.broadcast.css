@@ -8,6 +8,10 @@
   background: #2f4050;
   color: #fff;
 }
+.social-broadcast-targets .ui-select-choices-group {
+  padding: 0;
+  font-size: 15px;
+}
 
 .ft-wt-n {
   font-weight: normal;

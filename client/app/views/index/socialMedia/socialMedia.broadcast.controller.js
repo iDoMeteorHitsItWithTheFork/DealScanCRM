@@ -5,7 +5,8 @@ angular.module('dealScanCrmApp')
 
     var _smBroadcast =this;
     _smBroadcast.user = Auth.getCurrentUser();
-    console.log(_smBroadcast.user);
+    _smBroadcast.error = false;
+    _smBroadcast.errorMessage = null;
     _smBroadcast.ok = function () {
       $uibModalInstance.close();
     };
@@ -19,6 +20,8 @@ angular.module('dealScanCrmApp')
       name: 'My timeline',
       id: 1
     }
+
+    _smBroadcast.selectedPages = [];
     /**
      * Twitter status update
      * @param message
@@ -49,22 +52,20 @@ angular.module('dealScanCrmApp')
         } else {
           _smBroadcast.pages = res.data;
           _smBroadcast.pages.push(fbProfile);
-          console.log(_smBroadcast.pages);
         }
       });
     }
-    _smBroadcast.getFbPages();
 
-    _smBroadcast.postToFb = function (){
-      SocialMedia.postToFb(_smBroadcast.broadcastObj, _smBroadcast.selectedPage).then(function(res){
-        if (res.errorCode) {
-          console.log(res);
-          //display error cod
-        } else {
-          console.log(res);
-        }
+
+    _smBroadcast.broadcastSocial = function (){
+      _smBroadcast.broadcasting = true;
+      SocialMedia.broadcastSocial(_smBroadcast.broadcastObj, _smBroadcast.selectedPages).then(function(res){
+        console.log(res);
+        _smBroadcast.broadcasting = false;
       });
     }
+
+    _smBroadcast.getFbPages();
 
 
   });
