@@ -151,7 +151,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/socialMedia/socialMedia.broadcast.html',
         controller: 'SocialMediaBroadcastCtrl as smBroadcast',
         placement: 'right',
-        size:'sm',
+        size:'300',
         resolve: {
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
