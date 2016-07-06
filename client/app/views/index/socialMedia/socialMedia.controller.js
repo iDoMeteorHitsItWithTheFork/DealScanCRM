@@ -97,6 +97,10 @@ angular.module('dealScanCrmApp')
 
     _sm.setLocation = function (){
       _sm.drawing = true;
+      if (_sm.shape){
+        _sm.shape.setMap(null);
+      }
+
       _sm.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.CIRCLE);
       google.maps.event.addListener(_sm.drawingManager, 'circlecomplete', function(circle) {
         _sm.drawingManager.setDrawingMode(null);
