@@ -164,51 +164,80 @@
 
     <!-- live monitoring -->
       <!-- live monitoring -->
-      <div ng-show="sm.currentView.id == 'monitor'" id="monitor-pane" style="width:577px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
+      <div ng-show="sm.currentView.id == 'monitor'" id="monitor-pane" style="width:700px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
           <div class="ibox-title p-b-14">
               <div class="row">
-                  <form class="form-inline p-l-15 p-r-15 p-t-5 p-b-5">
-                      <div class="input-group " style="padding-right: 10px;">
-                          <input class="form-control m-l-20 " style="width:350px;" type="text" placeholder="enter keywords or username">
-              <span class="input-group-addon navy-bg cursor-pointer">
-                <i class="fa fa-television">&nbsp;&nbsp;</i>Add To List
-              </span>
-                      </div>
-                  </form>
-              </div>
-          </div>
-          <div class="ibox-content" full-scroll style="position: absolute; bottom: 40px;left:0;right:0;top:0;padding: 0;">
-                  <!-- monitoring list -->
-                  <div class="col-lg-5 no-margins" style="position: absolute; bottom: 40px;left:0; top:0; padding: 0;">
-                      <span class="p-r-5">
-                      <ui-select ng-model="sm.displayingList" theme="bootstrap" style="margin-bottom:10px; margin-right:0; margin-left:5px; margin-top:10px;">
-                          <ui-select-match placeholder="Select Watchlist...">{{$select.selected.watchlistName | cut:true:25}}
+                  <div class="col-xs-9">
+                      <ui-select ng-model="sm.displayingList" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+                          <ui-select-match placeholder="Select Watchlist...">{{$select.selected.watchlistName | cut:true:35}}
                           </ui-select-match>
                           <ui-select-choices repeat="list in sm.watchlists| filter: $select.search">
                               <div ng-bind-html="list.watchlistName | highlight: $select.search"></div>
                           </ui-select-choices>
                       </ui-select>
-                      </span>
-                      <ul class="unstyled monitoring-items-list">
-                          <li class="active">
-                              <strong>All Keywords and Users</strong>
-                              <span class="badge badge-warning pull-right">315</span>
+                  </div>
+                  <div class="col-xs-3">
+                      <button class="btn btn-sm btn-primary pull-right">Create Watchlist</button>
+                  </div>
+              </div>
+          </div>
+          <div class="ibox-content" full-scroll style="position: absolute; bottom: 0;left:0;right:0;top:0;padding: 0;">
+                  <!-- monitoring list -->
+                  <div class="col-xs-6 no-margins" style="position: absolute; bottom: 0;left:11px; top:0; padding: 0; width:320px">
+                      <ul class="unstyled monitoring-items-list" ng-hide="!sm.displayingList">
+                          <li class="active cursor-default no-hover-white" style="border-top:none; padding-right:0;">
+                              <div style="display:block; height: 40px;">
+                              <strong style="font-size:17px;">{{sm.displayingList.watchlistName | cut:true:25}}</strong>
+                              <button class="btn btn-sm pull-right" ng-class="sm.displayingList.paused ? 'btn-play' : 'btn-pause'" ng-click="sm.displayingList.paused = !sm.displayingList.paused"  style="margin-right:3px; cursor:pointer;" type="button">
+                                  <i class="fa" ng-class="sm.displayingList.paused ? 'fa-play' : 'fa-pause'" style=""></i> &nbsp; {{sm.displayingList.paused ? 'Play' : 'Pause'}}
+                              </button>
+                              </div>
+                              <div style="display:block;">
+                                  <span style="cursor:pointer;">
+                                  <input
+                                          bs-switch
+                                          ng-model="sm.displayingList.Sources[1].selected"
+                                          type="checkbox"
+                                          switch-on-text="on"
+                                          switch-off-text="off"
+                                          switch-size="mini"
+                                          switch-icon="fa fa-twitter twt-color"
+                                          switch-on-color="success"
+                                          switch-off-color="danger"
+                                          switch-inverse="true"
+                                  >
+                                      </span>
+                                  <span style="cursor:pointer;">
+                                  <input
+                                          bs-switch
+                                          ng-model="sm.displayingList.Sources[0].selected"
+                                          type="checkbox"
+                                          switch-on-text="on"
+                                          switch-off-text="off"
+                                          switch-size="mini"
+                                          switch-icon="fa fa-facebook fb-color"
+                                          switch-on-color="success"
+                                          switch-off-color="danger"
+                                          switch-inverse="true"
+                                  >
+                                      </span>
+                                  <button class="btn btn-xs btn-primary pull-right m-r-5">Edit</button>
+
+                              </div>
+
                           </li>
-                          <li ng-repeat="item in sm.displayingList.Keywords">
-                              <strong>{{item.keyword}}</strong>
-                              <button class="btn pull-right" ng-class="item.fb ? 'fb-selected' : 'fb-not-selected'" ng-click="item.fb = !item.fb"  style="width:25px; height: 25px; margin-right:3px; padding:0;" type="button">
-                                  <i class="fa fa-facebook fs-15" style="margin-top: 1px;margin-left: 0px;"></i>
-                              </button>
-                              <button class="btn pull-right" ng-class="item.twt ? 'twt-selected' : 'twt-not-selected'" ng-click="item.twt = !item.twt"  style="width:25px; height: 25px; margin-right:3px; padding:0;" type="button">
-                                  <i class="fa fa-twitter fs-15" style=""></i>
-                              </button>
+                          <li class="cursor-default" ng-repeat="item in sm.displayingList.Keywords">
+                              <div style="display:block">
+                                <strong>{{item.keyword}}</strong>
+                                  <span class="badge badge-warning pull-right">315</span>
+                              </div>
                           </li>
                       </ul>
                   </div>
                   <!-- /. monitoring list -->
                   <!-- Monitoring Details Pane -->
-                  <div class="col-lg-7" style="position:absolute; left:254px; top:0; right:0; bottom:40px; padding:10px; padding-right:25px;">
-                      <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="min-width: 295px;">
+                  <div class="col-xs-6" style="position:absolute; left:342px; bottom:0; top:0px; right:0; padding:10px; padding-bottom:0;">
+                      <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="width: 342px;">
                           <div class="pull-right social-action">
                               <button class="btn btn-{{::item.datasource}} btn-circle">
                                   <i class="fa fa-{{::item.datasource}}"></i>

@@ -82,6 +82,10 @@
   font-size: 22px !important;
 }
 
+.modal-300 {
+  width:300px!important;
+}
+
 .width-220 {
   width: 220px !important;
 }
@@ -109,13 +113,26 @@
   color: #3b5998!important;
   border: 1px solid #3b5998;
 }
-
+.default {
+  background-color: #000;
+}
 .circle-selected {
   background-color:#1ab394!important;
   color: #fff!important;
   border: 1px solid #1ab394;
 }
 
+.btn-pause {
+  background-color:#fff!important;
+  color: #f8ac59!important;
+  border: 1px solid #f8ac59;
+}
+
+.btn-play {
+  background-color:#fff!important;
+  color: #23c6c8!important;
+  border: 1px solid #23c6c8;
+}
 .circle-not-selected {
   background-color:#fff;
   color: #1ab394!important;
@@ -185,7 +202,11 @@ height:76%!important;
 }
 
 .social-map-monitor {
-  padding-left:577px!important
+  padding-left:700px!important
+}
+
+.no-hover-white:hover {
+  background-color:#fff!important;
 }
 tags-input .host {
   position: relative;
@@ -251,6 +272,34 @@ tags-input .host {
 .monitoring-items-list li:hover,
 .monitoring-items-list li.active {
   background: #fefefe;
+}
+
+.keyword-list {
+  list-style: none;
+  padding:0;
+  margin:0;
+}
+
+.keyword-list li {
+  padding:0;
+  margin:0;
+}
+
+.monitoring-items-list li:hover {
+  background-color:#f6f6f6!important;
+}
+
+.monitoring-items-list .active:hover {
+  background-color:#fff!important;
+}
+
+.cursor-default {
+  cursor:default !important;
+}
+
+.ibox-title .ui-select-choices-row-inner {
+  padding:10px;
+  font-size:16px;
 }
 
 
