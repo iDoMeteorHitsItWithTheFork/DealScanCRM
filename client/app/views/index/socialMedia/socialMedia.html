@@ -189,7 +189,7 @@
                       </ui-select>
                   </div>
                   <div class="col-xs-3">
-                      <button class="btn btn-sm btn-primary pull-right">Create Watchlist</button>
+                      <button class="btn btn-sm btn-primary pull-right" ng-click="sm.testWatchlists()">Create Watchlist</button>
                   </div>
               </div>
           </div>
@@ -204,7 +204,7 @@
                                   <i class="fa" ng-class="sm.displayingList.paused ? 'fa-stop':'fa-play' " style=""></i> &nbsp; {{sm.displayingList.paused ? 'Stop' : 'Play'}}
                               </button>
                               </div>
-                              <div style="display:block;">
+                              <div style="display:none;">
                                   <span style="cursor:pointer;">
                                   <input
                                           bs-switch

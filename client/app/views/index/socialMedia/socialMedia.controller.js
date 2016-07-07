@@ -8,7 +8,6 @@ angular.module('dealScanCrmApp')
     _sm.user = Auth.getCurrentUser();
     _sm.searchResults = SocialMedia.searchResults();
     _sm.watchlists = SocialMedia.watchlists();
-
     console.log(_sm.watchlists);
 
 
@@ -430,6 +429,7 @@ angular.module('dealScanCrmApp')
     }
 
     _sm.startMonitoring = function(){
+      console.log(_sm.watchlists);
        console.log('[Starting Monitoring]');
       _sm.watchlists = SocialMedia.monitor();
       console.log(_sm.watchlists);
@@ -705,5 +705,7 @@ angular.module('dealScanCrmApp')
     ]; */
 
 
-
+ _sm.testWatchlists = function () {
+   console.log(_sm.watchlists);
+ }
   });
