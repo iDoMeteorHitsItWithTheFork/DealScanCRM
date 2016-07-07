@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
   .factory('SocialMedia',
-    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, toaster, WatchlistResource, $interval) {
+    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, SocialMediaMonitoring ,toaster, WatchlistResource, $interval) {
     // Service logic
     var _socialSearchResults = { data: null, searchParams: null};
     var _watchlists = [];
@@ -140,26 +140,25 @@ angular.module('dealScanCrmApp')
     }
 
 
+      /**
+       * Start Monitoring Session
+       * @returns {Array}
+         */
+      function statMonitoring(){
+        console.log('>> Initiate Monitoring Session');
+        _watchlists.length = 0;
+        _watchlists  = SocialMediaMonitoring.start();
+        return _watchlists;
+      }
 
-      function statMonitoring(keywords){
-        if (!Array.isArray(keywords)) throw {errorCode: '', errorMessage: 'Keywords should be an array'};
-        var since = '';
-        var q = keywords.join(' OR ');
-        var params = {
-          q: q,
-          result_type:'recent',
-          count: 100
-        }
-        console.log(params);
-        return SocialMediaResource.twitterSearch(params)
-          .$promise.then(function(res){
-           console.log(res);
-
-        }).catch(function(err){
-             console.log(err);
-             return err;
-        })
-
+        /**
+         * Stop Monitoring Session
+         * @returns {Array}
+         */
+      function stopMonitoring(){
+        console.log('>> Stoping Montioting session');
+        _watchlists = SocialMediaMonitoring.stop();
+        return _watchlists;
       }
 
     /**
@@ -580,6 +579,7 @@ angular.module('dealScanCrmApp')
         searchResults: getSocialSearchResults,
         clear: clearResults,
         monitor:statMonitoring,
+        stopStream: stopMonitoring,
         postToFb: postToFb,
         getFbPages: getFbPages,
         broadcastSocial: broadcastSocial

@@ -66,28 +66,44 @@ function handleError(res, statusCode) {
 
 // Gets a list of Watchlists
 export function index(req, res) {
-  Watchlist.findAll({
-    include: [
-      {
-        model: Dealership,
-        where: {
-          dealershipName: req.query.dealershipName
+  var watchlists = (req.query.hasOwnProperty('dealershipName') && req.query.dealershipName.trim() != '') ?
+    (Watchlist.findAll({
+      include: [
+        {
+          model: Dealership,
+          where: {
+            dealershipName: req.query.dealershipName
+          }
+        },
+        {
+          model: User,
+          as: 'ListOwner',
+          attributes: ['firstName', 'lastName', 'email', 'userID', 'phone'],
+          required: true
+        },
+        {
+          model: Keyword,
+          required: true
+        },
+        {
+          model: Source,
+          as: 'MonitoringSources',
+          required: true
         }
-      },
+      ],
+    })) : (Watchlist.findAll({
+    include: [
+      {model: Dealership, required: true},
       {
         model: User,
         as: 'ListOwner',
         attributes: ['firstName', 'lastName', 'email', 'userID', 'phone'],
         required: true
       },
-      {
-        model: Keyword,
-        required: true
-      }
-    ],
-  })
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+      {model: Keyword, required: true}
+    ]
+  }));
+  return watchlists.then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a single Watchlist from the DB

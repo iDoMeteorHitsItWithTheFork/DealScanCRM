@@ -397,17 +397,25 @@ angular.module('dealScanCrmApp')
         }
     }
 
-    _sm.startMonitoring = function(){
-      var keywords = ['Donald','Trump', 'Clinton', 'big booty judy'];
-      SocialMedia.monitor(keywords).then(function(res){
-         console.log(res);
-      }).catch(function(err){
-          console.log(err);
-          toaster.error({title:'Social Monitor Error',  body: err});
-      })
+
+    _sm.controls = function(){
+      _sm.displayingList.paused = !_sm.displayingList.paused;
+      (_sm.displayingList.paused) ? _sm.startMonitoring() : _sm.stopMonitoring();
     }
 
-    _sm.startMonitoring();
+    _sm.startMonitoring = function(){
+       console.log('[Starting Monitoring]');
+      _sm.watchlists = SocialMedia.monitor();
+      console.log(_sm.watchlists);
+    }
+
+
+    _sm.stopMonitoring  = function(){
+       console.log('[Stoping Monitoring]');
+       _sm.watchlists = SocialMedia.stopStream();
+       console.log(_sm.watchlists);
+    }
+
 
       /**
        * Twitter status update
@@ -427,7 +435,7 @@ angular.module('dealScanCrmApp')
 
 
 
-    _sm.watchlists = [
+    /*_sm.watchlists = [
       {
         watchlistID: 1,
         watchlistName: 'Online Reputation Management',
@@ -668,7 +676,7 @@ angular.module('dealScanCrmApp')
               ]
 
       }
-    ];
+    ]; */
 
 
 

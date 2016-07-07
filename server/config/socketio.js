@@ -18,12 +18,12 @@ function onConnect(socket) {
 
   // Insert sockets below
   require('../api/watchlist/watchlist.socket').register(socket);
-  require('../api/socialMedia/socialMedia.socket').register(socket);
+  //require('../api/socialMedia/socialMedia.socket').register(socket);
   require('../api/financing/financing.socket').register(socket);
-  require('../api/document/document.socket').register(socket);
-  require('../api/documents/documents.socket').register(socket);
+  //require('../api/document/document.socket').register(socket);
+  //require('../api/documents/documents.socket').register(socket);
   require('../api/rebate/rebate.socket').register(socket);
-  require('../api/payment/payment.socket').register(socket);
+  //require('../api/payment/payment.socket').register(socket);
   require('../api/trade/trade.socket').register(socket);
   require('../api/deal/deal.socket').register(socket);
   require('../api/vehicle/vehicle.socket').register(socket);
@@ -33,7 +33,7 @@ function onConnect(socket) {
   require('../api/customer/customer.socket').register(socket);
   require('../api/team/team.socket').register(socket);
   require('../api/dealership/dealership.socket').register(socket);
-  require('../api/thing/thing.socket').register(socket);
+  //require('../api/thing/thing.socket').register(socket);
 
 }
 
@@ -69,8 +69,36 @@ export default function(socketio) {
       socket.log('DISCONNECTED');
     });
 
+    /*
+    *  Start Social Montioring
+    * */
+    var _socialStream = null;
+    socket.on('startMonitoring', function(){
+      socket.log('\n\n\n[Start Monitoring Session]\n\n\n');
+      var SocialStream = require('../api/socialMedia/SocialStream/SocialStream');
+      var StreamManager = require('../api/socialMedia/SocialStream/StreamManager');
+      var config = require('../api/socialMedia/SocialStream/socialConfig');
+      var twitterStreamManager = new StreamManager({
+          "consumer_key": config.twitter.consumer_key,
+          "consumer_secret": config.twitter.consumer_secret,
+          "access_token": config.twitter.access_token,
+          "access_token_secret": config.twitter.access_token_secret,
+          "mock": true
+       });
+      _socialStream = new SocialStream(socket, twitterStreamManager);
+      _socialStream.start(socket); //start stream
+    });
+
+      /**
+       * Stop Social Monitioring
+       */
+      socket.on('stopMonitoring', function(){
+          _socialStream.stop(socket);
+      });
+
     // Call onConnect.
     onConnect(socket);
     socket.log('CONNECTED');
   });
+
 }

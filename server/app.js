@@ -19,6 +19,8 @@ var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',
   path: '/socket.io-client'
 });
+
+//Socket Connection Manager
 require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);

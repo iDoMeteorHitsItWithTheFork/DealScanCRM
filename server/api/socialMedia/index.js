@@ -21,9 +21,7 @@ router.post('/twitter/reTweet', auth.isAuthenticated(), controller.reTweet);
 router.post('/twitter/favs', auth.isAuthenticated(), controller.favTweet);
 router.put('/facebook/setToken', auth.isAuthenticated(), controller.setFbToken);
 router.get('/facebook/search', auth.isAuthenticated(), controller.searchFacebook);
-router.post('/monitoring/start', auth.isAuthenticated(), controller.startMonitoring);
-router.get('/monitoring/stop', auth.isAuthenticated(), controller.stopMonitoring);
-router.get('/monitoring/resume', auth.isAuthenticated(), controller.resumeMonitoring);
+
 
 
 module.exports = router;
