@@ -33,36 +33,34 @@ StreamManager.prototype.getWatchlists = function(){
     return require('./channelsDescription.mock.json');
   }
   else{
-    /**
-     *   get Watchlists from DB
-     */
-    return Watchlist.findAll({
-      attributes: ['watchlistName', 'watchlistInfo'],
-      include: [
-        {
-          model: Keyword,
-          attributes: ['keyword'],
-          required: true
-        }
-      ],
-    }).then(function(watchlists){
-        var channels = [];
-        if (watchlists){
-            for(var i  = 0 ; i < watchlists.length; i++) {
-              var keywords = [];
-              for(var k = 0; k < watchlists[i].Keywords.length; k++)
-                keywords.push(watchlists[i].Keywords[k].keyword);
-              channels.push({
-                title: watchlists[i].watchlistName,
-                description: watchlists[i].watchlistInfo,
-                track: keywords
-              });
-            }
-        } return channels;
-    }).catch(function(err){
-       console.log(err);
-       throw new Error({errorCode: '', errorMessage: 'Unable to retreive Watchlists Details'});
-    })
+    return require('./channelsDescription.json');
+    // return Watchlist.findAll({
+    //   attributes: ['watchlistName', 'watchlistInfo'],
+    //   include: [
+    //     {
+    //       model: Keyword,
+    //       attributes: ['keyword'],
+    //       required: true
+    //     }
+    //   ],
+    // }).then(function(watchlists){
+    //     var channels = [];
+    //     if (watchlists){
+    //         for(var i  = 0 ; i < watchlists.length; i++) {
+    //           var keywords = [];
+    //           for(var k = 0; k < watchlists[i].Keywords.length; k++)
+    //             keywords.push(watchlists[i].Keywords[k].keyword);
+    //           channels.push({
+    //             title: watchlists[i].watchlistName,
+    //             description: watchlists[i].watchlistInfo,
+    //             track: keywords
+    //           });
+    //         }
+    //     }  return channels;
+    // }).catch(function(err){
+    //    console.log(err);
+    //    throw new Error({errorCode: '', errorMessage: 'Unable to retreive Watchlists Details'});
+    // })
   }
 };
 
@@ -83,13 +81,10 @@ StreamManager.prototype.getStreamChannelsTrackOptions = function(){
       });
       return this.streamChannelsTrackOptions;
     } else {
-      var trackingOptions = {};
-      return this.getWatchlists().then(function (channels) {
-        channels.forEach(function (item, i) {
-          that.streamChannelsTrackOptions[i] = item.track;
-        });
-        return that.streamChannelsTrackOptions;
-      })
+      this.getWatchlists().forEach(function (item, i) {
+        that.streamChannelsTrackOptions[i] = item.track;
+      });
+      return this.streamChannelsTrackOptions;
     }
   }
 };

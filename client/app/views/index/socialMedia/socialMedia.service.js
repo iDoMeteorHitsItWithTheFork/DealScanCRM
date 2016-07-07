@@ -55,7 +55,7 @@ angular.module('dealScanCrmApp')
          q: searchOptions.term
        }
        if (searchOptions.location) {
-        if (searchOptions.location.metrics != 'm' && searchOptions.location.metrics != 'mi')
+        if (searchOptions.location.metrics != 'km' && searchOptions.location.metrics != 'mi')
           return {errorCode:'', errorMessage: 'Invalid Metric Parameter'};
         params.geocode = [searchOptions.location.lat, searchOptions.location.lon, searchOptions.location.distance];
        }
@@ -551,17 +551,37 @@ angular.module('dealScanCrmApp')
 
 
 
-    // console.log(startMonitoring({
+    // console.log(createWatchlist({
     //   Watchlist: {
     //     WatchlistName: 'Online Reputation Monitoring',
     //     WatchlistInfo: 'Monitor negative online activities pertaining to dealership',
     //     dealershipName: 'Hagerstown Ford'
     //   },
     //   Keywords: [
-    //     {keyword: 'Fuck Hagerstown Ford'},
-    //     {keyword: 'Hagerstown Ford is horrible'},
-    //     {keyword: 'Hagerstown Ford sucks'},
-    //     {keyword: 'Hagerstown Ford ripped me off'}
+    //     {keyword: 'Hagerstown Ford'},
+    //     {keyword: 'Ford'},
+    //     {keyword: 'Toyota'},
+    //     {keyword: ' Nissan'}
+      //   {keyword: ' Kent Parsons'}
+      //   {keyword: ' Car'}
+      //   {keyword: ' Truck'}
+      //   {keyword: ' F150'}
+      //   {keyword: ' Focus'}
+      //   {keyword: ' Explorer'}
+      //   {keyword: ' Fusion'}
+      //   {keyword: ' Escape'}
+      //   {keyword: 'Edge'}
+      //   {keyword: ' New car'}
+      //   {keyword: ' Used car'}
+      //   {keyword: ' New truck'}
+      //   {keyword: 'Used truck'}
+      //   {keyword: 'Fiesta'}
+      //   {keyword: 'Service department'}
+      //   {keyword: 'Oil change'}
+      //   {keyword: 'Mustang'}
+      //   {keyword: 'Younger Toyota'}
+      //   {keyword: 'Hamilton Nissan'}
+      //   {keyword: 'Malloy Ford}
     //   ],
     //   Sources: ['facebook', 'twitter']
     // }));

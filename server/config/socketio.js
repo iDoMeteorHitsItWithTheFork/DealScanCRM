@@ -83,7 +83,7 @@ export default function(socketio) {
           "consumer_secret": config.twitter.consumer_secret,
           "access_token": config.twitter.access_token,
           "access_token_secret": config.twitter.access_token_secret,
-          "mock": true
+          "mock": false
        });
       _socialStream = new SocialStream(socket, twitterStreamManager);
       _socialStream.start(socket); //start stream
