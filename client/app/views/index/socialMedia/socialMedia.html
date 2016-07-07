@@ -164,7 +164,7 @@
 
     <!-- live monitoring -->
       <!-- live monitoring -->
-      <div ng-show="sm.currentView.id == 'monitor'" id="monitor-pane" style="width:700px;" class="ibox float-e-margins col-lg-6 social-search-options animated fadeInRight">
+      <div ng-show="sm.currentView.id == 'monitor'" style="width:700px; position:absolute; left:0; top: 0; bottom:55px;" class="ibox float-e-margins animated fadeInRight">
           <div class="ibox-title p-b-14">
               <div class="row">
                   <div class="col-xs-9">
@@ -181,7 +181,7 @@
                   </div>
               </div>
           </div>
-          <div class="ibox-content" full-scroll style="position: absolute; bottom: 0;left:0;right:0;top:0;padding: 0;">
+          <div class="ibox-content" style="position: relative; height:100%; overflow-x:auto; overflow-y:scroll;">
                   <!-- monitoring list -->
                   <div class="col-xs-6 no-margins" style="position: absolute; bottom: 0;left:11px; top:0; padding: 0; width:320px">
                       <ul class="unstyled monitoring-items-list" ng-hide="!sm.displayingList">
@@ -236,7 +236,7 @@
                   </div>
                   <!-- /. monitoring list -->
                   <!-- Monitoring Details Pane -->
-                  <div class="col-xs-6" style="position:absolute; left:342px; bottom:0; top:0px; right:0; padding:10px; padding-bottom:0;">
+                  <div class="col-xs-6" style="position:absolute; left:342px; top:0px; bottom:0; right:0; padding:10px; padding-bottom:0;">
                       <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="width: 342px;">
                           <div class="pull-right social-action">
                               <button class="btn btn-{{::item.datasource}} btn-circle">
