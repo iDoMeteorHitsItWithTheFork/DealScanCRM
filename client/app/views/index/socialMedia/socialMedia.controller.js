@@ -8,7 +8,6 @@ angular.module('dealScanCrmApp')
     _sm.user = Auth.getCurrentUser();
     _sm.searchResults = SocialMedia.searchResults();
     _sm.watchlists = SocialMedia.watchlists();
-
     console.log(_sm.watchlists);
 
 
@@ -94,8 +93,34 @@ angular.module('dealScanCrmApp')
         _sm.map = map;
       });
 
+    _sm.clearResults = function () {
+      console.log("clearing results...");
+      _sm.searchResults.data.length = 0;
+      if (infoWindow){
+        infoWindow.close();
+      }
+    }
+
+    _sm.removeCircle = function () {
+      if (_sm.shape){
+        _sm.shape.setMap(null);
+        _sm.shape = null;
+        _sm.drawing = false;
+      }
+      _sm.searchObj.geo = {lat: null, lon: null, distance: null};
+
+
+    }
 
     _sm.setLocation = function (){
+      if (_sm.drawing === true){
+        _sm.drawing = false;
+        return;
+      }
+      if (_sm.shape){
+        _sm.shape.setMap(null);
+      }
+
       _sm.drawing = true;
       _sm.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.CIRCLE);
       google.maps.event.addListener(_sm.drawingManager, 'circlecomplete', function(circle) {
@@ -404,6 +429,7 @@ angular.module('dealScanCrmApp')
     }
 
     _sm.startMonitoring = function(){
+      console.log(_sm.watchlists);
        console.log('[Starting Monitoring]');
       _sm.watchlists = SocialMedia.monitor();
       console.log(_sm.watchlists);
@@ -679,5 +705,7 @@ angular.module('dealScanCrmApp')
     ]; */
 
 
-
+ _sm.testWatchlists = function () {
+   console.log(_sm.watchlists);
+ }
   });
