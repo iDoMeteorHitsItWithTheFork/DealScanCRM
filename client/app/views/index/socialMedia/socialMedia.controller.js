@@ -94,13 +94,35 @@ angular.module('dealScanCrmApp')
         _sm.map = map;
       });
 
+    _sm.clearResults = function () {
+      console.log("clearing results...");
+      _sm.searchResults.data.length = 0;
+      if (infoWindow){
+        infoWindow.close();
+      }
+    }
+
+    _sm.removeCircle = function () {
+      if (_sm.shape){
+        _sm.shape.setMap(null);
+        _sm.shape = null;
+        _sm.drawing = false;
+      }
+      _sm.searchObj.geo = {lat: null, lon: null, distance: null};
+
+
+    }
 
     _sm.setLocation = function (){
-      _sm.drawing = true;
+      if (_sm.drawing === true){
+        _sm.drawing = false;
+        return;
+      }
       if (_sm.shape){
         _sm.shape.setMap(null);
       }
 
+      _sm.drawing = true;
       _sm.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.CIRCLE);
       google.maps.event.addListener(_sm.drawingManager, 'circlecomplete', function(circle) {
         _sm.drawingManager.setDrawingMode(null);

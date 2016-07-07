@@ -54,8 +54,20 @@
   <div class="row social-row">
 
     <!-- social map -->
-        <ng-map class="col-sm-7 social-map" ng-class="sm.currentView.id == 'discover' ? 'social-map-discover' : 'social-map-monitor'" center="[38.9072, -77.0369]" fit-map>
-            <marker id="{{post.postID}}" on-click="sm.showInfoWindow(event, post, sm.map, null, true)" ng-repeat="post in sm.searchResults.data" position="{{::post.geo[0]}}, {{::post.geo[1]}}"></marker>
+
+        <ng-map class="col-sm-7 social-map" ng-class="sm.currentView.id == 'discover' ? 'social-map-discover' : 'social-map-monitor'" center="[39.628, -77.766]" fit-map>
+            <marker icon="{
+                url:'../../assets/images/twitterMarker.png',
+                scaledSize:[40,40],
+                origin: [0,0],
+                anchor: [21,45]
+                }"
+                    id="{{post.postID}}" on-click="sm.showInfoWindow(event, post, sm.map, null, true)" ng-repeat="post in sm.searchResults.data" position="{{::post.geo[0]}}, {{::post.geo[1]}}"></marker>
+
+            <custom-control id="clear" position="TOP_CENTER" index="1" on-click="sm.clearResults()" ng-if="sm.searchResults.data.length > 0">
+                <button class="btn btn-primary" style="margin-top:10px;">CLEAR RESULTS</button>
+            </custom-control>
+
         </ng-map>
     <!-- /.social map -->
 
@@ -71,9 +83,9 @@
               <button ng-repeat="source in sm.searchObj.sources" uib-tooltip="{{source.name}}" tooltip-placement="bottom" class="btn" ng-class="source.selected ? '{{source.id}}-selected' : '{{source.id}}-not-selected'" ng-click="source.selected = !source.selected"  style="width:34px; height: 34px; margin-right:3px; {{source.buttonStyle}}" type="button">
                 <i class="fa fa-{{source.name}} fs-15" style="{{source.iconStyle}}"></i>
               </button>
-              <button uib-tooltip="Add location filter" tooltip-placement="bottom" class="btn m-l-0" ng-class="sm.drawing ? 'circle-selected' : 'circle-not-selected'" ng-click="sm.setLocation()" type="button" style="width:34px; height: 34px;">
+              <button uib-tooltip="Add location filter" tooltip-placement="bottom" class="btn m-l-0" ng-class="sm.drawing ? 'circle-selected' : 'circle-not-selected'" ng-click="sm.shape ? sm.removeCircle() : sm.setLocation()" type="button" style="width:34px; height: 34px;">
                 <i class="fa fa-map-marker" style="font-size: 20px; margin-left:-2px"></i>
-                <i class="fa fa-plus" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
+                <i class="fa" ng-class="sm.shape ? 'fa-minus' : 'fa-plus'" ng-style="sm.shape ? 'fa-minus' : 'fa-plus'" style="margin-left: -3px;position: absolute; margin-top: 13px; font-size: 11px;"></i>
               </button>
               <button ng-disabled="!sm.searchObj.sources[0].selected && !sm.searchObj.sources[1].selected" class="btn btn-primary m-l-5" style="height: 34px;" type="submit" ng-click="sm.searchSocialMedia();">
                 <i class="fa fa-search">&nbsp;&nbsp;</i>Search
