@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q, toaster) {
+  .controller('SocialMediaCtrl', function ($scope, $timeout, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q, toaster) {
     $("#page-wrapper").css("overflow-x", "hidden");//little hack for scroll issue
 
     var _sm =this;
@@ -281,7 +281,11 @@ angular.module('dealScanCrmApp')
       google.maps.event.addListener(infoWindow,'closeclick',function(){});
 
     }
-
+    $timeout(function(){
+      //_sm.map.setCenter(new google.maps.LatLng(_location.lat, _location.lng));
+      google.maps.event.trigger(_sm.map,'resize');
+      console.log("resizing...");
+    }, 2000);
       /**
        * Like or Favs a Post depending on Source
        * @param post
