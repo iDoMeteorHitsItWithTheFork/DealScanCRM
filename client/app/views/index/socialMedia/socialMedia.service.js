@@ -182,7 +182,7 @@ angular.module('dealScanCrmApp')
         if (searchOptions.location.metrics != 'km' && searchOptions.location.metrics != 'mi')
           return {errorCode:'', errorMessage: 'Invalid Metric Parameter'};
         params.geocode = [searchOptions.location.lat, searchOptions.location.lon,
-        searchOptions.location.distance+searchOptions.location.metrics];
+        Math.ceil(searchOptions.location.distance/1000)+searchOptions.location.metrics];
       }
 
       console.log(params);
@@ -226,7 +226,7 @@ angular.module('dealScanCrmApp')
                    case 'circle':
                      if (dataModel.geo)
                         if (Util.pointInCircle(new google.maps.LatLng(dataModel.geo[0],
-                           dataModel.geo[1]), ref, (searchOptions.location.distance * 1000)))
+                           dataModel.geo[1]), ref, searchOptions.location.distance))
                           _data.push(dataModel);
                       break;
                    case 'polygon':

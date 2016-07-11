@@ -133,7 +133,7 @@
                 <button ng-if="item.datasource != 'twitter'" class="btn btn-white btn-xs" ng-click="item.write_comment = !item.write_comment">
                   <i ng-class="::{'fa fa-comments' : item.datasource == 'facebook'}"></i>
                   {{::item.datasource == 'facebook' ? ' Comment' : ''}}</button>
-                <button ladda="item.retweeting" ng-disabled="item.retweeting || (item.datasource == 'twitter' && item.retweeted)" class="btn btn-white btn-xs" ng-click="sm.shareOrRetweet(item);">
+                <button ng-if="item.datasource !='facebook'" ladda="item.retweeting" ng-disabled="item.retweeting || (item.datasource == 'twitter' && item.retweeted)" class="btn btn-white btn-xs" ng-click="sm.shareOrRetweet(item);">
                   <i ng-class="{'fa fa-share' : item.datasource == 'facebook', 'fa fa-retweet': item.datasource == 'twitter'}"></i>
                   {{::item.datasource == 'facebook' ? ' Share' : ''}}{{::item.datasource == 'twitter' ? ' Retweet' : ''}}</button>
               </div>

@@ -82,7 +82,7 @@ angular.module('dealScanCrmApp')
       _socket.on('disconnect', function(msg) {
         console.log('disconnect', msg);
         _state.socket = STATE_DISCONNECTED;
-        //_state.twitter = STATE_DISCONNECTED;
+        _state.twitter = STATE_DISCONNECTED;
         updateStateConnexionTime();
       });
 
@@ -91,7 +91,7 @@ angular.module('dealScanCrmApp')
         console.warn(msg.msg, "Inactive for " + msg.timeout + "ms");
         _socket.disconnect();
         _state.socket = STATE_DISCONNECTED_DUE_TO_INACTIVITY;
-        //_state.twitter = STATE_DISCONNECTED;
+        _state.twitter = STATE_DISCONNECTED;
         updateStateConnexionTime();
       });
 
