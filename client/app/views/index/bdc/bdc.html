@@ -56,12 +56,6 @@
                         <span class="label label-info metric-label">$30,400.00</span>
                     </span>
                     <h5>{{m.Category | uppercase}}</h5><br/>
-                    <!--<div class="row margin-top-10 padding-left-15 padding-right-15">-->
-                    <!--<small class="pull-left">Days Left: {{m.remainingDays}}</small>-->
-                    <!--<span class="pull-right text-navy">-->
-                    <!--<i class="fa fa-play fa-rotate-270 middle-text-align">&nbsp;</i>45%-->
-                    <!--</span>-->
-                    <!--</div>-->
                 </div>
                 <div class="ibox-content">
                     <div class="row p-l-r-15">
@@ -177,12 +171,12 @@
                 <div class="ibox-content">
 
                     <!-- metrics -->
-                    <div class="row">
+                    <div class="row p-l-10">
                         <div class="col-xs-2 margin-top-10">
                             <h3 class="no-margins">Today Statistics</h3>
                             <small>All Employee's Data</small>
                         </div>
-                        <div class="col-xs-10">
+                        <div class="col-xs-10" ng-hide="true">
                             <div class="col-lg-2" ng-repeat="s in bdc.summaryStats" ng-click="bdc.displayStatsDetails(s)" style="cursor: pointer;">
                                 <div class="widget style1 {{s.bgStyle}}">
                                     <div class="row vertical-align">
@@ -202,6 +196,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row p-t-20">
+                        <div class="col-lg-2" ng-repeat="s in bdc.summaryStats">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content" style="border: 1px solid #e7eaec;">
+                                    <h1 class="no-margins">{{s.value}}
+                                        <span class="label label-info pull-right" style="margin-top:7px;" ng-click="bdc.displayStatsDetails(s)">View</span>
+                                    </h1>
+                                    <small>{{s.category}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- /.metrics -->
 
 
@@ -209,34 +215,32 @@
                     <div class="row" style="padding-top:10px !important;" >
 
                         <!-- Won Pie & Stats -->
-                        <div class="pull-left"
-                             ng-class="(bdc.showBarChart && bdc.chartView == 'chart')? 'col-lg-3': 'col-lg-4'"
-                             ng-hide="bdc.selectedPie != 'won' && bdc.showBarChart && bdc.chartView == 'chart'">
+                        <div class="pull-left" ng-class="(bdc.showBarChart && bdc.chartView == 'chart')? 'col-lg-3': 'col-lg-4'" ng-hide="bdc.selectedPie != 'won' && bdc.showBarChart && bdc.chartView == 'chart'">
                             <!-- won stats-->
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title" style="border-top-width:1px;">
                                     <div class="row">
                                         <div class="col-lg-12 text-center">
                                             <h2>{{'Won' | uppercase}}
-                        <span class="btn-group" uib-dropdown>
-                           <button type="button" class="btn btn-primary btn-outline btn-xs"
-                                   uib-dropdown-toggle><span class="caret"></span>
-                           </button>
-                           <ul role="menu" uib-dropdown-menu="">
-                              <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in bdc.stats[0].sources">
-                                <checkbox ng-model="s.state" style="margin-right:7px !important;" ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
-                              </li>
-                              <li class="divider"></li>
-                               <li>
-                                  <div class="row">
-                                     <button class="btn btn-success btn-xs pull-right "
-                                             style="position:relative; top:-2px; left:-20px; padding-top: 3px;
-                                       padding-bottom: 3px; padding-right: 10px;" ng-click="bdc.filterDeals('won')">
-                                     <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
-                                  </div>
-                              </li>
-                          </ul>
-                          </span>
+                                            <span class="btn-group" uib-dropdown>
+                                               <button type="button" class="btn btn-primary btn-outline btn-xs"
+                                                       uib-dropdown-toggle><span class="caret"></span>
+                                               </button>
+                                               <ul role="menu" uib-dropdown-menu="">
+                                                  <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in bdc.stats[0].sources">
+                                                    <checkbox ng-model="s.state" style="margin-right:7px !important;" ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
+                                                  </li>
+                                                  <li class="divider"></li>
+                                                   <li>
+                                                      <div class="row">
+                                                         <button class="btn btn-success btn-xs pull-right "
+                                                                 style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                           padding-bottom: 3px; padding-right: 10px;" ng-click="bdc.filterDeals('won')">
+                                                         <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
+                                                      </div>
+                                                  </li>
+                                              </ul>
+                                              </span>
                                             </h2>
                                         </div>
                                     </div>
@@ -289,7 +293,6 @@
                             </div>
                         </div>
                         <!-- ./Won Pie & Charts -->
-
 
                         <!-- Lost Pie & Stats -->
                         <div class="pull-left"
@@ -459,9 +462,174 @@
                         </div>
                         <!-- ./Total Pie & Stats -->
 
+                        <!-- add1 Pie & Stats -->
+                        <div class="pull-left m-t-40"
+                             ng-class="(bdc.showBarChart && bdc.chartView == 'chart') ? 'col-lg-3': 'col-lg-4 col-lg-offset-2'"
+                             ng-hide="bdc.selectedPie != 'add1' && bdc.showBarChart && bdc.chartView == 'chart'">
+                            <!-- total stats-->
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title" style="border-top-width:1px;">
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <h2>{{'Total' | uppercase}}
+                        <span class="btn-group" uib-dropdown >
+                          <button type="button" class="btn btn-primary btn-outline btn-xs"
+                                  uib-dropdown-toggle><span class="caret"></span>
+                          </button>
+                          <ul role="menu" uib-dropdown-menu="">
+                             <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in bdc.stats[2].sources">
+                                                        <checkbox ng-model="s.state" style="margin-right:7px !important;" ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
+                              </li>
+                              <li class="divider"></li>
+                              <li>
+                                <div class="row">
+                                   <button class="btn btn-success btn-xs pull-right "
+                                           style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                                    padding-bottom: 3px; padding-right: 10px;" ng-click="bdc.filterDeals('total')">
+                                   <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
+                                </div>
+                              </li>
+                          </ul>
+                        </span>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox-content p-b-0">
+                                    <table class="table ">
+                                        <thead>
+                                        <tr>
+                                            <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
+                                                <button class="btn btn-warning btn-outline m-rl-a">{{bdc.stats[0].cars.units +
+                                                    bdc.stats[1].cars.units}}</button>
+                                                <br/>
+                                                Cars
+                                            </th>
+                                            <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
+                                                <button class="btn btn-info btn-outline m-rl-a">{{bdc.stats[0].trucks.units +
+                                                    bdc.stats[1].trucks.units}}</button>
+                                                <br/>
+                                                Trucks
+                                            </th>
+                                            <th style="border-bottom:none !important;" class="text-center">
+                                                <button class="btn btn-danger btn-outline m-rl-a">{{(bdc.stats[0].cars.units + bdc.stats[1].cars.units) +
+                                                    (bdc.stats[0].trucks.units + bdc.stats[1].trucks.units)}}</button>
+                                                <br/>
+                                                Total
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
+                                                <h5 style="margin-top:-12px !important;">${{bdc.stats[0].cars.pvr + bdc.stats[1].cars.pvr}}</h5>
+                                            </td>
+                                            <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
+                                                <h5 style="margin-top:-12px !important;">${{bdc.stats[0].trucks.pvr + bdc.stats[1].trucks.pvr}}</h5>
+                                            </td>
+                                            <td class="text-center" style="border-top:none !important;">
+                                                <h5 style="margin-top:-12px !important;">${{(bdc.stats[0].cars.pvr + bdc.stats[1].cars.pvr) + (bdc.stats[0].trucks.pvr + bdc.stats[1].trucks.pvr)}}</h5>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- ./total stats-->
+                            <div class="flot-chart large-pie-chart animated fadeInRight"
+                                 ng-show="bdc.chartView == 'chart'">
+                                <div flot class="flot-chart-content" dataset="bdc.totalDeals.pie"
+                                     options="bdc.pieOptions"
+                                     on-plot-click="bdc.showDetails($event, pos, item, 'total'); bdc.displayTable($event, pos, item, 'total')"></div>
+                            </div>
+                        </div>
+                        <!-- ./add1 Pie & Stats -->
+                        <!-- add2 Pie & Stats -->
+                        <div class="pull-left m-t-40"
+                             ng-class="(bdc.showBarChart && bdc.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
+                             ng-hide="bdc.selectedPie != 'add2' && bdc.showBarChart && bdc.chartView == 'chart'">
+                            <!-- total stats-->
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title" style="border-top-width:1px;">
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <h2>{{'Total' | uppercase}}
+                        <span class="btn-group" uib-dropdown >
+                          <button type="button" class="btn btn-primary btn-outline btn-xs"
+                                  uib-dropdown-toggle><span class="caret"></span>
+                          </button>
+                          <ul role="menu" uib-dropdown-menu="">
+                             <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in bdc.stats[2].sources">
+                                                        <checkbox ng-model="s.state" style="margin-right:7px !important;" ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
+                              </li>
+                              <li class="divider"></li>
+                              <li>
+                                <div class="row">
+                                   <button class="btn btn-success btn-xs pull-right "
+                                           style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                                    padding-bottom: 3px; padding-right: 10px;" ng-click="bdc.filterDeals('total')">
+                                   <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
+                                </div>
+                              </li>
+                          </ul>
+                        </span>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox-content p-b-0">
+                                    <table class="table ">
+                                        <thead>
+                                        <tr>
+                                            <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
+                                                <button class="btn btn-warning btn-outline m-rl-a">{{bdc.stats[0].cars.units +
+                                                    bdc.stats[1].cars.units}}</button>
+                                                <br/>
+                                                Cars
+                                            </th>
+                                            <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
+                                                <button class="btn btn-info btn-outline m-rl-a">{{bdc.stats[0].trucks.units +
+                                                    bdc.stats[1].trucks.units}}</button>
+                                                <br/>
+                                                Trucks
+                                            </th>
+                                            <th style="border-bottom:none !important;" class="text-center">
+                                                <button class="btn btn-danger btn-outline m-rl-a">{{(bdc.stats[0].cars.units + bdc.stats[1].cars.units) +
+                                                    (bdc.stats[0].trucks.units + bdc.stats[1].trucks.units)}}</button>
+                                                <br/>
+                                                Total
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
+                                                <h5 style="margin-top:-12px !important;">${{bdc.stats[0].cars.pvr + bdc.stats[1].cars.pvr}}</h5>
+                                            </td>
+                                            <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
+                                                <h5 style="margin-top:-12px !important;">${{bdc.stats[0].trucks.pvr + bdc.stats[1].trucks.pvr}}</h5>
+                                            </td>
+                                            <td class="text-center" style="border-top:none !important;">
+                                                <h5 style="margin-top:-12px !important;">${{(bdc.stats[0].cars.pvr + bdc.stats[1].cars.pvr) + (bdc.stats[0].trucks.pvr + bdc.stats[1].trucks.pvr)}}</h5>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- ./total stats-->
+                            <div class="flot-chart large-pie-chart animated fadeInRight"
+                                 ng-show="bdc.chartView == 'chart'">
+                                <div flot class="flot-chart-content" dataset="bdc.totalDeals.pie"
+                                     options="bdc.pieOptions"
+                                     on-plot-click="bdc.showDetails($event, pos, item, 'total'); bdc.displayTable($event, pos, item, 'total')"></div>
+                            </div>
+                        </div>
+                        <!-- ./add2 Pie & Stats -->
+
+                        </div>
                         <!-- bar chart -->
-                        <div id="dscBarChart" class="col-lg-9 pull-left animated fadeInRight" ng-if="bdc.showBarChart && bdc.chartView == 'chart'"
-                             style="padding-top:30px !important;">
+                        <div id="dscBarChart" class="col-lg-9 pull-left animated fadeInRight" ng-if="bdc.showBarChart && bdc.chartView == 'chart'" style="padding-top:30px !important; padding-left: 50px;">
                             <div class="ibox float-e-margins">
                                 <div class="row" style="border-top: 1px #d5d5d5 solid; border-bottom:1px #d5d5d5 solid;
                  margin-top: -31px;margin-right: 17px;margin-left: 5px ">
