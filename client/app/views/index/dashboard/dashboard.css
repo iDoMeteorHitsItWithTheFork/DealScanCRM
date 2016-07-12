@@ -41,8 +41,8 @@
   padding-bottom:0px !important;
 }
 .large-pie-chart {
-  width: 280px;
-  height: 280px;
+  width: 180px;
+  height: 180px;
   margin: auto;
 }
 .small-pie-chart {
@@ -258,4 +258,8 @@ div.navs-3 > ul.nav-tabs > li {
 }
 .m-t-40 {
   margin-top:40px;
+}
+
+.col-20-per {
+  width:20%;
 }
