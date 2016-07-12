@@ -164,14 +164,16 @@ export function create(req, res) {
         return Source.findAll({
           where: {
             source: sources
-          }
+          },
+          transaction: t
         }).then(function (sources) {
           return watchlist.setMonitoringSources(sources, {status: 'off'}, {transaction: t})
             .then(function (results) {
               return Dealership.find({
                 where: {
                   dealershipName: new_watchlist.dealershipName
-                }
+                },
+                transaction: t
               }).then(function (dealership) {
                 if (dealership) {
                   return watchlist.setDealership(dealership, {transaction: t})
@@ -179,7 +181,8 @@ export function create(req, res) {
                       return User.find({
                         where: {
                           userID: req.user.userID
-                        }
+                        },
+                        transaction: t
                       }).then(function (user) {
                         if (user) {
                           return watchlist.setListOwner(user, {transaction: t}).then(function () {

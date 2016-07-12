@@ -11,6 +11,7 @@ export default function (sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
+        dscDealershipID: DataTypes.BIGINT,
         dealershipName: {
             type: DataTypes.STRING(45),
             allowNull: false
@@ -42,7 +43,9 @@ export default function (sequelize, DataTypes) {
             dealerInfo: function () {
                 return {
                     'name': this.getDataValue('dealershipName'),
-                    'address': this.getDataValue('streetAddress') + ' , ' + this.getDataValue('city') + ' , ' + this.getDataValue('state') + ' ' + this.getDataValue('zipCode')
+                    'address': this.getDataValue('streetAddress') +
+                    ' , ' + this.getDataValue('city') +
+                    ' , ' + this.getDataValue('state') + ' ' + this.getDataValue('zipCode')
                 };
             },
 

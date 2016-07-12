@@ -52,6 +52,11 @@ export default function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
+    mileage: {
+      type: DataTypes.DOUBLE,
+      allowNull: true,
+      defaultValue: 0
+    },
     year: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -67,10 +72,7 @@ export default function(sequelize, DataTypes) {
     },
     color: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true,
     },
     bodyStyle: {
       type: DataTypes.STRING(45),
@@ -118,7 +120,8 @@ export default function(sequelize, DataTypes) {
       },
 
       classMethods: {
-         dscUpsert: function(data){
+         dscUpsert: function(data, t){
+
            var searchOptions = {};
            //Vehicle Identifiers
            if (data.VIN) searchOptions.VIN = data.VIN;
@@ -135,7 +138,7 @@ export default function(sequelize, DataTypes) {
              model: data.Model,
              year: data.Year,
              state: (data.New || data.New == 'true') ? 'new' : 'used', //new or used
-             mileage: data,
+             mileage: data.Mileage,
              color: data.Color,
              bodyStyle: data.BodyStyle,
              trimLevel: data.TrimLevel,
@@ -143,11 +146,11 @@ export default function(sequelize, DataTypes) {
              createdAt: data.DateCreated
            };
 
-
            //find existing vehicle or create
            return this.findOrCreate({
              where: searchOptions,
-             defaults: upsertValues
+             defaults: upsertValues,
+             transaction: t
            }).spread(function (vehicle, created) {
              if (!created) {
                return vehicle.update(upsertValues,
@@ -167,17 +170,15 @@ export default function(sequelize, DataTypes) {
                      'trimLevel',
                      'package'
                    ]
-                 })
+                 }, {transaction: t})
                  .then(function () {
                    return vehicle;
                  })
-             }
-             else return vehicle;
+             } else return vehicle;
            }).catch(function (err) {
              console.log(err);
              return err;
            });
-
          }
       }
   });

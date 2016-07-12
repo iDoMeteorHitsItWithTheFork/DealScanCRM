@@ -15,6 +15,7 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
+        dscUserID: DataTypes.BIGINT,
         firstName: {
             type: DataTypes.STRING(45),
             allowNull: false,
