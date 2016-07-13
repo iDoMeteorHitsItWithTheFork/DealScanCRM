@@ -25,6 +25,7 @@ export default function(app) {
   app.use('/api/dealerships', require('./api/dealership'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
+  app.use('/api/gmail', require('./api/gmail'));
 
   app.use('/auth', require('./auth'));
 
