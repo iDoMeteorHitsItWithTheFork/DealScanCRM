@@ -6,7 +6,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
       console.log("dashboard controller loaded");
       var _bdc = this;
-      console.log(BDCData);
       _bdc.BDCData = BDCData;
       
       _bdc.user = Auth.getCurrentUser();
