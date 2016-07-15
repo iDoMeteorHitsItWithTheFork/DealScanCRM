@@ -8,6 +8,7 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
+    dscCustomerID: DataTypes.BIGINT,
     driverLicenseID: {
       type: DataTypes.STRING,
       allowNull: true
@@ -116,6 +117,7 @@ export default function (sequelize, DataTypes) {
 
         var searchOptions = {};
         //Customer Identifiers
+        if (data.CustomerId) searchOptions.dscCustomerID = data.CustomerId;
         if (data.FirstName) searchOptions.firstName = data.FirstName;
         if (data.LastName) searchOptions.lastName = data.LastName;
         if (data.MiddleInitial) searchOptions.middleInitial = data.MiddleInitial;
@@ -128,6 +130,7 @@ export default function (sequelize, DataTypes) {
         //customer values to upsert
         var upsertValues = {
           driverLicenseID: data.DriversLicenseNo,
+          dscCustomerID: data.CustomerId,
           firstName: data.FirstName,
           middleInitial: data.MiddleInitial,
           lastName: data.LastName,
