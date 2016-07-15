@@ -149,7 +149,7 @@
                                     <h1 class="no-margins">{{s.value}}
                                         <span class="label label-info pull-right" style="margin-top:7px;" ng-click="bdc.displayStatsDetails(s)">View</span>
                                     </h1>
-                                    <small>{{s.category}}</small>
+                                    <small>{{s.title}}</small>
                                 </div>
                             </div>
                         </div>
@@ -1343,7 +1343,7 @@
 
 <!--  right sidebar -->
 <div id="right-sidebar" ng-show="bdc.sidebar" class="sidebar-open">
-    <div class="sidebar-container" full-scroll>
+    <div class="sidebar-container" full-scroll-page>
 
         <uib-tabset class="navs-3" active="0">
             <uib-tab index="$index" ng-repeat="tab in bdc.metricSummaryTabs" active="tab.active">
