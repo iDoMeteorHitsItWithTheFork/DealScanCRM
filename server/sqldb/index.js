@@ -22,6 +22,7 @@ var db = {
 
 
 // Insert models below
+db.Bdc = db.sequelize.import('../api/bdc/bdc.model');
 // db.SocialMedia = db.sequelize.import('../api/socialMedia/socialMedia.model');
 db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
 db.Team = db.sequelize.import('../api/team/team.model');

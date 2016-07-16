@@ -454,6 +454,24 @@ function fullScroll($timeout){
 }
 
 /**
+ * fullScroll - Directive for slimScroll with 100%
+ */
+function fullScrollPage($timeout){
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+      $timeout(function(){
+        element.slimscroll({
+          height: '100%',
+          railOpacity: 0.9,
+          touchScrollStep: 1,
+          wheelStep: 15
+        });
+      });
+    }
+  };
+}
+/**
  * slimScroll - Directive for slimScroll with custom height
  */
 function slimScroll($timeout){
@@ -674,6 +692,7 @@ angular
   .directive('fitHeight', fitHeight)
   .directive('scrollHeight', scrollHeight)
   .directive('pageHeight', pageHeight)
+  .directive('fullScrollPage', fullScrollPage)
   .directive('fitMap', fitMap)
   .directive('iboxToolsFullScreen', iboxToolsFullScreen)
   .directive('slimScroll', slimScroll)
