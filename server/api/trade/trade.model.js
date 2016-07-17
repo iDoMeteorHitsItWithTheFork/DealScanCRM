@@ -1,7 +1,7 @@
 'use strict';
 
 export default function(sequelize, DataTypes) {
-  return sequelize.define('Trade', {
+  var Trade = sequelize.define('Trade', {
     tradeID: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -19,60 +19,36 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: true,
       defaultValue: 0,
-      validate: {
-        notEmpty: true
-      }
     },
     payOffAmount: {
       type: DataTypes.DOUBLE,
       allowNull: true,
       defaultValue: 0,
-      validate: {
-        notEmpty: true
-      }
     },
     tradeAllowance: {
       type: DataTypes.DOUBLE,
       allowNull: true,
       defaultValue: 0,
-      validate: {
-        notEmpty: true
-      }
     },
     make: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty:true
-      }
+      allowNull: true,
     },
     model: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty:true
-      }
+      allowNull: true,
     },
     year: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING(4),
+      allowNull: true,
     },
     color: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true,
     },
     bodyStyle: {
       type: DataTypes.STRING(45),
       allowNull: true,
-      validate: {
-        notEmpty: true
-      }
     }
   }, {
     /**
@@ -111,65 +87,60 @@ export default function(sequelize, DataTypes) {
     },
 
     classMethods: {
-      dscUpsert:function(data){
+      dscUpsert:function(data, tradeValue, t){
 
-        // var searchOptions = {};
-        // //Vehicle Identifiers
-        // if (data.VIN) searchOptions.VIN = data.VIN;
-        //
-        // //vehicle values to upsert
-        // console.log(data);
-        // var upsertValues = {
-        //   VIN: data.VehicleUpdate.VIN,
-        //   actualCashValue:data.ActualCashValue,
-        //   payOffAmount: data.BalanceOwed,
-        //   tradeAllowance: '',
-        //   make: '',
-        //   model: '',
-        //   year: '',
-        //   color: '',
-        //   bodyStyle: '',
-        //   createdAt: '',
-        // };
-        //
-        //
-        // //find existing vehicle or create
-        // return this.findOrCreate({
-        //   where: searchOptions,
-        //   defaults: upsertValues
-        // }).spread(function (vehicle, created) {
-        //   if (!created) {
-        //     return vehicle.update(upsertValues,
-        //       {
-        //         fields: [
-        //           'VIN',
-        //           'stockNumber',
-        //           'invoice',
-        //           'retailValue',
-        //           'make',
-        //           'model',
-        //           'year',
-        //           'state', //new or used
-        //           'mileage',
-        //           'color',
-        //           'bodyStyle',
-        //           'trimLevel',
-        //           'package'
-        //         ]
-        //       })
-        //       .then(function () {
-        //         return vehicle;
-        //       })
-        //   }
-        //   else return vehicle;
-        // }).catch(function (err) {
-        //   console.log(err);
-        //   return err;
-        // });
+        var searchOptions = {};
+        //Vehicle Identifiers
+        if (data.Vehicle.VIN) searchOptions.VIN = data.Vehicle.VIN;
+        //vehicle values to upsert
+        var upsertValues = {
+          VIN: data.Vehicle.VIN,
+          actualCashValue:data.ActualCashValue,
+          payOffAmount: data.BalanceOwed,
+          tradeAllowance: tradeValue,
+          make: data.Vehicle.Make,
+          model: data.Vehicle.Model,
+          year: data.Vehicle.Year,
+          color: data.Vehicle.Color,
+          bodyStyle: data.Vehicle.BodyStyle,
+          createdAt: data.ScanDate,
+        };
 
+
+        //find existing vehicle or create
+        return Trade.findOrCreate({
+          where: searchOptions,
+          defaults: upsertValues,
+          transaction: t
+        }).spread(function (trade, created) {
+          if (!created) {
+            return trade.update(upsertValues,
+              {
+                fields: [
+                  'VIN',
+                  'actualCashValue',
+                  'payOffAmount',
+                  'tradeAllowance',
+                  'make',
+                  'model',
+                  'year', //new or used
+                  'color',
+                  'bodyStyle',
+                  'createdAt'
+                ]
+              }, {transaction: t})
+              .then(function () {
+                return trade;
+              })
+          } else return trade;
+        }).catch(function (err) {
+          console.log('An Error Occurred while attempting to create Trade Info');
+          console.log(err);
+          return err;
+        });
       }
-
     }
-
   });
+
+  return Trade;
 }

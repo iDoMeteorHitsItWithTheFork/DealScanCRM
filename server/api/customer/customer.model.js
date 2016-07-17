@@ -20,7 +20,6 @@ export default function (sequelize, DataTypes) {
     middleInitial: {
       type: DataTypes.STRING(1),
       allowNull: true,
-      defaultValue: ''
     },
     lastName: {
       type: DataTypes.STRING(45),
@@ -48,23 +47,23 @@ export default function (sequelize, DataTypes) {
     },
     streetAddress: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
     city: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     state: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     postalCode: {
       type: DataTypes.STRING(16),
-      allowNull: false
+      allowNull: true
     },
     source: {
       type: DataTypes.STRING,
@@ -113,7 +112,7 @@ export default function (sequelize, DataTypes) {
 
     classMethods : {
 
-      dscUpsert: function(data){
+      dscUpsert: function(data, t){
 
         var searchOptions = {};
         //Customer Identifiers
@@ -148,7 +147,8 @@ export default function (sequelize, DataTypes) {
         //find existing customer or create
         return this.findOrCreate({
           where: searchOptions,
-          defaults: upsertValues
+          defaults: upsertValues,
+          transaction: t
         }).spread(function(customer, created){
           if (!created){
             //console.log(' *** I am updated the customer data ****');
@@ -166,7 +166,7 @@ export default function (sequelize, DataTypes) {
                 'state',
                 'country',
                 'postalCode',
-              ] })
+              ] }, {transaction: t})
               .then(function(customer){
                 return customer;
               })
