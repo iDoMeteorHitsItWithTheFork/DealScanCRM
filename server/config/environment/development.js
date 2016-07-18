@@ -6,11 +6,11 @@ module.exports = {
 
   // Sequelize connection opions
   sequelize: {
-    database: 'dealscancrm',
-    username: 'dealscancrm',
+    database: 'DealScanCRM',
+    username: 'DealScanCRM',
     password: 'Baiser12!',
     options: {
-      host:'dealscancrm.db.3266541.hostedresource.com',
+      host:'97.74.31.7',
       dialect: 'mysql',
       pool: {
           max: 5,
@@ -25,6 +25,6 @@ module.exports = {
   },
 
   // Seed database on startup
-  seedDB: true
+  seedDB: false
 
 };
