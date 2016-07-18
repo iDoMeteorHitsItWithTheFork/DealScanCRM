@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-    .factory('Dashboard', function (Auth, User, Util, $q, $filter, $resource, DataSync) {
+    .factory('Dashboard', function (Auth, User, Util, $q, $filter, $resource, DealResource) {
         // Service logic
         // ...
 
@@ -21,6 +21,28 @@ angular.module('dealScanCrmApp')
         var salesData = Util.dummyData();
         var filteredData = salesData;
         console.log(salesData);
+        getTeamMates();
+        getDeals({type: 'All', dealershipID: 1, teamID: 1, from:moment().startOf('year'), to: moment()});
+        function getDeals(searchOptions){
+          console.log(searchOptions);
+          if (!searchOptions) throw new Error('Please Select Search Options');
+          if (!searchOptions.type) throw new Error('Please Select Type');
+          if (!searchOptions.dealershipID) throw new Error('Please Select Dealership');
+          if (!searchOptions.teamID) throw new Error('Please Select a Team');
+          if (!searchOptions.from || !searchOptions.to) throw new Error('Please Select Date Range');
+          return DealResource.get()
+            .$promise.then(function(deals){
+             console.log(deals);
+             if (deals && deals.length > 0){
+                 //process deals.
+
+
+             } else return [];
+          }).catch(function(err){
+             console.log(err);
+             return err;
+          });
+        }
 
         function filterData(status, sources){
             //var df = $q.defer();
@@ -234,18 +256,19 @@ angular.module('dealScanCrmApp')
 
         }
 
-        function getTeamMates(callback) {
-            if (!_user) return;
-            return Auth.getTeamMates(function(teammates){
-                _teamMates = teammates;
-                if (teamMates.length > 0) teamMates.length = 0;
-                angular.forEach(_teamMates, function(teamMate){
-                    teamMates.push({userID: teamMate.userID, profile: teamMate.profile});
-                }); return safeCb(callback)(teamMates);
-            }, function(err){
-                safeCb(callback)(err);
+        function getTeamMates() {
+            return User.getFilters({id:_user.userID})
+              .$promise.then(function(filters){
+              console.log('\n\n>> FILTERS ');
+              console.log(filters);
+              console.log('\n\n**************************');
+              if (filters){
+
+              }
+            }).catch(function(err){
+                console.log(err);
                 return err;
-            }).$promise;
+            })
         }
 
 

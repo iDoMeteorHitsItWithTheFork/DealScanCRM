@@ -84,7 +84,18 @@ Source.sync()
           password: 'Baiser12!',
           role: 'admin',
           provider: 'local',
-        }, {
+        },
+          {
+            firstName: 'Richard',
+            lastName: 'Kelly',
+            dscUserID: 8,
+            email: 'Richard.Kelly.8@HagerstownFord.com',
+            phone: '8006905984',
+            password: 'a',
+            role: 'sale_rep',
+            provider: 'local',
+          },
+          {
           firstName: 'Miles',
           lastName: 'Johnson',
           email: 'mjohnson@alvsoftwarellc.com',

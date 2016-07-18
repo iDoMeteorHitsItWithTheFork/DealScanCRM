@@ -69,6 +69,10 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: true,
     },
+    classification: {
+      type: DataTypes.STRING(45),
+      allowNull: true,
+    },
     trimLevel: {
       type: DataTypes.STRING(45),
       allowNull: true
@@ -96,7 +100,8 @@ export default function(sequelize, DataTypes) {
             'state': this.getDataValue('state'),
             'msrp': this.getDataValue('msrp'),
             'invoice': this.getDataValue('invoice'),
-            'bodyStyle': this.getDataValue('bodyStyle')
+            'bodyStyle': this.getDataValue('bodyStyle'),
+            'classification': this.getDataValue('classification')
           }
         },
 

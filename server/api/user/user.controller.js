@@ -1,6 +1,7 @@
 'use strict';
 
 import {User} from '../../sqldb';
+import {Dealership} from '../../sqldb';
 import {Team} from '../../sqldb';
 import passport from 'passport';
 import config from '../../config/environment';
@@ -82,22 +83,22 @@ export function show(req, res, next) {
 /**
  * Get a single user teamates
  */
-export function getTeamMates(req, res, next) {
+export function getFilters(req, res) {
   return User.findAll({
     where: {
-      userID: {
-        $ne: req.user.userID
-      },
-      role: {
-        $lt:config.userRoles.indexOf(req.user.role)
+      userID:  req.user.userID
+    },
+    attributes: ['firstName', 'lastName', 'email', 'userID', 'role'],
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        attributes: ['dealershipName', 'dealershipID', 'StreetAddress', 'city', 'state', 'zipCode']
       }
-    }
-  }).then(function (teammates) {
-    if (!teammates) return res.status(404).end();
-    return res.status(200).json(teammates);
-  }).catch(function (err) {
-    next(err);
-  });
+    ]
+  }).then(function (filters) {
+    return res.status(200).json(filters);
+  }).catch(handleError(res));
 
 }
 

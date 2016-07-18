@@ -11,6 +11,11 @@
 
 import _ from 'lodash';
 import {Deal} from '../../sqldb';
+import {User} from '../../sqldb';
+import {Customer} from '../../sqldb';
+import {Vehicle} from '../../sqldb';
+import {Trade} from '../../sqldb';
+
 var Q = require('q');
 
 
@@ -62,7 +67,34 @@ function handleError(res, statusCode) {
 
 // Gets a list of Deals
 export function index(req, res) {
-  Deal.findAll()
+
+  Deal.findAll({
+      include:[
+        {
+          model: User,
+          as:'SaleRep',
+          attributes: ['firstName', 'lastName', 'role'],
+          required: true
+        },
+        {
+          model: Customer,
+          as: 'Buyer',
+          attributes: ['firstName', 'lastName', 'phone', 'email', 'source'],
+          required: true
+        },
+        {
+          model: Customer,
+          as: 'CoBuyers',
+          attributesL: ['firstName', 'lastName', 'phone', 'email', 'source']
+        },
+        {
+          model: Vehicle,
+          as: 'Purchase',
+          attributes: ['make', 'model', 'year', 'trimLevel', 'state', 'classification'],
+          required: true
+        },
+      ]
+    })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }

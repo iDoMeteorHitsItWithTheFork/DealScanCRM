@@ -29,6 +29,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.teamMate = {};
     _dashboard.dealership = {};
 
+
     // _dashboard.sources = ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
     // _dashboard.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
 

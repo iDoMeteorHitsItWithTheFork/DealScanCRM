@@ -18,11 +18,11 @@ function UserResource($resource) {
         id: 'me'
       }
     },
-    getTeamMates : {
+    getFilters : {
         method:'GET',
         isArray: true,
         params: {
-            controller:'teammates'
+            controller:'filters'
         }
     },
     getMetrics: {
