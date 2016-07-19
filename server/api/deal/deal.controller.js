@@ -17,6 +17,7 @@ import {Vehicle} from '../../sqldb';
 import {Trade} from '../../sqldb';
 
 var Q = require('q');
+var moment = require('moment');
 
 
 function respondWithResult(res, statusCode) {
@@ -67,36 +68,89 @@ function handleError(res, statusCode) {
 
 // Gets a list of Deals
 export function index(req, res) {
-
+  console.log(req.query);
+  if (!req.query.hasOwnProperty('dealershipID') || !req.query.dealershipID || req.query.dealershipID.trim() == '')
+    res.status(500).send('DealershipID is required!');
+  if (!req.query.hasOwnProperty('from') || !req.query.from || req.query.from.trim() == '')
+    res.status(500).send('Date Range "From" is required!');
+  if (!req.query.hasOwnProperty('to') || !req.query.to || req.query.to.trim() == '')
+    res.status(500).send('Date Range "To" is required!');
+  var searchOptions = {
+    dealershipID: req.query.dealershipID,
+    createdAt: {
+      $or: [
+        {$lte:req.query.to},
+        {$gte: req.query.from}
+      ]
+    }
+  };
+  if (req.query.hasOwnProperty('employee') && req.query.employee && req.query.employee.trim() != '')
+    searchOptions.saleRepID = req.query.employee;
   Deal.findAll({
+      where: searchOptions,
       include:[
         {
           model: User,
           as:'SaleRep',
-          attributes: ['firstName', 'lastName', 'role'],
+          attributes: ['userID','firstName', 'lastName', 'role'],
           required: true
         },
         {
           model: Customer,
           as: 'Buyer',
-          attributes: ['firstName', 'lastName', 'phone', 'email', 'source'],
+          attributes: ['customerID','firstName', 'lastName', 'phone', 'email', 'source'],
           required: true
         },
         {
           model: Customer,
           as: 'CoBuyers',
-          attributesL: ['firstName', 'lastName', 'phone', 'email', 'source']
+          attributesL: ['customerID','firstName', 'lastName', 'phone', 'email', 'source']
         },
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['make', 'model', 'year', 'trimLevel', 'state', 'classification'],
+          attributes: ['vehicleID','make', 'model', 'year', 'trimLevel', 'state', 'classification'],
           required: true
         },
       ]
     })
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(function(deals){
+      if (deals && deals.length > 0){
+        return res.status(200).json(formatDeals(deals));
+      } else return res.status(200).json([]);
+    }).catch(handleError(res));
+}
+
+function formatDeals(deals){
+  var _deals = [];
+  for(var i = 0; i < deals.length; i++){
+    var deal = deals[i];
+    var dt = moment(new Date(deal.createdAt));
+    _deals.push({
+      "model": deal.Purchase.profile.model,
+      "vehicleID": deal.Purchase.profile.vehicleID,
+      "category": deal.Purchase.profile.classification,
+      "make": deal.Purchase.profile.make,
+      "year": deal.Purchase.profile.year,
+      "trimLevel": deal.Purchase.profile.trimLevel,
+      "customerID": deal.Buyer.profile.customerID,
+      "name": deal.Buyer.profile.name,
+      "email": deal.Buyer.profile.email,
+      "phone": deal.Buyer.profile.phone,
+      "date": dt.format("ddd, MMM DD YYYY HH:MM a"),
+      "userID": deal.saleRepID,
+      "salesman": deal.SaleRep.profile.name,
+      "source": deal.Buyer.profile.source,
+      "price": deal.salePrice,
+      "retailValue": deal.retailValue,
+      "status": deal.status,
+      "paymentOption": deal.paymentOption,
+      "dealID": deal.dealID,
+      "dealershipID": deal.dealershipID,
+      "dscDealID": deal.dscDealID
+    });
+  }
+  return _deals;
 }
 
 // Gets a single Deal from the DB

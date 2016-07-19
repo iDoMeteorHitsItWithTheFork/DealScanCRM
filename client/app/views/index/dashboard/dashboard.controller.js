@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
-  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter) {
+  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, toaster) {
     $("#page-wrapper").css("overflow-x", "scroll");
 
     console.log("dashboard controller loaded");
@@ -15,6 +15,10 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.showTable = false;
     _dashboard.sidebar = false;
     _dashboard.openChat = false;
+    _dashboard.dataFilters = [];
+    _dashboard.stats = [];
+    _dashboard.emptyResults = null;
+
 
     Auth.hasRole(appConfig.userRoles[2], function (ans) {
       _dashboard.isManager = ans;
@@ -25,14 +29,352 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     })
 
 
-    _dashboard.teamMates = Dashboard.teamMates();
-    _dashboard.teamMate = {};
-    _dashboard.dealership = {};
+    _dashboard.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
+    _dashboard.selectedDealership = {};
+    _dashboard.selectedTeam = {};
 
 
-    // _dashboard.sources = ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
-    // _dashboard.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
+    _dashboard.getFilters = function(){
+      Dashboard.filters().then(function(filters){
+        console.log(filters);
+        if (filters){
+          _dashboard.dataFilters = filters;
+          _dashboard.selectedType = _dashboard.dealTypes[0];
+          _dashboard.selectedDealership = _dashboard.dataFilters[0];
+          _dashboard.selectedTeam = _dashboard.selectedDealership.Teams[0];
+          _dashboard.selectedEmployee  = (_dashboard.user.role == 'sale_rep') ?
+              {MemberID: _dashboard.user.userID, profile: _dashboard.user.profile} :
+              _dashboard.selectedEmployee = _dashboard.selectedTeam.TeamMembers[0];
+        }
+      }).catch(function(err){
+          console.log(err);
+          toaster.error({title: 'Dashboard Error', body: 'An error occurred while loadind data filters'})
+      });
+    }
+    _dashboard.getFilters();
 
+    _dashboard.groupByRole = function (employee){
+       return employee.profile.role;
+    };
+
+    /**
+     * Deals Type
+     * @type {*[]}
+     */
+
+
+
+
+    _dashboard.datePickerOptions = {
+      'ranges': {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      },
+      "alwaysShowCalendars": true,
+      'opens': 'left',
+    };
+
+    _dashboard.dateRange = {startDate: _dashboard.datePickerOptions.ranges.Today[0],
+      endDate: _dashboard.datePickerOptions.ranges.Today[1]};
+
+
+    _dashboard.getSales = function(){
+      if (_dashboard.retreivingDeals) return;
+      _dashboard.retreivingDeals = true;
+      _dashboard.emptyResults = null;
+      console.log('**** GETTING DEALS DATA *****');
+      var searchOptions = {};
+      searchOptions.type = _dashboard.selectedType;
+      searchOptions.dealershipID = _dashboard.selectedDealership.DealershipID;
+      searchOptions.teamID = _dashboard.selectedTeam.TeamID;
+      searchOptions.employee = _dashboard.selectedEmployee;
+      searchOptions.from = _dashboard.dateRange.startDate.format('YYYY/MM/DD');
+      searchOptions.to = _dashboard.dateRange.endDate.format('YYYY/MM/DD');
+      console.log(searchOptions);
+      Dashboard.deals(searchOptions).then(function(sales){
+        console.log(sales);
+        if (sales && sales.length > 0){
+           _dashboard.emptyResults = false;
+          _dashboard.wonDeals = Dashboard.won();
+          _dashboard.lostDeals = Dashboard.lost();
+          _dashboard.totalDeals = Dashboard.total();
+          _dashboard.stats = getStats();
+        } else _dashboard.emptyResults = true;
+        _dashboard.retreivingDeals = false;
+      }).catch(function(err){
+         _dashboard.retreivingDeals = false;
+         console.log(err);
+         toaster.error({title: 'Sales Load Error', body: 'An Error occurred while attempting to retreive sales data'});
+      });
+    }
+
+    _dashboard.goToProfile = function(deal){
+      console.log(deal);
+      console.log(Util.slimTrim(deal.customerDetails.name));
+      console.log('>> going to customer page...');
+      $state.go('index.customer.profile', {
+        customerID: deal.customerDetails.customerID,
+        customerName: Util.slimTrim(deal.customerDetails.name).replace(/\ /g, '_')
+      });
+    }
+
+    _dashboard.summaryStats = [
+      {
+        bgStyle: 'navy-bg',
+        category: 'calls',
+        value: 217
+      },
+      {
+        bgStyle: 'navy-bg',
+        category: 'mail',
+        value: 400
+      },
+      {
+        bgStyle: 'navy-bg',
+        category: 'text',
+        value: 10
+      },
+      {
+        bgStyle: 'lazur-bg',
+        category: 'appointment_made',
+        value: 120
+      },
+      {
+        bgStyle: 'navy-bg',
+        category: 'appointment_sold',
+        value: 462
+      },
+      {
+        bgStyle: 'red-bg',
+        category: 'appointment_missed',
+        value: 610
+      },
+
+    ];
+    _dashboard.displayStatsDetails = function(stat){
+      if (!_dashboard.sidebar) _dashboard.sidebar = true;
+      console.log(stat);
+      var categoryId, filter;
+      switch(stat.category){
+        case 'calls':
+          categoryId = 'Phone';
+          break
+        case 'text':
+          categoryId = 'Correspondence';
+          filter = 'Text';
+          break;
+        case 'mail':
+          categoryId = 'Correspondence';
+          filter = 'Mail';
+          break;
+        case 'appointment_made':
+          categoryId = 'Appointments';
+          filter = 'Made';
+          break;
+        case 'appointment_sold':
+          categoryId = 'Appointments';
+          filter = 'Sold';
+          break;
+        case 'appointment_missed':
+          categoryId = 'Appointments';
+          filter = 'Missed';
+          break;
+
+      }
+      _dashboard.showStatsSummary(categoryId, filter);
+    }
+
+    var updateBarChart = function(status, category){
+      var barData, idx;
+      switch(status){
+        case 'won':
+          idx  = Util.indexOfObject(_dashboard.wonDeals.bar, 'category', category);
+          if (idx != -1) barData = _dashboard.wonDeals.bar[idx];
+          break;
+        case 'lost':
+          idx  = Util.indexOfObject(_dashboard.lostDeals.bar, 'category', category);
+          if (idx != -1) barData = _dashboard.lostDeals.bar[idx];
+          break;
+        case 'total':
+          idx  = Util.indexOfObject(_dashboard.totalDeals.bar, 'category', category);
+          if (idx != -1) barData = _dashboard.totalDeals.bar[idx];
+          break;
+      }
+
+      //update sales
+      _dashboard.sales.length = 0;
+      angular.forEach(barData.sales, function(value,key){
+        _dashboard.sales.push([key, value]);
+      });
+    }
+
+    var updateTableData = function(status, category){
+      var tableData = getDealsData(status).tableData;
+      var data = $filter('filter')(tableData, {$: category});
+      console.log(data);
+      _dashboard.dealsTableData = data;
+    }
+
+    _dashboard.filterDeals = function(status){
+      var idx = Util.indexOfObject(_dashboard.stats, 'id', status);
+      console.log(idx);
+      if (idx != -1){
+        var s = _dashboard.stats[idx].sources;
+        console.log(s);
+        var sources = [];
+        for(var i= 0; i < s.length; i++){
+          if (s[i].state) sources.push(s[i].id)
+        }
+        Dashboard.filter(status, sources);
+        if (_dashboard.showBarChart) updateBarChart(status, _dashboard.displayingCategory);
+        if (_dashboard.showTable) updateTableData(status, _dashboard.displayingCategory);
+        console.log('*** Deals Filtered ***');
+      }
+    }
+
+    _dashboard.mapFilters = {Cars: false, Trucks: false, Utilities: false};
+    _dashboard.expandedSection = '';
+
+    _dashboard.resetMapFilters = function(){
+      angular.forEach(_dashboard.mapFilters, function(value, key){
+        _dashboard.mapFilters[key] = false;
+      })
+      _dashboard.resetFiltersBtn = false;
+    }
+
+    _dashboard.displayCategory = function(category){
+      console.log('called');
+      _dashboard.displayingCategory = category;
+      _dashboard.expandSection = true;
+      _dashboard.expandedSection = category;
+      _dashboard.resetFiltersBtn = _dashboard.mapFilters.Cars || _dashboard.mapFilters.Trucks || _dashboard.mapFilters.Utilities;
+      console.log('Cars: '+_dashboard.mapFilters.Cars);
+      console.log('Trucks: '+_dashboard.mapFilters.Trucks);
+      console.log('Utilities: '+_dashboard.mapFilters.Utilities);
+      console.log(_dashboard.resetFiltersBtn);
+    }
+
+    _dashboard.toggleSection  = function(section) {
+      if ((section == _dashboard.displayingCategory) && _dashboard.expandSection) {
+        _dashboard.expandSection = false;
+        _dashboard.expandedSection = '';
+      } else _dashboard.displayCategory(section);
+    }
+
+    var getStats = function(){
+      return [
+        { id:'won',
+          cars: {
+            units: _dashboard.wonDeals.pie[0].data,
+            pvr: _dashboard.wonDeals.pie[0].pvr
+          },
+          trucks: {
+            units: (_dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data),
+            pvr: (_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr)
+          },
+          sources: [
+            {
+              id: 'Walk-In',
+              name: 'Walk In',
+              state: true,
+            },
+            {
+              id: 'Internet',
+              name: 'Internet',
+              state: true,
+            },
+            {
+              id: 'Phone',
+              name: 'Phone',
+              state: true,
+            },
+            {
+              id: 'HappyTag',
+              name: 'Happy Tag',
+              state: true,
+            },
+            {
+              id: 'Other',
+              name: 'Other',
+              state: true,
+            }
+          ]
+        },
+
+        { id:'lost',
+          cars: {
+            units: _dashboard.lostDeals.pie[0].data,
+            pvr: _dashboard.lostDeals.pie[0].pvr
+          },
+          trucks: {
+            units: (_dashboard.lostDeals.pie[1].data + _dashboard.lostDeals.pie[2].data + _dashboard.lostDeals.pie[3].data),
+            pvr: (_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr)
+          },
+          sources: [
+            {
+              id: 'Walk-In',
+              name: 'Walk In',
+              state: true,
+            },
+            {
+              id: 'Internet',
+              name: 'Internet',
+              state: true,
+            },
+            {
+              id: 'Phone',
+              name: 'Phone',
+              state: true,
+            },
+            {
+              id: 'HappyTag',
+              name: 'Happy Tag',
+              state: true,
+            },
+            {
+              id: 'Other',
+              name: 'Other',
+              state: true,
+            }
+          ]
+        },
+
+        {
+          id: 'total',
+          sources: [
+            {
+              id: 'Walk-In',
+              name: 'Walk In',
+              state: true,
+            },
+            {
+              id: 'Internet',
+              name: 'Web',
+              state: true,
+            },
+            {
+              id: 'Phone',
+              name: 'Phone',
+              state: true,
+            },
+            {
+              id: 'HappyTag',
+              name: 'Happy Tag',
+              state: true,
+            },
+            {
+              id: 'Other',
+              name: 'Other',
+              state: true,
+            }
+          ]
+        }
+      ];
+    }
     _dashboard.showBarChart = false;
     _dashboard.selectedPie = null;
 
@@ -216,7 +558,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
      */
 
     _dashboard.sectionTitle = {category: '', status: ''};
-    _dashboard.setTableData = function(chart, status, category){
+    _dashboard.setTableData = function(chart, status, category, haystack){
       console.log(chart);
       console.log(status);
       if (status){
@@ -235,10 +577,35 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       var tableData = getDealsData(_dashboard.sectionTitle.status).tableData;
       console.log(tableData);
       console.log(_dashboard.sectionTitle.category);
-      var data = $filter('filter')(tableData, {$: _dashboard.sectionTitle.category});
+      var needle = '', data = [];
+      switch(_dashboard.sectionTitle.category){
+        case 'Cars':
+        case 'Utilities':
+        case 'Trucks':
+        case 'Vans':
+        case 'Other':
+          if (_dashboard.sectionTitle.category == 'Cars') needle = 'car';
+          if (_dashboard.sectionTitle.category == 'Trucks') needle = 'truck';
+          if (_dashboard.sectionTitle.category == 'Utilities') needle = 'utility';
+          if (_dashboard.sectionTitle.category == 'Vans') needle = 'van';
+          if (_dashboard.sectionTitle.category == 'Other') needle = 'other';
+          data = $filter('filter')(tableData, function(val,idx, arr){
+            return val.vehicleInformation.category == needle;
+          });
+          break;
+        default:
+          needle = _dashboard.sectionTitle.category;
+          data = $filter('filter')(tableData, function(val, idx, arr){
+            return val.vehicleInformation.model == needle;
+          });
+          break;
+      }
       console.log(data);
       _dashboard.dealsTableData = data;
     }
+
+
+
 
       /**
        *  Display Details Table
@@ -248,6 +615,13 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
        */
     _dashboard.displayTable = function($event, pos, item, status, category){
        if (!_dashboard.showTable) _dashboard.showTable = true;
+       //status = status == 'won' ? 'working': status;
+       console.log('\n>> pos: ');
+       console.log(pos);
+       console.log('\n>> item: ');
+       console.log(item);
+       console.log('\n>> status: '+status);
+       console.log('\n>> category: '+category);
       _dashboard.setTableData(item, status, category);
     }
 
@@ -437,399 +811,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     }
 
 
-    /**
-     * Deals Type
-     * @type {*[]}
-     */
-    _dashboard.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
 
-    /**
-     * Dealerships data Structures
-     * @type {{name: string, owner: Array, genManger: Array, teams: *[]}}
-     */
-    _dashboard.dealerships = [{
-      name: "Hagerstown Ford",
-      owner: [{name: 'Rick kelly'}],
-      genManger: [{name: 'Eric Carper'}],
-      teams: [
-        {
-          name: "All Teams",
-          members: [
-            {
-              name: 'All Employees',
-              role: 'default'
-            },
-            {
-              name: 'Ludovic Agodio',
-              role: 'admin'
-            },
-            {
-              name: 'Miles Johnson',
-              role: 'admin'
-            },
-            {
-              name: 'Eric Carper',
-              role: 'gen_mgr'
-            },
-            {
-              name: 'Rick Kelly',
-              role: 'owner'
-            },
-            {
-              name: 'Roger Mason',
-              role: 'gen_sale_mgr'
-            },
-            {
-              name: 'Stacy Dash',
-              role: 'gen_sale_mgr'
-            },
-            {
-              name: 'Meagan Good',
-              role: 'sale_mgr'
-            }, {
-              name: 'Amber Rose',
-              role: 'sale_mgr'
-            }, {
-              name: 'Kim Kardashian',
-              role: 'bdc_mgr'
-            },
-            {
-              name: 'Shenaka Adams',
-              role: 'bdc_mgr'
-            },
-            {
-              name: 'Roger Moody',
-              role: 'sale_rep'
-            }, {
-              name: 'Dominique Toretto',
-              role: 'sale_rep'
-            }, {
-              name: 'Romeo Zalch',
-              role: 'sale_rep'
-            },
-            {
-              name: 'Johnny Manzel',
-              role: 'sale_rep'
-            },
-            {
-              name: 'Michael Jordan',
-              role: 'sale_rep'
-            }, {
-              name: 'Scotty Pippen',
-              role: 'sale_rep'
-            }, {
-              name: 'Dennis Rodman',
-              role: 'sale_rep'
-            },
-            {
-              name: 'Magic Johnson',
-              role: 'sale_rep'
-            },
-            {
-              name: 'Allen Iverson',
-              role: 'sale_rep'
-            }, {
-              name: 'Stephen Curry',
-              role: 'sale_rep'
-            }, {
-              name: 'LeBron James',
-              role: 'sale_rep'
-            }, {
-              name: 'Carmello Anthony',
-              role: 'sale_rep'
-            }, {
-              name: 'Chris Paul',
-              role: 'sale_rep'
-            }, {
-              name: 'Kyrie Irving',
-              role: 'sale_rep'
-            }, {
-              name: 'Lauren Woods',
-              role: 'sale_rep'
-            }, {
-              name: 'Julianna Rodgers',
-              role: 'sale_rep'
-            },
-            {
-              name: 'Chelsea Lynn',
-              role: 'sale_rep'
-            },
-            {
-              name: 'Vida Guierra',
-              role: 'sale_rep'
-            }
-          ]
-        }
-      ]
-    }];
-
-
-    _dashboard.selectedType = _dashboard.dealTypes[0];
-    _dashboard.selectedDealership = _dashboard.dealerships[0];
-    _dashboard.selectedTeam = _dashboard.selectedDealership.teams[0];
-    _dashboard.selectedEmployee = _dashboard.selectedTeam.members[0];
-
-
-    _dashboard.datePickerOptions = {
-      'ranges': {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      },
-      "alwaysShowCalendars": true,
-      'opens': 'left',
-    };
-
-    _dashboard.dateRange = {startDate: _dashboard.datePickerOptions.ranges.Today[0],
-                            endDate: _dashboard.datePickerOptions.ranges.Today[1]};
-
-    _dashboard.summaryStats = [
-      {
-        bgStyle: 'navy-bg',
-        category: 'calls',
-        value: 217
-      },
-      {
-        bgStyle: 'navy-bg',
-        category: 'mail',
-        value: 400
-      },
-      {
-        bgStyle: 'navy-bg',
-        category: 'text',
-        value: 10
-      },
-      {
-        bgStyle: 'lazur-bg',
-        category: 'appointment_made',
-        value: 120
-      },
-      {
-        bgStyle: 'navy-bg',
-        category: 'appointment_sold',
-        value: 462
-      },
-      {
-        bgStyle: 'red-bg',
-        category: 'appointment_missed',
-        value: 610
-      },
-
-    ];
-    _dashboard.displayStatsDetails = function(stat){
-      if (!_dashboard.sidebar) _dashboard.sidebar = true;
-      console.log(stat);
-      var categoryId, filter;
-      switch(stat.category){
-        case 'calls':
-          categoryId = 'Phone';
-          break
-        case 'text':
-          categoryId = 'Correspondence';
-          filter = 'Text';
-          break;
-        case 'mail':
-          categoryId = 'Correspondence';
-          filter = 'Mail';
-          break;
-        case 'appointment_made':
-          categoryId = 'Appointments';
-          filter = 'Made';
-          break;
-        case 'appointment_sold':
-          categoryId = 'Appointments';
-          filter = 'Sold';
-          break;
-        case 'appointment_missed':
-          categoryId = 'Appointments';
-          filter = 'Missed';
-          break;
-
-      }
-      _dashboard.showStatsSummary(categoryId, filter);
-    }
-
-    var updateBarChart = function(status, category){
-      var barData, idx;
-      switch(status){
-        case 'won':
-          idx  = Util.indexOfObject(_dashboard.wonDeals.bar, 'category', category);
-          if (idx != -1) barData = _dashboard.wonDeals.bar[idx];
-          break;
-        case 'lost':
-          idx  = Util.indexOfObject(_dashboard.lostDeals.bar, 'category', category);
-          if (idx != -1) barData = _dashboard.lostDeals.bar[idx];
-          break;
-        case 'total':
-          idx  = Util.indexOfObject(_dashboard.totalDeals.bar, 'category', category);
-          if (idx != -1) barData = _dashboard.totalDeals.bar[idx];
-          break;
-      }
-
-      //update sales
-      _dashboard.sales.length = 0;
-      angular.forEach(barData.sales, function(value,key){
-        _dashboard.sales.push([key, value]);
-      });
-    }
-
-
-
-    var updateTableData = function(status, category){
-      var tableData = getDealsData(status).tableData;
-      var data = $filter('filter')(tableData, {$: category});
-      console.log(data);
-      _dashboard.dealsTableData = data;
-    }
-
-    _dashboard.filterDeals = function(status){
-      var idx = Util.indexOfObject(_dashboard.stats, 'id', status);
-      console.log(idx);
-      if (idx != -1){
-         var s = _dashboard.stats[idx].sources;
-         console.log(s);
-         var sources = [];
-         for(var i= 0; i < s.length; i++){
-            if (s[i].state) sources.push(s[i].id)
-         }
-         Dashboard.filter(status, sources);
-         if (_dashboard.showBarChart) updateBarChart(status, _dashboard.displayingCategory);
-         if (_dashboard.showTable) updateTableData(status, _dashboard.displayingCategory);
-         console.log('*** Deals Filtered ***');
-      }
-    }
-
-    _dashboard.mapFilters = {Cars: false, Trucks: false, Utilities: false};
-    _dashboard.expandedSection = '';
-
-    _dashboard.resetMapFilters = function(){
-      angular.forEach(_dashboard.mapFilters, function(value, key){
-          _dashboard.mapFilters[key] = false;
-      })
-      _dashboard.resetFiltersBtn = false;
-    }
-
-
-
-    _dashboard.displayCategory = function(category){
-         console.log('called');
-        _dashboard.displayingCategory = category;
-        _dashboard.expandSection = true;
-        _dashboard.expandedSection = category;
-        _dashboard.resetFiltersBtn = _dashboard.mapFilters.Cars || _dashboard.mapFilters.Trucks || _dashboard.mapFilters.Utilities;
-        console.log('Cars: '+_dashboard.mapFilters.Cars);
-        console.log('Trucks: '+_dashboard.mapFilters.Trucks);
-        console.log('Utilities: '+_dashboard.mapFilters.Utilities);
-        console.log(_dashboard.resetFiltersBtn);
-    }
-
-    _dashboard.toggleSection  = function(section) {
-      if ((section == _dashboard.displayingCategory) && _dashboard.expandSection) {
-        _dashboard.expandSection = false;
-        _dashboard.expandedSection = '';
-      } else _dashboard.displayCategory(section);
-    }
-
-    _dashboard.stats = [
-
-      { id:'won',
-        cars: {units: 3, pvr: 100000},
-        trucks: {units: 4, pvr: 30000},
-        sources: [
-          {
-            id: 'Walk-In',
-            name: 'Walk In',
-            state: true,
-          },
-          {
-            id: 'Internet',
-            name: 'Internet',
-            state: true,
-          },
-          {
-            id: 'Phone',
-            name: 'Phone',
-            state: true,
-          },
-          {
-            id: 'HappyTag',
-            name: 'Happy Tag',
-            state: true,
-          },
-          {
-            id: 'Other',
-            name: 'Other',
-            state: true,
-          }
-        ]
-      },
-
-      { id:'lost',
-        cars: {units: 20, pvr: 100000},
-        trucks: {units: 12, pvr: 30000},
-        sources: [
-          {
-            id: 'Walk-In',
-            name: 'Walk In',
-            state: true,
-          },
-          {
-            id: 'Internet',
-            name: 'Internet',
-            state: true,
-          },
-          {
-            id: 'Phone',
-            name: 'Phone',
-            state: true,
-          },
-          {
-            id: 'HappyTag',
-            name: 'Happy Tag',
-            state: true,
-          },
-          {
-            id: 'Other',
-            name: 'Other',
-            state: true,
-          }
-        ]
-      },
-
-      { id:'total',
-        sources: [
-          {
-            id: 'Walk-In',
-            name: 'Walk In',
-            state: true,
-          },
-          {
-            id: 'Internet',
-            name: 'Web',
-            state: true,
-          },
-          {
-            id: 'Phone',
-            name: 'Phone',
-            state: true,
-          },
-          {
-            id: 'HappyTag',
-            name: 'Happy Tag',
-            state: true,
-          },
-          {
-            id: 'Other',
-            name: 'Other',
-            state: true,
-          }
-        ]
-      },
-
-    ];
 
 
     _dashboard.chatRecipient = {name: '', number: ''};

@@ -72,7 +72,7 @@
   padding-top:15px !important;
 }
 .date-picker {
-  width: 100% !important;
+  width: 240px !important;
 }
 .date-picker::before {
   font-family: "FontAwesome";
@@ -83,7 +83,15 @@
   font-family: "FontAwesome";
   content:'\f0d7';
   position: absolute;
-  right: 10px;
+  right: 0px;
+}
+.custom-btn {
+  padding-bottom: 6px;
+  padding-top: 6px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-left: 15px;
+  margin-top:1px;
 }
 .dashboard-table-avatar {
   width: 32px;
@@ -262,4 +270,14 @@ div.navs-3 > ul.nav-tabs > li {
 
 .col-20-per {
   width:20%;
+}
+
+.height-337 {
+  height:337px !important;
+}
+.p-t-150 {
+  padding-top: 100px !important;
+}
+.m-t-30 {
+  margin-top:30px !important;
 }

@@ -101,7 +101,8 @@ export default function(sequelize, DataTypes) {
             'msrp': this.getDataValue('msrp'),
             'invoice': this.getDataValue('invoice'),
             'bodyStyle': this.getDataValue('bodyStyle'),
-            'classification': this.getDataValue('classification')
+            'classification': this.getDataValue('classification'),
+            "trimLevel": this.getDataValue('trimLevel')
           }
         },
 

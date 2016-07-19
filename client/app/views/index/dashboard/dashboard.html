@@ -60,8 +60,8 @@
             <div class="col-lg-7">
               <div class="row">
                 <!-- Data Filters -->
-                <div class="col-lg-2">
-                  <ui-select ng-model="dashboard.selectedType" theme="bootstrap">
+                <div class="col-lg-2 pull-left">
+                  <ui-select ng-model="dashboard.selectedType" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
                     <ui-select-match placeholder="Type">{{$select.selected.text}}
                     </ui-select-match>
                     <ui-select-choices
@@ -70,33 +70,33 @@
                     </ui-select-choices>
                   </ui-select>
                 </div>
-                <div class="col-lg-3">
-                  <ui-select ng-model="dashboard.selectedDealership" theme="bootstrap">
-                    <ui-select-match placeholder="Dealerships">{{$select.selected.name}}
+                <div class="col-lg-3 pull-left" ng-if="dashboard.dataFilters.length > 1">
+                  <ui-select ng-model="dashboard.selectedDealership" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
+                    <ui-select-match placeholder="Dealerships">{{$select.selected.DealershipName}}
                     </ui-select-match>
                     <ui-select-choices
-                      repeat="dealership in dashboard.dealerships | filter: $select.search">
-                      <div ng-bind-html="dealership.name | highlight: $select.search"></div>
+                      repeat="dealership in dashboard.dataFilters | filter: $select.search">
+                      <div ng-bind-html="dealership.DealershipName | highlight: $select.search"></div>
                     </ui-select-choices>
                   </ui-select>
                 </div>
-                <div class="col-lg-3">
-                  <ui-select ng-model="dashboard.selectedTeam" theme="bootstrap">
-                    <ui-select-match placeholder="Teams">{{$select.selected.name}}
+                <div class="col-lg-3 pull-left" ng-if="dashboard.selectedDealership.Teams.length > 1">
+                  <ui-select ng-model="dashboard.selectedTeam" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
+                    <ui-select-match placeholder="Teams">{{$select.selected.TeamName}}
                     </ui-select-match>
                     <ui-select-choices
-                      repeat="team in dashboard.selectedDealership.teams | filter: $select.search">
-                      <div ng-bind-html="team.name | highlight: $select.search"></div>
+                      repeat="team in dashboard.selectedDealership.Teams | filter: $select.search">
+                      <div ng-bind-html="team.TeamName | highlight: $select.search"></div>
                     </ui-select-choices>
                   </ui-select>
                 </div>
-                <div class="col-lg-3">
-                  <ui-select ng-model="dashboard.selectedEmployee" theme="bootstrap">
-                    <ui-select-match placeholder="Employees">{{$select.selected.name}}
+                <div class="col-lg-3 pull-left">
+                  <ui-select ng-model="dashboard.selectedEmployee" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
+                    <ui-select-match placeholder="Employees">{{$select.selected.profile.name}}
                     </ui-select-match>
-                    <ui-select-choices
-                      repeat="employee in dashboard.selectedTeam.members | filter: $select.search">
-                      <div ng-bind-html="employee.name | highlight: $select.search"></div>
+                    <ui-select-choices group-by="dashboard.groupByRole"
+                      repeat="employee in dashboard.selectedTeam.TeamMembers | filter: $select.search">
+                      <div ng-bind-html="employee.profile.name | highlight: $select.search"></div>
                     </ui-select-choices>
                   </ui-select>
                 </div>
@@ -106,10 +106,15 @@
 
 
             <div class="col-lg-3">
-              <div style="position:relative;margin-left:50px !important">
+              <div class="col-lg-9 no-margins" style="position:relative;">
                 <span class="form-control date-picker" date-range-picker options="dashboard.datePickerOptions"
                       ng-model="dashboard.dateRange">{{dashboard.dateRange.startDate.format('YYYY/MM/DD')}} -
                 {{dashboard.dateRange.endDate.format('YYYY/MM/DD')}}</span>
+              </div>
+              <div class="col-lg-3 no-margins">
+                <button class="btn btn-sm btn-primary custom-btn" ng-click="dashboard.getSales()"
+                        ng-disabled="dashboard.retreivingDeals"><i class="fa fa-download">&nbsp;&nbsp;</i>Load
+                </button>
               </div>
             </div>
 
@@ -134,7 +139,7 @@
           <div class="row">
             <div class="col-xs-2 margin-top-10">
               <h3 class="no-margins">Today Statistics</h3>
-              <small>All Employee's Data</small>
+              <small>{{dashboard.selectedEmployee.profile.name}}'s Data</small>
             </div>
             <div class="col-xs-10">
               <div class="col-lg-2" ng-repeat="s in dashboard.summaryStats" ng-click="dashboard.displayStatsDetails(s)" style="cursor: pointer;">
@@ -162,100 +167,122 @@
           <!-- charts -->
           <div class="row" style="padding-top:10px !important;" >
 
-            <!-- Won Pie & Stats -->
-            <div class="pull-left"
-                 ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart')? 'col-lg-3': 'col-lg-4'"
-                 ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart && dashboard.chartView == 'chart'">
-              <!-- won stats-->
-              <div class="ibox float-e-margins">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2>{{'Won' | uppercase}}
-                        <span class="btn-group" uib-dropdown>
+            <div class="height-337 p-t-150" ng-hide="!dashboard.retreivingDeals">
+              <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px;"></i>
+              <span class="sr-only">Loading...</span>
+            </div>
+
+            <div class="text-center height-337 p-t-150" ng-hide="dashboard.retreivingDeals || !dashboard.emptyResults">
+              <p class="m-t-30">Sorry , there are no deals to report from {{dashboard.dateRange.startDate.format('YYYY/MM/DD')}} to
+                {{dashboard.dateRange.endDate.format('YYYY/MM/DD')}}, Please adjust your critrias and try again
+              </p>
+            </div>
+
+            <div ng-show="!dashboard.retreivingDeals && !dashboard.emptyResults">
+
+              <!-- Won Pie & Stats -->
+              <div class="pull-left"
+                   ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart')? 'col-lg-3': 'col-lg-4'"
+                   ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart && dashboard.chartView == 'chart'">
+                <!-- won stats-->
+                <div class="ibox float-e-margins">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2>{{'Won' | uppercase}}
+                          <span class="btn-group" uib-dropdown>
                            <button type="button" class="btn btn-primary btn-outline btn-xs"
-                              uib-dropdown-toggle><span class="caret"></span>
+                                   uib-dropdown-toggle><span class="caret"></span>
                            </button>
                            <ul role="menu" uib-dropdown-menu="">
-                              <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in dashboard.stats[0].sources">
-                                <checkbox ng-model="s.state" style="margin-right:7px !important;" ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
+                              <li role="menuitem" class="padding-left-10 padding-top-5"
+                                  ng-repeat="s in dashboard.stats[0].sources">
+                                <checkbox ng-model="s.state" style="margin-right:7px !important;"
+                                          ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
                               </li>
                               <li class="divider"></li>
                                <li>
                                   <div class="row">
                                      <button class="btn btn-success btn-xs pull-right "
-                                       style="position:relative; top:-2px; left:-20px; padding-top: 3px;
-                                       padding-bottom: 3px; padding-right: 10px;" ng-click="dashboard.filterDeals('won')">
+                                             style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                       padding-bottom: 3px; padding-right: 10px;"
+                                             ng-click="dashboard.filterDeals('won')">
                                      <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
                                   </div>
                               </li>
                           </ul>
                           </span>
-                      </h2>
+                        </h2>
+                      </div>
                     </div>
                   </div>
+                  <div class="ibox-content p-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units}}</button>
+                          <br/>
+                          Cars
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units}}</button>
+                          <br/>
+                          Trucks
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{dashboard.stats[0].cars.units+dashboard.stats[0].trucks.units}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                            class="text-center">
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr}}</h5>
+                        </td>
+                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                            class="text-center">
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr}}</h5>
+                        </td>
+                        <td style="border-top:none !important;" class="text-center">
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr +
+                            dashboard.stats[0].trucks.pvr}}</h5>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div class="ibox-content p-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units}}</button>
-                        <br/>
-                        Cars
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units}}</button>
-                        <br/>
-                        Trucks
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">{{dashboard.stats[0].cars.units+dashboard.stats[0].trucks.units}}</button>
-                        <br/>
-                        Total</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
-                        <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr}}</h5>
-                      </td>
-                      <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
-                        <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr}}</h5>
-                      </td>
-                      <td style="border-top:none !important;" class="text-center">
-                        <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr + dashboard.stats[0].trucks.pvr}}</h5>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
+                <!-- ./ won stats -->
+
+                <div class="flot-chart large-pie-chart animated fadeInRight"
+                     ng-show="dashboard.chartView == 'chart'">
+                  <div flot class="flot-chart-content" dataset="dashboard.wonDeals.pie"
+                       options="dashboard.pieOptions"
+                       on-plot-click="dashboard.showDetails($event, pos, item, 'won'); dashboard.displayTable($event, pos, item, 'won')"></div>
                 </div>
               </div>
-              <!-- ./ won stats -->
-
-              <div class="flot-chart large-pie-chart animated fadeInRight"
-                   ng-show="dashboard.chartView == 'chart'">
-                <div flot class="flot-chart-content" dataset="dashboard.wonDeals.pie"
-                     options="dashboard.pieOptions"
-                     on-plot-click="dashboard.showDetails($event, pos, item, 'won'); dashboard.displayTable($event, pos, item, 'won')"></div>
-              </div>
-            </div>
-            <!-- ./Won Pie & Charts -->
+              <!-- ./Won Pie & Charts -->
 
 
-            <!-- Lost Pie & Stats -->
-            <div class="pull-left"
-                 ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
-                 ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart && dashboard.chartView == 'chart'">
-              <!-- lost stats-->
-              <div class="ibox float-e-margins">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2>{{'Lost' | uppercase}}
-                         <span class="btn-group" uib-dropdown>
+              <!-- Lost Pie & Stats -->
+              <div class="pull-left"
+                   ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
+                   ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart && dashboard.chartView == 'chart'">
+                <!-- lost stats-->
+                <div class="ibox float-e-margins">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2>{{'Lost' | uppercase}}
+                          <span class="btn-group" uib-dropdown>
                             <button type="button" class="btn btn-primary btn-outline btn-xs"
                                     uib-dropdown-toggle><span class="caret"></span>
                             </button>
@@ -263,198 +290,224 @@
                                 <li role="menuitem" class="padding-left-10 padding-top-5"
                                     ng-repeat="s in dashboard.stats[1].sources">
                                     <checkbox ng-model="s.state"
-                                            style="margin-right:7px !important;"
-                                            ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
+                                              style="margin-right:7px !important;"
+                                              ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
                                </li>
                                <li class="divider"></li>
                                 <li>
                                   <div class="row">
                                      <button class="btn btn-success btn-xs pull-right "
-                                                                    style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                             style="position:relative; top:-2px; left:-20px; padding-top: 3px;
                                                                     padding-bottom: 3px; padding-right: 10px;"
-                                                                    ng-click="dashboard.filterDeals('lost')">
+                                             ng-click="dashboard.filterDeals('lost')">
                                       <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
                                  </div>
                                 </li>
                             </ul>
                          </span>
-                      </h2>
+                        </h2>
+                      </div>
                     </div>
                   </div>
+                  <div class="ibox-content p-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[1].cars.units}}</button>
+                          <br/>
+                          Cars
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[1].trucks.units}}</button>
+                          <br/>
+                          Trucks
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">{{dashboard.stats[1].cars.units +
+                            dashboard.stats[1].trucks.units}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                            class="text-center">
+                          <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr}}</h5>
+                        </td>
+                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                            class="text-center">
+                          <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].trucks.pvr}}</h5>
+                        </td>
+                        <td class="text-center" style="border-top:none !important;">
+                          <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr +
+                            dashboard.stats[1].trucks.pvr}}</h5>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-                <div class="ibox-content p-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[1].cars.units}}</button>
-                        <br/>
-                        Cars
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[1].trucks.units}}</button>
-                        <br/>
-                        Trucks
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">{{dashboard.stats[1].cars.units +
-                        dashboard.stats[1].trucks.units}}</button>
-                        <br/>
-                        Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
-                        <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr}}</h5>
-                      </td>
-                      <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
-                        <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].trucks.pvr}}</h5>
-                      </td>
-                      <td class="text-center" style="border-top:none !important;">
-                        <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr + dashboard.stats[1].trucks.pvr}}</h5>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
+                <!-- ./lost stats-->
+                <div class="flot-chart large-pie-chart animated fadeInRight"
+                     ng-show="dashboard.chartView == 'chart'">
+                  <div flot class="flot-chart-content" dataset="dashboard.lostDeals.pie"
+                       options="dashboard.pieOptions"
+                       on-plot-click="dashboard.showDetails($event, pos, item, 'lost'); dashboard.displayTable($event, pos, item, 'lost')"></div>
                 </div>
               </div>
-              <!-- ./lost stats-->
-              <div class="flot-chart large-pie-chart animated fadeInRight"
-                   ng-show="dashboard.chartView == 'chart'">
-                <div flot class="flot-chart-content" dataset="dashboard.lostDeals.pie"
-                     options="dashboard.pieOptions"
-                     on-plot-click="dashboard.showDetails($event, pos, item, 'lost'); dashboard.displayTable($event, pos, item, 'lost')"></div>
-              </div>
-            </div>
-            <!-- ./Lost Pie & Charts -->
+              <!-- ./Lost Pie & Charts -->
 
-            <!-- Total Pie & Stats -->
-            <div class="pull-left"
-                 ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
-                 ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart && dashboard.chartView == 'chart'">
-              <!-- total stats-->
-              <div class="ibox float-e-margins">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2>{{'Total' | uppercase}}
-                        <span class="btn-group" uib-dropdown >
+              <!-- Total Pie & Stats -->
+              <div class="pull-left"
+                   ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
+                   ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart && dashboard.chartView == 'chart'">
+                <!-- total stats-->
+                <div class="ibox float-e-margins">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2>{{'Total' | uppercase}}
+                          <span class="btn-group" uib-dropdown>
                           <button type="button" class="btn btn-primary btn-outline btn-xs"
-                                                        uib-dropdown-toggle><span class="caret"></span>
+                                  uib-dropdown-toggle><span class="caret"></span>
                           </button>
                           <ul role="menu" uib-dropdown-menu="">
-                             <li role="menuitem" class="padding-left-10 padding-top-5" ng-repeat="s in dashboard.stats[2].sources">
-                                                        <checkbox ng-model="s.state" style="margin-right:7px !important;" ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
+                             <li role="menuitem" class="padding-left-10 padding-top-5"
+                                 ng-repeat="s in dashboard.stats[2].sources">
+                                                        <checkbox ng-model="s.state"
+                                                                  style="margin-right:7px !important;"
+                                                                  ng-click="$event.stopPropagation();"></checkbox> {{s.name}}
                               </li>
                               <li class="divider"></li>
                               <li>
                                 <div class="row">
                                    <button class="btn btn-success btn-xs pull-right "
-                                                                    style="position:relative; top:-2px; left:-20px; padding-top: 3px;
-                                                                    padding-bottom: 3px; padding-right: 10px;" ng-click="dashboard.filterDeals('total')">
+                                           style="position:relative; top:-2px; left:-20px; padding-top: 3px;
+                                                                    padding-bottom: 3px; padding-right: 10px;"
+                                           ng-click="dashboard.filterDeals('total')">
                                    <i class="fa fa-check">&nbsp;&nbsp;</i>Apply</button>
                                 </div>
                               </li>
                           </ul>
                         </span>
-                      </h2>
+                        </h2>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ibox-content p-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units +
+                            dashboard.stats[1].cars.units}}
+                          </button>
+                          <br/>
+                          Cars
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units +
+                            dashboard.stats[1].trucks.units}}
+                          </button>
+                          <br/>
+                          Trucks
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">{{(dashboard.stats[0].cars.units +
+                            dashboard.stats[1].cars.units) +
+                            (dashboard.stats[0].trucks.units + dashboard.stats[1].trucks.units)}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                            class="text-center">
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr +
+                            dashboard.stats[1].cars.pvr}}</h5>
+                        </td>
+                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                            class="text-center">
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr +
+                            dashboard.stats[1].trucks.pvr}}</h5>
+                        </td>
+                        <td class="text-center" style="border-top:none !important;">
+                          <h5 style="margin-top:-12px !important;">${{(dashboard.stats[0].cars.pvr +
+                            dashboard.stats[1].cars.pvr) + (dashboard.stats[0].trucks.pvr +
+                            dashboard.stats[1].trucks.pvr)}}</h5>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- ./total stats-->
+                <div class="flot-chart large-pie-chart animated fadeInRight"
+                     ng-show="dashboard.chartView == 'chart'">
+                  <div flot class="flot-chart-content" dataset="dashboard.totalDeals.pie"
+                       options="dashboard.pieOptions"
+                       on-plot-click="dashboard.showDetails($event, pos, item, 'total'); dashboard.displayTable($event, pos, item, 'total')"></div>
+                </div>
+              </div>
+              <!-- ./Total Pie & Stats -->
+
+              <!-- bar chart -->
+              <div id="dscBarChart" class="col-lg-9 pull-left animated fadeInRight"
+                   ng-if="dashboard.showBarChart && dashboard.chartView == 'chart'"
+                   style="padding-top:30px !important;">
+                <div class="ibox float-e-margins">
+                  <div class="row" style="border-top: 1px #d5d5d5 solid; border-bottom:1px #d5d5d5 solid;
+                 margin-top: -31px;margin-right: 17px;margin-left: 5px ">
+                    <div class="col-lg-10">
+                      <h2 style="padding-top: 18px;padding-bottom: 7px;font-size: 22px !important;">
+                        {{dashboard.displayingCategory | uppercase}} - BY MODELS</h2>
+                    </div>
+                    <div class="col-lg-2 text-right" style="padding-top:24px !important;">
+                      <div ibox-tools on-close="dashboard.showBarChart = false"></div>
+                    </div>
+                  </div>
+                  <div class="ibox-content" style="border-top:none; padding-top:30px !important;">
+                    <div class="flot-chart" style="height:380px;">
+                      <div flot class="flot-chart-content" dataset="dashboard.barChartData"
+                           options="dashboard.barChartOptions"
+                           on-plot-click="dashboard.displayTable($event, pos, item, null, dashboard.displayingCategory)"></div>
                     </div>
                   </div>
                 </div>
-                <div class="ibox-content p-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units +
-                          dashboard.stats[1].cars.units}}</button>
-                        <br/>
-                         Cars
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units +
-                          dashboard.stats[1].trucks.units}}</button>
-                        <br/>
-                         Trucks
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">{{(dashboard.stats[0].cars.units + dashboard.stats[1].cars.units) +
-                          (dashboard.stats[0].trucks.units + dashboard.stats[1].trucks.units)}}</button>
-                        <br/>
-                         Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
-                        <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr + dashboard.stats[1].cars.pvr}}</h5>
-                      </td>
-                      <td style="border-right:1px solid #eee !important; border-top:none !important;" class="text-center">
-                        <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr + dashboard.stats[1].trucks.pvr}}</h5>
-                      </td>
-                      <td class="text-center" style="border-top:none !important;">
-                        <h5 style="margin-top:-12px !important;">${{(dashboard.stats[0].cars.pvr + dashboard.stats[1].cars.pvr) + (dashboard.stats[0].trucks.pvr + dashboard.stats[1].trucks.pvr)}}</h5>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
               </div>
-              <!-- ./total stats-->
-              <div class="flot-chart large-pie-chart animated fadeInRight"
-                   ng-show="dashboard.chartView == 'chart'">
-                <div flot class="flot-chart-content" dataset="dashboard.totalDeals.pie"
-                     options="dashboard.pieOptions"
-                     on-plot-click="dashboard.showDetails($event, pos, item, 'total'); dashboard.displayTable($event, pos, item, 'total')"></div>
-              </div>
-            </div>
-            <!-- ./Total Pie & Stats -->
-
-            <!-- bar chart -->
-            <div id="dscBarChart" class="col-lg-9 pull-left animated fadeInRight" ng-if="dashboard.showBarChart && dashboard.chartView == 'chart'"
-                 style="padding-top:30px !important;">
-              <div class="ibox float-e-margins">
-                <div class="row" style="border-top: 1px #d5d5d5 solid; border-bottom:1px #d5d5d5 solid;
-                 margin-top: -31px;margin-right: 17px;margin-left: 5px ">
-                  <div class="col-lg-10">
-                    <h2 style="padding-top: 18px;padding-bottom: 7px;font-size: 22px !important;">
-                      {{dashboard.displayingCategory | uppercase}} - BY MODELS</h2>
-                  </div>
-                 <div class="col-lg-2 text-right" style="padding-top:24px !important;">
-                   <div ibox-tools on-close="dashboard.showBarChart = false"></div>
-                  </div>
-                </div>
-                <div class="ibox-content" style="border-top:none; padding-top:30px !important;">
-                  <div class="flot-chart" style="height:380px;">
-                    <div flot class="flot-chart-content" dataset="dashboard.barChartData"
-                         options="dashboard.barChartOptions" on-plot-click="dashboard.displayTable($event, pos, item, null, dashboard.displayingCategory)"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- ./bar chart -->
+              <!-- ./bar chart -->
 
 
-            <!-- map view -->
-            <div class="row clearfix" >
-              <div class="col-lg-12 padding-right-30 pull-left animated fadeInRight " ng-show="dashboard.chartView == 'map'">
-                <!-- Map filters -->
-                <div class="col-lg-3">
+              <!-- map view -->
+              <div class="row clearfix">
+                <div class="col-lg-12 padding-right-30 pull-left animated fadeInRight "
+                     ng-show="dashboard.chartView == 'map'">
+                  <!-- Map filters -->
+                  <div class="col-lg-3">
 
-                  <div class="ibox float-e-margins margin-bottom-0">
-                    <div class="ibox-title border-top-w-1 shadow-border">
-                      <h5>FILTERS</h5>
-                      <span ng-show="dashboard.resetFiltersBtn" class="label label-danger pull-right custom-label" ng-click="dashboard.resetMapFilters()">
+                    <div class="ibox float-e-margins margin-bottom-0">
+                      <div class="ibox-title border-top-w-1 shadow-border">
+                        <h5>FILTERS</h5>
+                        <span ng-show="dashboard.resetFiltersBtn" class="label label-danger pull-right custom-label"
+                              ng-click="dashboard.resetMapFilters()">
                         <i class="fa fa-times"></i>
                         Reset
                       </span>
-                    </div>
+                      </div>
 
-                    <div class="ibox-content shadow-border padding-top-8 no-padding-bottom">
-                      <div class="map-filter-switch">
+                      <div class="ibox-content shadow-border padding-top-8 no-padding-bottom">
+                        <div class="map-filter-switch">
                           <span>WON</span>
                           <div class="switch">
                             <div class="onoffswitch">
@@ -465,202 +518,205 @@
                               </label>
                             </div>
                           </div>
-                      </div>
+                        </div>
 
-                      <div class="map-filter-switch">
-                        <span>LOST</span>
-                        <div class="switch">
-                          <div class="onoffswitch">
-                            <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="lost">
-                            <label class="onoffswitch-label" for="lost">
-                              <span class="onoffswitch-inner"></span>
-                              <span class="onoffswitch-switch"></span>
-                            </label>
+                        <div class="map-filter-switch">
+                          <span>LOST</span>
+                          <div class="switch">
+                            <div class="onoffswitch">
+                              <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="lost">
+                              <label class="onoffswitch-label" for="lost">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- Category -->
-                  <ul side-navigation class="map-filter-category-list metismenu shadow-border">
-                    <li ng-class="{active : dashboard.mapFilters.Cars}">
-                      <div class="radio radio-success">
-                        <input type="radio" name="categories" id="cars"
-                               ng-click="dashboard.displayCategory('Cars')" ng-model="dashboard.mapFilters.Cars" value="true">
-                        <label for="cars"> CARS</label>
-                        <a href="#"><i
-                          ng-class="(dashboard.expandedSection == 'Cars') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                          class="pull-right margin-right-20 margin-top-4 light-gray"
-                          ng-click="dashboard.toggleSection('Cars')"></i></a>
-                      </div>
-                      <ul ng-class="{in: (dashboard.displayingCategory == 'Cars' && dashboard.expandSection)}"
-                          class="map-filter-second-level collapse">
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkOne">
-                              &nbsp;&nbsp;&nbsp;Focus
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkTwo">
-                              &nbsp;&nbsp;&nbsp;Fusion
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkThree">
-                              &nbsp;&nbsp;&nbsp;C-Max
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkFour">
-                              &nbsp;&nbsp;&nbsp;Fiesta </label></div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkFive">
-                              &nbsp;&nbsp;&nbsp;Tarus </label></div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkSix">
-                              &nbsp;&nbsp;&nbsp;Police Interceptor Sedan </label></div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkSeven">
-                              &nbsp;&nbsp;&nbsp;Mustang </label></div>
-                        </li>
-                      </ul>
-                    </li>
-                    <li ng-class="{active : dashboard.mapFilters.Trucks}">
-                      <div class="radio radio-success">
-                        <input type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
-                               ng-click="dashboard.displayCategory('Trucks')" value="true">
-                        <label for="trucks"> TRUCKS</label>
-                        <a href="#"><i
-                          ng-class="(dashboard.expandedSection == 'Trucks') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                          class="pull-right margin-right-20 margin-top-4 light-gray"
-                          ng-click="dashboard.toggleSection('Trucks')"></i></a>
-                      </div>
-                      <ul ng-class="{in: (dashboard.displayingCategory == 'Trucks' && dashboard.expandSection)}"
-                          class="map-filter-second-level collapse">
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkEight">
-                              &nbsp;&nbsp;&nbsp;F-Series
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkNine">
-                              &nbsp;&nbsp;&nbsp;E-Series
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkTen">
-                              &nbsp;&nbsp;&nbsp;Transit
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkEleven">
-                              &nbsp;&nbsp;&nbsp;Transit Connect</label></div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkTwelve">
-                              &nbsp;&nbsp;&nbsp;Heavy Trucks </label></div>
-                        </li>
-                      </ul>
-                    </li>
-                    <li ng-class="{active : dashboard.mapFilters.Utilities}">
-                      <div class="radio radio-success">
-                        <input type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
-                               ng-click="dashboard.displayCategory('Utilities')" value="true">
-                        <label for="utilities"> UTILITIES</label>
-                        <a href="#"><i
-                          ng-class="(dashboard.expandedSection == 'Utilities') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                          class="pull-right margin-right-20 margin-top-4 light-gray"
-                          ng-click="dashboard.toggleSection('Utilities')"></i></a>
-                      </div>
-                      <ul ng-class="{in: (dashboard.displayingCategory == 'Utilities' && dashboard.expandSection)}"
-                          class="map-filter-second-level collapse">
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkThirteen">
-                              &nbsp;&nbsp;&nbsp;Escape
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkFourteen">
-                              &nbsp;&nbsp;&nbsp;Edge
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label><input icheck type="checkbox" ng-model="main.checkFifteen">
-                              &nbsp;&nbsp;&nbsp;Flex
-                            </label>
-                          </div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkSixteen">
-                              &nbsp;&nbsp;&nbsp;Explorer </label></div>
-                        </li>
-                        <li>
-                          <div>
-                            <label> <input icheck type="checkbox" ng-model="main.checkSeventen">
-                              &nbsp;&nbsp;&nbsp;Expedition </label></div>
-                        </li>
-                      </ul>
-                    </li>
-                    <li ng-class="{active : dashboard.mapFilters.Vans}">
-                      <div class="radio radio-success">
-                        <input type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
-                               ng-click="dashboard.displayCategory('Vans')" value="true">
-                        <label for="utilities"> VANS</label>
-                        <a href="#"><i
-                          ng-class="(dashboard.expandedSection == 'Vans') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                          class="pull-right margin-right-20 margin-top-4 light-gray"
-                          ng-click="dashboard.toggleSection('Vans')"></i></a>
-                      </div>
-                    </li>
-                    <li ng-class="{active : dashboard.mapFilters.Other}">
-                      <div class="radio radio-success">
-                        <input type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
-                               ng-click="dashboard.displayCategory('Others')" value="true">
-                        <label for="utilities"> OTHERS</label>
-                        <a href="#"><i
-                          ng-class="(dashboard.expandedSection == 'Others') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                          class="pull-right margin-right-20 margin-top-4 light-gray"
-                          ng-click="dashboard.toggleSection('Others')"></i></a>
-                      </div>
-                    </li>
-                  </ul>
+                    <!-- Category -->
+                    <ul side-navigation class="map-filter-category-list metismenu shadow-border">
+                      <li ng-class="{active : dashboard.mapFilters.Cars}">
+                        <div class="radio radio-success">
+                          <input type="radio" name="categories" id="cars"
+                                 ng-click="dashboard.displayCategory('Cars')" ng-model="dashboard.mapFilters.Cars"
+                                 value="true">
+                          <label for="cars"> CARS</label>
+                          <a href="#"><i
+                            ng-class="(dashboard.expandedSection == 'Cars') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                            class="pull-right margin-right-20 margin-top-4 light-gray"
+                            ng-click="dashboard.toggleSection('Cars')"></i></a>
+                        </div>
+                        <ul ng-class="{in: (dashboard.displayingCategory == 'Cars' && dashboard.expandSection)}"
+                            class="map-filter-second-level collapse">
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkOne">
+                                &nbsp;&nbsp;&nbsp;Focus
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkTwo">
+                                &nbsp;&nbsp;&nbsp;Fusion
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkThree">
+                                &nbsp;&nbsp;&nbsp;C-Max
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkFour">
+                                &nbsp;&nbsp;&nbsp;Fiesta </label></div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkFive">
+                                &nbsp;&nbsp;&nbsp;Tarus </label></div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkSix">
+                                &nbsp;&nbsp;&nbsp;Police Interceptor Sedan </label></div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkSeven">
+                                &nbsp;&nbsp;&nbsp;Mustang </label></div>
+                          </li>
+                        </ul>
+                      </li>
+                      <li ng-class="{active : dashboard.mapFilters.Trucks}">
+                        <div class="radio radio-success">
+                          <input type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
+                                 ng-click="dashboard.displayCategory('Trucks')" value="true">
+                          <label for="trucks"> TRUCKS</label>
+                          <a href="#"><i
+                            ng-class="(dashboard.expandedSection == 'Trucks') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                            class="pull-right margin-right-20 margin-top-4 light-gray"
+                            ng-click="dashboard.toggleSection('Trucks')"></i></a>
+                        </div>
+                        <ul ng-class="{in: (dashboard.displayingCategory == 'Trucks' && dashboard.expandSection)}"
+                            class="map-filter-second-level collapse">
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkEight">
+                                &nbsp;&nbsp;&nbsp;F-Series
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkNine">
+                                &nbsp;&nbsp;&nbsp;E-Series
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkTen">
+                                &nbsp;&nbsp;&nbsp;Transit
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkEleven">
+                                &nbsp;&nbsp;&nbsp;Transit Connect</label></div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkTwelve">
+                                &nbsp;&nbsp;&nbsp;Heavy Trucks </label></div>
+                          </li>
+                        </ul>
+                      </li>
+                      <li ng-class="{active : dashboard.mapFilters.Utilities}">
+                        <div class="radio radio-success">
+                          <input type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
+                                 ng-click="dashboard.displayCategory('Utilities')" value="true">
+                          <label for="utilities"> UTILITIES</label>
+                          <a href="#"><i
+                            ng-class="(dashboard.expandedSection == 'Utilities') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                            class="pull-right margin-right-20 margin-top-4 light-gray"
+                            ng-click="dashboard.toggleSection('Utilities')"></i></a>
+                        </div>
+                        <ul ng-class="{in: (dashboard.displayingCategory == 'Utilities' && dashboard.expandSection)}"
+                            class="map-filter-second-level collapse">
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkThirteen">
+                                &nbsp;&nbsp;&nbsp;Escape
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkFourteen">
+                                &nbsp;&nbsp;&nbsp;Edge
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label><input icheck type="checkbox" ng-model="main.checkFifteen">
+                                &nbsp;&nbsp;&nbsp;Flex
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkSixteen">
+                                &nbsp;&nbsp;&nbsp;Explorer </label></div>
+                          </li>
+                          <li>
+                            <div>
+                              <label> <input icheck type="checkbox" ng-model="main.checkSeventen">
+                                &nbsp;&nbsp;&nbsp;Expedition </label></div>
+                          </li>
+                        </ul>
+                      </li>
+                      <li ng-class="{active : dashboard.mapFilters.Vans}">
+                        <div class="radio radio-success">
+                          <input type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
+                                 ng-click="dashboard.displayCategory('Vans')" value="true">
+                          <label for="utilities"> VANS</label>
+                          <a href="#"><i
+                            ng-class="(dashboard.expandedSection == 'Vans') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                            class="pull-right margin-right-20 margin-top-4 light-gray"
+                            ng-click="dashboard.toggleSection('Vans')"></i></a>
+                        </div>
+                      </li>
+                      <li ng-class="{active : dashboard.mapFilters.Other}">
+                        <div class="radio radio-success">
+                          <input type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
+                                 ng-click="dashboard.displayCategory('Others')" value="true">
+                          <label for="utilities"> OTHERS</label>
+                          <a href="#"><i
+                            ng-class="(dashboard.expandedSection == 'Others') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                            class="pull-right margin-right-20 margin-top-4 light-gray"
+                            ng-click="dashboard.toggleSection('Others')"></i></a>
+                        </div>
+                      </li>
+                    </ul>
 
-                </div>
-                <!-- ./ Map filters -->
-                <div id="map" class="col-lg-9 height-400" style="border:1px solid #d5d5d5; padding: 5px;">
-                  <div ui-map="dashboard.statsMap" ui-options="dashboard.chartMapOptions"
-                       class="google-map height-388"></div>
+                  </div>
+                  <!-- ./ Map filters -->
+                  <div id="map" class="col-lg-9 height-400" style="border:1px solid #d5d5d5; padding: 5px;">
+                    <div ui-map="dashboard.statsMap" ui-options="dashboard.chartMapOptions"
+                         class="google-map height-388"></div>
+                  </div>
                 </div>
               </div>
+              <!-- ./map view -->
+
             </div>
-            <!-- ./map view -->
 
           </div>
 
@@ -707,7 +763,7 @@
               <td >{{::deal.vehicleInformation.model}}</td>
               <td >{{::deal.vehicleInformation.trim }}</td>
 
-              <td style="cursor:pointer;"><img alt="image" src="assets/images/a2.jpg" class="dashboard-table-avatar"> {{::deal.customerDetails.name}}</td>
+              <td style="cursor:pointer;" ng-click="dashboard.goToProfile(deal)" ><img alt="image" src="assets/images/profile.jpg" class="dashboard-table-avatar"> {{::deal.customerDetails.name}}</td>
               <td ng-click="dashboard.composeText(deal)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}</td>
               <td ng-click="dashboard.composeMail(deal)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.email}}</td>
 

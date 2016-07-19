@@ -15,14 +15,29 @@ angular.module('dealScanCrmApp')
         var _totalDeals = {};
         var teamMates = [];
         var safeCb = Util.safeCb;
+        var _filters = {dealerships: []};
 
+        var salesData = [];
+        var filteredData = [];
+        //console.log(salesData);
 
+        function getFilters() {
+        return User.getFilters({id:_user.userID})
+          .$promise.then(function(filters){
+            console.log(filters);
+            for(var i = 0; i < filters.length; i++){
+              for (var j = 0;  j < filters[i].Teams.length; j++){
+                if (filters[i].Teams[j].TeamMembers)
+                  filters[i].Teams[j].TeamMembers.unshift({profile: {name: 'Sales Personnel', role: 'Sales Representative', email: ''}});
+              }
+            }
+            return filters;
+          }).catch(function(err){
+            console.log(err);
+            return err;
+          })
+      }
 
-        var salesData = Util.dummyData();
-        var filteredData = salesData;
-        console.log(salesData);
-        getTeamMates();
-        getDeals({type: 'All', dealershipID: 1, teamID: 1, from:moment().startOf('year'), to: moment()});
         function getDeals(searchOptions){
           console.log(searchOptions);
           if (!searchOptions) throw new Error('Please Select Search Options');
@@ -30,13 +45,23 @@ angular.module('dealScanCrmApp')
           if (!searchOptions.dealershipID) throw new Error('Please Select Dealership');
           if (!searchOptions.teamID) throw new Error('Please Select a Team');
           if (!searchOptions.from || !searchOptions.to) throw new Error('Please Select Date Range');
-          return DealResource.get()
+          var query = {};
+          query.dealershipID = searchOptions.dealershipID;
+          if (searchOptions.employee.MemberID) query.employee = searchOptions.employee.MemberID;
+          query.from = searchOptions.from;
+          query.to = searchOptions.to;
+          salesData.length = 0;
+          return DealResource.query(query)
             .$promise.then(function(deals){
+             console.log('\n>> DEALS')
              console.log(deals);
+             console.log('\n\n================================\n\n');
              if (deals && deals.length > 0){
                  //process deals.
-
-
+               salesData = deals;
+               filteredData = salesData;
+               console.log(salesData);
+               return filteredData;
              } else return [];
           }).catch(function(err){
              console.log(err);
@@ -68,7 +93,7 @@ angular.module('dealScanCrmApp')
             });
             console.log(filteredData);
             switch(status){
-                case 'won':
+                case 'working':
                   wonDeals();
                   break;
                 case 'lost':
@@ -233,7 +258,6 @@ angular.module('dealScanCrmApp')
           console.log(workingDays - daysWorked);
         }
 
-
         console.log('\n\n\n[ --------------------- START ------------------------ ]');
         console.log("Default WorkWeek: Monday - Saturday ");
         computeWorkingDays();
@@ -244,44 +268,28 @@ angular.module('dealScanCrmApp')
         computeWorkingDays({workWeek: {start: 'Monday', end: 'Friday'}});
         console.log('[ ---------------------- END ------------------------ ]\n\n\n');
 
-
         console.log('\n\n\n[ --------------------- START ------------------------ ]');
         console.log("WorkWeek: Monday - Thursday");
         computeWorkingDays({workWeek: {start: 'Monday', end: 'Thursday'}});
         console.log('[ ---------------------- END ------------------------ ]\n\n\n');
 
-
-
-        function getTrend(){
-
-        }
-
-        function getTeamMates() {
-            return User.getFilters({id:_user.userID})
-              .$promise.then(function(filters){
-              console.log('\n\n>> FILTERS ');
-              console.log(filters);
-              console.log('\n\n**************************');
-              if (filters){
-
-              }
-            }).catch(function(err){
-                console.log(err);
-                return err;
-            })
-        }
-
-
         function getCategoryCount(arr, category, status){
             var count = 0;
+            var pvr = 0
             for(var i = 0; i < arr.length; i++) {
               if (status) {
-                if (arr[i].category == category && arr[i].status == status) count++;
+                if (arr[i].category == category && arr[i].status == status) {
+                  count++;
+                  pvr += arr[i].price - arr[i].retailValue;
+                }
               } else {
-                if (arr[i].category == category) count++;
+                if (arr[i].category == category) {
+                  count++;
+                  pvr += arr[i].price - arr[i].retailValue;
+                }
               }
             }
-            return count;
+            return {count: count, pvr: pvr};
         }
 
         function getModels(arr, category, status){
@@ -303,7 +311,7 @@ angular.module('dealScanCrmApp')
                }
              }
            }
-          return {models: models, sales: sales, data: getCategoryCount(arr, category, status), sources: sources};
+          return {models: models, sales: sales, data: getCategoryCount(arr, category, status).count, pvr: getCategoryCount(arr, category, status).pvr, sources: sources};
         }
 
         function getModelSales(arr, model, status){
@@ -324,30 +332,35 @@ angular.module('dealScanCrmApp')
          */
         function wonDeals(){
            //process data to generate won deals
-          var cars = getModels(filteredData, "Cars", "won");
-          var trucks = getModels(filteredData, "Trucks", "won");
-          var utilities = getModels(filteredData, "Utilities", "won");
-          var vans = getModels(filteredData, "Vans", "won");
-          var other = getModels(filteredData, "Other", "won");
+          var cars = getModels(filteredData, "car", "working");
+          var trucks = getModels(filteredData, "truck", "working");
+          var utilities = getModels(filteredData, "utility", "working");
+          var vans = getModels(filteredData, "van", "working");
+          var other = getModels(filteredData, "other", "working");
           var wonDeals = [{
                 label: "Cars",
                 data: cars.data,
+                pvr: cars.pvr,
                 color: Util.pieColors()[0],//"#d3d3d3",
               },{
                 label: "Trucks",
                 data: trucks.data,
+                pvr: trucks.pvr,
                 color: Util.pieColors()[1], //"#79d2c0"
               },{
                 label: "Utilities",
                 data: utilities.data,
+                pvr: utilities.pvr,
                 color: Util.pieColors()[2], //"#bababa"
               },{
                 label: "Vans",
                 data: vans.data,
+                pvr: vans.pvr,
                 color: Util.pieColors()[3], //"#1ab394"
               },{
                 label: "Other",
                 data: other.data,
+                pvr: other.pvr,
                 color: Util.pieColors()[4],//"#1ab380"
               }]
           _wonDeals.pie = wonDeals;
@@ -381,21 +394,24 @@ angular.module('dealScanCrmApp')
            _wonDeals.bar = barData;
             var tableData = [];
             angular.forEach(filteredData, function(value, key){
-               if(value.status == 'won'){
+               if(value.status == 'working'){
                   tableData.push({
                    vehicleInformation: {
+                     vehicleID: value.vehicleID,
                      category: value.category,
                      year: value.year,
-                     make: 'Ford',
+                     make: value.make,
                      model: value.model,
                      trim: value.trimLevel,
                    },
                    customerDetails: {
+                     customerID: value.customerID,
                      name: value.name,
                      phone: value.phone,
                      email : value.email,
                    },
                    dealDetails: {
+                     dealID: value.dealID,
                      date: value.date,
                      salesman: value.salesman,
                      source: value.source,
@@ -408,33 +424,36 @@ angular.module('dealScanCrmApp')
             return _wonDeals;
         }
 
-
-
         function lostDeals(){
-          var cars = getModels(filteredData, "Cars", "lost");
-          var trucks = getModels(filteredData, "Trucks", "lost");
-          var utilities = getModels(filteredData, "Utilities", "lost");
-          var vans = getModels(filteredData, "Vans", "lost");
-          var other = getModels(filteredData, "Other", "lost");
+          var cars = getModels(filteredData, "car", "lost");
+          var trucks = getModels(filteredData, "truck", "lost");
+          var utilities = getModels(filteredData, "utility", "lost");
+          var vans = getModels(filteredData, "van", "lost");
+          var other = getModels(filteredData, "other", "lost");
           var lostDeals = [{
             label: "Cars",
             data: cars.data,
+            pvr: cars.pvr,
             color: Util.pieColors()[0],//"#d3d3d3",
           },{
             label: "Trucks",
             data: trucks.data,
+            pvr: trucks.pvr,
             color: Util.pieColors()[1], //"#79d2c0"
           },{
             label: "Utilities",
             data: utilities.data,
+            pvr: utilities.pvr,
             color: Util.pieColors()[2], //"#bababa"
           },{
             label: "Vans",
             data: vans.data,
+            pvr: vans.pvr,
             color: Util.pieColors()[3], //"#1ab394"
           },{
             label: "Other",
             data: other.data,
+            pvr: other.pvr,
             color: Util.pieColors()[4],//"#1ab380"
           }];
           _lostDeals.pie = lostDeals;
@@ -474,7 +493,7 @@ angular.module('dealScanCrmApp')
                 vehicleInformation: {
                   category: value.category,
                   year: value.year,
-                  make: 'Ford',
+                  make: value.make,
                   model: value.model,
                   trim: value.trimLevel,
                 },
@@ -496,33 +515,37 @@ angular.module('dealScanCrmApp')
           return _lostDeals;
         }
 
-
         function totalDeals(){
-          var cars = getModels(filteredData, "Cars");
-          var trucks = getModels(filteredData, "Trucks");
-          var utilities = getModels(filteredData, "Utilities");
-          var vans = getModels(filteredData, "Vans");
-          var other = getModels(filteredData, "Other");
+          var cars = getModels(filteredData, "car");
+          var trucks = getModels(filteredData, "truck");
+          var utilities = getModels(filteredData, "utility");
+          var vans = getModels(filteredData, "vans");
+          var other = getModels(filteredData, "other");
 
           var totalDeals = [{
             label: "Cars",
             data: cars.data,
+            pvr: cars.pvr,
             color: Util.pieColors()[0],//"#d3d3d3",
           },{
             label: "Trucks",
             data: trucks.data,
+            pvr: trucks.pvr,
             color: Util.pieColors()[1], //"#79d2c0"
           },{
             label: "Utilities",
             data: utilities.data,
+            pvr: utilities.pvr,
             color: Util.pieColors()[2], //"#bababa"
           },{
             label: "Vans",
             data: vans.data,
+            pvr: vans.pvr,
             color: Util.pieColors()[3], //"#1ab394"
           },{
             label: "Other",
             data: other.data,
+            pvr: other.pvr,
             color: Util.pieColors()[4],//"#1ab380"
           }];
           _totalDeals.pie = totalDeals;
@@ -562,7 +585,7 @@ angular.module('dealScanCrmApp')
                 vehicleInformation: {
                   category: value.category,
                   year: value.year,
-                  make: 'Ford',
+                  make: value.make,
                   model: value.model,
                   trim: value.trimLevel,
                 },
@@ -585,11 +608,9 @@ angular.module('dealScanCrmApp')
 
         // Public API here
         return {
-            getTeamMates: getTeamMates,
+            filters: getFilters,
             metrics: getMetrics,
-            teamMates: function(){
-                return teamMates;
-            },
+            deals: getDeals,
             won: wonDeals,
             lost: lostDeals,
             total: totalDeals,
