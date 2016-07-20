@@ -8,7 +8,7 @@ angular.module('dealScanCrmApp')
     _customer.user = Auth.getCurrentUser();
     console.log('customer controller loaded....');
     _customer.thisCustomer = selectedCustomer;
-    console.log(_customer.thisCustomer);
+    console.log(selectedCustomer);
 
     _customer.info = {
       name: _customer.thisCustomer.profile.name,
@@ -79,19 +79,7 @@ angular.module('dealScanCrmApp')
 
 
 
-    _customer.tabs = [{
-      id: 'overview',
-      heading: 'SUMMARY',
-      route: 'index.customer.profile.overview',
-      icon: 'fa-file-text',
-      bg_color: 'yellow-bg'
-    }, {
-      id: 'documents',
-      heading: 'DOCUMENTS',
-      route: 'index.customer.profile.documents',
-      icon: 'fa-file-text',
-      bg_color: 'blue-bg'
-    }, {
+    _customer.tabs = [  {
       id: 'tasks',
       heading: 'TASKS',
       route: 'index.customer.profile.tasks',
@@ -109,7 +97,21 @@ angular.module('dealScanCrmApp')
       route: 'index.customer.profile.messages',
       icon: 'fa-envelope-o',
       bg_color: 'blue-bg'
-    }];
+    },
+      {
+        id: 'documents',
+        heading: 'DOCUMENTS',
+        route: 'index.customer.profile.documents',
+        icon: 'fa-file-text',
+        bg_color: 'blue-bg'
+      },
+      {
+        id: 'overview',
+        heading: 'SUMMARY',
+        route: 'index.customer.profile',
+        icon: 'fa-file-text',
+        bg_color: 'yellow-bg'
+      }];
 
     _customer.setActiveTab = function(tab){
       $state.go(tab.route);
