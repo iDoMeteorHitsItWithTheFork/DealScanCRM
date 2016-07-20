@@ -1,5 +1,5 @@
 <!-- top section -->
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading p-r-0">
   <!-- breadcrumbs -->
   <div class="col-lg-4">
     <h2>{{customer.info.name}}</h2>
@@ -14,57 +14,26 @@
   </div>
   <!-- ./ breadcrumbs -->
   <!-- Profile tabs -->
-  <div class="col-lg-8">
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab blue-bg">
-          <div class="profile-tab-icon">
-            <i class="fa fa-file-text"></i>
+  <div class="col-sm-8 p-r-0">
+    <div class="col-sm-3 no-padding">
+
+    </div>
+    <div class="col-sm-9 no-padding">
+      <div ng-repeat="tab in customer.tabs" ng-click="customer.setActiveTab(tab)" class="col-sm-4 no-margins no-padding text-center" style="width:121px;">
+        <div class="profile-tab {{tab.bg_color}} no-border-right">
+          <div class="profile-tab-icon m-t-5 m-l-26 no-border">
+            <i class="fa {{tab.icon}} f-sz-22"></i>
           </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Documents</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
-      </div>
-    </div>
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab navy-bg">
-        <div class="profile-tab-icon">
-          <i class="fa fa-list"></i>
+          <small class="p-t-42">{{tab.heading}}</small>
         </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Tasks</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
-      </div>
-    </div>
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab yellow-bg">
-        <div class="profile-tab-icon">
-          <i class="fa fa-files-o"></i>
-        </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Notes</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
-      </div>
-    </div>
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab lazur-bg no-border-right">
-        <div class="profile-tab-icon">
-          <i class="fa fa-envelope-o"></i>
-        </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Messages</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
       </div>
     </div>
   </div>
   <!-- ./profile Tabs -->
 </div>
 <!-- ./top section -->
-
-<div class="wrapper wrapper-content">
+<div ui-view></div>
+<div ng-show="$state.is('index.customer.profile')" class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
 
     <!-- Customer Information -->

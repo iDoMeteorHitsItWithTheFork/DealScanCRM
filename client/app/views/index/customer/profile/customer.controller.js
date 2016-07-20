@@ -81,34 +81,41 @@ angular.module('dealScanCrmApp')
 
     _customer.tabs = [{
       id: 'overview',
-      heading: 'Overview',
-      route: 'home.customer.profile.summary.overview',
+      heading: 'SUMMARY',
+      route: 'index.customer.profile.overview',
+      icon: 'fa-file-text',
+      bg_color: 'yellow-bg'
     }, {
       id: 'documents',
-      heading: 'Documents',
-      route: 'home.customer.profile.summary.documents',
-    }, {
-      id: 'images',
-      heading: 'Images',
-      route: 'home.customer.profile.summary.images',
+      heading: 'DOCUMENTS',
+      route: 'index.customer.profile.documents',
+      icon: 'fa-file-text',
+      bg_color: 'blue-bg'
     }, {
       id: 'tasks',
-      heading: 'Tasks',
-      route: 'home.customer.profile.summary.tasks',
+      heading: 'TASKS',
+      route: 'index.customer.profile.tasks',
+      icon: 'fa-list',
+      bg_color: 'navy-bg'
     }, {
       id: 'notes',
-      heading: 'Notes',
-      route: 'home.customer.profile.summary.notes',
+      heading: 'NOTES',
+      route: 'index.customer.profile.notes',
+      icon: 'fa-files-o',
+      bg_color: 'yellow-bg'
     }, {
       id: 'messages',
-      heading: 'Messages',
-      route: 'home.customer.profile.summary.messages'
+      heading: 'MESSAGES',
+      route: 'index.customer.profile.messages',
+      icon: 'fa-envelope-o',
+      bg_color: 'blue-bg'
     }];
 
-    var setActiveTab = function(){
-      var idx = Util.indexOfObject(_customer.tabs, 'route', $state.current.name);
-      if (idx != -1) _customer.activeTab = idx;
-    }; setActiveTab();
+    _customer.setActiveTab = function(tab){
+      $state.go(tab.route);
+    };
+
+    //_customer.setActiveTab();
 
     _customer.navButtons = [
       {
