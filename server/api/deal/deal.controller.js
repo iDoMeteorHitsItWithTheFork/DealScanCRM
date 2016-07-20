@@ -78,10 +78,8 @@ export function index(req, res) {
   var searchOptions = {
     dealershipID: req.query.dealershipID,
     createdAt: {
-      $or: [
-        {$lte:req.query.to},
-        {$gte: req.query.from}
-      ]
+      $lte: req.query.to,
+      $gte: req.query.from
     }
   };
   if (req.query.hasOwnProperty('employee') && req.query.employee && req.query.employee.trim() != '')
@@ -109,7 +107,7 @@ export function index(req, res) {
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID','make', 'model', 'year', 'trimLevel', 'state', 'classification'],
+          attributes: ['vehicleID','make', 'model', 'year','invoice','trimLevel', 'state', 'classification'],
           required: true
         },
       ]
@@ -143,6 +141,7 @@ function formatDeals(deals){
       "source": deal.Buyer.profile.source,
       "price": deal.salePrice,
       "retailValue": deal.retailValue,
+      "cost":deal.Purchase.profile.invoice,
       "status": deal.status,
       "paymentOption": deal.paymentOption,
       "dealID": deal.dealID,
@@ -151,6 +150,38 @@ function formatDeals(deals){
     });
   }
   return _deals;
+}
+
+
+export function getKPI(req, res){
+
+  if (!req.query.hasOwnProperty('dealershipID') || !req.query.dealershipID || req.query.dealershipID.trim() == '')
+    res.status(500).send('DealershipID is required');
+  var dealershipID = req.query.dealershipID;
+  var searchOptions = {
+    dealershipID: dealershipID,
+    attributes: { include: [[Deal.sequelize.fn('COUNT', Deal.sequelize.col('DealID')), 'Units']] },
+    CreatedAt: {
+      $lte: moment(),
+      $gte: moment().startOf('month')
+    },
+    include: [
+      {
+        model: Vehicle,
+        as: 'Purchase',
+        attributes: ['vehicleID', 'invoice', 'state', 'classification'],
+        where: {
+          state: 'new'
+        }
+      }
+    ]
+  };
+  if (req.user.role == 'sale_rep') searchOptions.saleRepID = req.query.saleRepID;
+  return Deal.findAll(searchOptions, {logging: console.log})
+    .then(function(res){
+      console.log(res);
+      return res.status(200).json(res);
+  }).catch(handleError(res));
 }
 
 // Gets a single Deal from the DB

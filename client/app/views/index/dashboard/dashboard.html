@@ -165,7 +165,7 @@
 
 
           <!-- charts -->
-          <div class="row" style="padding-top:10px !important;" >
+          <div class="row mn-ht-397" style="padding-top:10px !important;"  >
 
             <div class="height-337 p-t-150" ng-hide="!dashboard.retreivingDeals">
               <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px;"></i>
@@ -173,24 +173,31 @@
             </div>
 
             <div class="text-center height-337 p-t-150" ng-hide="dashboard.retreivingDeals || !dashboard.emptyResults">
-              <p class="m-t-30">Sorry , there are no deals to report from {{dashboard.dateRange.startDate.format('YYYY/MM/DD')}} to
-                {{dashboard.dateRange.endDate.format('YYYY/MM/DD')}}, Please adjust your critrias and try again
+              <p class="m-t-30">Sorry , there are no deals to report for <strong>{{dashboard.selectedEmployee.profile.name}}</strong>
+                from <strong>{{dashboard.dateRange.startDate.format('YYYY/MM/DD')}}</strong> to
+                <strong>{{dashboard.dateRange.endDate.format('YYYY/MM/DD')}}</strong>, Please adjust your critrias and
+                try again
               </p>
             </div>
 
-            <div ng-show="!dashboard.retreivingDeals && !dashboard.emptyResults">
+            <div ng-show="!dashboard.retreivingDeals && !dashboard.emptyResults && dashboard.viewIsReady">
 
               <!-- Won Pie & Stats -->
               <div class="pull-left"
                    ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart')? 'col-lg-3': 'col-lg-4'"
                    ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart && dashboard.chartView == 'chart'">
-                <!-- won stats-->
-                <div class="ibox float-e-margins">
-                  <div class="ibox-title" style="border-top-width:1px;">
-                    <div class="row">
-                      <div class="col-lg-12 text-center">
-                        <h2>{{'Won' | uppercase}}
-                          <span class="btn-group" uib-dropdown>
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length == 0 && dashboard.noWonDeals">
+                  <p class="m-t-235">No Won deals to display.</p>
+                </div>
+                <div ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length > 0 || dashboard.filtered[0].state">
+                  <!-- won stats-->
+                  <div class="ibox float-e-margins">
+                    <div class="ibox-title" style="border-top-width:1px;">
+                      <div class="row">
+                        <div class="col-lg-12 text-center">
+                          <h2>{{'Won' | uppercase}}
+                            <span class="btn-group" uib-dropdown>
                            <button type="button" class="btn btn-primary btn-outline btn-xs"
                                    uib-dropdown-toggle><span class="caret"></span>
                            </button>
@@ -212,61 +219,67 @@
                               </li>
                           </ul>
                           </span>
-                        </h2>
+                          </h2>
+                        </div>
                       </div>
                     </div>
+                    <div class="ibox-content p-b-0">
+                      <table class="table ">
+                        <thead>
+                        <tr>
+                          <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                              class="text-center">
+                            <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units}}
+                            </button>
+                            <br/>
+                            Cars
+                          </th>
+                          <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                              class="text-center">
+                            <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units}}</button>
+                            <br/>
+                            Trucks
+                          </th>
+                          <th style="border-bottom:none !important;" class="text-center">
+                            <button class="btn btn-danger btn-outline m-rl-a">
+                              {{dashboard.stats[0].cars.units+dashboard.stats[0].trucks.units}}
+                            </button>
+                            <br/>
+                            Total
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                              class="text-center">
+                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr}}</h5>
+                          </td>
+                          <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                              class="text-center">
+                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr}}</h5>
+                          </td>
+                          <td style="border-top:none !important;" class="text-center">
+                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr +
+                              dashboard.stats[0].trucks.pvr}}</h5>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  <div class="ibox-content p-b-0">
-                    <table class="table ">
-                      <thead>
-                      <tr>
-                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                            class="text-center">
-                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units}}</button>
-                          <br/>
-                          Cars
-                        </th>
-                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                            class="text-center">
-                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units}}</button>
-                          <br/>
-                          Trucks
-                        </th>
-                        <th style="border-bottom:none !important;" class="text-center">
-                          <button class="btn btn-danger btn-outline m-rl-a">
-                            {{dashboard.stats[0].cars.units+dashboard.stats[0].trucks.units}}
-                          </button>
-                          <br/>
-                          Total
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
-                            class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr}}</h5>
-                        </td>
-                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
-                            class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr}}</h5>
-                        </td>
-                        <td style="border-top:none !important;" class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr +
-                            dashboard.stats[0].trucks.pvr}}</h5>
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
+                  <!-- ./ won stats -->
+                  <div class="flot-chart large-pie-chart animated fadeInRight"
+                       ng-show="dashboard.chartView == 'chart'">
+                    <div class="text-center animated bounceIn hideSansDelay"
+                         ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length == 0 && dashboard.filtered[0].state">
+                      <p class="m-t-50">No won deals found through filters.</p>
+                    </div>
+                    <div ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length > 0" flot
+                         class="flot-chart-content" dataset="dashboard.wonDeals.pie"
+                         options="dashboard.pieOptions"
+                         on-plot-click="dashboard.showDetails($event, pos, item, 'won'); dashboard.displayTable($event, pos, item, 'won')"></div>
                   </div>
-                </div>
-                <!-- ./ won stats -->
-
-                <div class="flot-chart large-pie-chart animated fadeInRight"
-                     ng-show="dashboard.chartView == 'chart'">
-                  <div flot class="flot-chart-content" dataset="dashboard.wonDeals.pie"
-                       options="dashboard.pieOptions"
-                       on-plot-click="dashboard.showDetails($event, pos, item, 'won'); dashboard.displayTable($event, pos, item, 'won')"></div>
                 </div>
               </div>
               <!-- ./Won Pie & Charts -->
@@ -276,13 +289,18 @@
               <div class="pull-left"
                    ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
                    ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart && dashboard.chartView == 'chart'">
-                <!-- lost stats-->
-                <div class="ibox float-e-margins">
-                  <div class="ibox-title" style="border-top-width:1px;">
-                    <div class="row">
-                      <div class="col-lg-12 text-center">
-                        <h2>{{'Lost' | uppercase}}
-                          <span class="btn-group" uib-dropdown>
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length == 0 && dashboard.noLostDeals">
+                  <p class="m-t-235">No Lost deals to display.</p>
+                </div>
+                <div ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length > 0 || dashboard.filtered[1].state">
+                  <!-- lost stats-->
+                  <div class="ibox float-e-margins">
+                    <div class="ibox-title" style="border-top-width:1px;">
+                      <div class="row">
+                        <div class="col-lg-12 text-center">
+                          <h2>{{'Lost' | uppercase}}
+                            <span class="btn-group" uib-dropdown>
                             <button type="button" class="btn btn-primary btn-outline btn-xs"
                                     uib-dropdown-toggle><span class="caret"></span>
                             </button>
@@ -305,60 +323,68 @@
                                 </li>
                             </ul>
                          </span>
-                        </h2>
+                          </h2>
+                        </div>
                       </div>
                     </div>
+                    <div class="ibox-content p-b-0">
+                      <table class="table ">
+                        <thead>
+                        <tr>
+                          <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                              class="text-center">
+                            <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[1].cars.units}}
+                            </button>
+                            <br/>
+                            Cars
+                          </th>
+                          <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                              class="text-center">
+                            <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[1].trucks.units}}</button>
+                            <br/>
+                            Trucks
+                          </th>
+                          <th style="border-bottom:none !important;" class="text-center">
+                            <button class="btn btn-danger btn-outline m-rl-a">{{dashboard.stats[1].cars.units +
+                              dashboard.stats[1].trucks.units}}
+                            </button>
+                            <br/>
+                            Total
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                              class="text-center">
+                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr}}</h5>
+                          </td>
+                          <td style="border-right:1px solid #eee !important; border-top:none !important;"
+                              class="text-center">
+                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].trucks.pvr}}</h5>
+                          </td>
+                          <td class="text-center" style="border-top:none !important;">
+                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr +
+                              dashboard.stats[1].trucks.pvr}}</h5>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  <div class="ibox-content p-b-0">
-                    <table class="table ">
-                      <thead>
-                      <tr>
-                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                            class="text-center">
-                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[1].cars.units}}</button>
-                          <br/>
-                          Cars
-                        </th>
-                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                            class="text-center">
-                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[1].trucks.units}}</button>
-                          <br/>
-                          Trucks
-                        </th>
-                        <th style="border-bottom:none !important;" class="text-center">
-                          <button class="btn btn-danger btn-outline m-rl-a">{{dashboard.stats[1].cars.units +
-                            dashboard.stats[1].trucks.units}}
-                          </button>
-                          <br/>
-                          Total
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
-                            class="text-center">
-                          <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr}}</h5>
-                        </td>
-                        <td style="border-right:1px solid #eee !important; border-top:none !important;"
-                            class="text-center">
-                          <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].trucks.pvr}}</h5>
-                        </td>
-                        <td class="text-center" style="border-top:none !important;">
-                          <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr +
-                            dashboard.stats[1].trucks.pvr}}</h5>
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
+                  <!-- ./lost stats-->
+
+                  <div class="flot-chart large-pie-chart animated fadeInRight"
+                       ng-show="dashboard.chartView == 'chart'">
+                    <div class="text-center animated bounceIn hideSansDelay"
+                         ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length == 0 && dashboard.filtered[1].state">
+                      <p class="m-t-50">No lost deals found through filters.</p>
+                    </div>
+                    <div ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length > 0" flot
+                         class="flot-chart-content" dataset="dashboard.lostDeals.pie"
+                         options="dashboard.pieOptions"
+                         on-plot-click="dashboard.showDetails($event, pos, item, 'lost'); dashboard.displayTable($event, pos, item, 'lost')"></div>
                   </div>
-                </div>
-                <!-- ./lost stats-->
-                <div class="flot-chart large-pie-chart animated fadeInRight"
-                     ng-show="dashboard.chartView == 'chart'">
-                  <div flot class="flot-chart-content" dataset="dashboard.lostDeals.pie"
-                       options="dashboard.pieOptions"
-                       on-plot-click="dashboard.showDetails($event, pos, item, 'lost'); dashboard.displayTable($event, pos, item, 'lost')"></div>
                 </div>
               </div>
               <!-- ./Lost Pie & Charts -->
@@ -406,24 +432,21 @@
                       <tr>
                         <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                             class="text-center">
-                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[0].cars.units +
-                            dashboard.stats[1].cars.units}}
+                          <button class="btn btn-warning btn-outline m-rl-a">{{dashboard.stats[2].cars.units}}
                           </button>
                           <br/>
                           Cars
                         </th>
                         <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                             class="text-center">
-                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[0].trucks.units +
-                            dashboard.stats[1].trucks.units}}
+                          <button class="btn btn-info btn-outline m-rl-a">{{dashboard.stats[2].trucks.units}}
                           </button>
                           <br/>
                           Trucks
                         </th>
                         <th style="border-bottom:none !important;" class="text-center">
-                          <button class="btn btn-danger btn-outline m-rl-a">{{(dashboard.stats[0].cars.units +
-                            dashboard.stats[1].cars.units) +
-                            (dashboard.stats[0].trucks.units + dashboard.stats[1].trucks.units)}}
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{dashboard.stats[2].cars.units + dashboard.stats[2].trucks.units}}
                           </button>
                           <br/>
                           Total
@@ -434,18 +457,15 @@
                       <tr>
                         <td style="border-right:1px solid #eee !important; border-top:none !important;"
                             class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr +
-                            dashboard.stats[1].cars.pvr}}</h5>
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[2].cars.pvr}}</h5>
                         </td>
                         <td style="border-right:1px solid #eee !important; border-top:none !important;"
                             class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr +
-                            dashboard.stats[1].trucks.pvr}}</h5>
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[2].trucks.pvr}}</h5>
                         </td>
                         <td class="text-center" style="border-top:none !important;">
-                          <h5 style="margin-top:-12px !important;">${{(dashboard.stats[0].cars.pvr +
-                            dashboard.stats[1].cars.pvr) + (dashboard.stats[0].trucks.pvr +
-                            dashboard.stats[1].trucks.pvr)}}</h5>
+                          <h5 style="margin-top:-12px !important;">
+                            ${{dashboard.stats[2].cars.pvr + dashboard.stats[2].trucks.pvr}}</h5>
                         </td>
                       </tr>
                       </tbody>
@@ -455,7 +475,12 @@
                 <!-- ./total stats-->
                 <div class="flot-chart large-pie-chart animated fadeInRight"
                      ng-show="dashboard.chartView == 'chart'">
-                  <div flot class="flot-chart-content" dataset="dashboard.totalDeals.pie"
+                  <div class="text-center animated bounceIn hideSansDelay"
+                       ng-if="dashboard.totalDeals.tableData && dashboard.totalDeals.tableData.length == 0 && dashboard.filtered[2].state">
+                    <p class="m-t-50">No deals found through filters.</p>
+                  </div>
+                  <div ng-if="dashboard.totalDeals.tableData && dashboard.totalDeals.tableData.length > 0" flot
+                       class="flot-chart-content" dataset="dashboard.totalDeals.pie"
                        options="dashboard.pieOptions"
                        on-plot-click="dashboard.showDetails($event, pos, item, 'total'); dashboard.displayTable($event, pos, item, 'total')"></div>
                 </div>

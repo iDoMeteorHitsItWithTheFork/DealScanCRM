@@ -229,7 +229,9 @@ div.navs-3 > ul.nav-tabs > li {
 .ng-hide.ng-hide-animate {
   display: none !important;
 }
-#dscBarChart.ng-animate { -webkit-animation: none 0s; }
+#dscBarChart.ng-animate,
+.hideSansDelay.ng-animate
+{ -webkit-animation: none 0s; }
 
 
 .metric-label {
@@ -280,4 +282,17 @@ div.navs-3 > ul.nav-tabs > li {
 }
 .m-t-30 {
   margin-top:30px !important;
+}
+.m-t-50 {
+  margin-top: 50px;
+}
+.mn-ht-397 {
+  min-height: 397px !important;
+}
+.ps-rl-t-220 {
+  position: relative;
+  top: 120px;
+}
+.m-t-235 {
+  margin-top: 235px;
 }

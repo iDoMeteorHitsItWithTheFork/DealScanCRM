@@ -18,7 +18,21 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.dataFilters = [];
     _dashboard.stats = [];
     _dashboard.emptyResults = null;
+    _dashboard.viewIsReady = false;
+    _dashboard.filtered = [{id: 'won', state: false}, {id: 'lost', state: false}, {id: 'total', state: false}];
+    _dashboard.noWonDeals = null;
+    _dashboard.noLostDeals = null;
+    _dashboard.noTotalDeals = null;
 
+    var resetDealFlags = function(){
+      _dashboard.noWonDeals = null;
+      _dashboard.noLostDeals = null;
+      _dashboard.noTotalDeals = null;
+    }
+
+    var resetFilterFlags = function () {
+      _dashboard.filtered = [{id: 'won', state: false}, {id: 'lost', state: false}, {id: 'total', state: false}];
+    }
 
     Auth.hasRole(appConfig.userRoles[2], function (ans) {
       _dashboard.isManager = ans;
@@ -28,6 +42,18 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.isGM = ans;
     })
 
+
+
+
+    _dashboard.KPI = function(){
+      Dashboard.kpi().then(function(res){
+        console.log(res);
+      }).catch(function(err){
+         console.log(err);
+         toaster.error({title: 'KPI Error', body: 'An error occurred while retreiving KPI Info'})
+      })
+
+    }
 
     _dashboard.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
     _dashboard.selectedDealership = {};
@@ -45,6 +71,8 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           _dashboard.selectedEmployee  = (_dashboard.user.role == 'sale_rep') ?
               {MemberID: _dashboard.user.userID, profile: _dashboard.user.profile} :
               _dashboard.selectedEmployee = _dashboard.selectedTeam.TeamMembers[0];
+          _dashboard.viewIsReady = true;
+          _dashboard.getSales();
         }
       }).catch(function(err){
           console.log(err);
@@ -56,6 +84,11 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.groupByRole = function (employee){
        return employee.profile.role;
     };
+
+
+
+
+
 
     /**
      * Deals Type
@@ -86,6 +119,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       if (_dashboard.retreivingDeals) return;
       _dashboard.retreivingDeals = true;
       _dashboard.emptyResults = null;
+      resetFilterFlags();
       console.log('**** GETTING DEALS DATA *****');
       var searchOptions = {};
       searchOptions.type = _dashboard.selectedType;
@@ -103,6 +137,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           _dashboard.lostDeals = Dashboard.lost();
           _dashboard.totalDeals = Dashboard.total();
           _dashboard.stats = getStats();
+          _dashboard.noWonDeals = _dashboard.wonDeals.tableData && _dashboard.wonDeals.tableData.length == 0;
+          _dashboard.noLostDeals = _dashboard.lostDeals.tableData && _dashboard.lostDeals.tableData.length == 0;
+          _dashboard.noTotalDeals = _dashboard.totalDeals.tableData && _dashboard.totalDeals.tableData.length == 0;
         } else _dashboard.emptyResults = true;
         _dashboard.retreivingDeals = false;
       }).catch(function(err){
@@ -229,9 +266,13 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         for(var i= 0; i < s.length; i++){
           if (s[i].state) sources.push(s[i].id)
         }
+        if (status == 'won') _dashboard.filtered[0].state = true;
+        if (status == 'lost') _dashboard.filtered[1].state = true;
+        if (status == 'total') _dashboard.filtered[2].state = true;
         Dashboard.filter(status, sources);
         if (_dashboard.showBarChart) updateBarChart(status, _dashboard.displayingCategory);
         if (_dashboard.showTable) updateTableData(status, _dashboard.displayingCategory);
+        updateStats(status);
         console.log('*** Deals Filtered ***');
       }
     }
@@ -265,6 +306,43 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       } else _dashboard.displayCategory(section);
     }
 
+    var updateStats = function(status){
+      switch(status){
+        case 'won':
+          _dashboard.stats[0].cars =  {
+            units: _dashboard.wonDeals.pie[0].data,
+            pvr: _dashboard.wonDeals.pie[0].pvr
+          };
+          _dashboard.stats[0].trucks =  {
+            units: (_dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data),
+            pvr: (_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr)
+          };
+          break;
+        case 'lost':
+          _dashboard.stats[1].cars =  {
+            units: _dashboard.lostDeals.pie[0].data,
+            pvr: _dashboard.lostDeals.pie[0].pvr
+          };
+          _dashboard.stats[1].trucks =  {
+            units: (_dashboard.lostDeals.pie[1].data + _dashboard.lostDeals.pie[2].data + _dashboard.lostDeals.pie[3].data),
+            pvr: (_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr)
+          };
+          break;
+        case 'total':
+          _dashboard.stats[2].cars =  {
+            units: _dashboard.wonDeals.pie[0].data + _dashboard.lostDeals.pie[0].data,
+            pvr: _dashboard.wonDeals.pie[0].pvr + _dashboard.lostDeals.pie[0].pvr
+          };
+          _dashboard.stats[2].trucks =  {
+            units: (_dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data) +
+            (_dashboard.lostDeals.pie[1].data + _dashboard.lostDeals.pie[2].data + _dashboard.lostDeals.pie[3].data),
+            pvr: (_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr) +
+            (_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr)
+          };
+          break;
+      }
+    }
+
     var getStats = function(){
       return [
         { id:'won',
@@ -278,7 +356,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           },
           sources: [
             {
-              id: 'Walk-In',
+              id: 'walkIn',
               name: 'Walk In',
               state: true,
             },
@@ -316,7 +394,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           },
           sources: [
             {
-              id: 'Walk-In',
+              id: 'walkIn',
               name: 'Walk In',
               state: true,
             },
@@ -345,9 +423,17 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
         {
           id: 'total',
+          cars: {
+            units: _dashboard.totalDeals.pie[0].data,
+            pvr: _dashboard.totalDeals.pie[0].pvr
+          },
+          trucks: {
+            units: (_dashboard.totalDeals.pie[1].data + _dashboard.totalDeals.pie[2].data + _dashboard.totalDeals.pie[3].data),
+            pvr: (_dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr)
+          },
           sources: [
             {
-              id: 'Walk-In',
+              id: 'walkIn',
               name: 'Walk In',
               state: true,
             },
@@ -616,12 +702,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.displayTable = function($event, pos, item, status, category){
        if (!_dashboard.showTable) _dashboard.showTable = true;
        //status = status == 'won' ? 'working': status;
-       console.log('\n>> pos: ');
-       console.log(pos);
-       console.log('\n>> item: ');
-       console.log(item);
-       console.log('\n>> status: '+status);
-       console.log('\n>> category: '+category);
       _dashboard.setTableData(item, status, category);
     }
 
@@ -670,7 +750,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     }
 
 
-    _dashboard.metrics = Dashboard.metrics();
+    _dashboard.metrics = {};
     _dashboard.metricSummaryTabs = [
       {id: 'Phone', title: 'fa fa-phone', contentFilter: '', active: false,
         contentData: [

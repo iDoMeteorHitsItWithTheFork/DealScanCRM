@@ -2,13 +2,27 @@
 
 angular.module('dealScanCrmApp')
     .factory('Dashboard', function (Auth, User, Util, $q, $filter, $resource, DealResource) {
-        // Service logic
-        // ...
 
-       // var sales = DataSync.processAndSync();
-        //console.log(sales);
+        /**
+         * KPI Constants gola
+         * @type {any}
+         * @private
+         */
 
-        var _user = Auth.getCurrentUser();
+        var KPI_CAR_UNITS_GOAL = 50;
+        var KPI_CAR_PER_UNIT_GROSS_GOAL = 800;
+        var KPI_TRUCK_UNITS_GOAL = 100;
+        var KPI_TRUCK_PER_UNIT_GROSS_GOAL = 1600;
+        var KPI_USED_UNITS_GOAL = 125;
+        var KPI_USED_PER_UNIT_GROSS_GOAL = 2000;
+
+        var KPI_TOTAL_UNITS_GOAL = KPI_CAR_UNITS_GOAL + KPI_TRUCK_UNITS_GOAL + KPI_USED_UNITS_GOAL;
+        var KPI_TOTAL_GROSS_GOAL = (KPI_CAR_UNITS_GOAL * KPI_CAR_PER_UNIT_GROSS_GOAL) +
+                              (KPI_TRUCK_UNITS_GOAL * KPI_TRUCK_PER_UNIT_GROSS_GOAL) +
+                              (KPI_USED_UNITS_GOAL * KPI_USED_PER_UNIT_GROSS_GOAL);
+
+
+      var _user = Auth.getCurrentUser();
         var _teamMates = {};
         var _wonDeals = {};
         var _lostDeals = {};
@@ -72,6 +86,7 @@ angular.module('dealScanCrmApp')
         function filterData(status, sources){
             //var df = $q.defer();
             console.log(status);
+            status = status == 'won' ? 'working' : status;
             console.log(sources);
             filteredData = $filter('filter')(salesData, function(value, index, arr){
               var filtered = false;
@@ -106,9 +121,22 @@ angular.module('dealScanCrmApp')
 
         var _metrics = {};
 
-        function getMetrics(){
+        function getKPI(searchOptions){
+          if (!searchOptions) throw new Error('SearchOptions is required!');
+          if (!searchOptions.dealershipID || searchOptions.dealershipID.trim() == '')
+            throw new Error('DealershipID is required');
+          return DealResource.getKPI(searchOptions)
+            .$promise.then(function(res){
+              console.log(res);
+              if (res){
+
+              }
+          }).catch(function(err){
+             console.log(err);
+             return err;
+          })
           //process data to generate metrics
-           var metrics = [ {
+           /*var metrics = [ {
                  Category: "Cars",
                  Won: {
                    percentage: 44,
@@ -162,7 +190,7 @@ angular.module('dealScanCrmApp')
                }
              ];
            _metrics = metrics;
-           return _metrics;
+           return _metrics;*/
         }
 
         /**
@@ -194,7 +222,6 @@ angular.module('dealScanCrmApp')
 
           if (!startOfWeek.isAfter(lastDayOfMonth) && endOfWeek.isAfter(lastDayOfMonth))
               workWeeks.push({name: 'Week '+idx, start:startOfWeek.clone(), end: lastWorkingDay(lastDayOfMonth, workWeek).clone()})
-
 
           return workWeeks;
         }
@@ -275,7 +302,7 @@ angular.module('dealScanCrmApp')
 
         function getCategoryCount(arr, category, status){
             var count = 0;
-            var pvr = 0
+            var pvr = 0;
             for(var i = 0; i < arr.length; i++) {
               if (status) {
                 if (arr[i].category == category && arr[i].status == status) {
@@ -311,7 +338,8 @@ angular.module('dealScanCrmApp')
                }
              }
            }
-          return {models: models, sales: sales, data: getCategoryCount(arr, category, status).count, pvr: getCategoryCount(arr, category, status).pvr, sources: sources};
+          var rs = getCategoryCount(arr, category, status);
+          return {models: models, sales: sales, data: rs.count, pvr: rs.pvr, sources: sources};
         }
 
         function getModelSales(arr, model, status){
@@ -519,7 +547,7 @@ angular.module('dealScanCrmApp')
           var cars = getModels(filteredData, "car");
           var trucks = getModels(filteredData, "truck");
           var utilities = getModels(filteredData, "utility");
-          var vans = getModels(filteredData, "vans");
+          var vans = getModels(filteredData, "van");
           var other = getModels(filteredData, "other");
 
           var totalDeals = [{
@@ -609,7 +637,7 @@ angular.module('dealScanCrmApp')
         // Public API here
         return {
             filters: getFilters,
-            metrics: getMetrics,
+            kpi: getKPI,
             deals: getDeals,
             won: wonDeals,
             lost: lostDeals,
