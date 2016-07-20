@@ -121,76 +121,133 @@ angular.module('dealScanCrmApp')
 
         var _metrics = {};
 
-        function getKPI(searchOptions){
-          if (!searchOptions) throw new Error('SearchOptions is required!');
-          if (!searchOptions.dealershipID || searchOptions.dealershipID.trim() == '')
-            throw new Error('DealershipID is required');
-          return DealResource.getKPI(searchOptions)
+        function getKPI(){
+          var wrkStats = computeWorkingDays();
+          return DealResource.getKPI({})
             .$promise.then(function(res){
+              console.log("\n>> KPIS");
               console.log(res);
+              console.log('\n___________________________');
+              var kpis = [];
+              var workingDays = wrkStats.WorkingDays;
+              var workedDays = wrkStats.DaysWorked;
+              var rWorkDays = wrkStats.RemainingWorkingDays;
               if (res){
+                var idx = Util.indexOfObject(res.new, 'Classification', "car");
+                var newCarsKpi = {
+                    group : "Cars",
+                    units : 0,
+                    units_goal : KPI_CAR_UNITS_GOAL,
+                    gross : 0,
+                    gross_goal: KPI_CAR_UNITS_GOAL * KPI_CAR_PER_UNIT_GROSS_GOAL
+                };
+                if (idx != -1){
+                  newCarsKpi.units = res.new[idx].Units;
+                  newCarsKpi.gross = res.new[idx].Gross;
+                }
 
+                newCarsKpi.tracking = newCarsKpi.units / workedDays;
+                newCarsKpi.delta = rWorkDays > 0 ? (KPI_CAR_UNITS_GOAL - newCarsKpi.units) / rWorkDays : 0;
+                newCarsKpi.trend = newCarsKpi.delta > newCarsKpi.tracking ? 'Up' : 'Steady';
+                newCarsKpi.unit_progress = "width: "+Math.ceil(((newCarsKpi.units * 100)/newCarsKpi.units_goal))+"%";
+                newCarsKpi.gross_progress = "width: "+Math.ceil(((newCarsKpi.gross * 100)/newCarsKpi.gross_goal))+"%";
+
+                kpis.push(newCarsKpi);
+
+                var tIdx = Util.indexOfObject(res.new, 'Classification', "truck");
+                var uIdx = Util.indexOfObject(res.new, 'Classification', "utility");
+                var vIdx = Util.indexOfObject(res.new, 'Classification', "van");
+
+                var newTrucksKpi = {
+                  group: "Trucks",
+                  units: 0,
+                  units_goal: KPI_TRUCK_UNITS_GOAL,
+                  gross: 0,
+                  gross_goal: KPI_TRUCK_UNITS_GOAL * KPI_TRUCK_PER_UNIT_GROSS_GOAL
+                }
+
+                if (tIdx != -1) {
+                  newTrucksKpi.units += res.new[tIdx].Units;
+                  newTrucksKpi.gross += res.new[tIdx].Gross;
+                }
+                if (uIdx != -1) {
+                  newTrucksKpi.units += res.new[uIdx].Units;
+                  newTrucksKpi.gross += res.new[uIdx].Gross;
+                }
+                if (vIdx != -1) {
+                  newTrucksKpi.units += res.new[vIdx].Units;
+                  newTrucksKpi.gross += res.new[vIdx].Gross;
+                }
+
+                newTrucksKpi.tracking = newTrucksKpi.units / workedDays;
+                newTrucksKpi.delta = rWorkDays > 0 ? (KPI_TRUCK_UNITS_GOAL - newTrucksKpi.units) / rWorkDays : 0;
+                newTrucksKpi.trend = newTrucksKpi.delta > newTrucksKpi.tracking ? 'Up' : 'Steady';
+                newTrucksKpi.unit_progress = "width: "+((newTrucksKpi.units * 100)/newTrucksKpi.units_goal)+"%";
+                newTrucksKpi.gross_progress = "width: "+((newTrucksKpi.gross * 100)/newTrucksKpi.gross_goal)+"%";
+
+                kpis.push(newTrucksKpi);
+
+                var usedKpi = {
+                  group: "Used",
+                  units: 0,
+                  units_goal: KPI_USED_UNITS_GOAL,
+                  gross: 0,
+                  gross_goal: KPI_USED_UNITS_GOAL * KPI_USED_PER_UNIT_GROSS_GOAL
+                }
+
+                var uCIdx = Util.indexOfObject(res.used, 'Classification', "car");
+                var uTIdx = Util.indexOfObject(res.used, 'Classification', "truck");
+                var uUIdx = Util.indexOfObject(res.used, 'Classification', "utility");
+                var uVIdx = Util.indexOfObject(res.used, 'Classification', "van");
+
+                if (uCIdx != -1) {
+                  usedKpi.units += res.used[uCIdx].Units;
+                  usedKpi.gross += res.used[uCIdx].Gross;
+                }
+                if (uTIdx != -1) {
+                  usedKpi.units += res.used[uTIdx].Units;
+                  usedKpi.gross += res.used[uTIdx].Gross;
+                }
+                if (uUIdx != -1) {
+                  usedKpi.units += res.used[uUIdx].Units;
+                  usedKpi.gross += res.used[uUIdx].Gross;
+                }
+                if (uVIdx != -1) {
+                  usedKpi.units += res.used[uVIdx].Units;
+                  usedKpi.gross += res.used[uVIdx].Gross;
+                }
+
+
+                usedKpi.tracking = usedKpi.units / workedDays;
+                usedKpi.delta = rWorkDays > 0 ? (KPI_USED_UNITS_GOAL - usedKpi.units) / rWorkDays : 0;
+                usedKpi.trend = usedKpi.delta > usedKpi.tracking ? 'Up' : 'Steady';
+                usedKpi.unit_progress = "width: "+((usedKpi.units * 100)/usedKpi.units_goal)+"%";
+                usedKpi.gross_progress = 'width: '+((usedKpi.gross * 100)/usedKpi.gross_goal)+"%";
+
+                kpis.push(usedKpi);
+
+                var totalKpi = {
+                  group: "Total",
+                  units: newCarsKpi.units + newTrucksKpi.units + usedKpi.units,
+                  units_goal: KPI_TOTAL_UNITS_GOAL,
+                  gross: newCarsKpi.gross + newTrucksKpi.gross + usedKpi.gross,
+                  gross_goal: KPI_TOTAL_GROSS_GOAL
+                }
+
+                totalKpi.tracking = totalKpi.units / workedDays;
+                totalKpi.delta = rWorkDays > 0 ? (KPI_TOTAL_UNITS_GOAL - totalKpi.units) / rWorkDays : 0;
+                totalKpi.trend = totalKpi.delta > totalKpi.tracking ? 'Up' : 'Steady';
+                totalKpi.unit_progress = "width: "+((totalKpi.units * 100)/totalKpi.units_goal)+"%";
+                totalKpi.gross_progress = 'width: '+((totalKpi.gross * 100)/totalKpi.gross_goal)+"%";
+
+                kpis.push(totalKpi);
+
+                return {KPI:kpis, WorkedDays: workedDays, RemainingWorkingDays: rWorkDays};
               }
           }).catch(function(err){
              console.log(err);
              return err;
-          })
-          //process data to generate metrics
-           /*var metrics = [ {
-                 Category: "Cars",
-                 Won: {
-                   percentage: 44,
-                   trend: "up",
-                   deals: '100,000'
-                 },
-                 Lost: {
-                   percentage: 44,
-                   trend: "down",
-                   deals: '30,000'
-                 }
-               },
-               {
-                 Category: "Trucks",
-                 Won: {
-                   percentage: 44,
-                   trend: "up",
-                   deals: '100,000'
-                 },
-                 Lost: {
-                   percentage: 44,
-                   trend: "down",
-                   deals: '20,000'
-                 }
-               },
-             {
-               Category: "Used",
-               Won: {
-                 percentage: 44,
-                 trend: "up",
-                 deals: '100,000'
-               },
-               Lost: {
-                 percentage: 44,
-                 trend: "down",
-                 deals: '20,000'
-               }
-             },
-               {
-                 Category: "Total",
-                 Won: {
-                   percentage: 44,
-                   trend: "up",
-                   deals: '100,000'
-                 },
-                 Lost: {
-                   percentage: 44,
-                   trend: "down",
-                   deals: '100,000'
-                 }
-               }
-             ];
-           _metrics = metrics;
-           return _metrics;*/
+          });
         }
 
         /**
@@ -283,9 +340,11 @@ angular.module('dealScanCrmApp')
 
           console.log('*** Days Left ***');
           console.log(workingDays - daysWorked);
+
+          return {WorkingWeeks:workingWeeks, WorkingDays: workingDays, DaysWorked: daysWorked, RemainingWorkingDays: (workingDays - daysWorked)};
         }
 
-        console.log('\n\n\n[ --------------------- START ------------------------ ]');
+       /* console.log('\n\n\n[ --------------------- START ------------------------ ]');
         console.log("Default WorkWeek: Monday - Saturday ");
         computeWorkingDays();
         console.log('[ ---------------------- END ------------------------ ]\n\n\n');
@@ -298,7 +357,7 @@ angular.module('dealScanCrmApp')
         console.log('\n\n\n[ --------------------- START ------------------------ ]');
         console.log("WorkWeek: Monday - Thursday");
         computeWorkingDays({workWeek: {start: 'Monday', end: 'Thursday'}});
-        console.log('[ ---------------------- END ------------------------ ]\n\n\n');
+        console.log('[ ---------------------- END ------------------------ ]\n\n\n');*/
 
         function getCategoryCount(arr, category, status){
             var count = 0;

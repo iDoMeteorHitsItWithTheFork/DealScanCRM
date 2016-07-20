@@ -19,10 +19,12 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.stats = [];
     _dashboard.emptyResults = null;
     _dashboard.viewIsReady = false;
+    _dashboard.loadingKPI = false;
     _dashboard.filtered = [{id: 'won', state: false}, {id: 'lost', state: false}, {id: 'total', state: false}];
     _dashboard.noWonDeals = null;
     _dashboard.noLostDeals = null;
     _dashboard.noTotalDeals = null;
+    _dashboard.kpis = [];
 
     var resetDealFlags = function(){
       _dashboard.noWonDeals = null;
@@ -43,22 +45,25 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     })
 
 
-
-
     _dashboard.KPI = function(){
+      if (_dashboard.loadingKPI) return;
+      _dashboard.loadingKPI = true;
       Dashboard.kpi().then(function(res){
         console.log(res);
+        _dashboard.kpis = res;
+        _dashboard.loadingKPI = false;
       }).catch(function(err){
          console.log(err);
-         toaster.error({title: 'KPI Error', body: 'An error occurred while retreiving KPI Info'})
+         _dashboard.loadingKPI = false;
+         toaster.error({title: 'KPI Error', body: 'An error occurred while retrieving KPI Info'})
       })
-
     }
+
+    _dashboard.KPI();
 
     _dashboard.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
     _dashboard.selectedDealership = {};
     _dashboard.selectedTeam = {};
-
 
     _dashboard.getFilters = function(){
       Dashboard.filters().then(function(filters){

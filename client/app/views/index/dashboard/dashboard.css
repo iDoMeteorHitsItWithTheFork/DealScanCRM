@@ -293,6 +293,13 @@ div.navs-3 > ul.nav-tabs > li {
   position: relative;
   top: 120px;
 }
+.ps-rl-t-ng-3 {
+  position: relative;
+  top: -3px;
+}
 .m-t-235 {
   margin-top: 235px;
+}
+.height-100 {
+  height: 100px;
 }

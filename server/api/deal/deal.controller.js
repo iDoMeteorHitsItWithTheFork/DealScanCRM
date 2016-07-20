@@ -10,6 +10,7 @@
 'use strict';
 
 import _ from 'lodash';
+import {Dealership} from '../../sqldb';
 import {Deal} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Customer} from '../../sqldb';
@@ -62,6 +63,7 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
+    console.log(err);
     res.status(statusCode).send(err);
   };
 }
@@ -155,33 +157,55 @@ function formatDeals(deals){
 
 export function getKPI(req, res){
 
-  if (!req.query.hasOwnProperty('dealershipID') || !req.query.dealershipID || req.query.dealershipID.trim() == '')
-    res.status(500).send('DealershipID is required');
-  var dealershipID = req.query.dealershipID;
-  var searchOptions = {
-    dealershipID: dealershipID,
-    attributes: { include: [[Deal.sequelize.fn('COUNT', Deal.sequelize.col('DealID')), 'Units']] },
-    CreatedAt: {
-      $lte: moment(),
-      $gte: moment().startOf('month')
+  return User.find({
+    where: {
+      userID: req.user.userID
     },
     include: [
       {
-        model: Vehicle,
-        as: 'Purchase',
-        attributes: ['vehicleID', 'invoice', 'state', 'classification'],
-        where: {
-          state: 'new'
-        }
+        model: Dealership,
+        as: 'Employer',
+        required: true
       }
     ]
-  };
-  if (req.user.role == 'sale_rep') searchOptions.saleRepID = req.query.saleRepID;
-  return Deal.findAll(searchOptions, {logging: console.log})
-    .then(function(res){
-      console.log(res);
-      return res.status(200).json(res);
+  }).then(function(user){
+    if (user){
+
+      var dealershipID = user.Employer[0].token.dealerID;
+      var saleRep = '';
+      var promises = [];
+      var from = (moment().startOf('month')).format('YYYY-MM-DD');
+      var to = moment().format('YYYY-MM-DD');
+      if (req.user.role == 'sale_rep') saleRep = ' AND saleRepID = '+req.user.userID+' ';
+
+      /* Get New Cars KPI */
+      promises.push(Deal.sequelize
+        .query('SELECT classification AS Classification,' +
+          ' COUNT(DISTINCT dealID) AS Units, SUM(Deals.salePrice - Deals.retailValue) AS Gross' +
+          ' FROM Deals INNER JOIN Vehicles ON Deals.vehicleID = Vehicles.vehicleID' +
+          ' WHERE (Deals.createdAt <= "'+to+'" AND Deals.createdAt >= "'+from+'") AND state="new" AND (status = "working" OR status = "sold" OR status="won") ' +
+          'AND dealershipID = '+dealershipID+' '+saleRep+
+          ' GROUP BY classification',
+          {type: Deal.sequelize.QueryTypes.SELECT}));
+
+      /* Get Used Card KPI */
+      promises.push(Deal.sequelize
+        .query('SELECT classification AS Classification,' +
+          ' COUNT(DISTINCT dealID) AS Units, SUM(Deals.salePrice - Deals.retailValue) AS Gross' +
+          ' FROM Deals INNER JOIN Vehicles ON Deals.vehicleID = Vehicles.vehicleID' +
+          ' WHERE (Deals.createdAt <= "'+to+'" AND Deals.createdAt >= "'+from+'") AND state="used" AND (status = "working" OR status = "sold" OR status="won") ' +
+          'AND dealershipID = '+dealershipID+' '+saleRep+
+          'GROUP BY classification',
+          {type: Deal.sequelize.QueryTypes.SELECT}));
+      /*  */
+      return Q.all(promises).then(function(kpis){
+        //console.log(kpis);
+        return res.status(200).json({"new": kpis[0], "used":kpis[1]});
+      });
+
+    } else return res.status(200).json([]);
   }).catch(handleError(res));
+
 }
 
 // Gets a single Deal from the DB
@@ -213,14 +237,6 @@ export function sync(req, res) {
   for(var i=0; i < deals.length; i++)
     promises.push(Deal.dscUpsert(deals[i]));
   return Q.all(promises).then(respondWithResult(res)).catch(handleError(res));
-}
-
-function parseDeal(data){
-
-  var deal = {};
-
-
-  return deal;
 }
 
 // Updates an existing Deal in the DB

@@ -1,37 +1,46 @@
 <div class="wrapper wrapper-content wrapper animated fadeInRight p-t-10">
-
+  <!--<small class="pull-left">Days Left: {{dashboard.kpis.RemainingWorkingDays}}</small> -->
   <!-- Top Section ==> metrics -->
   <div class="row">
-    <div class="col-lg-3" ng-repeat="m in dashboard.metrics">
+    <div class="col-lg-3" ng-repeat="m in dashboard.kpis.KPI">
       <div class="ibox float-e-margins m-b-15">
         <div class="ibox-title">
-                    <span class="pull-right">
-                        <span class="label label-info metric-label">4</span>
-                        <span class="label label-info metric-label">$30,400.00</span>
-                    </span>
-          <h5>{{m.Category | uppercase}}</h5><br/>
-          <!--<div class="row margin-top-10 padding-left-15 padding-right-15">-->
-            <!--<small class="pull-left">Days Left: {{m.remainingDays}}</small>-->
-            <!--<span class="pull-right text-navy">-->
-              <!--<i class="fa fa-play fa-rotate-270 middle-text-align">&nbsp;</i>45%-->
-            <!--</span>-->
-          <!--</div>-->
+          <span class="pull-right" ng-hide="dashboard.loadingKPI">
+             <span ng-class="{'text-danger': m.trend == 'Up', 'text-navy': m.trend == 'Steady'}">
+                <i class="fa fa-line-chart"></i>
+                {{m.tracking}}
+             </span>
+             <span class="m-l-10 text-navy">
+               <i class="text-navy"
+                  ng-class="{'fa fa-play fa-rotate-270 ps-rl-t-ng-3': m.trend == 'Up',
+                   'fa fa-thumbs-o-up' : m.trend == 'Steady'}">&nbsp;&nbsp;</i>
+                <strong>{{m.delta}}</strong>
+             </span>
+            </span>
+          <h5>{{m.group | uppercase}}</h5><br/>
         </div>
         <div class="ibox-content">
-          <div class="row p-l-r-15">
+          <div class="height-100 p-t-20" ng-hide="!dashboard.loadingKPI">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block"></i>
+          </div>
+          <div class="row p-l-r-15" ng-hide="dashboard.loadingKPI">
             <div>
               <span>Units</span>
-              <small class="pull-right">10/120</small>
+              <small class="pull-right">{{m.units}}/{{m.units_goal}}</small>
             </div>
             <div class="progress progress-mini">
-              <div style="width: 60%;" class="progress-bar"></div>
+              <div style="{{m.unit_progress}}" class="progress-bar" ng-class="{'progress-bar-danger': (m.tracking * 100 / m.delta) < 75,
+                             'progress-bar-warning': (m.tracking * 100 / m.delta) >= 75 && (m.tracking * 100 / m.delta) <= 89,
+                             }"></div>
             </div>
             <div class="margin-top-10">
               <span>Gross[$]</span>
-              <small class="pull-right">1500/200000</small>
+              <small class="pull-right">{{m.gross}}/{{m.gross_goal}}</small>
             </div>
             <div class="progress progress-mini">
-              <div style="width: 60%;" class="progress-bar"></div>
+              <div style="{{m.gross_progress}}" class="progress-bar"
+                   ng-class="{'progress-bar-danger': (m.tracking * 100 / m.delta) < 75,
+                             'progress-bar-warning': (m.tracking * 100 / m.delta) >= 75 && (m.tracking * 100 / m.delta) <= 89}"></div>
             </div>
           </div>
         </div>
@@ -138,7 +147,7 @@
           <!-- metrics -->
           <div class="row">
             <div class="col-xs-2 margin-top-10">
-              <h3 class="no-margins">Today Statistics</h3>
+              <h3 class="no-margins">Statistics</h3>
               <small>{{dashboard.selectedEmployee.profile.name}}'s Data</small>
             </div>
             <div class="col-xs-10">

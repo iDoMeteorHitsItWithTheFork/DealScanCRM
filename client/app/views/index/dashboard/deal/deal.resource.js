@@ -19,9 +19,9 @@
         }
       },
       getKPI: {
-        method:'GET',
+        method:'PUT',
         params: {
-          id:'KPI'
+          id:'kpi'
         }
       },
     });
