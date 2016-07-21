@@ -10,7 +10,7 @@ module.exports = {
     username: 'DealScanCRM',
     password: 'Baiser12!',
     options: {
-      host:'DealScanCRM.db.3266541.hostedresource.com', //DealScanCRM.db.3266541.hostedresource.com
+      host:'dealscancrm.db.3266541.hostedresource.com',
       dialect: 'mysql',
       pool: {
           max: 5,
