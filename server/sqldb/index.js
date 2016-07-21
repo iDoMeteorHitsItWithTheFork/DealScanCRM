@@ -51,6 +51,7 @@ db.Image.belongsTo(db.Customer, {as:'CustomerImages', foreignKey:'customerID'});
 
 //
 db.Team.belongsTo(db.Dealership, {foreignKey:'dealershipID'});
+db.Dealership.hasMany(db.Team, {foreignKey:'dealershipID'});
 //
 
 //

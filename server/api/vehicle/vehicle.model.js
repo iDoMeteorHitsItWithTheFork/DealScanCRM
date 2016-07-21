@@ -40,17 +40,11 @@ export default function(sequelize, DataTypes) {
     },
     make: {
       type: DataTypes.STRING(45),
-      allowNull: false, //false
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true,
     },
     model: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true,
     },
     mileage: {
       type: DataTypes.DOUBLE,
@@ -58,23 +52,24 @@ export default function(sequelize, DataTypes) {
       defaultValue: 0
     },
     year: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      type: DataTypes.STRING(4),
+      allowNull: true,
     },
     state: {
       type: DataTypes.ENUM,
       values: ['new', 'used'],
       defaultValue: 'new',
-      allowNull: false,
+      allowNull: true,
     },
     color: {
       type: DataTypes.STRING(45),
       allowNull: true,
     },
     bodyStyle: {
+      type: DataTypes.STRING(45),
+      allowNull: true,
+    },
+    classification: {
       type: DataTypes.STRING(45),
       allowNull: true,
     },
@@ -105,7 +100,9 @@ export default function(sequelize, DataTypes) {
             'state': this.getDataValue('state'),
             'msrp': this.getDataValue('msrp'),
             'invoice': this.getDataValue('invoice'),
-            'bodyStyle': this.getDataValue('bodyStyle')
+            'bodyStyle': this.getDataValue('bodyStyle'),
+            'classification': this.getDataValue('classification'),
+            "trimLevel": this.getDataValue('trimLevel')
           }
         },
 
@@ -128,7 +125,6 @@ export default function(sequelize, DataTypes) {
            if (data.StockNumber) searchOptions.stockNumber = data.StockNumber;
 
            //vehicle values to upsert
-           console.log(data);
            var upsertValues = {
              VIN: data.VIN,
              stockNumber: data.StockNumber,

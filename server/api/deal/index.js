@@ -8,6 +8,7 @@ var router = express.Router();
 
 router.get('/', auth.isAuthenticated(), controller.index);
 router.get('/:id',auth.isAuthenticated(), controller.show);
+router.put('/kpi',auth.isAuthenticated(), controller.getKPI);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.post('/sync', auth.isAuthenticated(), controller.sync);
 router.put('/:id', auth.isAuthenticated(), controller.update);

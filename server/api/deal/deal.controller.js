@@ -10,8 +10,15 @@
 'use strict';
 
 import _ from 'lodash';
+import {Dealership} from '../../sqldb';
 import {Deal} from '../../sqldb';
+import {User} from '../../sqldb';
+import {Customer} from '../../sqldb';
+import {Vehicle} from '../../sqldb';
+import {Trade} from '../../sqldb';
+
 var Q = require('q');
+var moment = require('moment');
 
 
 function respondWithResult(res, statusCode) {
@@ -56,15 +63,149 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
+    console.log(err);
     res.status(statusCode).send(err);
   };
 }
 
 // Gets a list of Deals
 export function index(req, res) {
-  Deal.findAll()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  console.log(req.query);
+  if (!req.query.hasOwnProperty('dealershipID') || !req.query.dealershipID || req.query.dealershipID.trim() == '')
+    res.status(500).send('DealershipID is required!');
+  if (!req.query.hasOwnProperty('from') || !req.query.from || req.query.from.trim() == '')
+    res.status(500).send('Date Range "From" is required!');
+  if (!req.query.hasOwnProperty('to') || !req.query.to || req.query.to.trim() == '')
+    res.status(500).send('Date Range "To" is required!');
+  var searchOptions = {
+    dealershipID: req.query.dealershipID,
+    createdAt: {
+      $lte: req.query.to,
+      $gte: req.query.from
+    }
+  };
+  if (req.query.hasOwnProperty('employee') && req.query.employee && req.query.employee.trim() != '')
+    searchOptions.saleRepID = req.query.employee;
+  Deal.findAll({
+      where: searchOptions,
+      include:[
+        {
+          model: User,
+          as:'SaleRep',
+          attributes: ['userID','firstName', 'lastName', 'role'],
+          required: true
+        },
+        {
+          model: Customer,
+          as: 'Buyer',
+          attributes: ['customerID','firstName', 'lastName', 'phone', 'email', 'source'],
+          required: true
+        },
+        {
+          model: Customer,
+          as: 'CoBuyers',
+          attributesL: ['customerID','firstName', 'lastName', 'phone', 'email', 'source']
+        },
+        {
+          model: Vehicle,
+          as: 'Purchase',
+          attributes: ['vehicleID','make', 'model', 'year','invoice','trimLevel', 'state', 'classification'],
+          required: true
+        },
+      ]
+    })
+    .then(function(deals){
+      if (deals && deals.length > 0){
+        return res.status(200).json(formatDeals(deals));
+      } else return res.status(200).json([]);
+    }).catch(handleError(res));
+}
+
+function formatDeals(deals){
+  var _deals = [];
+  for(var i = 0; i < deals.length; i++){
+    var deal = deals[i];
+    var dt = moment(new Date(deal.createdAt));
+    _deals.push({
+      "model": deal.Purchase.profile.model,
+      "vehicleID": deal.Purchase.profile.vehicleID,
+      "category": deal.Purchase.profile.classification,
+      "make": deal.Purchase.profile.make,
+      "year": deal.Purchase.profile.year,
+      "trimLevel": deal.Purchase.profile.trimLevel,
+      "customerID": deal.Buyer.profile.customerID,
+      "name": deal.Buyer.profile.name,
+      "email": deal.Buyer.profile.email,
+      "phone": deal.Buyer.profile.phone,
+      "date": dt.format("ddd, MMM DD YYYY HH:MM a"),
+      "userID": deal.saleRepID,
+      "salesman": deal.SaleRep.profile.name,
+      "source": deal.Buyer.profile.source,
+      "price": deal.salePrice,
+      "retailValue": deal.retailValue,
+      "cost":deal.Purchase.profile.invoice,
+      "status": deal.status,
+      "paymentOption": deal.paymentOption,
+      "dealID": deal.dealID,
+      "dealershipID": deal.dealershipID,
+      "dscDealID": deal.dscDealID
+    });
+  }
+  return _deals;
+}
+
+
+export function getKPI(req, res){
+
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+    if (user){
+
+      var dealershipID = user.Employer[0].token.dealerID;
+      var saleRep = '';
+      var promises = [];
+      var from = (moment().startOf('month')).format('YYYY-MM-DD');
+      var to = moment().format('YYYY-MM-DD');
+      if (req.user.role == 'sale_rep') saleRep = ' AND saleRepID = '+req.user.userID+' ';
+
+      /* Get New Cars KPI */
+      promises.push(Deal.sequelize
+        .query('SELECT classification AS Classification,' +
+          ' COUNT(DISTINCT dealID) AS Units, SUM(Deals.salePrice - Deals.retailValue) AS Gross' +
+          ' FROM Deals INNER JOIN Vehicles ON Deals.vehicleID = Vehicles.vehicleID' +
+          ' WHERE (Deals.createdAt <= "'+to+'" AND Deals.createdAt >= "'+from+'") AND state="new" AND (status = "working" OR status = "sold" OR status="won") ' +
+          'AND dealershipID = '+dealershipID+' '+saleRep+
+          ' GROUP BY classification',
+          {type: Deal.sequelize.QueryTypes.SELECT}));
+
+      /* Get Used Card KPI */
+      promises.push(Deal.sequelize
+        .query('SELECT classification AS Classification,' +
+          ' COUNT(DISTINCT dealID) AS Units, SUM(Deals.salePrice - Deals.retailValue) AS Gross' +
+          ' FROM Deals INNER JOIN Vehicles ON Deals.vehicleID = Vehicles.vehicleID' +
+          ' WHERE (Deals.createdAt <= "'+to+'" AND Deals.createdAt >= "'+from+'") AND state="used" AND (status = "working" OR status = "sold" OR status="won") ' +
+          'AND dealershipID = '+dealershipID+' '+saleRep+
+          'GROUP BY classification',
+          {type: Deal.sequelize.QueryTypes.SELECT}));
+      /*  */
+      return Q.all(promises).then(function(kpis){
+        //console.log(kpis);
+        return res.status(200).json({"new": kpis[0], "used":kpis[1]});
+      });
+
+    } else return res.status(200).json([]);
+  }).catch(handleError(res));
+
 }
 
 // Gets a single Deal from the DB
@@ -96,14 +237,6 @@ export function sync(req, res) {
   for(var i=0; i < deals.length; i++)
     promises.push(Deal.dscUpsert(deals[i]));
   return Q.all(promises).then(respondWithResult(res)).catch(handleError(res));
-}
-
-function parseDeal(data){
-
-  var deal = {};
-
-
-  return deal;
 }
 
 // Updates an existing Deal in the DB

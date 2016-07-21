@@ -211,29 +211,6 @@
             },
 
             /**
-             * Gets a user teammates
-             *   (synchronous|asynchronous)
-             *
-             * @param  {Function|*} callback - optional, funciton(user)
-             * @return {Object|Promise}
-             */
-              getTeamMates(callback) {
-                var value = (currentUser.hasOwnProperty('$promise')) ? currentUser.$promise : currentUser;
-                return $q.when(value).then(function(user){
-                    User.getTeamMates({id: user.userID}, function(teammates) {
-                        safeCb(callback)(teammates);
-                        return teammates;
-                    }, function(err){
-                        safeCb(callback)(err);
-                        return err;
-                    }).$promise;
-                }).catch(function(err){
-                    safeCb(callback)(err);
-                    return err;
-                });
-            },
-
-            /**
              * Check if a user is logged in
              *   (synchronous|asynchronous)
              *

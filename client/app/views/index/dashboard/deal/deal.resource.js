@@ -17,7 +17,13 @@
         params: {
           id: 'sync'
         }
-      }
+      },
+      getKPI: {
+        method:'PUT',
+        params: {
+          id:'kpi'
+        }
+      },
     });
   }
 

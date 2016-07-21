@@ -1,6 +1,7 @@
 'use strict';
 
 import {User} from '../../sqldb';
+import {Dealership} from '../../sqldb';
 import {Team} from '../../sqldb';
 import passport from 'passport';
 import config from '../../config/environment';
@@ -16,6 +17,8 @@ function validationError(res, statusCode) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function (err) {
+    console.log(err);
+    throw err;
     res.status(statusCode).send(err);
   };
 }
@@ -82,22 +85,116 @@ export function show(req, res, next) {
 /**
  * Get a single user teamates
  */
-export function getTeamMates(req, res, next) {
-  return User.findAll({
+export function getFilters(req, res) {
+  return User.find({
     where: {
-      userID: {
-        $ne: req.user.userID
-      },
-      role: {
-        $lt:config.userRoles.indexOf(req.user.role)
+      userID:  req.user.userID
+    },
+    attributes: ['firstName', 'lastName', 'email', 'userID', 'role'],
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        attributes: ['dealershipName', 'dealershipID', 'streetAddress', 'city', 'state', 'zipCode'],
+        include: [
+          {
+            model: User,
+            as: 'Owners',
+            attributes: ['firstName', 'lastName', 'email', 'userID', 'role']
+          },
+          {
+            model: User,
+            as: 'GeneralManagers',
+            attributes: ['firstName', 'lastName', 'email', 'userID', 'role']
+          },
+          {
+            model: Team,
+            attributes: ['teamID', 'teamName'],
+            include: [
+              {
+                model: User,
+                as: 'TeamMembers',
+                attributes: ['firstName', 'lastName', 'email', 'userID', 'role'],
+                where: {
+                  userID: {
+                    $ne: req.user.userID
+                  },
+                  role: {
+                    $or:['sale_rep','sale_mgr','nw_car_sale_mgr','usd_car_sale_mgr']
+                  }
+                },
+                order: [['role', 'DESC']]
+              },
+              {
+                model: User,
+                as: 'TeamManagers',
+                attributes: ['firstName', 'lastName', 'email', 'userID', 'role']
+              }
+            ]
+          }
+        ]
       }
-    }
-  }).then(function (teammates) {
-    if (!teammates) return res.status(404).end();
-    return res.status(200).json(teammates);
-  }).catch(function (err) {
-    next(err);
-  });
+    ]
+  }).then(function (filters) {
+      //console.log(filters);
+      if (filters.Employer){
+        var _filters = [];
+        for (var i = 0; i < filters.Employer.length; i++){
+          var dealer = filters.Employer[i];
+          var dealership = {
+            DealershipID: dealer.dealershipID,
+            DealershipName: dealer.dealershipName,
+            DealershipAddress: dealer.streetAddress+', '+dealer.city+', '+dealer.state+' '+dealer.zipCode,
+            Owners: dealer.Owners,
+            GeneralManagers: dealer.GeneralManagers,
+            Teams: dealer.Teams
+          };
+          var owners = [];
+          for (var j=0; j < dealership.Owners.length; j++){
+             var owner = dealership.Owners[j];
+             owners.push({
+               OwnerID: owner.userID,
+               profile: owner.profile
+             })
+          }
+          dealership.Owners = owners;
+          var gms = [];
+          for (var k=0; k < dealership.GeneralManagers.length; k++){
+            var gm = dealership.GeneralManagers[k];
+            gms.push({
+              GeneralManagerID: gm.userID,
+              profile: gm.profile
+            })
+          }
+          dealership.GeneralManagers = gms;
+          var teams = [];
+          for(var x = 0; x < dealership.Teams.length; x++){
+            var team = dealership.Teams[x];
+            var t = {};
+            t.TeamID = team.teamID;
+            t.TeamName = team.teamName;
+            t.TeamManagers = [];
+            for(var y = 0; y < team.TeamManagers.length; y++){
+              t.TeamManagers.push({
+                ManagerID: team.TeamManagers[y].userID,
+                profile: team.TeamManagers[y].profile
+              })
+            }
+            t.TeamMembers = [];
+            for(var w = 0; w < team.TeamMembers.length; w++){
+              t.TeamMembers.push({
+                MemberID: team.TeamMembers[w].userID,
+                profile: team.TeamMembers[w].profile
+              })
+            }
+            teams.push(t);
+          }
+          dealership.Teams = teams;
+          _filters.push(dealership);
+        }
+      }
+      return res.status(200).json(_filters);
+  }).catch(handleError(res));
 
 }
 
