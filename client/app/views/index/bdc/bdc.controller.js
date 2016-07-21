@@ -7,7 +7,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       console.log("dashboard controller loaded");
       var _bdc = this;
       _bdc.BDCData = BDCData;
-      
+
       _bdc.user = Auth.getCurrentUser();
       _bdc.isAdmin = Auth.isAdmin;
       _bdc.isManager = false;
@@ -25,26 +25,20 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       })
 
 
-      _bdc.teamMates = Dashboard.teamMates();
-      _bdc.teamMate = {};
-      _bdc.dealership = {};
+      _bdc.viewOptions = 'list';
 
-      // _bdc.sources = ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
-      // _bdc.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
+
 
       _bdc.showBarChart = false;
       _bdc.selectedPie = null;
-
 
       /**
        * Dealerships data Structures
        * @type {{name: string, owner: Array, genManger: Array, teams: *[]}}
        */
-      _bdc.dealerships = _bdc.BDCData.dealerships;
       _bdc.summaryStats = _bdc.BDCData.summary_stats;
       _bdc.stats = _bdc.BDCData.stats;
 
-      _bdc.metrics = Dashboard.metrics();
       _bdc.metricSummaryTabs = [
         {id: 'Phone', title: 'fa fa-phone', contentFilter: '', active: false,
           contentData: _bdc.BDCData.metrics.phone},
@@ -58,9 +52,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       /**
        * Pie Chart Data
        */
-      _bdc.wonDeals = Dashboard.won();
-      _bdc.lostDeals = Dashboard.lost();
-      _bdc.totalDeals = Dashboard.total();
 
       /**
        * Pie Chart Options
@@ -86,11 +77,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       };
 
-
       _bdc.sales = [];
       _bdc.models = [];
       _bdc.color = '#1ab394';
-
 
       _bdc.showDetails = function($event, pos, item, chart){
         console.log(item);
@@ -172,7 +161,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         },
       ];
 
-
       _bdc.barChartOptions = {
         grid: {
           hoverable: true,
@@ -209,8 +197,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           position: "ne"
         }
       };
-
-
 
       var getDealsData = function(status){
         var deals;
@@ -313,88 +299,14 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       }
 
-
       /**
        * Stats Display Mode
        * @type {string}
        */
-      _bdc.chartView = 'chart';
 
-      /**
-       * StatsMap & Options
-       * @type {{}}
-       */
-      _bdc.statsMap = {};
-      _bdc.chartMapOptions = {
-        zoom: 11,
-        center: new google.maps.LatLng(38.9072, -77.0369),
-        // Style for Google Maps
-        styles: [{
-          "featureType": "water",
-          "stylers": [{"saturation": 43}, {"lightness": -11}, {"hue": "#0088ff"}]
-        }, {
-          "featureType": "road",
-          "elementType": "geometry.fill",
-          "stylers": [{"hue": "#ff0000"}, {"saturation": -100}, {"lightness": 99}]
-        }, {
-          "featureType": "road",
-          "elementType": "geometry.stroke",
-          "stylers": [{"color": "#808080"}, {"lightness": 54}]
-        }, {
-          "featureType": "landscape.man_made",
-          "elementType": "geometry.fill",
-          "stylers": [{"color": "#ece2d9"}]
-        }, {
-          "featureType": "poi.park",
-          "elementType": "geometry.fill",
-          "stylers": [{"color": "#ccdca1"}]
-        }, {
-          "featureType": "road",
-          "elementType": "labels.text.fill",
-          "stylers": [{"color": "#767676"}]
-        }, {
-          "featureType": "road",
-          "elementType": "labels.text.stroke",
-          "stylers": [{"color": "#ffffff"}]
-        }, {"featureType": "poi", "stylers": [{"visibility": "off"}]}, {
-          "featureType": "landscape.natural",
-          "elementType": "geometry.fill",
-          "stylers": [{"visibility": "on"}, {"color": "#b8cb93"}]
-        }, {"featureType": "poi.park", "stylers": [{"visibility": "on"}]}, {
-          "featureType": "poi.sports_complex",
-          "stylers": [{"visibility": "on"}]
-        }, {"featureType": "poi.medical", "stylers": [{"visibility": "on"}]}, {
-          "featureType": "poi.business",
-          "stylers": [{"visibility": "simplified"}]
-        }],
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-
-      /**
-       * Refresh Map on hide and show
-       * @param map
-       */
-      _bdc.refreshMap = function (map) {
-        $scope.$applyAsync(function(map){
-          var m = map || _bdc.statsMap;
-          if (m) google.maps.event.trigger(m, 'resize');
-          console.log('*** Refresh Map ***');
-        })
-      }
-
-
-
-
-      /**
-       * Deals Type
-       * @type {*[]}
-       */
-      _bdc.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
-      _bdc.selectedType = _bdc.dealTypes[0];
-      _bdc.selectedDealership = _bdc.dealerships[0];
-      _bdc.selectedTeam = _bdc.selectedDealership.teams[0];
-      _bdc.selectedEmployee = _bdc.selectedTeam.members[0];
-
+      // _bdc.selectedDealership = _bdc.dealerships[0];
+      // _bdc.selectedTeam = _bdc.selectedDealership.teams[0];
+      // _bdc.selectedEmployee = _bdc.selectedTeam.members[0];
 
       _bdc.datePickerOptions = {
         'ranges': {
@@ -411,7 +323,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
       _bdc.dateRange = {startDate: _bdc.datePickerOptions.ranges.Today[0],
         endDate: _bdc.datePickerOptions.ranges.Today[1]};
-
 
       _bdc.displayStatsDetails = function(stat){
         if (!_bdc.sidebar) _bdc.sidebar = true;
@@ -470,8 +381,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-
-
       var updateTableData = function(status, category){
         var tableData = getDealsData(status).tableData;
         var data = $filter('filter')(tableData, {$: category});
@@ -496,38 +405,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       }
 
-      _bdc.mapFilters = {Cars: false, Trucks: false, Utilities: false};
-      _bdc.expandedSection = '';
-
-      _bdc.resetMapFilters = function(){
-        angular.forEach(_bdc.mapFilters, function(value, key){
-          _bdc.mapFilters[key] = false;
-        })
-        _bdc.resetFiltersBtn = false;
-      }
-
-
-
-      _bdc.displayCategory = function(category){
-        console.log('called');
-        _bdc.displayingCategory = category;
-        _bdc.expandSection = true;
-        _bdc.expandedSection = category;
-        _bdc.resetFiltersBtn = _bdc.mapFilters.Cars || _bdc.mapFilters.Trucks || _bdc.mapFilters.Utilities;
-        console.log('Cars: '+_bdc.mapFilters.Cars);
-        console.log('Trucks: '+_bdc.mapFilters.Trucks);
-        console.log('Utilities: '+_bdc.mapFilters.Utilities);
-        console.log(_bdc.resetFiltersBtn);
-      }
-
-      _bdc.toggleSection  = function(section) {
-        if ((section == _bdc.displayingCategory) && _bdc.expandSection) {
-          _bdc.expandSection = false;
-          _bdc.expandedSection = '';
-        } else _bdc.displayCategory(section);
-      }
-
       _bdc.chatRecipient = {name: '', number: ''};
+
       _bdc.composeText = function(deal){
         if (!_bdc.openChat) _bdc.openChat = true;
         console.log('*** Compose Text ***');
@@ -569,6 +448,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           controller: 'AddLeadCtrl',
         });
       }
+
       $scope.addTask = function () {
         var modalInstance = $uibModal.open({
           animation: true,
@@ -580,21 +460,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
     });
 
-function dashboardMap() {
-  var data = {
-    "US": 298,
-    "SA": 200,
-    "DE": 220,
-    "FR": 540,
-    "CN": 120,
-    "AU": 760,
-    "BR": 550,
-    "IN": 200,
-    "GB": 120
-  };
-
-  this.data = data;
-}
 
 angular.module('dealScanCrmApp').controller('dashboardMap', dashboardMap);
 

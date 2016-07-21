@@ -26,7 +26,7 @@
           <div class="row p-l-r-15" ng-hide="dashboard.loadingKPI">
             <div>
               <span>Units</span>
-              <small class="pull-right">{{m.units}}/{{m.units_goal}}</small>
+              <small class="pull-right">{{m.units}}/<strong>{{m.units_goal}}</strong></small>
             </div>
             <div class="progress progress-mini">
               <div style="{{m.unit_progress}}" class="progress-bar" ng-class="{'progress-bar-danger': (m.tracking * 100 / m.delta) < 75,
@@ -35,7 +35,7 @@
             </div>
             <div class="margin-top-10">
               <span>Gross[$]</span>
-              <small class="pull-right">{{m.gross}}/{{m.gross_goal}}</small>
+              <small class="pull-right">{{m.gross}}/<strong>{{m.gross_goal}}</strong></small>
             </div>
             <div class="progress progress-mini">
               <div style="{{m.gross_progress}}" class="progress-bar"
