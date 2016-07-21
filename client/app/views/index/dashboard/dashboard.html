@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content wrapper animated fadeInRight p-t-10">
+<div class="wrapper wrapper-content wrapper animated fadeInRight p-t-10" style="padding-top: 25px!important;">
   <!--<small class="pull-left">Days Left: {{dashboard.kpis.RemainingWorkingDays}}</small> -->
   <!-- Top Section ==> metrics -->
   <div class="row">
@@ -198,7 +198,7 @@
                 </div>
                 <div ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length > 0 || dashboard.filtered[0].state">
                   <!-- won stats-->
-                  <div class="ibox float-e-margins">
+                  <div class="ibox float-e-margins no-material">
                     <div class="ibox-title" style="border-top-width:1px;">
                       <div class="row">
                         <div class="col-lg-12 text-center">
@@ -301,7 +301,7 @@
                 </div>
                 <div ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length > 0 || dashboard.filtered[1].state">
                   <!-- lost stats-->
-                  <div class="ibox float-e-margins">
+                  <div class="ibox float-e-margins no-material" >
                     <div class="ibox-title" style="border-top-width:1px;">
                       <div class="row">
                         <div class="col-lg-12 text-center">
@@ -400,7 +400,7 @@
                    ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-lg-3': 'col-lg-4'"
                    ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart && dashboard.chartView == 'chart'">
                 <!-- total stats-->
-                <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins no-material">
                   <div class="ibox-title" style="border-top-width:1px;">
                     <div class="row">
                       <div class="col-lg-12 text-center">
@@ -497,7 +497,7 @@
               <div id="dscBarChart" class="col-lg-9 pull-left animated fadeInRight"
                    ng-if="dashboard.showBarChart && dashboard.chartView == 'chart'"
                    style="padding-top:30px !important;">
-                <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins no-material">
                   <div class="row" style="border-top: 1px #d5d5d5 solid; border-bottom:1px #d5d5d5 solid;
                  margin-top: -31px;margin-right: 17px;margin-left: 5px ">
                     <div class="col-md-10">
@@ -509,7 +509,7 @@
                     </div>
                   </div>
                   <div class="ibox-content" style="border-top:none; padding-top:30px !important;">
-                    <div class="flot-chart" style="height:300px;">
+                    <div class="flot-chart crm-bar-chart" style="height:300px;">
                       <div flot class="flot-chart-content" dataset="dashboard.barChartData"
                            options="dashboard.barChartOptions"
                            on-plot-click="dashboard.displayTable($event, pos, item, null, dashboard.displayingCategory)"></div>
