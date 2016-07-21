@@ -307,3 +307,20 @@ div.navs-3 > ul.nav-tabs > li {
 .min-ht-45 {
   min-height: 45px !important;
 }
+
+.no-material {
+  box-shadow: none!important;
+}
+
+.crm-bar-chart div.xAxis div.tickLabel
+{
+  transform: rotate(-90deg);
+  -ms-transform:rotate(-90deg); /* IE 9 */
+  -moz-transform:rotate(-90deg); /* Firefox */
+  -webkit-transform:rotate(-90deg); /* Safari and Chrome */
+  -o-transform:rotate(-90deg); /* Opera */
+  margin-top:30px;
+  white-space: nowrap;
+  vertical-align:text-top;
+  text-align:right!important;
+}
