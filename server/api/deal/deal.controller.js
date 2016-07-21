@@ -80,8 +80,8 @@ export function index(req, res) {
   var searchOptions = {
     dealershipID: req.query.dealershipID,
     createdAt: {
-      $lte: req.query.to,
-      $gte: req.query.from
+      $lte: moment(req.query.to).endOf('day'),
+      $gte: moment(req.query.from).startOf('day')
     }
   };
   if (req.query.hasOwnProperty('employee') && req.query.employee && req.query.employee.trim() != '')
@@ -174,8 +174,8 @@ export function getKPI(req, res){
       var dealershipID = user.Employer[0].token.dealerID;
       var saleRep = '';
       var promises = [];
-      var from = (moment().startOf('month')).format('YYYY-MM-DD');
-      var to = moment().format('YYYY-MM-DD');
+      var from = moment().startOf('month');
+      var to = moment();
       if (req.user.role == 'sale_rep') saleRep = ' AND saleRepID = '+req.user.userID+' ';
 
       /* Get New Cars KPI */
