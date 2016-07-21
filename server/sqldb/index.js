@@ -22,8 +22,8 @@ var db = {
 
 
 // Insert models below
-db.Event = db.sequelize.import('../api/event/event.model');
-db.Lead = db.sequelize.import('../api/lead/lead.model');
+
+
 
 // db.SocialMedia = db.sequelize.import('../api/socialMedia/socialMedia.model');
 db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
@@ -50,6 +50,10 @@ db.Note.belongsTo(db.Customer, {as: 'CustomerNotes', foreignKey:'customerID'});
 db.Image.belongsTo(db.User, {as: 'Uploader', foreignKey:'uploaderID'});
 db.Image.belongsTo(db.Customer, {as:'CustomerImages', foreignKey:'customerID'});
 
+
+db.Lead = db.sequelize.import('../api/lead/lead.model');
+db.Event = db.sequelize.import('../api/event/event.model');
+db.Participants = db.sequelize.import('../api/event/event.participants.model');
 
 //
 db.Team.belongsTo(db.Dealership, {foreignKey:'dealershipID'});
@@ -105,8 +109,67 @@ db.Watchlist.hasMany(db.Keyword, {foreignKey:'watchlistID'});
 db.Source.belongsToMany(db.Watchlist, {as:'MonitoringWatchlists', through:db.Monitoring, foreignKey:'SourceID'});
 db.Watchlist.belongsToMany(db.Source, {as:'MonitoringSources', through:db.Monitoring, foreignKey:'WatchlistID'});
 
-/*db.Event.prototype.getItem = function() {
-  return this['get' + this.get('attendable').substr(0, 1).toUpperCase() + this.get('attendable').substr(1)]();
-};*/
+db.User.belongsToMany(db.Event, {
+  through: {
+    model: db.Participants,
+    unique: false,
+    scope: {
+      attentable: 'user'
+    }
+  },
+  foreignKey: 'participantID',
+  constraints: false
+});
+
+db.Event.belongsToMany(db.User, {
+  through: {
+    model: db.Participants,
+    unique: false
+  },
+  foreignKey: 'eventID',
+  constraints: false
+});
+
+db.Customer.belongsToMany(db.Event, {
+  through: {
+    model: db.Participants,
+    unique: false,
+    scope: {
+      attentable: 'customer'
+    }
+  },
+  foreignKey: 'participantID',
+  constraints: false
+});
+
+db.Event.belongsToMany(db.Customer, {
+  through: {
+    model: db.Participants,
+    unique: false
+  },
+  foreignKey: 'eventID',
+  constraints: false
+});
+
+db.Lead.belongsToMany(db.Event, {
+  through: {
+    model: db.Participants,
+    unique: false,
+    scope: {
+      attentable: 'lead'
+    }
+  },
+  foreignKey: 'participantID',
+  constraints: false
+});
+
+db.Event.belongsToMany(db.Lead, {
+  through: {
+    model: db.Participants,
+    unique: false
+  },
+  foreignKey: 'eventID',
+  constraints: false
+});
 
 export default db;
