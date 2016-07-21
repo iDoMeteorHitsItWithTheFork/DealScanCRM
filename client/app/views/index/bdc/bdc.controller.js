@@ -1,12 +1,11 @@
 
 angular.module('dealScanCrmApp').controller('BDCCtrl',
 
-    function ($scope, $state, $uibModal,BDCData, $anchorScroll, BDCService, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter) {
+    function ($scope, $state, $uibModal,$anchorScroll, BDCService, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter) {
       $("#page-wrapper").css("overflow-x", "scroll");
 
       console.log("dashboard controller loaded");
       var _bdc = this;
-      _bdc.BDCData = BDCData;
 
       _bdc.user = Auth.getCurrentUser();
       _bdc.isAdmin = Auth.isAdmin;
@@ -26,31 +25,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
 
       _bdc.viewOptions = 'list';
-
-      // _bdc.sources = ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
-      // _bdc.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
-
       _bdc.showBarChart = false;
       _bdc.selectedPie = null;
 
-
-      /**
-       * Dealerships data Structures
-       * @type {{name: string, owner: Array, genManger: Array, teams: *[]}}
-       */
-      _bdc.dealerships = _bdc.BDCData.dealerships;
-      _bdc.summaryStats = _bdc.BDCData.summary_stats;
-      _bdc.stats = _bdc.BDCData.stats;
-
-      _bdc.metricSummaryTabs = [
-        {id: 'Phone', title: 'fa fa-phone', contentFilter: '', active: false,
-          contentData: _bdc.BDCData.metrics.phone},
-        {id: 'Correspondence', title:'fa fa-exchange', contentFilter: '', active: false,
-          contentData: _bdc.BDCData.metrics.correspondence},
-        {id: 'Appointments', title:'fa fa-calendar-o', contentFilter: '', active: false,
-          sortableOptions: {connectWith: ".connectList"},
-          contentData: _bdc.BDCData.metrics.appointments},
-      ]
 
       /**
        * Pie Chart Data
@@ -303,11 +280,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       }
 
 
-      /**
-       * Stats Display Mode
-       * @type {string}
-       */
-      _bdc.chartView = 'chart';
 
       // _bdc.selectedDealership = _bdc.dealerships[0];
       // _bdc.selectedTeam = _bdc.selectedDealership.teams[0];
