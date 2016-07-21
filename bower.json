@@ -33,7 +33,8 @@
     "angular-easyfb": "^1.5.1",
     "ngmap": "^1.17.3",
     "ng-tags-input": "^3.1.1",
-    "angular-bootstrap-switch": "^0.5.1"
+    "angular-bootstrap-switch": "^0.5.1",
+    "ng-flow": "~2"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.0"

@@ -1,139 +1,531 @@
-<div class="row">
-  <div class="col-md-4">
-    <div class="panel panel-white" id="activities">
-      <div class="panel-heading border-light min-height-40">
-        <h4 class="panel-title text-primary ft-sz-12">Recent Activities</h4>
-        <paneltool class="panel-tools" tool-collapse="tool-collapse" tool-refresh="load1"
-                   tool-dismiss="tool-dismiss"></paneltool>
-      </div>
-      <div class="panel-wrapper">
-        <div class="panel-body scroll-300">
-          <ul class="timeline-xs">
-            <li class="timeline-item success">
-              <div class="margin-left-15">
-                <div class="text-muted text-small">
-                  2
-                  minutes ago
-                </div>
-                <p>John S. assigned some tasks to <a class="text-info" href>Ryan H.</a>
-                </p>
-              </div>
-            </li>
-            <li class="timeline-item">
-              <div class="margin-left-15">
-                <div class="text-muted text-small">
-                  Thur,
+<div class="wrapper wrapper-content">
+  <div class="row animated fadeInRight">
 
-                  12
-                  Jan
-                </div>
-                <p>Ryan H. sent <a class="text-info" href>text message</a>
-                </p>
-              </div>
-            </li>
-            <li class="timeline-item danger">
-              <div class="margin-left-15">
-                <div class="text-muted text-small">
-                  Tue,
-
-                  10
-                  Jun
-                </div>
-                <p>
-                  Cary Gaskell bought <a class="text-info" href>2001 Escape</a>
-                </p>
-              </div>
-            </li>
-            <li class="timeline-item info">
-              <div class="margin-left-15">
-                <div class="text-muted text-small">
-                  Sun,
-
-                  11
-                  Apr
-                </div>
-                <p>Ryan H. uploaded <a class="text-info" href>Credit Application</a>
-                </p>
-              </div>
-            </li>
-            <li class="timeline-item">
-              <div class="margin-left-15">
-                <div class="text-muted text-small">
-                  Wed,
-
-                  25
-                  Mar
-                </div>
-                <p>
-                  Appointment with Ryan H.
-                </p>
-              </div>
-            </li>
-            <li class="timeline-item">
-              <div class="margin-left-15">
-                <div class="text-muted text-small">
-                  Fri,
-
-                  20
-                  Mar
-                </div>
-                <p>Ryan H. Created Cary Gaskell
-                </p>
-              </div>
-            </li>
-          </ul>
+    <!-- Customer Information -->
+    <div class="col-md-4">
+      <div class="ibox float-e-margins">
+        <!-- section tittle -->
+        <div class="ibox-title">
+          <h5>Customer Details</h5>
         </div>
-      </div>
-    </div>
-  </div>
+        <!-- ./section title -->
 
-  <div class="col-md-4">
-    <div class="panel panel-white" id="activities">
-      <div class="panel-heading border-light min-height-40">
-        <h4 class="panel-title text-primary ft-sz-12">Recent Documents
-        </h4>
-      </div>
-      <ul class="media-list list-group scroll-300">
-        <li class="media list-group-item recent-docs-listItem" ng-repeat="doc in customer.documents">
-          <div class="media-left">
-            <a href="{{doc.image}}" target="_blank">
-              <img class="media-object" style="width:32px !important;" ng-src="{{doc.image}}" alt="{{doc.name}}">
-            </a>
-          </div>
-          <div class="media-body">
-            <h4 class="media-heading ft-sz-12">
-              <strong><a href="{{doc.image}}" target="_blank">Wed, Oct 15th, 2016</a></strong>
-              <a href="{{doc.image}}" download="{{doc.name}}">
-                <span class="label label-success pull-right">
-                <i class="fa fa-cloud-download fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>{{doc.size | uppercase}}</span></span>
-              </a>
-            </h4>
-
-            <p>{{doc.name}}<br><span class="text-muted text-small">Uploaded by: <a
-              href>Bryan H.</a></span></p>
-
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="panel panel-white" id="activities">
-      <div class="panel-heading border-light min-height-40">
-        <h4 class="panel-title text-primary ft-sz-12">Recent Images</h4>
-      </div>
-      <div class="panel-wrapper">
-        <div class="panel-body scroll-300">
-          <div class="row">
-            <div class="col-sm-6 col-md-6" ng-repeat="photo in customer.photos">
-              <a ng-click="customer.openLightboxModal($index)" class="thumbnail">
-                <img src="{{photo.url}}" alt="{{photo.alt}}">
-              </a>
+        <!-- section  content -->
+        <div>
+          <div class="ibox-content no-padding border-left-right">
+            <div class="customer-cover-photo">
+              <img alt="image" class="img-responsive" src="assets/images/a1.jpg">
             </div>
           </div>
+          <div class="ibox-content profile-content p-b-0">
+            <ul class="list-unstyled m-t-xs">
+              <li class="address-li">
+                <div class="row">
+                  <div class="col-lg-1">
+                    <span class="fa fa-home m-r-sm"></span>
+                  </div>
+                  <div class="col-lg-11 p-l-2">
+                    <span>{{customer.info.address}}</span>
+                  </div>
+                </div>
+              </li>
+              <li class="address-li">
+                <span class="fa fa-phone m-r-sm"></span>
+                {{customer.info.phone}}
+              </li>
+              <li class="address-li">
+                <span class="fa fa-envelope m-r-sm"></span>
+                {{customer.info.email}}
+              </li>
+            </ul>
+
+            <div class="row customer-social-media-feed">
+              <h5 class="m-t-10 m-b-18">Social Media feed</h5>
+                <span class="pull-right social-feed-icons">
+                    <button class="btn btn-circle m-r-xs btn-facebook" tooltip-placement="top" uib-tooltip="@facebook"><i class="fa fa-facebook"></i></button>
+                    <button class="btn btn-circle m-r-xs btn-twitter"  tooltip-placement="top" uib-tooltip="@twitter"><i class="fa fa-twitter"></i></button>
+                    <button class="btn btn-circle m-r-xs btn-instagram" tooltip-placement="top" uib-tooltip="@instagram"><i class="fa fa-instagram"></i></button>
+                  </span>
+              <div class="ibox">
+                <div class="ibox-content">
+                  <div class="chat-activity-list">
+                    <div class="chat-element">
+                      <a href="" class="pull-left">
+                        <i class="fa fa-twitter twitter" aria-hidden="true" style="font-size: 18px;"></i>
+                      </a>
+                      <div class="media-body ">
+                        <small class="pull-right text-navy">1m ago</small>
+                        <strong>John Smith</strong>
+                        <p class="m-b-xs">
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                        </p>
+                        <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                      </div>
+                    </div>
+                    <div class="chat-element">
+                      <a href="" class="pull-left">
+                        <i class="fa fa-instagram instagram" aria-hidden="true" style="font-size: 18px;"></i>
+                      </a>
+                      <div class="media-body">
+                        <small class="pull-right text-navy">1m ago</small>
+                        <strong>John Smith</strong>
+                        <div class="row"  style="margin-bottom: 10px; margin-top: 10px;">
+                          <div class="col-xs-2 p-r-0">
+                            <a href="">
+                              <img style="border-radius: 5%; height: 50px; width: 50px;"
+                                   alt="image" src="http://img.autobytel.com/car-reviews/autobytel/11694-good-looking-sports-cars/2016-Ford-Mustang-GT-burnout-red-tire-smoke.jpg">
+                            </a>
+                          </div>
+                          <div class="col-xs-10 no-margins">
+                            Witty Instagram caption coud go here.... #MustFinishCustomerPage
+                          </div>
+                        </div>
+                        <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                      </div>
+                    </div>
+                    <div class="chat-element">
+                      <a href="" class="pull-left">
+                        <i class="fa fa-instagram instagram" aria-hidden="true" style="font-size: 18px;"></i>
+                      </a>
+                      <div class="media-body ">
+                        <small class="pull-right text-navy">1m ago</small>
+                        <strong>John Smith</strong>
+                        <div class="row"  style="margin-bottom: 10px; margin-top: 10px;">
+                          <div class="col-xs-2 p-r-0">
+                            <div class="pull-left">
+                              <a href=""><img alt="image" src="http://img.autobytel.com/car-reviews/autobytel/11694-good-looking-sports-cars/2016-Ford-Mustang-GT-burnout-red-tire-smoke.jpg"
+                                              style="border-radius: 5%; height: 50px; width: 50px;"></a>
+                            </div>
+                          </div>
+                          <div class="col-xs-10 no-margins">
+                            Witty Instagram caption coud go here.... #MustFinishCustomerPage
+                          </div>
+                        </div>
+                        <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                      </div>
+                    </div>
+                    <div class="chat-element">
+                      <a href="" class="pull-left">
+                        <i class="fa fa-twitter twitter" aria-hidden="true" style="font-size: 18px;"></i>
+                      </a>
+                      <div class="media-body ">
+                        <small class="pull-right text-navy">1m ago</small>
+                        <strong>John Smith</strong>
+                        <p class="m-b-xs">
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                        </p>
+                        <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                      </div>
+                    </div>
+                    <div class="chat-element">
+                      <a href="" class="pull-left">
+                        <i class="fa fa-twitter twitter" aria-hidden="true" style="font-size: 18px;"></i>
+                      </a>
+                      <div class="media-body ">
+                        <small class="pull-right text-navy">1m ago</small>
+                        <strong>John Smith</strong>
+                        <p class="m-b-xs">
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                        </p>
+                        <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
         </div>
+        <!-- ./section content -->
+
       </div>
     </div>
+    <!-- ./customer information -->
+
+    <!-- activities -->
+    <div class="col-md-8">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Activites</h5>
+        </div>
+
+        <div class="ibox-content">
+          <div>
+            <div class="deals-activity">
+              <div class="deal">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="media">
+                      <div class="media-left pull-left vehicle-of-interest">
+                        <a href="#">
+                          <img class="media-object" src="http://67.media.tumblr.com/793ddbefed69c85bf663ca653b3727cd/tumblr_n57kfgYQz91sbyy0vo1_500.png" alt="Generic placeholder image">
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading f-s-13 m-t-0">2017 Ford F-150 Raptor &nbsp;&nbsp;<span class="badge badge-primary source-badge-align">Walk In</span></h4>
+                        <ul class="unstyled p-l-0 p-t-5">
+                          <li>
+                            <div class="feed-element">
+                              <a href="" class="pull-left">
+                                <img alt="image" class="img-circle" src="assets/images/a1.jpg">
+                              </a>
+                              <div class="media-body ">
+                                <small class="pull-right text-navy">1m ago</small>
+                                <strong>John Smith</strong> sold this truck to <strong>Aaron Ferguson</strong>.<br>
+                                Aaron traded 2 cars in for this deal, a <a>2015 Ford Mustang</a>, and a <a>2011 Honda Civic SE</a>.<br/>
+                                <small class="text-muted">Thrusday 4:21 pm - 12.06.2016</small><br>
+                                <div class="actions">
+                                  <a class="btn btn-xs btn-warning" tooltip-placement="top" uib-tooltip="Email John"><i class="fa fa-envelope-o"></i> Email </a>
+                                  <a class="btn btn-xs btn-primary" tooltip-placement="top" uib-tooltip="Text John"><i class="fa fa-comments-o"></i> Chat</a>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="m-b-25">
+                          <div>
+                            <span>Deal Progress</span>
+                            <small class="pull-right">60% (Documents Required)</small>
+                          </div>
+                          <div class="progress progress-mini">
+                            <div style="width: 60%;" class="progress-bar"></div>
+                          </div>
+                        </div>
+                        <div class="media">
+                          <a class="media-left pull-left" href="#">
+                            <img class="media-object deal-poster" src="http://66.media.tumblr.com/f6d6f342afcc8fc6aa6318768a2f4942/tumblr_n57kfgYQz91sbyy0vo2_500.png" alt="Generic placeholder image">
+                          </a>
+                          <div class="media-body">
+                            <h4 class="media-heading">Financial Sheet</h4>
+                            <table class="table table-condensed no-margin-bottom m-t-10">
+                              <tbody>
+                              <tr>
+                                <td>Sale Price</td>
+                                <td class="success text-right">
+                                  <strong>$50,0000</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Rebate</td>
+                                <td class="success text-right">
+                                  <strong>$2,500</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Trade Allowance</td>
+                                <td class="success text-right">
+                                  <strong>$15,000</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Trade Payoff</td>
+                                <td class="success text-right">
+                                  <strong>$12,000</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Amount Financed</td>
+                                <td class="success text-right">
+                                  <strong>$40,000</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Interest Rate</td>
+                                <td class="success text-right">
+                                  <strong>7.5%</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Terms</td>
+                                <td class="success text-right">
+                                  <strong>60</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Payment</td>
+                                <td class="success text-right">
+                                  <strong>$450</strong>
+                                </td>
+                              </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="feed-activity-list">
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/a1.jpg">
+                </a>
+
+                <div class="media-body ">
+                  <small class="pull-right text-navy">1m ago</small>
+                  <strong>Sandra Momot</strong> started following <strong>Monica Smith</strong>. <br>
+                  <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                  <div class="actions">
+                    <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="btn btn-xs btn-danger"><i class="fa fa-heart"></i> Love</a>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/profile.jpg">
+                </a>
+
+                <div class="media-body ">
+                  <small class="pull-right">5m ago</small>
+                  <strong>Monica Smith</strong> posted a new blog. <br>
+                  <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/a2.jpg">
+                </a>
+                <div class="media-body ">
+                  <small class="pull-right">2h ago</small>
+                  <strong>Mark Johnson</strong> posted message on <strong>Monica Smith</strong> site. <br>
+                  <small class="text-muted">Today 2:10 pm - 12.06.2014</small>
+                  <div class="well">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                    Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                  </div>
+                  <div class="pull-right">
+                    <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a>
+                    <a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i> Message</a>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/a3.jpg">
+                </a>
+                <div class="media-body ">
+                  <small class="pull-right">2h ago</small>
+                  <strong>Janet Rosowski</strong> add 1 photo on <strong>Monica Smith</strong>. <br>
+                  <small class="text-muted">2 days ago at 8:30am</small>
+                  <div class="photos">
+                    <a target="_blank" href="http://24.media.tumblr.com/20a9c501846f50c1271210639987000f/tumblr_n4vje69pJm1st5lhmo1_1280.jpg"> <img alt="image" class="feed-photo" src="assets/images/p1.jpg"></a>
+                    <a target="_blank" href="http://37.media.tumblr.com/9afe602b3e624aff6681b0b51f5a062b/tumblr_n4ef69szs71st5lhmo1_1280.jpg"> <img alt="image" class="feed-photo" src="assets/images/p3.jpg"></a>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/a4.jpg">
+                </a>
+
+                <div class="media-body ">
+                  <small class="pull-right text-navy">5h ago</small>
+                  <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                  <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                  <div class="actions">
+                    <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/a5.jpg">
+                </a>
+
+                <div class="media-body ">
+                  <small class="pull-right">2h ago</small>
+                  <strong>Kim Smith</strong> posted message on <strong>Monica Smith</strong> site. <br>
+                  <small class="text-muted">Yesterday 5:20 pm - 12.06.2014</small>
+                  <div class="well">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                    Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                  </div>
+                  <div class="pull-right">
+                    <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/profile.jpg">
+                </a>
+
+                <div class="media-body ">
+                  <small class="pull-right">23h ago</small>
+                  <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                  <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                </div>
+              </div>
+              <div class="feed-element">
+                <a href="" class="pull-left">
+                  <img alt="image" class="img-circle" src="assets/images/a7.jpg">
+                </a>
+
+                <div class="media-body ">
+                  <small class="pull-right">46h ago</small>
+                  <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                  <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- ./activities -->
   </div>
 </div>
+
+<!--<div class="row">-->
+  <!--<div class="col-md-4">-->
+    <!--<div class="panel panel-white" id="activities">-->
+      <!--<div class="panel-heading border-light min-height-40">-->
+        <!--<h4 class="panel-title text-primary ft-sz-12">Recent Activities</h4>-->
+        <!--<paneltool class="panel-tools" tool-collapse="tool-collapse" tool-refresh="load1"-->
+                   <!--tool-dismiss="tool-dismiss"></paneltool>-->
+      <!--</div>-->
+      <!--<div class="panel-wrapper">-->
+        <!--<div class="panel-body scroll-300">-->
+          <!--<ul class="timeline-xs">-->
+            <!--<li class="timeline-item success">-->
+              <!--<div class="margin-left-15">-->
+                <!--<div class="text-muted text-small">-->
+                  <!--2-->
+                  <!--minutes ago-->
+                <!--</div>-->
+                <!--<p>John S. assigned some tasks to <a class="text-info" href>Ryan H.</a>-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</li>-->
+            <!--<li class="timeline-item">-->
+              <!--<div class="margin-left-15">-->
+                <!--<div class="text-muted text-small">-->
+                  <!--Thur,-->
+
+                  <!--12-->
+                  <!--Jan-->
+                <!--</div>-->
+                <!--<p>Ryan H. sent <a class="text-info" href>text message</a>-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</li>-->
+            <!--<li class="timeline-item danger">-->
+              <!--<div class="margin-left-15">-->
+                <!--<div class="text-muted text-small">-->
+                  <!--Tue,-->
+
+                  <!--10-->
+                  <!--Jun-->
+                <!--</div>-->
+                <!--<p>-->
+                  <!--Cary Gaskell bought <a class="text-info" href>2001 Escape</a>-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</li>-->
+            <!--<li class="timeline-item info">-->
+              <!--<div class="margin-left-15">-->
+                <!--<div class="text-muted text-small">-->
+                  <!--Sun,-->
+
+                  <!--11-->
+                  <!--Apr-->
+                <!--</div>-->
+                <!--<p>Ryan H. uploaded <a class="text-info" href>Credit Application</a>-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</li>-->
+            <!--<li class="timeline-item">-->
+              <!--<div class="margin-left-15">-->
+                <!--<div class="text-muted text-small">-->
+                  <!--Wed,-->
+
+                  <!--25-->
+                  <!--Mar-->
+                <!--</div>-->
+                <!--<p>-->
+                  <!--Appointment with Ryan H.-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</li>-->
+            <!--<li class="timeline-item">-->
+              <!--<div class="margin-left-15">-->
+                <!--<div class="text-muted text-small">-->
+                  <!--Fri,-->
+
+                  <!--20-->
+                  <!--Mar-->
+                <!--</div>-->
+                <!--<p>Ryan H. Created Cary Gaskell-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</li>-->
+          <!--</ul>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="col-md-4">-->
+    <!--<div class="panel panel-white" id="activities">-->
+      <!--<div class="panel-heading border-light min-height-40">-->
+        <!--<h4 class="panel-title text-primary ft-sz-12">Recent Documents-->
+        <!--</h4>-->
+      <!--</div>-->
+      <!--<ul class="media-list list-group scroll-300">-->
+        <!--<li class="media list-group-item recent-docs-listItem" ng-repeat="doc in customer.documents">-->
+          <!--<div class="media-left">-->
+            <!--<a href="{{doc.image}}" target="_blank">-->
+              <!--<img class="media-object" style="width:32px !important;" ng-src="{{doc.image}}" alt="{{doc.name}}">-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="media-body">-->
+            <!--<h4 class="media-heading ft-sz-12">-->
+              <!--<strong><a href="{{doc.image}}" target="_blank">Wed, Oct 15th, 2016</a></strong>-->
+              <!--<a href="{{doc.image}}" download="{{doc.name}}">-->
+                <!--<span class="label label-success pull-right">-->
+                <!--<i class="fa fa-cloud-download fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>{{doc.size | uppercase}}</span></span>-->
+              <!--</a>-->
+            <!--</h4>-->
+
+            <!--<p>{{doc.name}}<br><span class="text-muted text-small">Uploaded by: <a-->
+              <!--href>Bryan H.</a></span></p>-->
+
+          <!--</div>-->
+        <!--</li>-->
+      <!--</ul>-->
+    <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="col-md-4">-->
+    <!--<div class="panel panel-white" id="activities">-->
+      <!--<div class="panel-heading border-light min-height-40">-->
+        <!--<h4 class="panel-title text-primary ft-sz-12">Recent Images</h4>-->
+      <!--</div>-->
+      <!--<div class="panel-wrapper">-->
+        <!--<div class="panel-body scroll-300">-->
+          <!--<div class="row">-->
+            <!--<div class="col-sm-6 col-md-6" ng-repeat="photo in customer.photos">-->
+              <!--<a ng-click="customer.openLightboxModal($index)" class="thumbnail">-->
+                <!--<img src="{{photo.url}}" alt="{{photo.alt}}">-->
+              <!--</a>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->

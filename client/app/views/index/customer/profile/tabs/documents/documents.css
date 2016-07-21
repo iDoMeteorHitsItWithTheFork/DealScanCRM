@@ -17,3 +17,11 @@
   overflow-y: scroll;
   margin-bottom: 35px !important;
 }
+
+.text-crm-green{
+  color: #1ab394!important;
+}
+
+.text-crm-red {
+  color: #ed5565!important;
+}

@@ -17,7 +17,8 @@ angular.module('dealScanCrmApp', [
   'ngAside',                      //page aside
   'ezfb',                         //Facebook API Integration
   'toaster',                       //Non-blocking Notifications
-  'frapontillo.bootstrap-switch'
+  'frapontillo.bootstrap-switch',
+    'flow'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('login');

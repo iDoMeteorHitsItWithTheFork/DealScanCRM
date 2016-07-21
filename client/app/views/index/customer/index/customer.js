@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .config(function ($stateProvider) {
+  .config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.when("/customers/:customerID/:customerName", "/customers/:customerID/:customerName/overview");
     $stateProvider
       .state('index.customer', {
         url: '/customers',
@@ -59,48 +60,33 @@ angular.module('dealScanCrmApp')
           }
         },
       })
-      .state('index.customer.profile.summary', {
-        url: '/summary',
-        abstract: true,
-        authenticate: true,
-        resolve: {
-          thisCustomer: function (selectedCustomer) {
-            return selectedCustomer;
-          }
-        },
-        views: {
-          tabs: {
-            templateUrl: 'app/views/index/customer/profile/tabs/summary.html',
-            controller: 'CustomerCtrl as customer',
-          }
-        }
-      })
-      .state('index.customer.profile.summary.overview', {
-        url: '/overview',
-        title: 'Overview',
-        authenticate: true,
-        templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
-        controller: 'CustomerCtrl as customer',
-        resolve: {
-          thisCustomer: function (selectedCustomer) {
-            return selectedCustomer;
-          }
-        },
-        data: {pageTitle: 'Customer Overview'},
-      })
-      .state('index.customer.profile.summary.documents', {
-        url: '/documents',
-        title: 'Documents',
-        authenticate: true,
-        templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
-        controller: 'DocumentsCtrl as documents',
-        resolve: {
-          thisCustomer: function (selectedCustomer) {
-            return selectedCustomer;
-          }
-        },
-        data: {pageTitle: 'Customer Documents'},
-      })
+        .state('index.customer.profile.overview', {
+          url: '/overview',
+          title: 'Overview',
+          authenticate: true,
+          templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
+          controller: 'CustomerCtrl as customer',
+          resolve: {
+            thisCustomer: function (selectedCustomer) {
+              return selectedCustomer;
+            }
+          },
+          data: {pageTitle: 'Customer Overview'},
+        })
+
+        .state('index.customer.profile.documents', {
+          url: '/documents',
+          title: 'Documents',
+          authenticate: true,
+          templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
+          controller: 'DocumentsCtrl as documents',
+          resolve: {
+            thisCustomer: function (selectedCustomer) {
+              return selectedCustomer;
+            }
+          },
+          data: {pageTitle: 'Customer Documents'},
+        })
       .state('index.customer.profile.summary.images', {
         url: '/images',
         title: 'Images',
@@ -114,7 +100,7 @@ angular.module('dealScanCrmApp')
         },
         data: {pageTitle: 'Customer Images'},
       })
-      .state('index.customer.profile.summary.tasks', {
+      .state('index.customer.profile.tasks', {
         url: '/tasks',
         title: 'Tasks',
         authenticate: true,
@@ -127,7 +113,7 @@ angular.module('dealScanCrmApp')
         },
         data: {pageTitle: 'Customer Tasks'},
       })
-      .state('index.customer.profile.summary.notes', {
+      .state('index.customer.profile.notes', {
         url: '/notes',
         title: 'Notes',
         authenticate: true,
@@ -140,7 +126,7 @@ angular.module('dealScanCrmApp')
         },
         data: {pageTitle: 'Customer Notes'},
       })
-      .state('index.customer.profile.summary.messages', {
+      .state('index.customer.profile.messages', {
         url: '/messages',
         title: 'Messages',
         authenticate: true,

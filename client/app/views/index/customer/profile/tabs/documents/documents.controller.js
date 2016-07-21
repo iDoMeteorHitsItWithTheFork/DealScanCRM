@@ -82,11 +82,12 @@ angular.module('dealScanCrmApp')
       }
     }
 
-
     _documents.docs = [{
       name: 'Purchase Vehicle Odometer',
       ext: 'pdf',
+      added: 'July 18, 2016',
       img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      icon: 'fa-file-pdf-o',
       size: '25kb',
       status: true,
       requested: true,
@@ -94,7 +95,9 @@ angular.module('dealScanCrmApp')
     }, {
       name: 'Trade Vehicle Odometer',
       ext: 'pdf',
+      added: 'July 18, 2016',
       img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      icon: 'fa-file-pdf-o',
       size: '25kb',
       status: true,
       requested: true,
@@ -102,7 +105,9 @@ angular.module('dealScanCrmApp')
     }, {
       name: 'Rebate Incentive Approval',
       ext: 'doc',
+      added: 'July 18, 2016',
       img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
+      icon: 'fa-file',
       size: '25kb',
       status: false,
       requested: true,
@@ -110,7 +115,9 @@ angular.module('dealScanCrmApp')
     }, {
       name: 'We Owe',
       ext: 'xls',
+      added: 'July 18, 2016',
       img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/excel-doc-48.png',
+      icon: 'fa-bar-chart-o',
       size: '25kb',
       status: true,
       requested: true,
@@ -118,7 +125,9 @@ angular.module('dealScanCrmApp')
     }, {
       name: 'Lemon Law',
       ext: 'ppt',
+      added: 'July 18, 2016',
       img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/ppt-doc-48.png',
+      icon: 'fa-file-powerpoint-o ',
       size: '25kb',
       status: false,
       requested: true,
@@ -126,12 +135,25 @@ angular.module('dealScanCrmApp')
     }, {
       name: 'Power Of Attorney',
       ext: 'pdf',
+      added: 'July 18, 2016',
       img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
+      icon: 'fa-file-pdf-o',
       status: false,
       requested: true,
       size: '25kb',
       url: ''
-    }
+    },
+      {
+        name: 'Trade-in Vehicle',
+        ext: 'img',
+        added: 'July 18, 2016',
+        img: 'https://www.cstatic-images.com/stock/1680x1680/28/img-1773720671-1468609294128.jpg',
+        icon: null,
+        status: false,
+        requested: false,
+        size: '25kb',
+        url: ''
+      }
     ];
 
     _documents.getRequestedDocs = function(){
