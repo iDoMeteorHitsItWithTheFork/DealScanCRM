@@ -19,14 +19,11 @@ function onConnect(socket) {
   // Insert sockets below
   require('../api/event/event.socket').register(socket);
   require('../api/lead/lead.socket').register(socket);
-  require('../api/bdc/bdc.socket').register(socket);
   require('../api/watchlist/watchlist.socket').register(socket);
   //require('../api/socialMedia/socialMedia.socket').register(socket);
   require('../api/financing/financing.socket').register(socket);
-  //require('../api/document/document.socket').register(socket);
   //require('../api/documents/documents.socket').register(socket);
   require('../api/rebate/rebate.socket').register(socket);
-  //require('../api/payment/payment.socket').register(socket);
   require('../api/trade/trade.socket').register(socket);
   require('../api/deal/deal.socket').register(socket);
   require('../api/vehicle/vehicle.socket').register(socket);
@@ -36,7 +33,6 @@ function onConnect(socket) {
   require('../api/customer/customer.socket').register(socket);
   require('../api/team/team.socket').register(socket);
   require('../api/dealership/dealership.socket').register(socket);
-  //require('../api/thing/thing.socket').register(socket);
 
 }
 
