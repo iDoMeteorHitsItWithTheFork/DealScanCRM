@@ -8,7 +8,11 @@ angular.module('dealScanCrmApp')
          * @type {any}
          * @private
          */
+        var _remainingDays = null;
 
+        function getRemainingDays(){
+          return _remainingDays;
+        }
         var KPI_CAR_UNITS_GOAL = 50;
         var KPI_CAR_PER_UNIT_GROSS_GOAL = 800;
         var KPI_TRUCK_UNITS_GOAL = 100;
@@ -340,6 +344,8 @@ angular.module('dealScanCrmApp')
 
           console.log('*** Days Left ***');
           console.log(workingDays - daysWorked);
+
+          _remainingDays = workingDays - daysWorked;
 
           return {WorkingWeeks:workingWeeks, WorkingDays: workingDays, DaysWorked: daysWorked, RemainingWorkingDays: (workingDays - daysWorked)};
         }
@@ -697,6 +703,7 @@ angular.module('dealScanCrmApp')
         return {
             filters: getFilters,
             kpi: getKPI,
+            getRemainingDays: getRemainingDays,
             deals: getDeals,
             won: wonDeals,
             lost: lostDeals,
