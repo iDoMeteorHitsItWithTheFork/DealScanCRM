@@ -52,6 +52,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         console.log(res);
         _dashboard.kpis = res;
         _dashboard.loadingKPI = false;
+        toaster.wait({title: res.RemainingWorkingDays+' remaining working days!'})
       }).catch(function(err){
          console.log(err);
          _dashboard.loadingKPI = false;
@@ -112,11 +113,12 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         'This Month': [moment().startOf('month'), moment().endOf('month')],
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       },
-      "alwaysShowCalendars": true,
+      
       'opens': 'left',
+      eventHandlers: {'apply.daterangepicker': function(ev, picker) { _dashboard.getSales() }}
     };
 
-    _dashboard.dateRange = {startDate: _dashboard.datePickerOptions.ranges.Today[0],
+    _dashboard.dateRange = {startDate: moment().subtract(6, 'days'),
       endDate: _dashboard.datePickerOptions.ranges.Today[1]};
 
 
@@ -949,9 +951,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         controller: 'AddTaskCtrl',
       });
     }
-
-
-
 
 
   });

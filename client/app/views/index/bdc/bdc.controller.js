@@ -25,7 +25,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       })
 
 
-      _bdc.teamMates = Dashboard.teamMates();
+      //_bdc.teamMates = Dashboard.teamMates();
       _bdc.teamMate = {};
       _bdc.dealership = {};
 
@@ -44,7 +44,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.summaryStats = _bdc.BDCData.summary_stats;
       _bdc.stats = _bdc.BDCData.stats;
 
-      _bdc.metrics = Dashboard.metrics();
+      //_bdc.metrics = Dashboard.metrics();
       _bdc.metricSummaryTabs = [
         {id: 'Phone', title: 'fa fa-phone', contentFilter: '', active: false,
           contentData: _bdc.BDCData.metrics.phone},
