@@ -17,6 +17,8 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/event/event.socket').register(socket);
+  require('../api/lead/lead.socket').register(socket);
   require('../api/bdc/bdc.socket').register(socket);
   require('../api/watchlist/watchlist.socket').register(socket);
   //require('../api/socialMedia/socialMedia.socket').register(socket);

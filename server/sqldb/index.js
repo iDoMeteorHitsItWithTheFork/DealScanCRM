@@ -22,7 +22,9 @@ var db = {
 
 
 // Insert models below
-db.Bdc = db.sequelize.import('../api/bdc/bdc.model');
+db.Event = db.sequelize.import('../api/event/event.model');
+db.Lead = db.sequelize.import('../api/lead/lead.model');
+
 // db.SocialMedia = db.sequelize.import('../api/socialMedia/socialMedia.model');
 db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
 db.Team = db.sequelize.import('../api/team/team.model');
@@ -103,5 +105,8 @@ db.Watchlist.hasMany(db.Keyword, {foreignKey:'watchlistID'});
 db.Source.belongsToMany(db.Watchlist, {as:'MonitoringWatchlists', through:db.Monitoring, foreignKey:'SourceID'});
 db.Watchlist.belongsToMany(db.Source, {as:'MonitoringSources', through:db.Monitoring, foreignKey:'WatchlistID'});
 
+/*db.Event.prototype.getItem = function() {
+  return this['get' + this.get('attendable').substr(0, 1).toUpperCase() + this.get('attendable').substr(1)]();
+};*/
 
 export default db;
