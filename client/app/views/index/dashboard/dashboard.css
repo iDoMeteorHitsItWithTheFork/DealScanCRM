@@ -72,7 +72,7 @@
   padding-top:15px !important;
 }
 .date-picker {
-  width: 240px !important;
+  cursor: pointer;
 }
 .date-picker::before {
   font-family: "FontAwesome";
@@ -83,7 +83,8 @@
   font-family: "FontAwesome";
   content:'\f0d7';
   position: absolute;
-  right: 0px;
+  right: 30px;
+  cursor: pointer;
 }
 .custom-btn {
   padding-bottom: 6px;

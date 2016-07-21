@@ -2,7 +2,7 @@
   <!--<small class="pull-left">Days Left: {{dashboard.kpis.RemainingWorkingDays}}</small> -->
   <!-- Top Section ==> metrics -->
   <div class="row">
-    <div class="col-lg-3" ng-repeat="m in dashboard.kpis.KPI">
+    <div class="col-md-3" ng-repeat="m in dashboard.kpis.KPI">
       <div class="ibox float-e-margins m-b-15">
         <div class="ibox-title min-ht-45">
           <span class="pull-right" ng-hide="dashboard.loadingKPI">
@@ -66,11 +66,11 @@
           <!-- Filters -->
           <div class="row " style="background-color: rgba(238,238,238, 0.5) !important; padding-top:13px !important; padding-bottom:9px !important;">
             <!-- Resources  -->
-            <div class="col-lg-7">
+            <div class="col-md-5">
               <div class="row">
                 <!-- Data Filters -->
-                <div class="col-lg-2 pull-left">
-                  <ui-select ng-model="dashboard.selectedType" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
+                <div class="col-md-5 pull-left">
+                  <ui-select on-select="dashboard.getSales()" ng-model="dashboard.selectedType" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
                     <ui-select-match placeholder="Type">{{$select.selected.text}}
                     </ui-select-match>
                     <ui-select-choices
@@ -79,7 +79,7 @@
                     </ui-select-choices>
                   </ui-select>
                 </div>
-                <div class="col-lg-3 pull-left" ng-if="dashboard.dataFilters.length > 1">
+                <div class="col-md-5 pull-left" ng-if="dashboard.dataFilters.length > 1">
                   <ui-select ng-model="dashboard.selectedDealership" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
                     <ui-select-match placeholder="Dealerships">{{$select.selected.DealershipName}}
                     </ui-select-match>
@@ -89,7 +89,7 @@
                     </ui-select-choices>
                   </ui-select>
                 </div>
-                <div class="col-lg-3 pull-left" ng-if="dashboard.selectedDealership.Teams.length > 1">
+                <div class="col-md-3 pull-left" ng-if="dashboard.selectedDealership.Teams.length > 1">
                   <ui-select ng-model="dashboard.selectedTeam" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
                     <ui-select-match placeholder="Teams">{{$select.selected.TeamName}}
                     </ui-select-match>
@@ -99,8 +99,8 @@
                     </ui-select-choices>
                   </ui-select>
                 </div>
-                <div class="col-lg-3 pull-left">
-                  <ui-select ng-model="dashboard.selectedEmployee" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
+                <div class="col-md-5 pull-left">
+                  <ui-select on-select="dashboard.getSales()"  ng-model="dashboard.selectedEmployee" theme="bootstrap" ng-disabled="dashboard.retreivingDeals">
                     <ui-select-match placeholder="Employees">{{$select.selected.profile.name}}
                     </ui-select-match>
                     <ui-select-choices group-by="dashboard.groupByRole"
@@ -114,30 +114,27 @@
             </div>
 
 
-            <div class="col-lg-3">
-              <div class="col-lg-9 no-margins" style="position:relative;">
-                <span class="form-control date-picker" date-range-picker options="dashboard.datePickerOptions"
-                      ng-model="dashboard.dateRange">{{dashboard.dateRange.startDate.format('YYYY/MM/DD')}} -
-                {{dashboard.dateRange.endDate.format('YYYY/MM/DD')}}</span>
+            <div class="col-md-7">
+              <div class="col-md-7 no-margins" >
+                <input type="text" class="form-control date-picker" style=" margin-right:10px;" date-range-picker options="dashboard.datePickerOptions"
+                      ng-model="dashboard.dateRange">
+                </input>
               </div>
-              <div class="col-lg-3 no-margins">
-                <button class="btn btn-sm btn-primary custom-btn" ng-click="dashboard.getSales()"
-                        ng-disabled="dashboard.retreivingDeals"><i class="fa fa-download">&nbsp;&nbsp;</i>Load
-                </button>
+              <div class="col-lg-5">
+                <div class="btn-group pull-right margin-right-10">
+                  <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
+                          uib-btn-radio="'chart'"><i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
+                  </button>
+                  <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
+                          uib-btn-radio="'map'" ng-click="dashboard.refreshMap()"><i
+                          class="fa fa-map-marker">&nbsp;&nbsp;</i> Map
+                  </button>
+                </div>
               </div>
+
             </div>
 
-            <div class="col-lg-2">
-              <div class="btn-group pull-right margin-right-10">
-                <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
-                        uib-btn-radio="'chart'"><i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
-                </button>
-                <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
-                        uib-btn-radio="'map'" ng-click="dashboard.refreshMap()"><i
-                  class="fa fa-map-marker">&nbsp;&nbsp;</i> Map
-                </button>
-              </div>
-            </div>
+
 
           </div>
           <!-- ./filters -->
@@ -147,11 +144,11 @@
           <!-- metrics -->
           <div class="row">
             <div class="col-xs-2 margin-top-10">
-              <h3 class="no-margins">Statistics</h3>
+              <h2 class="no-margins">Statistics</h2>
               <small>{{dashboard.selectedEmployee.profile.name}}'s Data</small>
             </div>
             <div class="col-xs-10">
-              <div class="col-lg-2" ng-repeat="s in dashboard.summaryStats" ng-click="dashboard.displayStatsDetails(s)" style="cursor: pointer;">
+              <div class="col-sm-2 col-md-2 col-lg-2" ng-repeat="s in dashboard.summaryStats" ng-click="dashboard.displayStatsDetails(s)" style="cursor: pointer;">
                 <div class="widget style1 {{s.bgStyle}}">
                   <div class="row vertical-align">
                     <div class="col-xs-2">
@@ -503,7 +500,7 @@
                 <div class="ibox float-e-margins">
                   <div class="row" style="border-top: 1px #d5d5d5 solid; border-bottom:1px #d5d5d5 solid;
                  margin-top: -31px;margin-right: 17px;margin-left: 5px ">
-                    <div class="col-lg-10">
+                    <div class="col-md-10">
                       <h2 style="padding-top: 18px;padding-bottom: 7px;font-size: 22px !important;">
                         {{dashboard.displayingCategory | uppercase}} - BY MODELS</h2>
                     </div>
@@ -512,7 +509,7 @@
                     </div>
                   </div>
                   <div class="ibox-content" style="border-top:none; padding-top:30px !important;">
-                    <div class="flot-chart" style="height:380px;">
+                    <div class="flot-chart" style="height:300px;">
                       <div flot class="flot-chart-content" dataset="dashboard.barChartData"
                            options="dashboard.barChartOptions"
                            on-plot-click="dashboard.displayTable($event, pos, item, null, dashboard.displayingCategory)"></div>
@@ -1186,7 +1183,7 @@
 </div>
 
 <!-- small chat -->
-<div class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="dashboard.openChat">
+<div ng-hide="true" class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="dashboard.openChat">
 
   <!-- Chat header -->
   <div class="heading padding-top-15" draggable="true">
@@ -1271,7 +1268,7 @@
   </div>
 
 </div>
-<div id="small-chat" ng-click="dashboard.openChat = !dashboard.openChat">
+<div ng-hide="true" id="small-chat" ng-click="dashboard.openChat = !dashboard.openChat">
   <!--<span class="badge badge-warning pull-right">5</span>-->
   <a class="open-small-chat">
     <i ng-class="dashboard.openChat ? 'fa fa-times' : 'fa fa-comments'"></i>

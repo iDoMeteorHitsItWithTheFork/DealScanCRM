@@ -27,15 +27,18 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
       _bdc.viewOptions = 'list';
 
-
+      // _bdc.sources = ['Walk-In', 'Phone', 'Internet', 'HappyTags', 'Social Media', 'DirectMail'];
+      // _bdc.colors = ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
 
       _bdc.showBarChart = false;
       _bdc.selectedPie = null;
+
 
       /**
        * Dealerships data Structures
        * @type {{name: string, owner: Array, genManger: Array, teams: *[]}}
        */
+      _bdc.dealerships = _bdc.BDCData.dealerships;
       _bdc.summaryStats = _bdc.BDCData.summary_stats;
       _bdc.stats = _bdc.BDCData.stats;
 
@@ -299,10 +302,12 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       }
 
+
       /**
        * Stats Display Mode
        * @type {string}
        */
+      _bdc.chartView = 'chart';
 
       // _bdc.selectedDealership = _bdc.dealerships[0];
       // _bdc.selectedTeam = _bdc.selectedDealership.teams[0];

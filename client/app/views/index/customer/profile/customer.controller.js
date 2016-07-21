@@ -8,7 +8,7 @@ angular.module('dealScanCrmApp')
     _customer.user = Auth.getCurrentUser();
     console.log('customer controller loaded....');
     _customer.thisCustomer = selectedCustomer;
-    console.log(_customer.thisCustomer);
+    console.log(selectedCustomer);
 
     _customer.info = {
       name: _customer.thisCustomer.profile.name,
@@ -79,36 +79,45 @@ angular.module('dealScanCrmApp')
 
 
 
-    _customer.tabs = [{
-      id: 'overview',
-      heading: 'Overview',
-      route: 'home.customer.profile.summary.overview',
-    }, {
-      id: 'documents',
-      heading: 'Documents',
-      route: 'home.customer.profile.summary.documents',
-    }, {
-      id: 'images',
-      heading: 'Images',
-      route: 'home.customer.profile.summary.images',
-    }, {
+    _customer.tabs = [  {
       id: 'tasks',
-      heading: 'Tasks',
-      route: 'home.customer.profile.summary.tasks',
+      heading: 'TASKS',
+      route: 'index.customer.profile.tasks',
+      icon: 'fa-list',
+      bg_color: 'navy-bg'
     }, {
       id: 'notes',
-      heading: 'Notes',
-      route: 'home.customer.profile.summary.notes',
+      heading: 'NOTES',
+      route: 'index.customer.profile.notes',
+      icon: 'fa-files-o',
+      bg_color: 'yellow-bg'
     }, {
       id: 'messages',
-      heading: 'Messages',
-      route: 'home.customer.profile.summary.messages'
-    }];
+      heading: 'MESSAGES',
+      route: 'index.customer.profile.messages',
+      icon: 'fa-envelope-o',
+      bg_color: 'blue-bg'
+    },
+      {
+        id: 'documents',
+        heading: 'DOCUMENTS',
+        route: 'index.customer.profile.documents',
+        icon: 'fa-file-text',
+        bg_color: 'blue-bg'
+      },
+      {
+        id: 'overview',
+        heading: 'SUMMARY',
+        route: 'index.customer.profile',
+        icon: 'fa-file-text',
+        bg_color: 'yellow-bg'
+      }];
 
-    var setActiveTab = function(){
-      var idx = Util.indexOfObject(_customer.tabs, 'route', $state.current.name);
-      if (idx != -1) _customer.activeTab = idx;
-    }; setActiveTab();
+    _customer.setActiveTab = function(tab){
+      $state.go(tab.route);
+    };
+
+    //_customer.setActiveTab();
 
     _customer.navButtons = [
       {

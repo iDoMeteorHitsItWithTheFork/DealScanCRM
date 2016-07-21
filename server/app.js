@@ -105,4 +105,4 @@ sqldb.sequelize.sync()
 
 
 // Expose app
-exports = module.exports = app;
+var exports = module.exports = app;

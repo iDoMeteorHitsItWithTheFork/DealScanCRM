@@ -1,5 +1,5 @@
 <!-- top section -->
-<div class="row wrapper border-bottom white-bg page-heading">
+<div class="row wrapper border-bottom white-bg page-heading p-r-0">
   <!-- breadcrumbs -->
   <div class="col-lg-4">
     <h2>{{customer.info.name}}</h2>
@@ -14,57 +14,24 @@
   </div>
   <!-- ./ breadcrumbs -->
   <!-- Profile tabs -->
-  <div class="col-lg-8">
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab blue-bg">
-          <div class="profile-tab-icon">
-            <i class="fa fa-file-text"></i>
+  <div class="col-sm-8 p-r-0">
+
+    <div class="col-sm-12 no-padding pull-right">
+      <div ng-repeat="tab in customer.tabs" ng-click="customer.setActiveTab(tab)" class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
+        <div class="profile-tab {{tab.bg_color}} no-border-right">
+          <div class="profile-tab-icon m-t-5 m-l-26 no-border">
+            <i class="fa {{tab.icon}} f-sz-22"></i>
           </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Documents</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
-      </div>
-    </div>
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab navy-bg">
-        <div class="profile-tab-icon">
-          <i class="fa fa-list"></i>
+          <small class="p-t-42">{{tab.heading}}</small>
         </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Tasks</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
-      </div>
-    </div>
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab yellow-bg">
-        <div class="profile-tab-icon">
-          <i class="fa fa-files-o"></i>
-        </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Notes</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
-      </div>
-    </div>
-    <div class="col-lg-3 no-margins no-padding">
-      <div class="profile-tab lazur-bg no-border-right">
-        <div class="profile-tab-icon">
-          <i class="fa fa-envelope-o"></i>
-        </div>
-          <span class="pull-right text-right">
-            <small class="no-margins">Messages</small>
-            <h2 class="no-margin-bottom margin-top-5">230</h2>
-          </span>
       </div>
     </div>
   </div>
   <!-- ./profile Tabs -->
 </div>
 <!-- ./top section -->
-
-<div class="wrapper wrapper-content">
+<div ui-view></div>
+<div ng-show="$state.is('index.customer.profile')" class="wrapper wrapper-content">
   <div class="row animated fadeInRight">
 
     <!-- Customer Information -->
@@ -88,31 +55,53 @@
               <li class="address-li">
                 <div class="row">
                   <div class="col-lg-1">
-                    <span class="fa fa-home m-r-sm"></span>
+                    <span class="fa fa-home fa-lg m-r-sm"></span>
                   </div>
-                  <div class="col-lg-11 p-l-2">
-                    <span>{{customer.info.address}}</span>
+                  <div class="col-lg-11 p-l-10">
+                    <span>{{customer.thisCustomer.profile.address || 'unavailable'}}</span>
                   </div>
                 </div>
               </li>
               <li class="address-li">
-                <span class="fa fa-phone m-r-sm"></span>
-                {{customer.info.phone}}
+                <div class="row">
+                  <div class="col-lg-1">
+                    <span class="fa fa-phone fa-lg m-r-sm"></span>
+                  </div>
+                  <div class="col-lg-11 p-l-10">
+                    <span>{{customer.thisCustomer.profile.phone || 'unavailable'}}</span>
+                  </div>
+                </div>
               </li>
               <li class="address-li">
-                <span class="fa fa-envelope m-r-sm"></span>
-                {{customer.info.email}}
+                <div class="row">
+                  <div class="col-lg-1">
+                    <span class="fa fa-envelope m-r-sm"></span>
+                  </div>
+                  <div class="col-lg-11 p-l-10">
+                    <span>{{customer.thisCustomer.profile.email || 'unavailable'}}</span>
+                  </div>
+                </div>
+              </li>
+              <li class="address-li">
+                <div class="row">
+                  <div class="col-lg-1">
+                    <span class="fa fa-credit-card-alt m-r-sm"></span>
+                  </div>
+                  <div class="col-lg-11 p-l-10">
+                    <span>{{customer.thisCustomer.driverLicenseID|| 'unavailable'}}</span>
+                  </div>
+                </div>
               </li>
             </ul>
 
             <div class="row customer-social-media-feed">
                 <h5 class="m-t-10 m-b-18">Social Media feed</h5>
-                <span class="pull-right social-feed-icons">
+                <span class="pull-right social-feed-icons" ng-hide="true">
                     <button class="btn btn-circle m-r-xs btn-facebook" tooltip-placement="top" uib-tooltip="@facebook"><i class="fa fa-facebook"></i></button>
                     <button class="btn btn-circle m-r-xs btn-twitter"  tooltip-placement="top" uib-tooltip="@twitter"><i class="fa fa-twitter"></i></button>
                     <button class="btn btn-circle m-r-xs btn-instagram" tooltip-placement="top" uib-tooltip="@instagram"><i class="fa fa-instagram"></i></button>
                   </span>
-                <div class="ibox">
+                <div class="ibox" ng-hide="true">
                   <div class="ibox-content">
                     <div class="chat-activity-list">
                       <div class="chat-element">
@@ -219,7 +208,7 @@
         </div>
 
         <div class="ibox-content">
-          <div>
+          <div ng-hide="true">
             <div class="deals-activity">
               <div class="deal">
                 <div class="row">
