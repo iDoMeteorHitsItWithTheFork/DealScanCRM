@@ -153,8 +153,11 @@ angular.module('dealScanCrmApp')
                 newCarsKpi.tracking = parseFloat(newCarsKpi.units / workedDays).toFixed(2);
                 newCarsKpi.delta = rWorkDays > 0 ? parseFloat((KPI_CAR_UNITS_GOAL - newCarsKpi.units) / rWorkDays).toFixed(2) : 0;
                 newCarsKpi.trend = newCarsKpi.delta > newCarsKpi.tracking ? 'Up' : 'Steady';
-                newCarsKpi.unit_progress = "width: "+Math.ceil(((newCarsKpi.units * 100)/newCarsKpi.units_goal))+"%";
-                newCarsKpi.gross_progress = "width: "+Math.ceil(((newCarsKpi.gross * 100)/newCarsKpi.gross_goal))+"%";
+                newCarsKpi.unit_progress = Math.ceil(((newCarsKpi.units * 100)/newCarsKpi.units_goal));
+                newCarsKpi.unit_progress_bar = "width: "+Math.ceil(((newCarsKpi.units * 100)/newCarsKpi.units_goal))+"%";
+                newCarsKpi.gross_progress = Math.ceil(((newCarsKpi.gross * 100)/newCarsKpi.gross_goal));
+                newCarsKpi.gross_progress_bar = "width: "+Math.ceil(((newCarsKpi.gross * 100)/newCarsKpi.gross_goal))+"%";
+
 
                 kpis.push(newCarsKpi);
 
@@ -186,8 +189,10 @@ angular.module('dealScanCrmApp')
                 newTrucksKpi.tracking = parseFloat(newTrucksKpi.units / workedDays).toFixed(2);
                 newTrucksKpi.delta = rWorkDays > 0 ? parseFloat((KPI_TRUCK_UNITS_GOAL - newTrucksKpi.units) / rWorkDays).toFixed(2) : 0;
                 newTrucksKpi.trend = newTrucksKpi.delta > newTrucksKpi.tracking ? 'Up' : 'Steady';
-                newTrucksKpi.unit_progress = "width: "+((newTrucksKpi.units * 100)/newTrucksKpi.units_goal)+"%";
-                newTrucksKpi.gross_progress = "width: "+((newTrucksKpi.gross * 100)/newTrucksKpi.gross_goal)+"%";
+                newTrucksKpi.unit_progress = Math.ceil((newTrucksKpi.units * 100)/newTrucksKpi.units_goal);
+                newTrucksKpi.unit_progress_bar = "width: "+Math.ceil((newTrucksKpi.units * 100)/newTrucksKpi.units_goal)+"%";
+                newTrucksKpi.gross_progress = Math.ceil((newTrucksKpi.gross * 100)/newTrucksKpi.gross_goal);
+                newTrucksKpi.gross_progress_bar = "width: "+Math.ceil((newTrucksKpi.gross * 100)/newTrucksKpi.gross_goal)+"%";
 
                 kpis.push(newTrucksKpi);
 
@@ -225,8 +230,10 @@ angular.module('dealScanCrmApp')
                 usedKpi.tracking = parseFloat(usedKpi.units / workedDays).toFixed(2);
                 usedKpi.delta = rWorkDays > 0 ? parseFloat((KPI_USED_UNITS_GOAL - usedKpi.units) / rWorkDays).toFixed(2) : 0;
                 usedKpi.trend = usedKpi.delta > usedKpi.tracking ? 'Up' : 'Steady';
-                usedKpi.unit_progress = "width: "+((usedKpi.units * 100)/usedKpi.units_goal)+"%";
-                usedKpi.gross_progress = 'width: '+((usedKpi.gross * 100)/usedKpi.gross_goal)+"%";
+                usedKpi.unit_progress = Math.ceil((usedKpi.units * 100)/usedKpi.units_goal);
+                usedKpi.gross_progress = Math.ceil((usedKpi.gross * 100)/usedKpi.gross_goal);
+                usedKpi.unit_progress_bar = "width: "+((usedKpi.units * 100)/usedKpi.units_goal)+"%";
+                usedKpi.gross_progress_bar = 'width: '+((usedKpi.gross * 100)/usedKpi.gross_goal)+"%";
 
                 kpis.push(usedKpi);
 
@@ -241,8 +248,10 @@ angular.module('dealScanCrmApp')
                 totalKpi.tracking = parseFloat(totalKpi.units / workedDays).toFixed(2);
                 totalKpi.delta = rWorkDays > 0 ? parseFloat((KPI_TOTAL_UNITS_GOAL - totalKpi.units) / rWorkDays).toFixed(2) : 0;
                 totalKpi.trend = totalKpi.delta > totalKpi.tracking ? 'Up' : 'Steady';
-                totalKpi.unit_progress = "width: "+((totalKpi.units * 100)/totalKpi.units_goal)+"%";
-                totalKpi.gross_progress = 'width: '+((totalKpi.gross * 100)/totalKpi.gross_goal)+"%";
+                totalKpi.unit_progress = Math.ceil((totalKpi.units * 100)/totalKpi.units_goal);
+                totalKpi.gross_progress = Math.ceil((totalKpi.gross * 100)/totalKpi.gross_goal);
+                totalKpi.unit_progress_bar = "width: "+((totalKpi.units * 100)/totalKpi.units_goal)+"%";
+                totalKpi.gross_progress_bar = 'width: '+((totalKpi.gross * 100)/totalKpi.gross_goal)+"%";
 
                 kpis.push(totalKpi);
 

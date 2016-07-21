@@ -29,8 +29,8 @@
               <small class="pull-right">{{m.units}}/<strong>{{m.units_goal}}</strong></small>
             </div>
             <div class="progress progress-mini">
-              <div style="{{m.unit_progress}}" class="progress-bar" ng-class="{'progress-bar-danger': (m.tracking * 100 / m.delta) < 75,
-                             'progress-bar-warning': (m.tracking * 100 / m.delta) >= 75 && (m.tracking * 100 / m.delta) <= 89,
+              <div style="{{m.unit_progress_bar}}" class="progress-bar" ng-class="{'progress-bar-danger': m.unit_progress < 75,
+                             'progress-bar-warning': m.unit_progress >= 75 && m.unit_progress <= 89,
                              }"></div>
             </div>
             <div class="margin-top-10">
@@ -38,9 +38,9 @@
               <small class="pull-right">{{m.gross}}/<strong>{{m.gross_goal}}</strong></small>
             </div>
             <div class="progress progress-mini">
-              <div style="{{m.gross_progress}}" class="progress-bar"
-                   ng-class="{'progress-bar-danger': (m.tracking * 100 / m.delta) < 75,
-                             'progress-bar-warning': (m.tracking * 100 / m.delta) >= 75 && (m.tracking * 100 / m.delta) <= 89}"></div>
+              <div style="{{m.gross_progress_bar}}" class="progress-bar"
+                   ng-class="{'progress-bar-danger': m.gross_progress < 75,
+                             'progress-bar-warning': m.gross_progress >= 75 && m.gross_progress <= 89}"></div>
             </div>
           </div>
         </div>
