@@ -1,0 +1,78 @@
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="newLead.cancel()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title">New Lead</h3>
+  <label class="tl" style="float: left;">Create a new opportunity</label>
+</div>
+<div class="modal-body p-b-10">
+  <form name="createLeadForm" role="form">
+    <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" required ng-model="newLead.prospect.name" placeholder="Name...">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" required ng-model="newLead.prospect.phone" placeholder="Phone...">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="newLead.prospect.email" placeholder="Email...">
+        </div>
+
+        <div class="form-group">
+          <label>Schedule Appointment</label>
+          <input type="text" placeholder="Appointment Date" class="form-control"
+                 uib-datepicker-popup="{{newLead.format}}"
+                 ng-model="newLead.dt"
+                 is-open="newLead.opened"
+                 datepicker-options="newLead.dateOptions" ng-required="true" close-text="Close"
+                 alt-input-formats="newLead.altInputFormats" min-date="newLead.minDate"
+                 ng-click="newLead.opened = !newLead.opened"/>
+        </div>
+      </div>
+      <div class="col-md-6">
+
+        <div class="form-group">
+          <input type="text" class="form-control" required ng-model="newLead.prospect.address" placeholder="Address...">
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="newLead.prospect.interest"
+                 placeholder="Vehicle Of Interest">
+        </div>
+
+        <div class="form-group">
+          <ui-select ng-model="newLead.prospect.source" theme="bootstrap" ng-required="true">
+            <ui-select-match placeholder="Sources">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="source in newLead.sources | filter: $select.search">
+              <div ng-bind-html="source.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="form-group">
+          <div class="m-t-38" uib-timepicker ng-model="newLead.appointmentTime"
+                 show-spinners = "false"
+                 show-meridian="true" type="text"
+                 placeholder="Appointment Time"></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Additional Information</label>
+          <div class="note-editor">
+            <textarea class="form-control" style="height: 200px !important;" ng-model="newLead.prospect.additionalInfo"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning btn-o" type="button" ng-click="newLead.cancel()">Cancel</button>
+  <button ladda="newLead.saving" data-style="zoom-in" class="ladda-button btn btn-primary btn-o" type="button" ng-click="newLead.create()"
+          ng-disabled="createLeadForm.$pristine || !createLeadForm.$valid || newLead.saving">Create Lead
+  </button>
+</div>

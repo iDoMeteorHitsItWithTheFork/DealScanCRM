@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('BDCCtrl',
 
-    function ($scope, $state, $uibModal,$anchorScroll, BDCService, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter) {
+    function ($scope, $state, $uibModal,$anchorScroll, BDCService, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, Lead, toaster) {
       $("#page-wrapper").css("overflow-x", "scroll");
 
       console.log("dashboard controller loaded");
@@ -14,6 +14,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.showTable = false;
       _bdc.sidebar = false;
       _bdc.openChat = false;
+      _bdc.loadingLeads = false;
+      _bdc.leads = [];
 
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
         _bdc.isManager = ans;
@@ -28,6 +30,47 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.showBarChart = false;
       _bdc.selectedPie = null;
 
+
+      _bdc.tabs = [
+        {
+          id: 'new_leads',
+          title: 'New Leads',
+          icon: 'fa fa-users'
+        },
+        {
+          id: 'follow_up',
+          title: 'Follow Up',
+          icon: 'fa fa-exchange'
+        }
+      ]
+
+      _bdc.activeTab = _bdc.tabs[0];
+      _bdc.viewTab = function(tab){
+        _bdc.activeTab = tab;
+      }
+
+
+      _bdc.loadLeads = function(){
+        if (_bdc.loadingLeads) return;
+        _bdc.loadingLeads = true;
+        Lead.leads().then(function(leads){
+          console.log(leads);
+          if (leads && !leads.error){
+            _bdc.leads = leads;
+          } else toaster.error({title: 'Leads Load Error', body:'An error occured while attempting to load leads'});
+          _bdc.loadingLeads = false;
+        }).catch(function(err){
+          console.log(err);
+          _bdc.loadingLeads = false;
+          toaster.error({title: 'Leads Load Error', body: 'An error occurred while attempting to load leads.'})
+        });
+      }
+
+      _bdc.loadLeads();
+      _bdc.activeLead = null;
+      _bdc.showInDetails = function(lead){
+        _bdc.activeLead = lead;
+      }
 
       /**
        * Pie Chart Data
@@ -417,16 +460,60 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-      $scope.addLead = function () {
+      _bdc.addLead = function () {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
-          templateUrl: 'app/account/dashboard/addLead.html',
+          templateUrl: 'app/views/index/bdc/lead/addLead.html',
           controller: 'AddLeadCtrl',
+          controllerAs: 'newLead',
+          resolve: {
+            loadPlugin: function ($ocLazyLoad) {
+              return $ocLazyLoad.load([
+                {
+                  serie: true,
+                  name: 'angular-ladda',
+                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                }
+              ]);
+            }
+          }
         });
+
+
+
+
       }
 
-      $scope.addTask = function () {
+      _bdc.editLead = function(lead){
+        console.log('*** Edit Lead ****');
+        var modalInstance = $uibModal.open({
+          animation: true,
+          windowClass: 'slide-up',
+          templateUrl: 'app/views/index/bdc/lead/addLead.html',
+          controller: 'EditLeadCtrl',
+          controllerAs: 'editLead',
+          resolve: {
+            lead: function(){
+              return lead;
+            },
+            loadPlugin: function ($ocLazyLoad) {
+              return $ocLazyLoad.load([
+                {
+                  serie: true,
+                  name: 'angular-ladda',
+                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                }
+              ]);
+            }
+          }
+        });
+
+      }
+
+      _bdc.addTask = function () {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',

@@ -43,39 +43,75 @@ db.Watchlist = db.sequelize.import('../api/watchlist/watchlist.model');
 db.Keyword = db.sequelize.import('../api/watchlist/watchlist.keyword.model');
 db.Source = db.sequelize.import('../api/watchlist/watchlist.source.model');
 db.Monitoring = db.sequelize.import('../api/socialMedia/socialMedia.monitoring.model');
-
+db.Lead = db.sequelize.import('../api/lead/lead.model');
+db.Event = db.sequelize.import('../api/event/event.model');
+db.Participants = db.sequelize.import('../api/event/event.participants.model');
+db.NoteActivities = db.sequelize.import('../api/note/note.activity.model');
 db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
-db.Note.belongsTo(db.Customer, {as: 'CustomerNotes', foreignKey:'customerID'});
-//
+db.User.hasMany(db.Note, {foreignKey: 'creatorID'});
 db.Image.belongsTo(db.User, {as: 'Uploader', foreignKey:'uploaderID'});
 db.Image.belongsTo(db.Customer, {as:'CustomerImages', foreignKey:'customerID'});
 
 
-db.Lead = db.sequelize.import('../api/lead/lead.model');
-db.Event = db.sequelize.import('../api/event/event.model');
-db.Participants = db.sequelize.import('../api/event/event.participants.model');
 
-//
+db.Customer.belongsToMany(db.Note, {
+  through: {
+    model: db.NoteActivities,
+    unique: false,
+    scope: {
+      notable: 'customer'
+    }
+  },
+  foreignKey: 'subjectID',
+  constraints: false
+});
+
+db.Note.belongsToMany(db.Customer, {
+  through: {
+    model: db.NoteActivities,
+    unique: false
+  },
+  foreignKey: 'noteID',
+  constraints: false
+});
+
+db.Lead.belongsToMany(db.Note, {
+  through: {
+    model: db.NoteActivities,
+    unique: false,
+    scope: {
+      notable: 'lead'
+    }
+  },
+  foreignKey: 'subjectID',
+  constraints: false
+});
+
+db.Note.belongsToMany(db.Lead, {
+  through: {
+    model: db.NoteActivities,
+    unique: false
+  },
+  foreignKey: 'noteID',
+  constraints: false
+});
+
+
 db.Team.belongsTo(db.Dealership, {foreignKey:'dealershipID'});
 db.Dealership.hasMany(db.Team, {foreignKey:'dealershipID'});
-//
 
-//
 db.User.belongsToMany(db.Dealership, {through:'Owns', foreignKey:'ownerID'});
 db.Dealership.belongsToMany(db.User, {as:'Owners', through:'Owns', foreignKey:'dealershipID'});
-//
 
 db.User.belongsToMany(db.Dealership, {as:'ManagesDealerships', through:'DealershipManagers', foreignKey:'generalManagerID'});
 db.Dealership.belongsToMany(db.User, {as: 'GeneralManagers', through:'DealershipManagers', foreignKey:'dealershipID'});
-//
 
 db.Dealership.belongsToMany(db.User, {as: 'Employees', through: 'Employment', foreignKey: 'employerID'});
 db.User.belongsToMany(db.Dealership, {as:'Employer', through: 'Employment', foreignKey: 'employeeID'});
 
-//
 db.User.belongsToMany(db.Team, {as:'MyTeams', through:'TeamMemberships', foreignKey:'memberID'});
 db.Team.belongsToMany(db.User, {as:'TeamMembers', through:'TeamMemberships', foreignKey: 'teamID'});
-//
+
 db.Team.belongsToMany(db.User, {as: 'TeamManagers', through: 'Managers', foreignKey:'teamID'});
 db.User.belongsToMany(db.Team, {as: 'ManagesTeams', through: 'Managers', foreignKey:'teamManagerID'});
 
@@ -84,16 +120,13 @@ db.Deal.belongsTo(db.User, {as:'SaleRep', through: 'Purchases', foreignKey: 'sal
 db.Deal.belongsTo(db.Customer, {as:'Buyer', through:'Purchases', foreignKey:'buyerID'});
 db.Deal.belongsTo(db.Vehicle, {as:'Purchase', through: 'Purchases', foreignKey: 'vehicleID'});
 
-db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'CoBuyerID'});
+db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'coBuyerID'});
 db.Customer.belongsToMany(db.Deal, {as:'CoSignedDeals' , through:'CoSigners', foreignKey:'dealID'});
-
 
 db.Financing.belongsTo(db.Deal, {foreignKey:'dealID'});
 db.Trade.belongsTo(db.Deal, {foreignKey:'dealID'});
 db.Rebate.belongsTo(db.Deal, {foreignKey:'dealID'});
 db.Document.belongsTo(db.Deal, {foreignKey:'dealID'});
-
-
 
 db.Watchlist.belongsTo(db.Dealership, {foreignKey: 'dealershipID'});
 db.Watchlist.belongsTo(db.User, {as:'ListOwner', foreignKey: 'ownerID'});
@@ -104,10 +137,14 @@ db.User.hasMany(db.Watchlist, {as:'UserWatchlists', foreignKey:'ownerID'});
 db.Keyword.belongsTo(db.Watchlist, {foreignKey: 'watchlistID'});
 db.Watchlist.hasMany(db.Keyword, {foreignKey:'watchlistID'});
 
-//
+db.Source.belongsToMany(db.Watchlist, {as:'MonitoringWatchlists', through:db.Monitoring, foreignKey:'sourceID'});
+db.Watchlist.belongsToMany(db.Source, {as:'MonitoringSources', through:db.Monitoring, foreignKey:'watchlistID'});
 
-db.Source.belongsToMany(db.Watchlist, {as:'MonitoringWatchlists', through:db.Monitoring, foreignKey:'SourceID'});
-db.Watchlist.belongsToMany(db.Source, {as:'MonitoringSources', through:db.Monitoring, foreignKey:'WatchlistID'});
+db.Lead.belongsTo(db.Dealership, {foreignKey:'dealershipID'});
+db.Dealership.hasMany(db.Lead, {foreignKey:'dealershipID'});
+
+db.Lead.belongsTo(db.User, {as:'Creator', foreignKey:'creatorID'});
+db.User.hasMany(db.Lead, {foreignKey: 'creatorID'});
 
 db.User.belongsToMany(db.Event, {
   through: {
