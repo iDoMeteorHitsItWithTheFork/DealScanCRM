@@ -40,9 +40,10 @@
 .no-padding-bottom {
   padding-bottom:0px !important;
 }
+
 .large-pie-chart {
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
   margin: auto;
 }
 .small-pie-chart {
