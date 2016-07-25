@@ -17,7 +17,14 @@
           method: 'PUT',
           params: {
             id:'schedule',
-            controller: 'appointment'
+            controller:'appointment',
+          }
+        },
+        note :{
+          method: 'PUT',
+          params: {
+            id:'add',
+            controller: 'note'
           }
         }
       });

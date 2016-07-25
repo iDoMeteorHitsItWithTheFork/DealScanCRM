@@ -8,8 +8,6 @@ export default function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    attendable: DataTypes.STRING,
-    attendableID: DataTypes.BIGINT,
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
     location: DataTypes.STRING,
@@ -31,8 +29,6 @@ export default function(sequelize, DataTypes) {
         return {
           'eventID': this.getDataValue('eventID'),
           'name': this.getDataValue('name'),
-          "attendable": this.getDataValue("attendable"),
-          "attendableID": this.getDataValue("attendableID"),
           'description': this.getDataValue('description'),
           'location': this.getDataValue('location'),
           "time": this.getDataValue('time'),
@@ -48,8 +44,6 @@ export default function(sequelize, DataTypes) {
         return {
           'eventID': this.getDataValue('eventID'),
           'name': this.getDataValue('name'),
-          "attendable": this.getDataValue("attendable"),
-          "attendableID": this.getDataValue("attendableID"),
           'description': this.getDataValue('description'),
           'location': this.getDataValue('location'),
           "time": this.getDataValue('time'),
@@ -59,11 +53,6 @@ export default function(sequelize, DataTypes) {
           'createdAt': this.getDataValue('createdAt')
         }
       },
-      getItem: function () {
-        return this['get' + this.get('attendable').substr(0, 1).toUpperCase() + this.get('attendable').substr(1)]();
-      }
-
-
     },
 
   });

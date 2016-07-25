@@ -38,9 +38,6 @@ export default function (sequelize, DataTypes) {
             'deletedAt': this.getDataValue('deletedAt')
           };
         },
-        getSubjects: function(){
-          return this['get' + this.getDataValue('notable').substr(0, 1).toUpperCase() + this.getDataValue('notable').substr(1)]();
-        }
       },
 
       instanceMethods: {}

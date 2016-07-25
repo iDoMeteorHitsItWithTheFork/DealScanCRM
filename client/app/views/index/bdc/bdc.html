@@ -193,6 +193,7 @@
                               <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
                               <td><a class="client-link">{{lead.name}}</a></td>
                               <td> {{lead.interest | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
+                              <td><i class="fa fa-clock-o">&nbsp;&nbsp;</i> {{lead.timeAgo}}</td>
                               <td class="contact-type">
                                 <i ng-class="{'fa fa-envelope': !lead.phone && lead.email,
                                               'fa fa-phone': lead.phone,
@@ -264,14 +265,32 @@
                         <p>
                           {{bdc.activeLead.interest}}
                         </p>
-                        <button type="button" class="btn btn-primary btn-sm"><i
-                          class="fa fa-envelope"></i> Email
+                        <button type="button" ng-click="bdc.newNote = !bdc.newNote" class="btn btn-primary btn-sm"><i
+                          class="fa fa-sticky-note" >&nbsp;&nbsp;</i>Add Note
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm"><i
-                          class="fa fa-comments-o"></i> Text
-                        </button>
+
+                        <div class="animated fadeInDown m-t-25 m-b-20 hideSansDelay" ng-if="bdc.newNote">
+                          <form name="addNoteForm" role="form">
+                            <div class="row margin-negative-left-15 margin-negative-right-15">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <label>Notes</label>
+                                  <div>
+                                    <textarea class="form-control" style="height: 100px !important;" ng-model="bdc.note.content" ng-required="true"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button type="button" ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || bdc.savingNote"
+                                    ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm btn-block">Create
+                            </button>
+                          </form>
+                        </div>
+
+
+
                         <button type="button" ng-click="bdc.setAppointment = !bdc.setAppointment" class="btn btn-primary btn-sm"><i
-                          class="fa fa-calendar"></i> Appointment
+                          class="fa fa-calendar">&nbsp;&nbsp;</i>Schedule Appointment
                         </button>
 
                         <div class="animated fadeInDown m-t-25 hideSansDelay" ng-if="bdc.setAppointment">

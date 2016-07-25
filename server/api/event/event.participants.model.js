@@ -16,13 +16,38 @@ export default function (sequelize, DataTypes) {
     eventID: {
       type: DataTypes.INTEGER,
     },
-    attentable: {
+    attendable: {
       type: DataTypes.STRING,
     },
     participantID: {
       type: DataTypes.INTEGER,
       references: null
     }
+  }, {
+    /**
+     * Virtual Getters
+     */
+    getterMethods: {
+      //Public profile information
+      profile: function () {
+        return {
+          'participationID': this.getDataValue('participationID'),
+          'eventID': this.getDataValue('eventID'),
+          'attendable': this.getDataValue('attendable'),
+          'participantID': this.getDataValue('participantID'),
+        }
+      },
+
+      // Non-sensitive info we'll be putting in the token
+      token: function () {
+        return {
+          'participationID': this.getDataValue('participationID'),
+          'eventID': this.getDataValue('eventID'),
+          'attendable': this.getDataValue('attendable'),
+          'participantID': this.getDataValue('participantID'),
+        }
+      }
+    },
   });
 
   return Participants;

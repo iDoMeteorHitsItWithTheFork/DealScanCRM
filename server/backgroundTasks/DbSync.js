@@ -122,6 +122,8 @@ var fetchData = function(time) {
       console.log(err);
     }).pipe(stream.input || []);
 
+  /* */
+
   stream.output.on("data", function(object){
     data.push(object.value);
     if (object.value.Customer.FirstName || object.value.Customer.LastName){

@@ -47,12 +47,15 @@ db.Lead = db.sequelize.import('../api/lead/lead.model');
 db.Event = db.sequelize.import('../api/event/event.model');
 db.Participants = db.sequelize.import('../api/event/event.participants.model');
 db.NoteActivities = db.sequelize.import('../api/note/note.activity.model');
+
+
+
+
+
 db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
 db.User.hasMany(db.Note, {foreignKey: 'creatorID'});
 db.Image.belongsTo(db.User, {as: 'Uploader', foreignKey:'uploaderID'});
 db.Image.belongsTo(db.Customer, {as:'CustomerImages', foreignKey:'customerID'});
-
-
 
 db.Customer.belongsToMany(db.Note, {
   through: {
@@ -146,12 +149,15 @@ db.Dealership.hasMany(db.Lead, {foreignKey:'dealershipID'});
 db.Lead.belongsTo(db.User, {as:'Creator', foreignKey:'creatorID'});
 db.User.hasMany(db.Lead, {foreignKey: 'creatorID'});
 
+db.Event.belongsTo(db.User, {as: 'Host', foreignKey:'hostID'});
+db.User.hasMany(db.Event, {foreignKey: 'hostID'});
+
 db.User.belongsToMany(db.Event, {
   through: {
     model: db.Participants,
     unique: false,
     scope: {
-      attentable: 'user'
+      attendable: 'user'
     }
   },
   foreignKey: 'participantID',
@@ -172,7 +178,7 @@ db.Customer.belongsToMany(db.Event, {
     model: db.Participants,
     unique: false,
     scope: {
-      attentable: 'customer'
+      attendable: 'customer'
     }
   },
   foreignKey: 'participantID',
@@ -193,7 +199,7 @@ db.Lead.belongsToMany(db.Event, {
     model: db.Participants,
     unique: false,
     scope: {
-      attentable: 'lead'
+      attendable: 'lead'
     }
   },
   foreignKey: 'participantID',

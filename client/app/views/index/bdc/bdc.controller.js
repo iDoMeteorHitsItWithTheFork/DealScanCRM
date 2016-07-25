@@ -16,6 +16,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.openChat = false;
       _bdc.loadingLeads = false;
       _bdc.savingAppointment  = false;
+      _bdc.savingNote = false;
+      _bdc.note = {content: ''};
       _bdc.leads = [];
 
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
@@ -573,6 +575,27 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           toaster.error({title:'New Lead Error', body: 'An error occurred while attempting to schedule appointment'});
         })
 
+      }
+
+      _bdc.addNote = function(lead){
+        console.log('*** Add Note ****');
+        if (_bdc.savingNote) return;
+        _bdc.savingNote = true;
+        var details = {};
+        details.leadID = lead.leadID;
+        details.note = _bdc.note.content;
+        console.log(details);
+        Lead.note(details).then(function(note){
+          console.log(note);
+          if (note && !note.error){
+            toaster.success({title:'New Note', body: 'Note added for Lead ('+lead.name+')'});
+          } else toaster.error({title:'New Note Error', body: appointment.error.msg});
+          _bdc.savingNote = false;
+        }).catch(function(err){
+          console.log(err);
+          _bdc.savingAppointment = false;
+          toaster.error({title:'New Lead Error', body: 'An error occurred while attempting to schedule appointment'});
+        });
       }
 
       _bdc.addTask = function () {

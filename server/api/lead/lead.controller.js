@@ -14,6 +14,7 @@ import {Lead} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Dealership} from '../../sqldb';
 import {Event} from '../../sqldb';
+import {Note} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -158,7 +159,7 @@ export function scheduleAppointment(req, res) {
   if (!req.body) return res.status(500).send('Appointment Details are required');
   if (!req.body.leadID) return res.status(500).send('leadID is required');
   if (!req.body.appointment) return res.status(500).send('Appointment is required');
-  return Event.sequelize.transaction(function (t) {
+  return Lead.sequelize.transaction(function (t) {
     return User.find({
       where: {
         userID: req.user.userID
@@ -185,15 +186,16 @@ export function scheduleAppointment(req, res) {
           location: user.Employer[0].dealerInfo.address,
           time: req.body.appointment,
           category: 'appointment',
-          status: 'open'
+          status: 'open',
         };
-        return Event.create(details, {transaction: t})
+        return lead.createEvent(details, {transaction: t})
           .then(function (event) {
-            return event.addLead(lead, {transaction: t, logging: console.log})
-              .then(function () {
-                console.log('>> Lead added to event');
-                return event;
-              });
+            console.log('>> Appointment Event Added to Lead');
+            return event.setHost(user, {transaction: t})
+              .then(function(){
+              console.log('>> Added Event Host');
+              return event;
+            });
           })
       })
 
@@ -202,6 +204,54 @@ export function scheduleAppointment(req, res) {
     }).catch(handleError(res));
   });
 }
+
+
+export function addNote(req,res) {
+  if (!req.user) return res.status(500).send('Unable to Authenticate your request');
+  if (!req.body) return res.status(500).send('Note Details are required');
+  if (!req.body.leadID) return res.status(500).send('leadID is required');
+  if (!req.body.note) return res.status(500).send('Note is required');
+  return Lead.sequelize.transaction(function (t) {
+    return User.find({
+      where: {
+        userID: req.user.userID
+      },
+      include: [
+        {
+          model: Dealership,
+          as: 'Employer',
+          required: true
+        }
+      ],
+      transaction: t
+    }).then(function (user) {
+      var user = user;
+      return Lead.find({
+        where: {
+          leadID: req.body.leadID
+        },
+        transaction: t
+      }).then(function (lead) {
+        var details = {
+          content: req.body.note,
+        };
+        return lead.createNote(details, {transaction: t})
+          .then(function (note) {
+            console.log('>> Note added to Lead');
+            return note.setCreator(user, {transaction: t})
+              .then(function(){
+              return note;
+            });
+          })
+      })
+
+    }).then(function (event) {
+      return res.status(200).json(event);
+    }).catch(handleError(res));
+  });
+
+}
+
 // Updates an existing Lead in the DB
 export function update(req, res) {
   if (req.body.id) {

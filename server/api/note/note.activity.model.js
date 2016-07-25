@@ -4,7 +4,7 @@
 'use strict';
 
 export default function (sequelize, DataTypes) {
-  var noteActivities = sequelize.define('Participants', {
+  var noteActivities = sequelize.define('NoteActivities', {
     activityID: {
       type: DataTypes.BIGINT,
       primaryKey: true,
