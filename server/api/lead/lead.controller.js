@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {Lead} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Dealership} from '../../sqldb';
+import {Event} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -57,6 +58,7 @@ function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
     console.log(err);
+    throw err;
     res.status(statusCode).send(err);
   };
 }
@@ -150,6 +152,56 @@ export function create(req, res) {
   }).catch(handleError(res));
 }
 
+
+export function scheduleAppointment(req, res) {
+  if (!req.user) return res.status(500).send('Unable to Authenticate your request');
+  if (!req.body) return res.status(500).send('Appointment Details are required');
+  if (!req.body.leadID) return res.status(500).send('leadID is required');
+  if (!req.body.appointment) return res.status(500).send('Appointment is required');
+  return Event.sequelize.transaction(function (t) {
+    return User.find({
+      where: {
+        userID: req.user.userID
+      },
+      include: [
+        {
+          model: Dealership,
+          as: 'Employer',
+          required: true
+        }
+      ],
+      transaction: t
+    }).then(function (user) {
+      var user = user;
+      return Lead.find({
+        where: {
+          leadID: req.body.leadID
+        },
+        transaction: t
+      }).then(function (lead) {
+        var details = {
+          name: lead.name,
+          description: req.description,
+          location: user.Employer[0].dealerInfo.address,
+          time: req.body.appointment,
+          category: 'appointment',
+          status: 'open'
+        };
+        return Event.create(details, {transaction: t})
+          .then(function (event) {
+            return event.addLead(lead, {transaction: t, logging: console.log})
+              .then(function () {
+                console.log('>> Lead added to event');
+                return event;
+              });
+          })
+      })
+
+    }).then(function (event) {
+      return res.status(200).json(event);
+    }).catch(handleError(res));
+  });
+}
 // Updates an existing Lead in the DB
 export function update(req, res) {
   if (req.body.id) {

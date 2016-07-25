@@ -59,8 +59,8 @@ export default function(sequelize, DataTypes) {
           'createdAt': this.getDataValue('createdAt')
         }
       },
-      getAttendees: function () {
-        return this['get' + this.getDataValue('commentable').substr(0, 1).toUpperCase() + this.getDataValue('commentable').substr(1)]();
+      getItem: function () {
+        return this['get' + this.get('attendable').substr(0, 1).toUpperCase() + this.get('attendable').substr(1)]();
       }
 
 

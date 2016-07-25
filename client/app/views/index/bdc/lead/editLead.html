@@ -1,0 +1,60 @@
+
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="editLead.cancel()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title">Edit Lead</h3>
+  <label class="tl" style="float: left;">Update opportunity</label>
+</div>
+<div class="modal-body p-b-10">
+  <form name="createLeadForm" role="form">
+    <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" class="form-control" required ng-model="editLead.prospect.name" placeholder="Name...">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" required ng-model="editLead.prospect.phone" placeholder="Phone...">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="editLead.prospect.email" placeholder="Email...">
+        </div>
+      </div>
+      <div class="col-md-6">
+
+        <div class="form-group">
+          <input type="text" class="form-control" required ng-model="editLead.prospect.address" placeholder="Address...">
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="editLead.prospect.interest"
+                 placeholder="Vehicle Of Interest">
+        </div>
+
+        <div class="form-group">
+          <ui-select ng-model="editLead.prospect.source" theme="bootstrap" ng-required="true">
+            <ui-select-match placeholder="Sources">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="source in editLead.sources | filter: $select.search">
+              <div ng-bind-html="source.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+    <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Additional Information</label>
+          <div class="note-editor">
+            <textarea class="form-control" style="height: 200px !important;" ng-model="editLead.prospect.additionalInfo"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning btn-o" type="button" ng-click="editLead.cancel()">Cancel</button>
+  <button ladda="editLead.saving" data-style="zoom-in" class="ladda-button btn btn-primary btn-o" type="button" ng-click="editLead.update()"
+          ng-disabled="createLeadForm.$pristine || !createLeadForm.$valid || editLead.saving">Update Lead
+  </button>
+</div>

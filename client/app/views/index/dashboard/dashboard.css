@@ -227,14 +227,6 @@ div.navs-3 > ul.nav-tabs > li {
   padding-right: 0 !important;
 }
 
-.ng-hide.ng-hide-animate {
-  display: none !important;
-}
-#dscBarChart.ng-animate,
-.hideSansDelay.ng-animate
-{ -webkit-animation: none 0s; }
-
-
 .metric-label {
   padding-top:5px !important;
   padding-bottom:5px !important;

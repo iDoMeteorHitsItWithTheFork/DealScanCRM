@@ -38,3 +38,10 @@ textarea {
 .dsc-dark-blue-bg {
   background: #2f4050 !important;
 }
+
+.ng-hide.ng-hide-animate {
+  display: none !important;
+}
+#dscBarChart.ng-animate,
+.hideSansDelay.ng-animate
+{ -webkit-animation: none 0s; }

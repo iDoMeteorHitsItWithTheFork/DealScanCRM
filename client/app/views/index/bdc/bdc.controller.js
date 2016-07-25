@@ -15,6 +15,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.sidebar = false;
       _bdc.openChat = false;
       _bdc.loadingLeads = false;
+      _bdc.savingAppointment  = false;
       _bdc.leads = [];
 
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
@@ -36,6 +37,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           id: 'new_leads',
           title: 'New Leads',
           icon: 'fa fa-users'
+        },
+        {
+          id: 'processed',
+          title: 'Processed',
+          icon: 'fa fa-user'
         },
         {
           id: 'follow_up',
@@ -491,7 +497,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
-          templateUrl: 'app/views/index/bdc/lead/addLead.html',
+          templateUrl: 'app/views/index/bdc/lead/editLead.html',
           controller: 'EditLeadCtrl',
           controllerAs: 'editLead',
           resolve: {
@@ -510,6 +516,62 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             }
           }
         });
+
+        modalInstance.result.then(function (result) {
+            _bdc.activeLead = result;
+        }).catch(function(e){
+          console.log(e);
+        });
+      }
+
+      _bdc.appointment = {};
+      _bdc.appointment.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+      _bdc.appointment.format = _bdc.appointment.formats[0];
+      _bdc.appointment.altInputFormats = ['M!/d!/yyyy'];
+
+      _bdc.today = function () {
+        _bdc.appointment.dt = new Date();
+      };
+
+      _bdc.today();
+      _bdc.appointment.minDate = new Date();
+
+      _bdc.clear = function () {
+        _bdc.appointment.dt = null;
+      };
+
+
+      _bdc.appointment.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+      };
+
+      _bdc.scheduleLeadAppointment = function(lead){
+        console.log('*** Schedule Lead ****');
+        if (_bdc.savingAppointment) return;
+        _bdc.savingAppointment = true;
+        var details = {};
+        details.leadID = lead.leadID;
+        details.description = _bdc.appointment.description;
+        console.log(_bdc.appointment.dt);
+        console.log(_bdc.appointment.time);
+        //details.appointment = moment(_bdc.appointment.dt.format('YYYY-MM-DD') +''+_bdc.appointment.time);
+        var aptTime = moment(_bdc.appointment.dt).format('YYYY-MM-DD') +' '+_bdc.appointment.time;
+        console.log(aptTime);
+        details.appointment = moment(aptTime);
+        console.log(details.appointment);
+        console.log(details);
+        Lead.appointment(details).then(function(appointment){
+          console.log(appointment);
+          if (appointment && !appointment.error){
+            toaster.success({title:'New Appointment', body: 'Appointment for Lead ('+lead.name+') was scheduled for '+details.appointment});
+          } else toaster.error({title:'New Appointment Error', body: appointment.error.msg});
+          _bdc.savingAppointment = false;
+        }).catch(function(err){
+          console.log(err);
+          _bdc.savingAppointment = false;
+          toaster.error({title:'New Lead Error', body: 'An error occurred while attempting to schedule appointment'});
+        })
 
       }
 

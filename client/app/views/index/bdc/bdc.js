@@ -58,6 +58,10 @@ angular.module('dealScanCrmApp')
                 files: ['.resources/plugins/jasny/jasny-bootstrap.min.js']
               },
               {
+                files: ['.styles/plugins/clockpicker/clockpicker.css',
+                  '.resources/plugins/clockpicker/clockpicker.js']
+              },
+              {
                 name: 'ui.map',
                 files: ['.resources/plugins/uimaps/ui-map.js']
               },

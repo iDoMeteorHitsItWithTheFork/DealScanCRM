@@ -13,6 +13,13 @@
         update: {
           method:'PUT',
         },
+        scheduleLead :{
+          method: 'PUT',
+          params: {
+            id:'schedule',
+            controller: 'appointment'
+          }
+        }
       });
   }
 

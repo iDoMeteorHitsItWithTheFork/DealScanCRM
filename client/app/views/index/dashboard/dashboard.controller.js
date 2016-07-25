@@ -82,7 +82,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         }
       }).catch(function(err){
           console.log(err);
-          toaster.error({title: 'Dashboard Error', body: 'An error occurred while loadind data filters'})
+          toaster.error({title: 'Dashboard Error', body: 'An error occurred while loading data filters'})
       });
     }
     _dashboard.getFilters();
@@ -113,7 +113,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         'This Month': [moment().startOf('month'), moment().endOf('month')],
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       },
-      
+
       'opens': 'left',
       eventHandlers: {'apply.daterangepicker': function(ev, picker) { _dashboard.getSales() }}
     };
