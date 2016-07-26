@@ -70,6 +70,8 @@ function handleError(res, statusCode) {
 // Gets a list of Leads
 export function index(req, res) {
   if (!req.user) return res.status(500).send('Unable to authenticate request');
+  var category = null;
+
   return User.find({
     where:{
       userID: req.user.userID
@@ -82,10 +84,36 @@ export function index(req, res) {
       }
     ]
   }).then(function(user){
+
+
+    var searchOptions = {
+      dealershipID: user.Employer[0].token.dealerID
+    }
+    /*if (req.params.hasOwnProperty('category') && req.params.category && req.params.category.trim() != '')
+      category = req.params.category;
+    if (category) {
+      switch (category.toLowerCase()) {
+        case 'new':
+          searchOptions.createdAt = {
+            $gte: moment().startOf('day'),
+            $lte: moment().endOf('day')
+          };
+          searchOptions.status = 'new';
+          break;
+        case 'working':
+          searchOptions.status = 'working';
+          break;
+        case 'followup':
+          searchOptions.createdAt = {
+            $gt: moment().endOf('day')
+          };
+          searchOptions.status = 'new';
+          break;
+      }
+    }
+    console.log(searchOptions);*/
       return Lead.findAll({
-        where: {
-          dealershipID: user.Employer[0].token.dealerID
-        },
+        where:searchOptions,
         include: [
           {
             model: Note,
@@ -301,7 +329,10 @@ export function scheduleAppointment(req, res) {
               }).then(function(newEvent){
                  var appointment = newEvent.profile;
                  appointment.host = newEvent.Host.profile;
-                 return appointment;
+                 return lead.update({status: 'working'}, {transaction: t})
+                   .then(function(){
+                      return appointment;
+                 });
               });
             });
           })
@@ -364,7 +395,10 @@ export function addNote(req,res) {
                 var noteProfile = newNote.profile;
                 noteProfile.timeAgo = moment(newNote.profile.createdAt).fromNow();
                 noteProfile.creator = newNote.Creator.profile;
-                return noteProfile;
+                return lead.update({status: 'working'}, {transaction: t})
+                  .then(function(){
+                  return noteProfile;
+                });
               })
             });
           })

@@ -491,8 +491,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           }
         });
 
-
-
+        modalInstance.result.then(function (result) {
+          _bdc.leads = result;
+        }).catch(function(e){
+          console.log(e);
+        });
 
       }
 
@@ -521,8 +524,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           }
         });
 
-        modalInstance.result.then(function (result) {
-            _bdc.activeLead = result;
+        modalInstance.result.then(function (leads) {
+            _bdc.activeLead = leads;
         }).catch(function(e){
           console.log(e);
         });

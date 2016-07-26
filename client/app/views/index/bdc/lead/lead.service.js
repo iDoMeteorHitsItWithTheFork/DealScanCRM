@@ -7,6 +7,9 @@ angular.module('dealScanCrmApp')
 
     var user = Auth.getCurrentUser();
     var _leads = [];
+    var _newLeads = [];
+    var _workingLeads = [];
+    var _followUpLeads = [];
 
       /**
        * Create New Lead
@@ -19,9 +22,9 @@ angular.module('dealScanCrmApp')
         if (!details.source) throw new Error('Lead Source is required');
         return LeadResource.save(details)
           .$promise.then(function (lead) {
-            if (lead && !lead.error)
+            if (lead && !lead.error) {
               _leads.unshift(lead);
-            return lead;
+            } return categorizeLeads(_leads);
           }).catch(function (err) {
             console.log(err);
             return {error: {msg: err.data, code: err.status}};
@@ -102,10 +105,26 @@ angular.module('dealScanCrmApp')
 
     }
 
+    function categorizeLeads(leads){
+      _newLeads = $filter('filter')(leads, function(value, index, arr){
+        return value.status == 'new' && moment(value.createdAt).unix() >= moment().startOf('day').unix() && moment(value.createdAt).unix() <= moment().endOf('day').unix();
+      })
+      _workingLeads = $filter('filter')(leads, function(value, index, arr){
+        return value.status == 'working' && value.appointments && value.appointments.length > 0;
+      });
+      _followUpLeads = $filter('filter')(leads, function(value, index, arr){
+        return (value.status == 'working' || value.status == 'new') && ( value.appointments && value.appointments.length == 0) && moment(value.createdAt).unix() <  moment().startOf('day').unix();
+      });
+      return {new_leads: _newLeads, working_leads: _workingLeads, follow_up_leads: _followUpLeads};
+    }
+
       /**
        * Get List of leads
        */
     function getLeads(){
+      /*if (!category) category = 'new';
+      if (category && (category != 'new' && category != 'working' && category != 'followup'))
+        throw new Error('Invalid category');*/
       return LeadResource.query().$promise
         .then(function(leads){
            console.log(leads);
@@ -115,8 +134,7 @@ angular.module('dealScanCrmApp')
                  leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
                  leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
                 _leads.push(leads[i]);
-              }
-              return _leads;
+              } return categorizeLeads(_leads);
            } else return {error: {msg:leads.error.msg}};
         })
         .catch(function(err){
