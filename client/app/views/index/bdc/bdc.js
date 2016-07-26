@@ -27,6 +27,12 @@ angular.module('dealScanCrmApp')
                   '.resources/plugins/flot/curvedLines.js', '.resources/plugins/flot/angular-flot.js', ]
               },
               {
+                serie: true,
+                name: 'angular-ladda',
+                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                  '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+              },
+              {
                 files: ['.resources/plugins/chartJs/Chart.min.js']
               },
               {

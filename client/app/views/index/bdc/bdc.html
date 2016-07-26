@@ -193,7 +193,7 @@
                             <tr ng-repeat="lead in bdc.leads" ng-click="bdc.showInDetails(lead)">
                               <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
                               <td><a class="client-link">{{lead.name}}</a></td>
-                              <td> {{lead.interest | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
+                              <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
                               <td><i class="fa fa-clock-o">&nbsp;&nbsp;</i> {{lead.timeAgo}}</td>
                               <td class="contact-type">
                                 <i ng-class="{'fa fa-envelope': !lead.phone && lead.email,
@@ -214,7 +214,11 @@
                       </div>
                     </div>
 
-                    <div id="tab-2" class="tab-pane active" ng-show="bdc.activeTab.id == 'follow_up'">
+                    <div id="tab-2" class="tab-pane active" ng-show="bdc.activeTab.id == 'working'">
+                      <p>Working Leads.</p>
+                    </div>
+
+                    <div id="tab-3" class="tab-pane active" ng-show="bdc.activeTab.id == 'follow_up'">
                       <p>Leads to follow up with.</p>
                     </div>
 
@@ -268,7 +272,7 @@
                           Interested In
                         </strong>
                         <p>
-                          {{bdc.activeLead.interest}}
+                          {{bdc.activeLead.interest || 'Not Specified'}}
                         </p>
                         <button type="button" ng-click="bdc.newNote = !bdc.newNote" class="btn btn-primary btn-sm"><i
                           class="fa fa-sticky-note">&nbsp;&nbsp;</i>Add Note
@@ -284,6 +288,23 @@
                             <div class="row margin-negative-left-15 margin-negative-right-15">
                               <div class="col-md-12">
                                 <div class="form-group">
+
+                                  <ui-select ng-model="bdc.note.action" theme="bootstrap" ng-required="true">
+                                    <ui-select-match placeholder="Actions">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="action in bdc.noteActions | filter: $select.search">
+                                      <div ng-bind-html="action.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                  </ui-select>
+
+                                  <ui-select ng-if="bdc.note.action.status.length > 0" ng-model="bdc.note.selectedAction" theme="bootstrap" ng-required="true">
+                                    <ui-select-match placeholder="Status">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="status in bdc.note.action.status | filter: $select.search">
+                                      <div ng-bind-html="status.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                  </ui-select>
+
+                                </div>
+                                <div class="form-group">
                                   <label>Notes</label>
                                   <div>
                                     <textarea class="form-control" style="height: 100px !important;"
@@ -292,9 +313,9 @@
                                 </div>
                               </div>
                             </div>
-                            <button type="button"
+                            <button ladda="bdc.savingNote" type="button"
                                     ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || bdc.savingNote"
-                                    ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm btn-block">
+                                    ng-click="bdc.addNote(bdc.activeLead)" class="ladda-button btn btn-primary btn-sm btn-block">
                               Create
                             </button>
                           </form>
@@ -341,10 +362,10 @@
                               </div>
                             </div>
 
-                            <button type="button"
+                            <button ladda="bdc.savingAppointment" type="button"
                                     ng-disabled="scheduleLeadForm.$pristine || !scheduleLeadForm.$valid || bdc.savingAppointment"
-                                    ng-click="bdc.scheduleLeadAppointment(bdc.activeLead)"
-                                    class="btn btn-primary btn-sm btn-block">Create
+                                    ng-click="bdc.scheduleLeadAppointment(bdc.activeLead, bdc.setAppointment)"
+                                    class="ladda-button btn btn-primary btn-sm btn-block">Create
                             </button>
 
                           </form>
@@ -358,7 +379,7 @@
                       <div class="full-height-scroll" full-scroll>
                         <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
                         <p ng-if="bdc.activeLead.additionalInfo">
-                          {{bdc.activeLead.info.additionalInfo}}
+                          {{bdc.activeLead.additionalInfo}}
                         </p>
                         <hr/>
                         <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent Notes</strong>
@@ -371,7 +392,7 @@
                           </li>
                         </ul>
 
-                        <strong>Timeline activity</strong>
+                        <strong>Timeline Activity</strong>
                         <div id="vertical-timeline" class="vertical-container dark-timeline">
                           <div class="vertical-timeline-block">
                             <div class="vertical-timeline-icon gray-bg">

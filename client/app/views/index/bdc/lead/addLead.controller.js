@@ -78,7 +78,7 @@ angular.module('dealScanCrmApp')
             details.email = _newLead.prospect.email;
             details.address = _newLead.prospect.address;
             details.interest = _newLead.prospect.interest;
-            details.additonalInfo = _newLead.prospect.additionalInfo;
+            details.additionalInfo = _newLead.prospect.additionalInfo;
             details.source =_newLead.prospect.source;
             if (_newLead.prospect.appointmentDate.trim() != '' && _newLead.prospect.appointmentTime.trim() != '')
               details.appointment = { Date: _newLead.prospect.appointmentDate, Time: _newLead.prospect.appointmentTime};

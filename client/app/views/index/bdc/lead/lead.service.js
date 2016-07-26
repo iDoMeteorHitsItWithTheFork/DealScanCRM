@@ -41,7 +41,7 @@ angular.module('dealScanCrmApp')
             if (lead){
               var idx = Util.indexOfObject(_leads, 'leadID', leadID);
               if (idx != -1) _leads.splice(idx, 1, lead);
-              return lead.profile;
+              return lead;
             }
           }).catch(function(err){
             console.log(err);

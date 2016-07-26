@@ -207,6 +207,8 @@ export function create(req, res) {
   details.sourceName = req.body.source.name;
   details.sourceType = req.body.source.type;
 
+  console.log(details);
+
   var appointment;
   if (req.body.hasOwnProperty('appointment') && req.body.appointment && req.body.appointment.Date && req.body.appointment.Time)
     appointment = req.body.appointment;
@@ -387,7 +389,41 @@ export function update(req, res) {
   })
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
+    .then(function(result){
+      return Lead.find({
+        where: {
+          leadID: req.params.id
+        },
+        include: [
+          {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            order: [['eventID', 'DESC']]
+          }
+        ]
+      }).then(function(lead){
+         return res.status(200).json(formatLead(lead));
+      })
+    })
     .catch(handleError(res));
 }
 

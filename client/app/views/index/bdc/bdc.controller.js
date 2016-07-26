@@ -17,9 +17,126 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.loadingLeads = false;
       _bdc.savingAppointment  = false;
       _bdc.savingNote = false;
-      _bdc.note = {content: ''};
-      _bdc.leads = [];
+      _bdc.noteActions = [
+        {
+          id: 'documenting',
+          name: 'Documenting Lead',
+          status: []
+        },
+        {
+          id: 'made_call',
+          name: 'Outgoing Call',
+          status: [
+            {
+            id: 'no_answer',
+            name: 'No Answer'
+           },
+            {
+              id: 'not_interested',
+              name: 'Not Interested'
+            },
+            {
+              id: 'call_back_later',
+              name: 'Call Back'
+            }
+          ]
+        },
+        {
+          id: 'received_call',
+          name: 'Incoming Call',
+          status: [
+            {
+              id: 'no_answer',
+              name: 'No Answer'
+            },
+            {
+              id: 'not_interested',
+              name: 'Not Interested'
+            },
+            {
+              id: 'call_back_later',
+              name: 'Call Back'
+            }
+          ]
+        },
+        {
+          id: 'send_text',
+          name: 'Outgoing Text',
+          status: [
+            {
+              id: 'no_answer',
+              name: 'No Answer'
+            },
+            {
+              id: 'not_interested',
+              name: 'Not Interested'
+            },
+            {
+              id: 'call_back_later',
+              name: 'Call Back'
+            }
+          ]
+        },
+        {
+          id: 'received_text',
+          name: 'Incoming Text',
+          status: [
+            {
+              id: 'no_answer',
+              name: 'No Answer'
+            },
+            {
+              id: 'not_interested',
+              name: 'Not Interested'
+            },
+            {
+              id: 'call_back_later',
+              name: 'Call Back'
+            }
+          ]
+        },
+        {
+          id: 'send_email',
+          name: 'Outgoing Email',
+          status: [
+            {
+              id: 'no_answer',
+              name: 'No Answer'
+            },
+            {
+              id: 'not_interested',
+              name: 'Not Interested'
+            },
+            {
+              id: 'call_back_later',
+              name: 'Call Back'
+            }
+          ]
+        },
+        {
+          id: 'received_mail',
+          name: 'Incoming Mail',
+          status: [
+            {
+              id: 'no_answer',
+              name: 'No Answer'
+            },
+            {
+              id: 'not_interested',
+              name: 'Not Interested'
+            },
+            {
+              id: 'call_back_later',
+              name: 'Call Back'
+            }
+          ]
+        }
+      ]
+      _bdc.note = {content: '', action: _bdc.noteActions[0]};
 
+
+
+      _bdc.leads = [];
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
         _bdc.isManager = ans;
       });
@@ -37,18 +154,18 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.tabs = [
         {
           id: 'new_leads',
-          title: 'New Leads',
-          icon: 'fa fa-users'
+          title: 'New',
+          icon: 'fa fa-bolt'
         },
         {
-          id: 'processed',
-          title: 'Processed',
-          icon: 'fa fa-user'
+          id: 'working',
+          title: 'Working',
+          icon: 'fa fa-cog fa-spin'
         },
         {
           id: 'follow_up',
           title: 'Follow Up',
-          icon: 'fa fa-exchange'
+          icon: 'fa fa-recycle'
         }
       ]
 
@@ -569,6 +686,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             toaster.success({title:'New Appointment', body: 'Appointment for Lead ('+lead.name+') was scheduled for '+details.appointment});
           } else toaster.error({title:'New Appointment Error', body: appointment.error.msg});
           _bdc.savingAppointment = false;
+          _bdc.setAppointment = !_bdc.setAppointment;
         }).catch(function(err){
           console.log(err);
           _bdc.savingAppointment = false;
@@ -591,6 +709,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             toaster.success({title:'New Note', body: 'Note added for Lead ('+lead.name+')'});
           } else toaster.error({title:'New Note Error', body: appointment.error.msg});
           _bdc.savingNote = false;
+          _bdc.newNote = !_bdc.newNote;
         }).catch(function(err){
           console.log(err);
           _bdc.savingNote= false;

@@ -83,7 +83,7 @@ angular.module('dealScanCrmApp')
         details.email = _editLead.prospect.email;
         details.address = _editLead.prospect.address;
         details.interest = _editLead.prospect.interest;
-        details.additonalInfo = _editLead.prospect.additionalInfo;
+        details.additionalInfo = _editLead.prospect.additionalInfo;
         details.source =_editLead.prospect.source;
 
         Lead.update(lead.leadID,details).then(function(lead){
