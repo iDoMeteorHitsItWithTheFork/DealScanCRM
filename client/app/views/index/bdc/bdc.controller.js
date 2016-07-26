@@ -568,9 +568,10 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         details.appointment = moment(aptTime);
         console.log(details.appointment);
         console.log(details);
-        Lead.appointment(details).then(function(appointment){
-          console.log(appointment);
-          if (appointment && !appointment.error){
+        Lead.appointment(details).then(function(leads){
+          console.log(leads);
+          if (leads && !leads.error){
+            _bdc.leads = leads;
             toaster.success({title:'New Appointment', body: 'Appointment for Lead ('+lead.name+') was scheduled for '+details.appointment});
           } else toaster.error({title:'New Appointment Error', body: appointment.error.msg});
           _bdc.savingAppointment = false;
@@ -591,9 +592,10 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         details.leadID = lead.leadID;
         details.note = _bdc.note.content;
         console.log(details);
-        Lead.note(details).then(function(note){
-          console.log(note);
-          if (note && !note.error){
+        Lead.note(details).then(function(leads){
+          console.log(leads);
+          if (leads && !leads.error){
+            _bdc.leads = leads;
             toaster.success({title:'New Note', body: 'Note added for Lead ('+lead.name+')'});
           } else toaster.error({title:'New Note Error', body: appointment.error.msg});
           _bdc.savingNote = false;

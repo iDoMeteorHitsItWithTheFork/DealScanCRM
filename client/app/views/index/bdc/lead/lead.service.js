@@ -65,7 +65,7 @@ angular.module('dealScanCrmApp')
         if (appointment){
           var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
           if (idx != -1) _leads[idx].appointments.unshift(appointment);
-          return appointment;
+          return categorizeLeads(_leads);;
         } else return {error: {msg: '', code:''}};
       }).catch(function(err){
          console.log(err);
@@ -88,7 +88,7 @@ angular.module('dealScanCrmApp')
         if (note){
            var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
            if (idx != -1) _leads[idx].notes.unshift(note);
-           return note;
+           return categorizeLeads(_leads);
         } else return {error: {msg: '', code: ''}};
       }).catch(function(err){
           console.log(err);
@@ -122,9 +122,6 @@ angular.module('dealScanCrmApp')
        * Get List of leads
        */
     function getLeads(){
-      /*if (!category) category = 'new';
-      if (category && (category != 'new' && category != 'working' && category != 'followup'))
-        throw new Error('Invalid category');*/
       return LeadResource.query().$promise
         .then(function(leads){
            console.log(leads);
