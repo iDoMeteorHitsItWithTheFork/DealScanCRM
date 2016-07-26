@@ -24,6 +24,7 @@ export default function (sequelize, DataTypes) {
           return {
             'noteID': this.getDataValue('noteID'),
             'content': this.getDataValue('content'),
+            'creatorID': this.getDataValue('CreatorID'),
             'createdAt': this.getDataValue('createdAt'),
           };
         },

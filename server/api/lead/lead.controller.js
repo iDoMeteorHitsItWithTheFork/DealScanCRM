@@ -15,6 +15,9 @@ import {User} from '../../sqldb';
 import {Dealership} from '../../sqldb';
 import {Event} from '../../sqldb';
 import {Note} from '../../sqldb';
+import {NoteActivities} from '../../sqldb';
+import {Participants} from '../../sqldb';
+var moment = require('moment');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -82,8 +85,42 @@ export function index(req, res) {
       return Lead.findAll({
         where: {
           dealershipID: user.Employer[0].token.dealerID
-        }
-      }).then(respondWithResult(res))
+        },
+        include: [
+          {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            order: [['eventID', 'DESC']]
+          }
+        ],
+        order: [['leadID', 'DESC']]
+      }).then(function(leads){
+         if (leads){
+           var _leads = [];
+           for(var i =0; i < leads.length; i++)
+             _leads.push(formatLead(leads[i]));
+           return res.status(200).json(_leads);
+         }
+      })
     }).catch(handleError(res));
 }
 
@@ -92,11 +129,64 @@ export function show(req, res) {
   Lead.find({
     where: {
       leadID: req.params.id
-    }
+    },
+    include: [
+      {
+        model: Note,
+        include: [
+          {
+            model: User,
+            as: 'Creator',
+            attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+          }
+        ],
+        through: NoteActivities,
+        order: [['noteID', 'DESC']]
+      },
+      {
+        model: Event,
+        include: [
+          {
+            model: User,
+            as: 'Host',
+            attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+          }
+        ],
+        through: Participants,
+        order: [['eventID', 'DESC']]
+      }
+    ]
   })
     .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
+    .then(respondWithResult(formatLead(res)))
     .catch(handleError(res));
+}
+
+
+function formatLead(lead){
+  if (!lead) return;
+  var formattedLead = {};
+  formattedLead = lead.profile;
+  formattedLead.timeAgo =  moment(formattedLead.createdAt).fromNow();
+  if (lead.Notes) {
+    formattedLead.notes = [];
+    for (var i = 0; i < lead.Notes.length; i++) {
+      var noteProfile = lead.Notes[i].profile;
+      noteProfile.timeAgo = moment(lead.Notes[i].profile.createdAt).fromNow();
+      noteProfile.creator = lead.Notes[i].Creator.profile;
+      formattedLead.notes.push(noteProfile);
+    }
+  }
+
+  if (lead.Events){
+    formattedLead.appointments = [];
+    for(var j = 0; j < lead.Events.length; j++){
+      var appointmentProfile = lead.Events[j].profile;
+      appointmentProfile.host = lead.Events[j].Host.profile;
+      formattedLead.appointments.push(appointmentProfile);
+    }
+  }
+  return formattedLead;
 }
 
 // Creates a new Lead in the DB
@@ -146,7 +236,7 @@ export function create(req, res) {
           lead.setCreator(user).then(function(result){
              return lead.setDealership(user.Employer[0])
                .then(function(){
-                  return res.status(200).json(lead);
+                  return res.status(200).json(formatLead(lead));
              })
           }) : res.status(200).json({error: {msg: 'Sorry, this lead already exist', code:''}});
       })
@@ -186,7 +276,7 @@ export function scheduleAppointment(req, res) {
           location: user.Employer[0].dealerInfo.address,
           time: req.body.appointment,
           category: 'appointment',
-          status: 'open',
+          status: 'scheduled',
         };
         return lead.createEvent(details, {transaction: t})
           .then(function (event) {
@@ -194,7 +284,23 @@ export function scheduleAppointment(req, res) {
             return event.setHost(user, {transaction: t})
               .then(function(){
               console.log('>> Added Event Host');
-              return event;
+              return Event.find({
+                where: {
+                  eventID: event.eventID
+                },
+                include: [
+                  {
+                    model: User,
+                    as: 'Host',
+                    attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                  }
+                ],
+                transaction: t
+              }).then(function(newEvent){
+                 var appointment = newEvent.profile;
+                 appointment.host = newEvent.Host.profile;
+                 return appointment;
+              });
             });
           })
       })
@@ -240,7 +346,24 @@ export function addNote(req,res) {
             console.log('>> Note added to Lead');
             return note.setCreator(user, {transaction: t})
               .then(function(){
-              return note;
+              return Note.find({
+                where: {
+                  noteID: note.noteID,
+                },
+                include: [
+                  {
+                    model: User,
+                    as: 'Creator',
+                    attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                  }
+                ],
+                transaction: t
+              }).then(function(newNote){
+                var noteProfile = newNote.profile;
+                noteProfile.timeAgo = moment(newNote.profile.createdAt).fromNow();
+                noteProfile.creator = newNote.Creator.profile;
+                return noteProfile;
+              })
             });
           })
       })

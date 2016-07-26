@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('Lead', function (Auth, LeadResource, Util) {
+  .factory('Lead', function (Auth, LeadResource, Util, $filter) {
     // Service logic
     // ...
 
@@ -19,10 +19,8 @@ angular.module('dealScanCrmApp')
         if (!details.source) throw new Error('Lead Source is required');
         return LeadResource.save(details)
           .$promise.then(function (lead) {
-            if (lead && !lead.error) {
-              lead.profile.timeAgo = moment(lead.profile.createdAt).fromNow();
-              _leads.unshift(lead.profile);
-            }
+            if (lead && !lead.error)
+              _leads.unshift(lead);
             return lead;
           }).catch(function (err) {
             console.log(err);
@@ -42,8 +40,7 @@ angular.module('dealScanCrmApp')
           .$promise.then(function(lead){
             if (lead){
               var idx = Util.indexOfObject(_leads, 'leadID', leadID);
-              lead.profile.timeAgo = moment(lead.profile.createdAt).fromNow();
-              if (idx != -1) _leads.splice(idx, 1, lead.profile);
+              if (idx != -1) _leads.splice(idx, 1, lead);
               return lead.profile;
             }
           }).catch(function(err){
@@ -58,10 +55,13 @@ angular.module('dealScanCrmApp')
        */
     function scheduleAppointment(details){
       if (!details) throw new Error('Appointment Details are needed');
+      if (!details.leadID) throw new Error('Lead Details is required');
       return LeadResource.scheduleLead(details)
         .$promise.then(function(appointment){
         console.log(appointment);
         if (appointment){
+          var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
+          if (idx != -1) _leads[idx].appointments.unshift(appointment);
           return appointment;
         } else return {error: {msg: '', code:''}};
       }).catch(function(err){
@@ -83,6 +83,8 @@ angular.module('dealScanCrmApp')
         .$promise.then(function(note){
           console.log(note);
         if (note){
+           var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
+           if (idx != -1) _leads[idx].notes.unshift(note);
            return note;
         } else return {error: {msg: '', code: ''}};
       }).catch(function(err){
@@ -110,8 +112,9 @@ angular.module('dealScanCrmApp')
            if (leads && !leads.error){
               _leads.length = 0;
               for (var i = 0; i < leads.length; i++) {
-                leads[i].profile.timeAgo = moment(leads[i].profile.createdAt).fromNow();
-                _leads.push(leads[i].profile);
+                 leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
+                 leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
+                _leads.push(leads[i]);
               }
               return _leads;
            } else return {error: {msg:leads.error.msg}};

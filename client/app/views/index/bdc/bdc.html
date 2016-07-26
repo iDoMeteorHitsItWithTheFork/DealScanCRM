@@ -174,7 +174,8 @@
 
                   <ul class="nav nav-tabs">
                     <span class="pull-right small text-muted">{{bdc.leads.length || 0}} Leads</span>
-                    <li ng-click="bdc.viewTab(tab)" ng-repeat="tab in bdc.tabs" ng-class="{'active' : tab == bdc.activeTab}">
+                    <li ng-click="bdc.viewTab(tab)" ng-repeat="tab in bdc.tabs"
+                        ng-class="{'active' : tab == bdc.activeTab}">
                       <a><i class="{{tab.icon}}"></i> {{tab.title}}</a></li>
                   </ul>
                   <div class="tab-content">
@@ -198,7 +199,9 @@
                                 <i ng-class="{'fa fa-envelope': !lead.phone && lead.email,
                                               'fa fa-phone': lead.phone,
                                               'fa fa-exclamation-triangle': !lead.phone && !lead.email}"> </i></td>
-                              <td> {{!lead.phone && !lead.email ? 'No contact information' : lead.phone ? lead.phone : lead.email}}</td>
+                              <td> {{!lead.phone && !lead.email ? 'No contact information' : lead.phone ? lead.phone :
+                                lead.email}}
+                              </td>
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
@@ -224,7 +227,7 @@
           </div>
           <div ng-if="bdc.activeLead" class="col-sm-4 animated fadeInDown">
             <div class="ibox ">
-              <div ibox-tools on-close="bdc.activeLead = null"></div>
+              <div ibox-tools on-close="bdc.activeLead = null" class="ps-rl-tp-10-rt-10"></div>
               <div class="ibox-content">
                 <div class="tab-content">
                   <div id="contact-1" class="tab-pane active">
@@ -235,7 +238,9 @@
                           <img alt="image" class="img-circle" src="assets/images/profile.jpg"
                                style="width: 62px">
                         </div>
-                        <a class="text-muted" ng-click="bdc.editLead(bdc.activeLead);"><small><i class="fa fa-pencil">&nbsp;</i> Edit</small></a>
+                        <a class="text-muted" ng-click="bdc.editLead(bdc.activeLead);">
+                          <small><i class="fa fa-pencil">&nbsp;</i> Edit</small>
+                        </a>
                       </div>
                       <div class="col-lg-8">
                         <div class="table-responsive">
@@ -258,7 +263,7 @@
                             </tr>
                             </tbody>
                           </table>
-                          </div>
+                        </div>
                         <strong>
                           Interested In
                         </strong>
@@ -266,7 +271,12 @@
                           {{bdc.activeLead.interest}}
                         </p>
                         <button type="button" ng-click="bdc.newNote = !bdc.newNote" class="btn btn-primary btn-sm"><i
-                          class="fa fa-sticky-note" >&nbsp;&nbsp;</i>Add Note
+                          class="fa fa-sticky-note">&nbsp;&nbsp;</i>Add Note
+                        </button>
+
+                        <button type="button" ng-click="bdc.setAppointment = !bdc.setAppointment"
+                                class="btn btn-primary btn-sm"><i
+                          class="fa fa-calendar">&nbsp;&nbsp;</i>Schedule Appointment
                         </button>
 
                         <div class="animated fadeInDown m-t-25 m-b-20 hideSansDelay" ng-if="bdc.newNote">
@@ -276,22 +286,19 @@
                                 <div class="form-group">
                                   <label>Notes</label>
                                   <div>
-                                    <textarea class="form-control" style="height: 100px !important;" ng-model="bdc.note.content" ng-required="true"></textarea>
+                                    <textarea class="form-control" style="height: 100px !important;"
+                                              ng-model="bdc.note.content" ng-required="true"></textarea>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <button type="button" ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || bdc.savingNote"
-                                    ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm btn-block">Create
+                            <button type="button"
+                                    ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || bdc.savingNote"
+                                    ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm btn-block">
+                              Create
                             </button>
                           </form>
                         </div>
-
-
-
-                        <button type="button" ng-click="bdc.setAppointment = !bdc.setAppointment" class="btn btn-primary btn-sm"><i
-                          class="fa fa-calendar">&nbsp;&nbsp;</i>Schedule Appointment
-                        </button>
 
                         <div class="animated fadeInDown m-t-25 hideSansDelay" ng-if="bdc.setAppointment">
                           <form name="scheduleLeadForm" role="form">
@@ -302,15 +309,18 @@
                                          uib-datepicker-popup="{{bdc.appointment.format}}"
                                          ng-model="bdc.appointment.dt"
                                          is-open="bdc.appointment.opened"
-                                         datepicker-options="bdc.appointment.dateOptions" ng-required="true" close-text="Close"
-                                         alt-input-formats="bdc.appointment.altInputFormats" min-date="bdc.appointment.minDate"
+                                         datepicker-options="bdc.appointment.dateOptions" ng-required="true"
+                                         close-text="Close"
+                                         alt-input-formats="bdc.appointment.altInputFormats"
+                                         min-date="bdc.appointment.minDate"
                                          ng-click="bdc.appointment.opened = !bdc.appointment.opened"/>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <div class="input-group " clock-picker data-autoclose="true">
-                                    <input type="text" class="form-control" ng-model="bdc.appointment.time" placeholder="Time" ng-required="true">
+                                    <input type="text" class="form-control" ng-model="bdc.appointment.time"
+                                           placeholder="Time" ng-required="true">
                                     <span class="input-group-addon">
                                         <span class="fa fa-clock-o"></span>
                                     </span>
@@ -324,13 +334,17 @@
                                 <div class="form-group">
                                   <label>Notes</label>
                                   <div>
-                                    <textarea class="form-control" style="height: 100px !important;" ng-model="bdc.appointment.description"></textarea>
+                                    <textarea class="form-control" style="height: 100px !important;"
+                                              ng-model="bdc.appointment.description"></textarea>
                                   </div>
                                 </div>
                               </div>
                             </div>
 
-                            <button type="button" ng-disabled="scheduleLeadForm.$pristine || !scheduleLeadForm.$valid || bdc.savingAppointment" ng-click="bdc.scheduleLeadAppointment(bdc.activeLead)" class="btn btn-primary btn-sm btn-block">Create
+                            <button type="button"
+                                    ng-disabled="scheduleLeadForm.$pristine || !scheduleLeadForm.$valid || bdc.savingAppointment"
+                                    ng-click="bdc.scheduleLeadAppointment(bdc.activeLead)"
+                                    class="btn btn-primary btn-sm btn-block">Create
                             </button>
 
                           </form>
@@ -338,35 +352,90 @@
                         </div>
 
 
-
-
-
-
-
-
                       </div>
-                      </div>
-                      <div class="client-detail">
-                        <div class="full-height-scroll" full-scroll>
-                          <strong>Activity</strong>
-                          <ul class="list-group clear-list">
-                            <li ng-if="!bdc.activeLead.notes || bdc.activeLead.notes.length == 0" class="list-group-item fist-item">
-                              No recent activities
-                            </li>
-                            <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item" ng-class="'fist-item' : $index == 0">
-                              <span class="pull-right"> {{note.createdAt}}</span>
-                              {{::note.content}}
-                              <small>{{::note.Creator.profile.name}}</small>
-                            </li>
-                          </ul>
-                          <strong>Additional Info</strong>
-                          <p>
-                            {{bdc.activeLead.additionalInfo}}
-                          </p>
-                          <hr/>
+                    </div>
+                    <div class="client-detail">
+                      <div class="full-height-scroll" full-scroll>
+                        <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
+                        <p ng-if="bdc.activeLead.additionalInfo">
+                          {{bdc.activeLead.info.additionalInfo}}
+                        </p>
+                        <hr/>
+                        <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent Notes</strong>
+                        <ul class="list-group clear-list" ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">
+                          <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item" ng-class="{'fist-item': $index == 0}">
+                            <span class="pull-right"> {{note.timeAgo}}
+                            </span>
+                            {{note.content}}
+                            <br/><small>{{note.creator.name}}</small>
+                          </li>
+                        </ul>
+
+                        <strong>Timeline activity</strong>
+                        <div id="vertical-timeline" class="vertical-container dark-timeline">
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon gray-bg">
+                              <i class="fa fa-coffee"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <p>Conference on the sales results for the previous year.
+                              </p>
+                              <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                            </div>
+                          </div>
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon gray-bg">
+                              <i class="fa fa-briefcase"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <p>Many desktop publishing packages and web page editors now use Lorem.
+                              </p>
+                              <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                            </div>
+                          </div>
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon gray-bg">
+                              <i class="fa fa-bolt"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <p>There are many variations of passages of Lorem Ipsum available.
+                              </p>
+                              <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
+                            </div>
+                          </div>
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon navy-bg">
+                              <i class="fa fa-warning"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <p>The generated Lorem Ipsum is therefore.
+                              </p>
+                              <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
+                            </div>
+                          </div>
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon gray-bg">
+                              <i class="fa fa-coffee"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <p>Conference on the sales results for the previous year.
+                              </p>
+                              <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                            </div>
+                          </div>
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon gray-bg">
+                              <i class="fa fa-briefcase"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <p>Many desktop publishing packages and web page editors now use Lorem.
+                              </p>
+                              <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                  </div>
+                    </div>
                 </div>
               </div>
             </div>

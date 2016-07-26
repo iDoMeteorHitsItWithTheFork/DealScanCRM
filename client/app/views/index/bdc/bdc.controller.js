@@ -593,7 +593,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           _bdc.savingNote = false;
         }).catch(function(err){
           console.log(err);
-          _bdc.savingAppointment = false;
+          _bdc.savingNote= false;
           toaster.error({title:'New Lead Error', body: 'An error occurred while attempting to schedule appointment'});
         });
       }
