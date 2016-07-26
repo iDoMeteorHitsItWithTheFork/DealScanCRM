@@ -288,23 +288,6 @@
                             <div class="row margin-negative-left-15 margin-negative-right-15">
                               <div class="col-md-12">
                                 <div class="form-group">
-
-                                  <ui-select ng-model="bdc.note.action" theme="bootstrap" ng-required="true">
-                                    <ui-select-match placeholder="Actions">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="action in bdc.noteActions | filter: $select.search">
-                                      <div ng-bind-html="action.name | highlight: $select.search"></div>
-                                    </ui-select-choices>
-                                  </ui-select>
-
-                                  <ui-select ng-if="bdc.note.action.status.length > 0" ng-model="bdc.note.selectedAction" theme="bootstrap" ng-required="true">
-                                    <ui-select-match placeholder="Status">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="status in bdc.note.action.status | filter: $select.search">
-                                      <div ng-bind-html="status.name | highlight: $select.search"></div>
-                                    </ui-select-choices>
-                                  </ui-select>
-
-                                </div>
-                                <div class="form-group">
                                   <label>Notes</label>
                                   <div>
                                     <textarea class="form-control" style="height: 100px !important;"
