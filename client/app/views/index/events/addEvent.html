@@ -1,0 +1,56 @@
+<div class="modal-header p-b-15">
+    <button type="button" class="close" ng-click="scheduleLead.cancel()"><i class="fa fa-times fs-14"></i></button>
+    <h3 class="modal-title">Schedule Appointment</h3>
+    <label class="tl" style="float: left;">Create a new opportunity</label>
+</div>
+<div class="modal-body p-b-10">
+    <form name="createLeadForm" role="form">
+        <div class="row margin-negative-left-15 margin-negative-right-15">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="text" class="form-control"  required ng-model="scheduleLead.name" placeholder="Name...">
+                </div>
+
+                <div class="form-group">
+                    <label>Schedule Appointment</label>
+                    <input type="datetime" class="form-control" placeholder="Appointment Date" date-time
+                           ng-model="scheduleLead.dt"
+                           view="date"
+                           auto-close="true"
+                           min-view="date"
+                           format="YYYY-MM-DD"
+                           ng-required="true">
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" required ng-model="scheduleLead.phone" placeholder="Phone...">
+                </div>
+
+                <div class="form-group">
+                    <div class="m-t-38" uib-timepicker ng-model="scheduleLead.appointmentTime"
+                         show-spinners = "false"
+                         show-meridian="true" type="text"
+                         placeholder="Appointment Time"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row margin-negative-left-15 margin-negative-right-15">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Notes</label>
+                        <textarea class="form-control" style="height: 200px !important;" ng-model="scheduleLead.description"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning btn-o" type="button" ng-click="scheduleLead.cancel()">Cancel</button>
+    <button ladda="scheduleLead.saving" data-style="zoom-in" class="ladda-button btn btn-primary btn-o" type="button" ng-click="scheduleLead.create()"
+            ng-disabled="createLeadForm.$pristine || !createLeadForm.$valid || scheduleLead.saving">Create Appointment
+    </button>
+</div>

@@ -63,3 +63,12 @@ textarea {
   background-color: #FF750D;
   border-color: #ff5f00;
 }
+
+.navbar-right {
+  float: right!important;
+  margin-right: 0;
+}
+
+.row {
+
+}

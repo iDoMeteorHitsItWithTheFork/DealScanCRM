@@ -1,0 +1,22 @@
+<div class="modal-header p-b-15">
+    <button type="button" class="close" ng-click="addNote.cancel()"><i class="fa fa-times fs-14"></i></button>
+    <h3 class="modal-title">Add Note to {{addNote.leadName}}'s Profile</h3>
+</div>
+<div class="modal-body p-b-10">
+    <form name="addNoteForm" role="form">
+        <div class="row margin-negative-left-15 margin-negative-right-15">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <textarea class="form-control" ng-required="true" placeholder="Add note details..." style="height: 200px !important;" ng-model="addNote.note.content"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div style="text-align:right;">
+    <button class="btn btn-warning btn-o" type="button" ng-click="addNote.cancel()">Cancel</button>
+    <button ladda="addNote.saving" data-style="zoom-in" class="ladda-button btn btn-primary btn-o" type="button" ng-click="addNote.create()"
+            ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || addNote.saving">Create Note
+    </button>
+    </div>
+</div>

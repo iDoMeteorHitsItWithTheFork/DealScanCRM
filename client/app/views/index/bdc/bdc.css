@@ -16,3 +16,9 @@
   top: 10px;
   right: 10px;
 }
+
+#lead-info td {
+  line-height: 1.42857;
+  padding: 4px;
+  vertical-align: top;
+}

@@ -19,8 +19,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.savingNote = false;
       _bdc.note = {content: ''};
 
-
-
       _bdc.leads = [];
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
         _bdc.isManager = ans;
@@ -440,8 +438,10 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         },
         "alwaysShowCalendars": true,
         'opens': 'left',
+        eventHandlers: {'apply.daterangepicker': function(ev, picker) { _bdc.getLeads() }}
       };
-      _bdc.dateRange = {startDate: _bdc.datePickerOptions.ranges.Today[0],
+
+      _bdc.dateRange = {startDate: moment().subtract(6, 'days'),
         endDate: _bdc.datePickerOptions.ranges.Today[1]};
 
 
@@ -616,13 +616,13 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-      _bdc.addLead = function () {
+      _bdc.addAppointment = function (lead) {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
-          templateUrl: 'app/views/index/bdc/lead/addLead.html',
-          controller: 'AddLeadCtrl',
-          controllerAs: 'newLead',
+          templateUrl: 'app/views/index/bdc/lead/scheduleLead.html',
+          controller: 'ScheduleLeadCtrl',
+          controllerAs: 'scheduleLead',
           resolve: {
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
@@ -631,14 +631,31 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                   name: 'angular-ladda',
                   files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
                     '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                },
+                {
+                  name: 'datePicker',
+                  files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+                },
+                {
+                  serie: true,
+                  files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+                },
+                {
+                  name: 'daterangepicker',
+                  files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
                 }
               ]);
+            },
+            lead: function(){
+              return lead;
             }
           }
         });
 
-        modalInstance.result.then(function (result) {
-          _bdc.leads = result;
+        modalInstance.result.then(function (leads) {
+          console.log(leads);
+          _bdc.leads = leads;
+
         }).catch(function(e){
           console.log(e);
         });
@@ -699,66 +716,117 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         startingDay: 1
       };
 
-      _bdc.scheduleLeadAppointment = function(lead){
-        console.log('*** Schedule Lead ****');
-        if (_bdc.savingAppointment) return;
-        _bdc.savingAppointment = true;
-        var details = {};
-        details.leadID = lead.leadID;
-        details.description = _bdc.appointment.description;
-        console.log(_bdc.appointment.dt);
-        console.log(_bdc.appointment.time);
-        //details.appointment = moment(_bdc.appointment.dt.format('YYYY-MM-DD') +''+_bdc.appointment.time);
-        var aptTime = moment(_bdc.appointment.dt).format('YYYY-MM-DD') +' '+_bdc.appointment.time;
-        console.log(aptTime);
-        details.appointment = moment(aptTime);
-        console.log(details.appointment);
-        console.log(details);
-        Lead.appointment(details).then(function(leads){
-          console.log(leads);
-          if (leads && !leads.error){
-            _bdc.leads = leads;
-            toaster.success({title:'New Appointment', body: 'Appointment for Lead ('+lead.name+') was scheduled for '+details.appointment});
-          } else toaster.error({title:'New Appointment Error', body: appointment.error.msg});
-          _bdc.savingAppointment = false;
-          _bdc.setAppointment = !_bdc.setAppointment;
-        }).catch(function(err){
-          console.log(err);
-          _bdc.savingAppointment = false;
-          toaster.error({title:'New Lead Error', body: 'An error occurred while attempting to schedule appointment'});
-        })
 
+
+      _bdc.addLead = function () {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          windowClass: 'slide-up',
+          templateUrl: 'app/views/index/bdc/lead/addLead.html',
+          controller: 'AddLeadCtrl',
+        });
       }
 
-      _bdc.addNote = function(lead){
-        console.log('*** Add Note ****');
-        if (_bdc.savingNote) return;
-        _bdc.savingNote = true;
-        var details = {};
-        details.leadID = lead.leadID;
-        details.note = _bdc.note.content;
-        console.log(details);
-        Lead.note(details).then(function(leads){
-          console.log(leads);
-          if (leads && !leads.error){
-            _bdc.leads = leads;
-            toaster.success({title:'New Note', body: 'Note added for Lead ('+lead.name+')'});
-          } else toaster.error({title:'New Note Error', body: appointment.error.msg});
-          _bdc.savingNote = false;
-          _bdc.newNote = !_bdc.newNote;
-        }).catch(function(err){
-          console.log(err);
-          _bdc.savingNote= false;
-          toaster.error({title:'New Lead Error', body: 'An error occurred while attempting to schedule appointment'});
+      _bdc.addNote= function (lead) {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          windowClass: 'slide-up',
+          templateUrl: 'app/views/index/bdc/lead/addLeadNote.html',
+          controller: 'AddLeadNoteCtrl',
+          controllerAs: 'addNote',
+          resolve: {
+            loadPlugin: function ($ocLazyLoad) {
+              return $ocLazyLoad.load([
+                {
+                  serie: true,
+                  name: 'angular-ladda',
+                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                }
+              ]);
+            },
+            lead: function(){
+              return lead;
+            }
+          }
         });
+
+        modalInstance.result.then(function (leads) {
+          console.log(leads);
+          _bdc.leads = leads;
+
+        }).catch(function(e){
+          console.log(e);
+        });
+
       }
 
       _bdc.addTask = function (lead) {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
-          templateUrl: 'app/account/task/addTask.html',
+          templateUrl: 'app/views/index/task/addTask.html',
           controller: 'AddTaskCtrl',
+          resolve: {
+            loadPlugin: function ($ocLazyLoad) {
+              return $ocLazyLoad.load([
+                {
+                  serie: true,
+                  name: 'angular-ladda',
+                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                },
+                {
+                  name: 'datePicker',
+                  files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
+                },
+                {
+                  serie: true,
+                  files: ['js/plugins/daterangepicker/daterangepicker.js', 'css/plugins/daterangepicker/daterangepicker-bs3.css']
+                },
+                {
+                  name: 'daterangepicker',
+                  files: ['js/plugins/daterangepicker/angular-daterangepicker.js']
+                },
+              ]);
+            }
+          }
+        });
+      }
+
+
+      // TODO: this ui needs modified
+      _bdc.addEvent = function () {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          windowClass: 'slide-up',
+          templateUrl: 'app/views/index/events/addEvent.html',
+          controller: 'AddEventCtrl',
+          controllerAs: 'scheduleLead',
+          resolve: {
+            loadPlugin: function ($ocLazyLoad) {
+              return $ocLazyLoad.load([
+                {
+                  serie: true,
+                  name: 'angular-ladda',
+                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                },
+                {
+                  name: 'datePicker',
+                  files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
+                },
+                {
+                  serie: true,
+                  files: ['js/plugins/daterangepicker/daterangepicker.js', 'css/plugins/daterangepicker/daterangepicker-bs3.css']
+                },
+                {
+                  name: 'daterangepicker',
+                  files: ['js/plugins/daterangepicker/angular-daterangepicker.js']
+                },
+              ]);
+            }
+          }
         });
       }
 
