@@ -6,12 +6,50 @@
 (function () {
 
   function LeadResource($resource) {
-    return $resource('/api/leads/:id/:controller', {
+    return $resource('/api/leads/:id/:controller/:status', {
         id: '@leadID'
       },
       {
         update: {
           method:'PUT',
+        },
+        totalLeads :{
+          method: 'GET',
+          params: {
+            id:'stats',
+            controller:'leads',
+          }
+        },
+        totalAppointments :{
+          method: 'GET',
+          params: {
+            id:'stats',
+            controller:'appointments',
+          }
+        },
+        keptAppointments :{
+          method: 'GET',
+          params: {
+            id:'stats',
+            controller:'appointments',
+            status:'kept'
+          }
+        },
+        missedAppointments :{
+          method: 'GET',
+          params: {
+            id:'stats',
+            controller:'appointments',
+            status: 'missed'
+          }
+        },
+        soldAppointments :{
+          method: 'GET',
+          params: {
+            id:'stats',
+            controller:'appointments',
+            status: 'sold'
+          }
         },
         scheduleLead :{
           method: 'PUT',

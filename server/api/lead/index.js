@@ -8,6 +8,11 @@ var router = express.Router();
 
 router.get('/', auth.isAuthenticated(), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);
+router.get('/stats/leads', auth.isAuthenticated(), controller.totalLeads);
+router.get('/stats/appointments', auth.isAuthenticated(), controller.totalAppointments);
+router.get('/stats/appointments/kept', auth.isAuthenticated(), controller.keptAppointments);
+router.get('/stats/appointments/missed', auth.isAuthenticated(), controller.missedAppointments);
+router.get('/stats/appointments/sold', auth.isAuthenticated(), controller.soldAppointments);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.put('/schedule/appointment', auth.isAuthenticated(), controller.scheduleAppointment);
