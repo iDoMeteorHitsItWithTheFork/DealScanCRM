@@ -18,6 +18,7 @@ import {Note} from '../../sqldb';
 import {NoteActivities} from '../../sqldb';
 import {Participants} from '../../sqldb';
 var moment = require('moment');
+var Q = require('q');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -211,6 +212,8 @@ function formatLead(lead){
     for(var j = 0; j < lead.Events.length; j++){
       var appointmentProfile = lead.Events[j].profile;
       appointmentProfile.host = lead.Events[j].Host.profile;
+      appointmentProfile.sourceName = lead.sourceName;
+      appointmentProfile.sourceType = lead.sourceType;
       formattedLead.appointments.push(appointmentProfile);
     }
   }
@@ -460,6 +463,313 @@ export function update(req, res) {
     })
     .catch(handleError(res));
 }
+
+
+
+
+export function totalLeads(req, res){
+
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+    if (user){
+      var dealershipID = user.Employer[0].token.dealerID;
+      var saleRep = '';
+      var promises = [];
+      /*var from = moment().startOf('month').startOf('day').format('YYYY-MM-DD HH:MM:ss');
+      var to = moment().endOf('day').format('YYYY-MM-DD HH:MM:ss');
+      if (req.user.role == 'sale_rep') saleRep = ' AND saleRepID = '+req.user.userID+' ';
+      console.log(from);
+      console.log(to);*/
+
+      /* Get totalLeads Stats */
+      promises.push(Lead.sequelize
+        .query('SELECT lds.sourceName AS Source, lds.sourceType AS Type,' +
+          '  COUNT(1) AS Leads, COUNT(1) / t.cnt * 100 AS Percentage FROM Leads lds' +
+          ' CROSS JOIN (SELECT COUNT(1) AS cnt FROM Leads) t GROUP BY lds.sourceName ORDER BY Percentage DESC',
+          {type: Lead.sequelize.QueryTypes.SELECT}));
+
+      /* Get table Data */
+      promises.push(Lead.findAll({
+        where:{
+          dealershipID: dealershipID
+        },
+        include: [
+          {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            order: [['eventID', 'DESC']]
+          }
+        ],
+        order: [['leadID', 'DESC']]
+      }));
+
+      /* Return Query results */
+      return Q.all(promises).then(function(leads){
+        return res.status(200).json({stats: leads[0], data: leads[1]});
+      });
+
+    } else return res.status(200).json([]);
+
+  }).catch(handleError(res));
+
+}
+
+
+
+export function totalAppointments(req, res){
+
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+
+     if (user){
+
+         var promises = [];
+         /* Get Appointments Stats */
+         promises.push(Lead.sequelize
+         .query('SELECT sourceName AS Source, sourceType AS Type,' +
+           '  COUNT(1) AS Appointments, COUNT(1) / t.cnt * 100 AS Percentage FROM Events' +
+           ' JOIN Participants ON Events.eventID = Participants.eventID ' +
+           'JOIN Leads ON Participants.participantID = Leads.leadID ' +
+           'CROSS JOIN (SELECT COUNT(1) AS cnt FROM Events ' +
+           'JOIN Participants ON Events.eventID = Participants.eventID ' +
+           'WHERE category="appointment" AND attendable="lead") t GROUP BY sourceName ORDER BY Percentage DESC',
+           {type: Lead.sequelize.QueryTypes.SELECT}));
+
+         /* Get All Appointments */
+         promises.push(Lead.findAll({
+           include: {
+              model: Event,
+              include: [
+               {
+                 model: User,
+                 as: 'Host',
+                 attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+               }
+             ],
+           },
+           through: Participants
+         }));
+
+         return Q.all(promises).then(function(appointments){
+           return res.status(200).json({stats:appointments[0], data:appointments[1]});
+         });
+
+     } else return res.status(200).json([]);
+
+  }).catch(handleError(res));
+
+}
+
+export function keptAppointments(req, res){
+
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+
+    if (user){
+
+      var promises = [];
+      /* Get Appointments Stats */
+      promises.push(Lead.sequelize
+        .query('SELECT sourceName AS Source, sourceType AS Type,' +
+          '  COUNT(1) AS Appointments, COUNT(1) / t.cnt * 100 AS Percentage FROM Events' +
+          ' JOIN Participants ON Events.eventID = Participants.eventID ' +
+          'JOIN Leads ON Participants.participantID = Leads.leadID ' +
+          'CROSS JOIN (SELECT COUNT(1) AS cnt FROM Events ' +
+          'JOIN Participants ON Events.eventID = Participants.eventID ' +
+          'WHERE category="appointment" AND attendable="lead" AND Events.status="kept") t ' +
+          'WHERE Events.status="kept" GROUP BY sourceName ORDER BY Percentage DESC',
+          {type: Lead.sequelize.QueryTypes.SELECT}));
+
+      /* Get All Appointments */
+      promises.push(Lead.findAll({
+        include: {
+          model: Event,
+          where: {
+            status: 'kept'
+          },
+          include: [
+            {
+              model: User,
+              as: 'Host',
+              attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+            }
+          ],
+        },
+        through: Participants
+      }));
+
+      return Q.all(promises).then(function(appointments){
+        return res.status(200).json({stats:appointments[0], data:appointments[1]});
+      });
+
+    } else return res.status(200).json([]);
+
+  }).catch(handleError(res));
+}
+
+export function missedAppointments(req, res){
+
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+
+    if (user){
+
+      var promises = [];
+      /* Get Appointments Stats */
+      promises.push(Lead.sequelize
+        .query('SELECT sourceName AS Source, sourceType AS Type,' +
+          '  COUNT(1) AS Appointments, COUNT(1) / t.cnt * 100 AS Percentage FROM Events' +
+          ' JOIN Participants ON Events.eventID = Participants.eventID ' +
+          'JOIN Leads ON Participants.participantID = Leads.leadID ' +
+          'CROSS JOIN (SELECT COUNT(1) AS cnt FROM Events ' +
+          'JOIN Participants ON Events.eventID = Participants.eventID ' +
+          'WHERE category="appointment" AND attendable="lead" AND Events.status="missed") t ' +
+          'WHERE Events.status="missed" GROUP BY sourceName ORDER BY Percentage DESC',
+          {type: Lead.sequelize.QueryTypes.SELECT}));
+
+      /* Get All Appointments */
+      promises.push(Lead.findAll({
+        include: {
+          model: Event,
+          where: {
+            status: 'missed'
+          },
+          include: [
+            {
+              model: User,
+              as: 'Host',
+              attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+            }
+          ],
+        },
+        through: Participants
+      }));
+
+      return Q.all(promises).then(function(appointments){
+        return res.status(200).json({stats:appointments[0], data:appointments[1]});
+      });
+
+    } else return res.status(200).json([]);
+
+  }).catch(handleError(res));
+}
+
+export function soldAppointments(req, res){
+
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+
+    if (user){
+
+      var promises = [];
+      /* Get Appointments Stats */
+      promises.push(Lead.sequelize
+        .query('SELECT sourceName AS Source, sourceType AS Type,' +
+          '  COUNT(1) AS Appointments, COUNT(1) / t.cnt * 100 AS Percentage FROM Events' +
+          ' JOIN Participants ON Events.eventID = Participants.eventID ' +
+          'JOIN Leads ON Participants.participantID = Leads.leadID ' +
+          'CROSS JOIN (SELECT COUNT(1) AS cnt FROM Events ' +
+          'JOIN Participants ON Events.eventID = Participants.eventID ' +
+          'WHERE category="appointment" AND attendable="lead" AND Events.status="sold") t ' +
+          'WHERE Events.status="sold" GROUP BY sourceName ORDER BY Percentage DESC',
+          {type: Lead.sequelize.QueryTypes.SELECT}));
+
+      /* Get All Appointments */
+      promises.push(Lead.findAll({
+        include: {
+          model: Event,
+          where: {
+            status: 'sold'
+          },
+          include: [
+            {
+              model: User,
+              as: 'Host',
+              attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+            }
+          ],
+        },
+        through: Participants
+      }));
+
+      return Q.all(promises).then(function(appointments){
+        return res.status(200).json({stats:appointments[0], data:appointments[1]});
+      });
+
+    } else return res.status(200).json([]);
+
+  }).catch(handleError(res));
+}
+
 
 // Deletes a Lead from the DB
 export function destroy(req, res) {

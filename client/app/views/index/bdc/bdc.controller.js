@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('BDCCtrl',
 
-    function ($scope, $state, $uibModal,$anchorScroll, BDCService, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, Lead, toaster) {
+    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, BDC, appConfig, DTOptionsBuilder, $filter, Lead, toaster) {
       $("#page-wrapper").css("overflow-x", "scroll");
 
       console.log("dashboard controller loaded");
@@ -31,7 +31,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       })
 
 
-      _bdc.viewOptions = 'list';
+      _bdc.viewOptions = 'charts';
       _bdc.showBarChart = false;
       _bdc.selectedPie = null;
 
@@ -82,12 +82,75 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         _bdc.activeLead = lead;
       }
 
+
+      /**
+       * Retreive Graph Data From Service
+       */
+      _bdc.getGraphData = function(){
+        if (_bdc.retreivingGraphData) return;
+        _bdc.retreivingGraphData = true;
+        console.log('**** GETTING GRAPH DATA *****');
+    /*    var searchOptions = {};
+        searchOptions.type = _dashboard.selectedType;
+        searchOptions.dealershipID = _dashboard.selectedDealership.DealershipID;
+        searchOptions.teamID = _dashboard.selectedTeam.TeamID;
+        searchOptions.employee = _dashboard.selectedEmployee;
+        searchOptions.from = _dashboard.dateRange.startDate.format('YYYY/MM/DD');
+        searchOptions.to = _dashboard.dateRange.endDate.format('YYYY/MM/DD');*/
+        //console.log(searchOptions);
+        BDC.graphData().then(function(leads){
+          console.log('\n\n\n\ GRAPH DATA \n\n\n');
+          console.log(leads);
+          if (leads){
+            _bdc.totalLeads = leads.totalLeads;
+            _bdc.totalAppointments = leads.totalAppointments;
+            _bdc.keptAppointments = leads.keptAppointments;
+            _bdc.missedAppointments = leads.missedAppointments;
+            _bdc.soldAppointments = leads.soldAppointments;
+          }
+            /*_bdc.totalLeads = BDC.totalLeads();
+            console.log('\n\n\n TOTAL LEADS GRAPH DATA \n\n\n');
+            console.log(_bdc.totalLeads);
+            console.log('\n\n *****************************\n\n');
+
+            _bdc.totalAppointments = BDC.totalAppointments();
+            console.log('\n\n\n TOTAL APPOINTMENTS GRAPH DATA \n\n\n');
+            console.log(_bdc.totalAppointments);
+            console.log('\n\n *****************************\n\n');
+
+            _bdc.keptAppointments = BDC.keptAppointments();
+            console.log('\n\n\n KEPT APPOINTMENTS GRAPH DATA \n\n\n');
+            console.log(_bdc.keptAppointments);
+            console.log('\n\n *****************************\n\n');
+
+
+            _bdc.soldAppointments = BDC.soldAppointments();
+            console.log('\n\n\n SOLD APPOINTMENTS GRAPH DATA \n\n\n');
+            console.log(_bdc.soldAppointments);
+            console.log('\n\n *****************************\n\n');
+
+
+            _bdc.missedAppointments = BDC.missedAppointments();
+            console.log('\n\n\n MISSED APPOINTMENTS GRAPH DATA \n\n\n');
+            console.log(_bdc.missedAppointments);
+            console.log('\n\n *****************************\n\n');*/
+
+          _bdc.retreivingGraphData = false;
+        }).catch(function(err){
+          _bdc.retreivingGraphData = false;
+          console.log(err);
+          toaster.error({title: 'Leads Load Error', body: 'An Error occurred while attempting to retreive leads data'});
+        });
+      }
+
+      _bdc.getGraphData();
+
       /**
        * Pie Chart Data
        */
 
       /**
-       * Pie Chart Options
+       * Pie Chart Display Options
        */
       _bdc.pieOptions = {
         series: {
@@ -110,10 +173,21 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       };
 
+
+
+
       _bdc.sales = [];
       _bdc.models = [];
       _bdc.color = '#1ab394';
 
+
+        /**
+         * Show Details of selected pie
+         * @param $event
+         * @param pos
+         * @param item
+         * @param chart
+         */
       _bdc.showDetails = function($event, pos, item, chart){
         console.log(item);
         console.log(chart);
@@ -179,12 +253,16 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         console.log("*****************************");
       }
 
+        /**
+         * Bar Chart Data Modeler
+         * @type {*[]}
+         */
       _bdc.barChartData = [
         {
-          label: "Sales",
+          label: "Leads",
           grow:{stepMode:"linear"},
-          data: _bdc.sales,
-          color: _bdc.color,
+          data: _bdc.sales, //leads data
+          color: _bdc.color, //chart color [green]
           bars: {
             show: true,
             align: "center",
@@ -194,6 +272,28 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         },
       ];
 
+        /**
+         * Bar chart default Options
+         * @type {{grid: {hoverable: boolean,
+         * clickable: boolean,
+         * tickColor: string,
+         * borderWidth: number,
+         * color: string},
+         * colors: string[],
+         * tooltip: boolean,
+         * xaxis: {ticks: Array,
+         * tickLength: number,
+         * axisLabel: string,
+         * axisLabelUseCanvas: boolean,
+         * axisLabelFontSizePixels: number,
+         * axisLabelFontFamily: string,
+         * axisLabelPadding: number,
+         * color: string},
+         * yaxes: *[],
+         * legend: {noColumns: number,
+         * labelBoxBorderColor: string,
+         * position: string}}}
+         */
       _bdc.barChartOptions = {
         grid: {
           hoverable: true,
@@ -231,6 +331,12 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       };
 
+
+        /**
+         * Get formatted Chart Data
+         * @param status
+         * @returns {*}
+         */
       var getDealsData = function(status){
         var deals;
         switch(status){
@@ -253,6 +359,13 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
        */
 
       _bdc.sectionTitle = {category: '', status: ''};
+
+        /**
+         * Initialize TableData For Selection
+         * @param chart
+         * @param status
+         * @param category
+         */
       _bdc.setTableData = function(chart, status, category){
         console.log(chart);
         console.log(status);
@@ -312,6 +425,109 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           ]);
 
 
+      // _bdc.selectedDealership = _bdc.dealerships[0];
+      // _bdc.selectedTeam = _bdc.selectedDealership.teams[0];
+      // _bdc.selectedEmployee = _bdc.selectedTeam.members[0];
+
+      _bdc.datePickerOptions = {
+        'ranges': {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        "alwaysShowCalendars": true,
+        'opens': 'left',
+      };
+      _bdc.dateRange = {startDate: _bdc.datePickerOptions.ranges.Today[0],
+        endDate: _bdc.datePickerOptions.ranges.Today[1]};
+
+
+        /**
+         * Update Bar Chart Data Based on Selection
+         * @param status
+         * @param category
+         */
+      var updateBarChart = function(status, category){
+        var barData, idx;
+        switch(status){
+          case 'won':
+            idx  = Util.indexOfObject(_bdc.wonDeals.bar, 'category', category);
+            if (idx != -1) barData = _bdc.wonDeals.bar[idx];
+            break;
+          case 'lost':
+            idx  = Util.indexOfObject(_bdc.lostDeals.bar, 'category', category);
+            if (idx != -1) barData = _bdc.lostDeals.bar[idx];
+            break;
+          case 'total':
+            idx  = Util.indexOfObject(_bdc.totalDeals.bar, 'category', category);
+            if (idx != -1) barData = _bdc.totalDeals.bar[idx];
+            break;
+        }
+
+        //update sales
+        _bdc.sales.length = 0;
+        angular.forEach(barData.sales, function(value,key){
+          _bdc.sales.push([key, value]);
+        });
+      }
+
+        /**
+         * Update Table Data based on selection
+         * @param status
+         * @param category
+         */
+      var updateTableData = function(status, category){
+        var tableData = getDealsData(status).tableData;
+        var data = $filter('filter')(tableData, {$: category});
+        console.log(data);
+        _bdc.dealsTableData = data;
+      }
+
+
+        /**
+         * Filter Deals based on Selection
+         * @param status
+         */
+      _bdc.filterDeals = function(status){
+        var idx = Util.indexOfObject(_bdc.stats, 'id', status);
+        console.log(idx);
+        if (idx != -1){
+          var s = _bdc.stats[idx].sources;
+          console.log(s);
+          var sources = [];
+          for(var i= 0; i < s.length; i++){
+            if (s[i].state) sources.push(s[i].id)
+          }
+          Dashboard.filter(status, sources);
+          if (_bdc.showBarChart) updateBarChart(status, _bdc.displayingCategory);
+          if (_bdc.showTable) updateTableData(status, _bdc.displayingCategory);
+          console.log('*** Deals Filtered ***');
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
       /**
@@ -331,28 +547,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           if (filter) _bdc.metricSummaryTabs[idx].contentFilter = filter;
         }
       }
-
-
-
-      // _bdc.selectedDealership = _bdc.dealerships[0];
-      // _bdc.selectedTeam = _bdc.selectedDealership.teams[0];
-      // _bdc.selectedEmployee = _bdc.selectedTeam.members[0];
-
-      _bdc.datePickerOptions = {
-        'ranges': {
-          'Today': [moment(), moment()],
-          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month': [moment().startOf('month'), moment().endOf('month')],
-          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        "alwaysShowCalendars": true,
-        'opens': 'left',
-      };
-
-      _bdc.dateRange = {startDate: _bdc.datePickerOptions.ranges.Today[0],
-        endDate: _bdc.datePickerOptions.ranges.Today[1]};
 
       _bdc.displayStatsDetails = function(stat){
         if (!_bdc.sidebar) _bdc.sidebar = true;
@@ -387,64 +581,16 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         _bdc.showStatsSummary(categoryId, filter);
       }
 
-      var updateBarChart = function(status, category){
-        var barData, idx;
-        switch(status){
-          case 'won':
-            idx  = Util.indexOfObject(_bdc.wonDeals.bar, 'category', category);
-            if (idx != -1) barData = _bdc.wonDeals.bar[idx];
-            break;
-          case 'lost':
-            idx  = Util.indexOfObject(_bdc.lostDeals.bar, 'category', category);
-            if (idx != -1) barData = _bdc.lostDeals.bar[idx];
-            break;
-          case 'total':
-            idx  = Util.indexOfObject(_bdc.totalDeals.bar, 'category', category);
-            if (idx != -1) barData = _bdc.totalDeals.bar[idx];
-            break;
-        }
-
-        //update sales
-        _bdc.sales.length = 0;
-        angular.forEach(barData.sales, function(value,key){
-          _bdc.sales.push([key, value]);
-        });
-      }
-
-      var updateTableData = function(status, category){
-        var tableData = getDealsData(status).tableData;
-        var data = $filter('filter')(tableData, {$: category});
-        console.log(data);
-        _bdc.dealsTableData = data;
-      }
-
-      _bdc.filterDeals = function(status){
-        var idx = Util.indexOfObject(_bdc.stats, 'id', status);
-        console.log(idx);
-        if (idx != -1){
-          var s = _bdc.stats[idx].sources;
-          console.log(s);
-          var sources = [];
-          for(var i= 0; i < s.length; i++){
-            if (s[i].state) sources.push(s[i].id)
-          }
-          Dashboard.filter(status, sources);
-          if (_bdc.showBarChart) updateBarChart(status, _bdc.displayingCategory);
-          if (_bdc.showTable) updateTableData(status, _bdc.displayingCategory);
-          console.log('*** Deals Filtered ***');
-        }
-      }
-
       _bdc.chatRecipient = {name: '', number: ''};
 
-      _bdc.composeText = function(deal){
+      _bdc.composeText = function(lead){
         if (!_bdc.openChat) _bdc.openChat = true;
         console.log('*** Compose Text ***');
         console.log(deal);
         _bdc.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
       }
 
-      _bdc.composeMail = function(deal){
+      _bdc.composeMail = function(lead){
         console.log('*** Compose Mail ****');
         console.log(deal);
         var modalInstance = $uibModal.open({
@@ -607,7 +753,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-      _bdc.addTask = function () {
+      _bdc.addTask = function (lead) {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
@@ -618,6 +764,4 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
     });
 
-
-angular.module('dealScanCrmApp').controller('dashboardMap', dashboardMap);
 
