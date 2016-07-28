@@ -101,7 +101,7 @@
 
           <!-- Date Filters -->
           <div class="col-md-7">
-            <div class="col-md-7 no-margins" >
+            <div class="col-md-7 no-margins">
               <input class="form-control date-picker" style="margin-right:10px" date-range-picker
                      options="bdc.datePickerOptions"
                      ng-model="bdc.dateRange">
@@ -115,7 +115,7 @@
                 <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'list'">
                   <i class="fa fa-tasks">&nbsp;</i> List
                 </button>
-                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'chart'">
+                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'charts'">
                   <i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
                 </button>
               </div>
@@ -164,10 +164,10 @@
             <div class="ibox">
               <div class="ibox-content no-padding">
                 <div class="p-r-15 p-l-15" style="padding-top:15px;">
-                <span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>
-                <p>
-                  All leads need to be verified before you can send email and set a project.
-                </p>
+                  <span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>
+                  <p>
+                    All leads need to be verified before you can send email and set a project.
+                  </p>
                 </div>
                 <div class="clients-list">
 
@@ -325,14 +325,15 @@
                       <div class="col-md-12">
                         <h2 style="display:inline;">{{bdc.activeLead.name}}</h2>
                         <a class="text-muted pull-right m-t-5" ng-click="bdc.editLead(bdc.activeLead);">
-                        <small><i class="fa fa-pencil">&nbsp;</i> Edit</small>
+                          <small><i class="fa fa-pencil">&nbsp;</i> Edit</small>
                         </a>
                       </div>
                     </div>
                     <hr style="margin-top: 7px; margin-bottom:7px;">
                     <div class="row" style="margin-bottom:5px;">
                       <div class="col-md-3 text-center">
-                          <img alt="image" class="img-circle" src="assets/images/profile.jpg" style="width: 62px; margin-top:5px;">
+                        <img alt="image" class="img-circle" src="assets/images/profile.jpg"
+                             style="width: 62px; margin-top:5px;">
                       </div>
                       <div class="col-md-9">
                         <div class="table-responsive">
@@ -359,132 +360,137 @@
 
                       </div>
 
-                      </div>
+                    </div>
                     <div style="margin-top:3px;">
                       <p><strong>Interested In: </strong>{{bdc.activeLead.interest || 'Not Specified'}}</p>
                     </div>
-                      <div class="clear-fix"></div>
-                      <div class="row">
-                        <div class="col-md-12">
+                    <div class="clear-fix"></div>
+                    <div class="row">
+                      <div class="col-md-12">
                         <button type="button" ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm"><i
                           class="fa fa-sticky-note">&nbsp;&nbsp;</i>Add Note
                         </button>
-                        <button type="button" ng-click="bdc.addAppointment(bdc.activeLead)" class="btn btn-primary btn-sm">
+                        <button type="button" ng-click="bdc.addAppointment(bdc.activeLead)"
+                                class="btn btn-primary btn-sm">
                           <i class="fa fa-calendar-plus-o">&nbsp;&nbsp;</i>Schedule Appointment
                         </button>
                       </div>
-                      </div>
+                    </div>
 
 
-              <div class="row" style="margin-top:10px">
-                <div class="col-md-12" style="padding-right:0;">
-                    <div class="client-detail">
-                      <div class="full-height-scroll" full-scroll style="padding-right:15px;">
-                        <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
-                        <p ng-if="bdc.activeLead.additionalInfo">
-                          {{bdc.activeLead.additionalInfo}}
-                        </p>
-                        <hr style="margin-top:7px; margin-bottom:7px;"/>
-                        <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent Notes</strong>
-                        <ul class="list-group clear-list"
-                            ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">
-                          <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item"
-                              ng-class="{'fist-item': $index == 0}">
+                    <div class="row" style="margin-top:10px">
+                      <div class="col-md-12" style="padding-right:0;">
+                        <div class="client-detail">
+                          <div class="full-height-scroll" full-scroll style="padding-right:15px;">
+                            <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
+                            <p ng-if="bdc.activeLead.additionalInfo">
+                              {{bdc.activeLead.additionalInfo}}
+                            </p>
+                            <hr style="margin-top:7px; margin-bottom:7px;"/>
+                            <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent
+                              Notes</strong>
+                            <ul class="list-group clear-list"
+                                ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">
+                              <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item"
+                                  ng-class="{'fist-item': $index == 0}">
                             <span class="pull-right"> {{note.timeAgo}}
                             </span>
-                            {{note.content}}
-                            <br/>
-                            <small>{{note.creator.name}}</small>
-                          </li>
-                        </ul>
+                                {{note.content}}
+                                <br/>
+                                <small>{{note.creator.name}}</small>
+                              </li>
+                            </ul>
 
 
-                        <!-- timeline actitivity -->
-                        <strong>Timeline Activity</strong>
-                        <div id="vertical-timeline" class="vertical-container dark-timeline">
-                          <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon gray-bg">
-                              <i class="fa fa-coffee"></i>
+                            <!-- timeline actitivity -->
+                            <strong>Timeline Activity</strong>
+                            <div id="vertical-timeline" class="vertical-container dark-timeline">
+                              <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon gray-bg">
+                                  <i class="fa fa-coffee"></i>
+                                </div>
+                                <div class="vertical-timeline-content">
+                                  <p>Conference on the sales results for the previous year.
+                                  </p>
+                                  <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                </div>
+                              </div>
+                              <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon gray-bg">
+                                  <i class="fa fa-briefcase"></i>
+                                </div>
+                                <div class="vertical-timeline-content">
+                                  <p>Many desktop publishing packages and web page editors now use Lorem.
+                                  </p>
+                                  <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                                </div>
+                              </div>
+                              <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon gray-bg">
+                                  <i class="fa fa-bolt"></i>
+                                </div>
+                                <div class="vertical-timeline-content">
+                                  <p>There are many variations of passages of Lorem Ipsum available.
+                                  </p>
+                                  <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
+                                </div>
+                              </div>
+                              <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon navy-bg">
+                                  <i class="fa fa-warning"></i>
+                                </div>
+                                <div class="vertical-timeline-content">
+                                  <p>The generated Lorem Ipsum is therefore.
+                                  </p>
+                                  <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
+                                </div>
+                              </div>
+                              <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon gray-bg">
+                                  <i class="fa fa-coffee"></i>
+                                </div>
+                                <div class="vertical-timeline-content">
+                                  <p>Conference on the sales results for the previous year.
+                                  </p>
+                                  <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                </div>
+                              </div>
+                              <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon gray-bg">
+                                  <i class="fa fa-briefcase"></i>
+                                </div>
+                                <div class="vertical-timeline-content">
+                                  <p>Many desktop publishing packages and web page editors now use Lorem.
+                                  </p>
+                                  <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                                </div>
+                              </div>
                             </div>
-                            <div class="vertical-timeline-content">
-                              <p>Conference on the sales results for the previous year.
-                              </p>
-                              <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
-                            </div>
+                            <!-- ./ timeline activity -->
+
+
                           </div>
-                          <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon gray-bg">
-                              <i class="fa fa-briefcase"></i>
-                            </div>
-                            <div class="vertical-timeline-content">
-                              <p>Many desktop publishing packages and web page editors now use Lorem.
-                              </p>
-                              <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-                            </div>
-                          </div>
-                          <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon gray-bg">
-                              <i class="fa fa-bolt"></i>
-                            </div>
-                            <div class="vertical-timeline-content">
-                              <p>There are many variations of passages of Lorem Ipsum available.
-                              </p>
-                              <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
-                            </div>
-                          </div>
-                          <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon navy-bg">
-                              <i class="fa fa-warning"></i>
-                            </div>
-                            <div class="vertical-timeline-content">
-                              <p>The generated Lorem Ipsum is therefore.
-                              </p>
-                              <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
-                            </div>
-                          </div>
-                          <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon gray-bg">
-                              <i class="fa fa-coffee"></i>
-                            </div>
-                            <div class="vertical-timeline-content">
-                              <p>Conference on the sales results for the previous year.
-                              </p>
-                              <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
-                            </div>
-                          </div>
-                          <div class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon gray-bg">
-                              <i class="fa fa-briefcase"></i>
-                            </div>
-                            <div class="vertical-timeline-content">
-                              <p>Many desktop publishing packages and web page editors now use Lorem.
-                              </p>
-                              <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-                            </div>
-                          </div>
+
                         </div>
-                        <!-- ./ timeline activity -->
-
+                        <!-- ./ active lead details bottom section -->
 
                       </div>
+                      <!-- ./Active lead details content view -->
 
                     </div>
-                    <!-- ./ active lead details bottom section -->
-
+                    <!-- ./active content pane -->
                   </div>
-                  <!-- ./Active lead details content view -->
-
                 </div>
-                <!-- ./active content pane -->
               </div>
+              <!-- ./ active lead -->
+
             </div>
+            <!-- /.Lists-->
+
+            <!-- /. content View -->
           </div>
-          <!-- ./ active lead -->
-
         </div>
-        <!-- /.Lists-->
-
-
+        <!-- ./list -->
 
         <!-- charts -->
         <div class="row mn-ht-397" style="padding-top:10px !important;" ng-show="bdc.viewOptions == 'charts'">
@@ -647,600 +653,568 @@
             <!-- ./appointments sold Pie & Charts -->
 
 
-
-
-
-
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         </div>
         <!-- ./charts -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- /. content View -->
       </div>
-    </div>
-  </div>
 
 
-  <!-- data tables-->
-  <div class="row animated fadeInRight" ng-if="bdc.showTable">
-    <div class="col-lg-12">
-      <div class="ibox float-e-margins">
-        <div class="ibox-title">
-          <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong></h5>
-          <div ibox-tools on-close="bdc.showTable = false"></div>
-        </div>
-        <div class="ibox-content">
-          <table datatable="ng" dt-options="bdc.dtOptions"
-                 class="table table-striped table-bordered table-hover dataTables-example" style="padding-bottom:0">
-            <thead>
-            <tr>
-              <th colspan="3" class="text-center">Vehicle Details</th>
-              <th colspan="3" class="text-center">Customer Details</th>
-              <th colspan="4" class="text-center">Deal Details</th>
-            </tr>
-            <tr>
-              <th>Year</th>
-              <th>Model</th>
-              <th>Trim Level</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Date</th>
-              <th>Salesman</th>
-              <th>Source</th>
-              <th>Price</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="deal in bdc.dealsTableData" class="dashboard-table-w-avatar">
-              <td>{{::deal.vehicleInformation.year}}</td>
-              <td>{{::deal.vehicleInformation.model}}</td>
-              <td>{{::deal.vehicleInformation.trim }}</td>
-
-              <td style="cursor:pointer;"><img alt="image" src="assets/images/a2.jpg" class="dashboard-table-avatar">
-                {{::deal.customerDetails.name}}
-              </td>
-              <td ng-click="bdc.composeText(deal)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}
-              </td>
-              <td ng-click="bdc.composeMail(deal)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.email}}
-              </td>
-
-              <td>{{::deal.dealDetails.date}}</td>
-              <td>{{::deal.dealDetails.salesman}}</td>
-              <td> {{::deal.dealDetails.source}}</td>
-              <td>{{::deal.dealDetails.price}}</td>
-            </tr>
-            </tbody>
-          </table>
-
-
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ./data Tables -->
-<!-- /.Middle Section -->
-</div>
-    </div>
-  </div>
-
-  <!-- /.Middle Section -->
-
-  <!-- Bottom section ==> Timeline, Tasks, Active Users, Social Activities-->
-  <div class="row">
-
-
-    <!-- Left section -->
-    <div class="col-lg-12">
-      <!-- tasks & active users -->
-      <div class="row">
-        <!-- active users -->
-        <div class="col-lg-5">
+      <!-- data tables-->
+      <div class="row animated fadeInRight" ng-if="bdc.showTable">
+        <div class="col-lg-12">
           <div class="ibox float-e-margins">
             <div class="ibox-title">
-              <h5>Active Users</h5>
-              <div ibox-tools></div>
+              <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong>
+              </h5>
+              <div ibox-tools on-close="bdc.showTable = false"></div>
             </div>
-            <div class="ibox-content" style="height:365px !important;">
-              <div>
-                <div class="feed-activity-list">
-                  <div class="feed-element">
-                    <a ui-sref="profile" class="pull-left">
-                      <img alt="image" class="img-circle" src="assets/images/profile.jpg">
-                    </a>
+            <div class="ibox-content">
+              <table datatable="ng" dt-options="bdc.dtOptions"
+                     class="table table-striped table-bordered table-hover dataTables-example" style="padding-bottom:0">
+                <thead>
+                <tr>
+                  <th colspan="3" class="text-center">Vehicle Details</th>
+                  <th colspan="3" class="text-center">Customer Details</th>
+                  <th colspan="4" class="text-center">Deal Details</th>
+                </tr>
+                <tr>
+                  <th>Year</th>
+                  <th>Model</th>
+                  <th>Trim Level</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Date</th>
+                  <th>Salesman</th>
+                  <th>Source</th>
+                  <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="deal in bdc.dealsTableData" class="dashboard-table-w-avatar">
+                  <td>{{::deal.vehicleInformation.year}}</td>
+                  <td>{{::deal.vehicleInformation.model}}</td>
+                  <td>{{::deal.vehicleInformation.trim }}</td>
 
-                    <div class="media-body ">
-                      <small class="pull-right">5m ago</small>
-                      <strong>Monica Smith</strong> posted a new blog. <br>
-                      <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+                  <td style="cursor:pointer;"><img alt="image" src="assets/images/a2.jpg"
+                                                   class="dashboard-table-avatar">
+                    {{::deal.customerDetails.name}}
+                  </td>
+                  <td ng-click="bdc.composeText(deal)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">
+                    &nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}
+                  </td>
+                  <td ng-click="bdc.composeMail(deal)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">
+                    &nbsp;&nbsp;</i>{{::deal.customerDetails.email}}
+                  </td>
 
-                    </div>
-                  </div>
-                  <div class="feed-element">
-                    <a ui-sref="profile" class="pull-left">
-                      <img alt="image" class="img-circle" src="assets/images/a4.jpg">
-                    </a>
+                  <td>{{::deal.dealDetails.date}}</td>
+                  <td>{{::deal.dealDetails.salesman}}</td>
+                  <td> {{::deal.dealDetails.source}}</td>
+                  <td>{{::deal.dealDetails.price}}</td>
+                </tr>
+                </tbody>
+              </table>
 
-                    <div class="media-body ">
-                      <small class="pull-right text-navy">5h ago</small>
-                      <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica
-                      Smith</strong>. <br>
-                      <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
-                    </div>
-                  </div>
-
-                  <div class="feed-element">
-                    <a ui-sref="profile" class="pull-left">
-                      <img alt="image" class="img-circle" src="assets/images/profile.jpg">
-                    </a>
-
-                    <div class="media-body ">
-                      <small class="pull-right">23h ago</small>
-                      <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
-                      <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
-                    </div>
-                  </div>
-                  <div class="feed-element">
-                    <a ui-sref="profile" class="pull-left">
-                      <img alt="image" class="img-circle" src="assets/images/a7.jpg">
-                    </a>
-
-                    <div class="media-body ">
-                      <small class="pull-right">46h ago</small>
-                      <strong>Mike Loreipsum</strong> started following <strong>Monica
-                      Smith</strong>. <br>
-                      <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
-                    </div>
-                  </div>
-                </div>
-
-                <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More
-                </button>
-
-              </div>
 
             </div>
           </div>
-          <div class="ibox">
-            <div class="ibox-title">
-              <h5>Tasks</h5>
-              <div ibox-tools></div>
-            </div>
-            <div class="ibox-content" style="height:365px !important;">
-              <ul class="todo-list m-t small-list">
-                <li>
-                  <checkbox ng-model="main.checkOne"></checkbox>
-                  <span class="m-l-xs">Buy a milk</span>
-                </li>
-                <li>
-                  <checkbox ng-model="check1"></checkbox>
-                  <span class="m-l-xs">Go to shop and find some products.</span>
+        </div>
+      </div>
+      <!-- ./data Tables -->
 
-                </li>
-                <li>
-                  <checkbox ng-model="check2"></checkbox>
-                  <span class="m-l-xs">Send documents to Mike</span>
-                  <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 mins</small>
-                </li>
-                <li>
-                  <checkbox ng-model="main.checkTwo"></checkbox>
-                  <span class="m-l-xs">Go to the doctor dr Smith</span>
-                </li>
-                <li>
-                  <checkbox ng-model="check4"></checkbox>
-                  <span class="m-l-xs">Plan vacation</span>
-                </li>
-                <li>
-                  <checkbox ng-model="check5"></checkbox>
-                  <span class="m-l-xs">Create new stuff</span>
-                </li>
-                <li>
-                  <checkbox ng-model="check6"></checkbox>
-                  <span class="m-l-xs">Call to Anna for dinner</span>
-                </li>
-              </ul>
+
+      <!-- /.Middle Section -->
+    </div>
+  </div>
+</div>
+
+<!-- /.Middle Section -->
+
+<!-- Bottom section ==> Timeline, Tasks, Active Users, Social Activities-->
+<div class="row">
+
+
+  <!-- Left section -->
+  <div class="col-lg-12">
+    <!-- tasks & active users -->
+    <div class="row">
+      <!-- active users -->
+      <div class="col-lg-5">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <h5>Active Users</h5>
+            <div ibox-tools></div>
+          </div>
+          <div class="ibox-content" style="height:365px !important;">
+            <div>
+              <div class="feed-activity-list">
+                <div class="feed-element">
+                  <a ui-sref="profile" class="pull-left">
+                    <img alt="image" class="img-circle" src="assets/images/profile.jpg">
+                  </a>
+
+                  <div class="media-body ">
+                    <small class="pull-right">5m ago</small>
+                    <strong>Monica Smith</strong> posted a new blog. <br>
+                    <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+
+                  </div>
+                </div>
+                <div class="feed-element">
+                  <a ui-sref="profile" class="pull-left">
+                    <img alt="image" class="img-circle" src="assets/images/a4.jpg">
+                  </a>
+
+                  <div class="media-body ">
+                    <small class="pull-right text-navy">5h ago</small>
+                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica
+                    Smith</strong>. <br>
+                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                  </div>
+                </div>
+
+                <div class="feed-element">
+                  <a ui-sref="profile" class="pull-left">
+                    <img alt="image" class="img-circle" src="assets/images/profile.jpg">
+                  </a>
+
+                  <div class="media-body ">
+                    <small class="pull-right">23h ago</small>
+                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                  </div>
+                </div>
+                <div class="feed-element">
+                  <a ui-sref="profile" class="pull-left">
+                    <img alt="image" class="img-circle" src="assets/images/a7.jpg">
+                  </a>
+
+                  <div class="media-body ">
+                    <small class="pull-right">46h ago</small>
+                    <strong>Mike Loreipsum</strong> started following <strong>Monica
+                    Smith</strong>. <br>
+                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                  </div>
+                </div>
+              </div>
+
               <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More
               </button>
+
             </div>
+
           </div>
         </div>
-        <!-- ./active users -->
-
-        <!-- Tasks -->
-        <div class="col-lg-7">
-          <div class="ibox float-e-margins">
-            <div class="ibox-title">
-              <h5>Recent Activities</h5>
-              <div ibox-tools></div>
-            </div>
-            <div class="ibox-content ibox-heading">
-              <h3>You have meeting today!</h3>
-              <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
-              </small>
-            </div>
-            <div class="ibox-content inspinia-timeline"
-                 style="height: 710px; overflow-y:scroll; padding-bottom:20px;">
-
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-briefcase"></i>
-                    6:00 am
-                    <br/>
-                    <small class="text-navy">2 hour ago</small>
-                  </div>
-                  <div class="col-xs-7 content no-top-border">
-                    <p class="m-b-xs"><strong>Meeting</strong></p>
-
-                    <p>Conference on the sales results for the previous year. Monica please examine sales
-                      trends in marketing and products. Below please find the current status of the
-                      sale.</p>
-
-                    <p>
-                      <bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></bar-chart>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-file-text"></i>
-                    7:00 am
-                    <br/>
-                    <small class="text-navy">3 hour ago</small>
-                  </div>
-                  <div class="col-xs-7 content">
-                    <p class="m-b-xs"><strong>Send documents to Mike</strong></p>
-
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                      Ipsum has been the industry's standard dummy text ever since.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-coffee"></i>
-                    8:00 am
-                    <br/>
-                  </div>
-                  <div class="col-xs-7 content">
-                    <p class="m-b-xs"><strong>Coffee Break</strong></p>
-
-                    <p>
-                      Go to shop and find some products.
-                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                      Ipsum has been the industry's.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-phone"></i>
-                    11:00 am
-                    <br/>
-                    <small class="text-navy">21 hour ago</small>
-                  </div>
-                  <div class="col-xs-7 content">
-                    <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
-
-                    <p>
-                      Lorem Ipsum has been the industry's standard dummy text ever since.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-user-md"></i>
-                    09:00 pm
-                    <br/>
-                    <small>21 hour ago</small>
-                  </div>
-                  <div class="col-xs-7 content">
-                    <p class="m-b-xs"><strong>Go to the doctor dr Smith</strong></p>
-
-                    <p>
-                      Find some issue and go to doctor.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-user-md"></i>
-                    11:10 pm
-                  </div>
-                  <div class="col-xs-7 content">
-                    <p class="m-b-xs"><strong>Chat with Sandra</strong></p>
-
-                    <p>
-                      Lorem Ipsum has been the industry's standard dummy text ever since.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-comments"></i>
-                    12:50 pm
-                    <br/>
-                    <small class="text-navy">48 hour ago</small>
-                  </div>
-                  <div class="col-xs-7 content">
-                    <p class="m-b-xs"><strong>Chat with Monica and Sandra</strong></p>
-
-                    <p>
-                      Web sites still in their infancy. Various versions have evolved over the years,
-                      sometimes by accident, sometimes on purpose (injected humour and the like).
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
+        <div class="ibox">
+          <div class="ibox-title">
+            <h5>Tasks</h5>
+            <div ibox-tools></div>
           </div>
+          <div class="ibox-content" style="height:365px !important;">
+            <ul class="todo-list m-t small-list">
+              <li>
+                <checkbox ng-model="main.checkOne"></checkbox>
+                <span class="m-l-xs">Buy a milk</span>
+              </li>
+              <li>
+                <checkbox ng-model="check1"></checkbox>
+                <span class="m-l-xs">Go to shop and find some products.</span>
 
+              </li>
+              <li>
+                <checkbox ng-model="check2"></checkbox>
+                <span class="m-l-xs">Send documents to Mike</span>
+                <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 mins</small>
+              </li>
+              <li>
+                <checkbox ng-model="main.checkTwo"></checkbox>
+                <span class="m-l-xs">Go to the doctor dr Smith</span>
+              </li>
+              <li>
+                <checkbox ng-model="check4"></checkbox>
+                <span class="m-l-xs">Plan vacation</span>
+              </li>
+              <li>
+                <checkbox ng-model="check5"></checkbox>
+                <span class="m-l-xs">Create new stuff</span>
+              </li>
+              <li>
+                <checkbox ng-model="check6"></checkbox>
+                <span class="m-l-xs">Call to Anna for dinner</span>
+              </li>
+            </ul>
+            <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More
+            </button>
+          </div>
         </div>
-        <!-- ./Tasks -->
+      </div>
+      <!-- ./active users -->
+
+      <!-- Tasks -->
+      <div class="col-lg-7">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <h5>Recent Activities</h5>
+            <div ibox-tools></div>
+          </div>
+          <div class="ibox-content ibox-heading">
+            <h3>You have meeting today!</h3>
+            <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
+            </small>
+          </div>
+          <div class="ibox-content inspinia-timeline"
+               style="height: 710px; overflow-y:scroll; padding-bottom:20px;">
+
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-briefcase"></i>
+                  6:00 am
+                  <br/>
+                  <small class="text-navy">2 hour ago</small>
+                </div>
+                <div class="col-xs-7 content no-top-border">
+                  <p class="m-b-xs"><strong>Meeting</strong></p>
+
+                  <p>Conference on the sales results for the previous year. Monica please examine sales
+                    trends in marketing and products. Below please find the current status of the
+                    sale.</p>
+
+                  <p>
+                    <bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></bar-chart>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-file-text"></i>
+                  7:00 am
+                  <br/>
+                  <small class="text-navy">3 hour ago</small>
+                </div>
+                <div class="col-xs-7 content">
+                  <p class="m-b-xs"><strong>Send documents to Mike</strong></p>
+
+                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                    Ipsum has been the industry's standard dummy text ever since.</p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-coffee"></i>
+                  8:00 am
+                  <br/>
+                </div>
+                <div class="col-xs-7 content">
+                  <p class="m-b-xs"><strong>Coffee Break</strong></p>
+
+                  <p>
+                    Go to shop and find some products.
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                    Ipsum has been the industry's.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-phone"></i>
+                  11:00 am
+                  <br/>
+                  <small class="text-navy">21 hour ago</small>
+                </div>
+                <div class="col-xs-7 content">
+                  <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
+
+                  <p>
+                    Lorem Ipsum has been the industry's standard dummy text ever since.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-user-md"></i>
+                  09:00 pm
+                  <br/>
+                  <small>21 hour ago</small>
+                </div>
+                <div class="col-xs-7 content">
+                  <p class="m-b-xs"><strong>Go to the doctor dr Smith</strong></p>
+
+                  <p>
+                    Find some issue and go to doctor.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-user-md"></i>
+                  11:10 pm
+                </div>
+                <div class="col-xs-7 content">
+                  <p class="m-b-xs"><strong>Chat with Sandra</strong></p>
+
+                  <p>
+                    Lorem Ipsum has been the industry's standard dummy text ever since.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="row">
+                <div class="col-xs-3 date">
+                  <i class="fa fa-comments"></i>
+                  12:50 pm
+                  <br/>
+                  <small class="text-navy">48 hour ago</small>
+                </div>
+                <div class="col-xs-7 content">
+                  <p class="m-b-xs"><strong>Chat with Monica and Sandra</strong></p>
+
+                  <p>
+                    Web sites still in their infancy. Various versions have evolved over the years,
+                    sometimes by accident, sometimes on purpose (injected humour and the like).
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
 
       </div>
-      <!-- ./tasks & active users -->
+      <!-- ./Tasks -->
 
     </div>
-    <!-- ./ Left section -->
-
-
-    <!-- Right section -->
-    <div class="col-lg-4">
-
-    </div>
-    <!-- ./Right section -->
+    <!-- ./tasks & active users -->
 
   </div>
-  <!-- ./Bottom section -->
+  <!-- ./ Left section -->
 
-  <!-- small chat -->
-  <div class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="bdc.openChat">
 
-    <!-- Chat header -->
-    <div class="heading padding-top-15" draggable="true">
+  <!-- Right section -->
+  <div class="col-lg-4">
+
+  </div>
+  <!-- ./Right section -->
+
+</div>
+<!-- ./Bottom section -->
+
+<!-- small chat -->
+<div class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="bdc.openChat">
+
+  <!-- Chat header -->
+  <div class="heading padding-top-15" draggable="true">
     <span class="small-chat-avatar pull-left">
       <img alt="image" src="assets/images/a2.jpg">
     </span>
-      <!--<small class="chat-date pull-right">-->
-      <!--02.19.2015-->
-      <!--</small>-->
-      {{bdc.chatRecipient.name}}
-      <p>{{bdc.chatRecipient.number}}</p>
-    </div>
+    <!--<small class="chat-date pull-right">-->
+    <!--02.19.2015-->
+    <!--</small>-->
+    {{bdc.chatRecipient.name}}
+    <p>{{bdc.chatRecipient.number}}</p>
+  </div>
 
-    <!-- Chat Content -->
-    <div class="content" chat-slim-scroll>
+  <!-- Chat Content -->
+  <div class="content" chat-slim-scroll>
 
-      <div class="left">
-        <div class="author-name">
-          Monica Jackson
-          <small class="chat-date">
-            10:02 am
-          </small>
-        </div>
-        <div class="chat-message active">
-          Lorem Ipsum is simply dummy text input.
-        </div>
-
+    <div class="left">
+      <div class="author-name">
+        Monica Jackson
+        <small class="chat-date">
+          10:02 am
+        </small>
       </div>
-      <div class="right">
-        <div class="author-name">
-          Mick Smith
-          <small class="chat-date">
-            11:24 am
-          </small>
-        </div>
-        <div class="chat-message">
-          Lorem Ipsum is simpl.
-        </div>
+      <div class="chat-message active">
+        Lorem Ipsum is simply dummy text input.
       </div>
-      <div class="left">
-        <div class="author-name">
-          Alice Novak
-          <small class="chat-date">
-            08:45 pm
-          </small>
-        </div>
-        <div class="chat-message active">
-          Check this stock char.
-        </div>
-      </div>
-      <div class="right">
-        <div class="author-name">
-          Anna Lamson
-          <small class="chat-date">
-            11:24 am
-          </small>
-        </div>
-        <div class="chat-message">
-          The standard chunk of Lorem Ipsum
-        </div>
-      </div>
-      <div class="left">
-        <div class="author-name">
-          Mick Lane
-          <small class="chat-date">
-            08:45 pm
-          </small>
-        </div>
-        <div class="chat-message active">
-          I belive that. Lorem Ipsum is simply dummy text.
-        </div>
-      </div>
-
 
     </div>
+    <div class="right">
+      <div class="author-name">
+        Mick Smith
+        <small class="chat-date">
+          11:24 am
+        </small>
+      </div>
+      <div class="chat-message">
+        Lorem Ipsum is simpl.
+      </div>
+    </div>
+    <div class="left">
+      <div class="author-name">
+        Alice Novak
+        <small class="chat-date">
+          08:45 pm
+        </small>
+      </div>
+      <div class="chat-message active">
+        Check this stock char.
+      </div>
+    </div>
+    <div class="right">
+      <div class="author-name">
+        Anna Lamson
+        <small class="chat-date">
+          11:24 am
+        </small>
+      </div>
+      <div class="chat-message">
+        The standard chunk of Lorem Ipsum
+      </div>
+    </div>
+    <div class="left">
+      <div class="author-name">
+        Mick Lane
+        <small class="chat-date">
+          08:45 pm
+        </small>
+      </div>
+      <div class="chat-message active">
+        I belive that. Lorem Ipsum is simply dummy text.
+      </div>
+    </div>
 
-    <!-- Chat Compose -->
-    <div class="form-chat">
-      <div class="input-group input-group-sm"><input type="text" class="form-control"> <span class="input-group-btn"> <button
-        class="btn btn-primary" type="button">Send
+
+  </div>
+
+  <!-- Chat Compose -->
+  <div class="form-chat">
+    <div class="input-group input-group-sm"><input type="text" class="form-control"> <span class="input-group-btn"> <button
+      class="btn btn-primary" type="button">Send
         </button> </span></div>
-    </div>
-
   </div>
-  <div id="small-chat" ng-click="bdc.openChat = !bdc.openChat">
-    <!--<span class="badge badge-warning pull-right">5</span>-->
-    <a class="open-small-chat">
-      <i ng-class="bdc.openChat ? 'fa fa-times' : 'fa fa-comments'"></i>
-    </a>
-  </div>
-  <!-- ./small chat -->
-
-
-  <!--  right sidebar -->
-  <div id="right-sidebar" ng-show="bdc.sidebar" class="sidebar-open">
-    <div class="sidebar-container" full-scroll-page>
-
-      <uib-tabset class="navs-3" active="0">
-        <uib-tab index="$index" ng-repeat="tab in bdc.metricSummaryTabs" active="tab.active">
-          <uib-tab-heading><i class="{{tab.title}}"></i></uib-tab-heading>
-          <div class="tab-content">
-            <div class="tab-pane" ng-class="{active: tab.id == 'Phone'}">
-              <div class="sidebar-title">
-                <button class="btn btn-xs btn-danger pull-right upper-right-corner"
-                        ng-click="bdc.dismissSidebar('calls');"><i class="fa fa-times"></i></button>
-                <h3>Call Summary</h3>
-                <small><i class="fa fa-tim"></i> You have made 217 calls.</small>
-              </div>
-              <div>
-                <div class="sidebar-message m-h-75" ng-repeat="cl in tab.contentData">
-                  <a href="#">
-                    <div class="pull-left text-center">
-                      <img alt="image" class="img-circle message-avatar" ng-src="{{cl.cavatar}}">
-                      <div class="margin-top-3">
-                        <i class="fa fa-phone">&nbsp;</i>
-                        <i
-                          ng-class="{'fa fa-long-arrow-left text-success': cl.ctype == 'incoming',
-                                  'fa fa-long-arrow-right text-warning': cl.ctype == 'outgoing',
-                                  'fa fa-times text-danger': cl.ctype == 'missed'}"></i>
-                      </div>
-                    </div>
-                    <div class="media-body">
-                      <strong>{{cl.cname}}</strong>
-                      <br>
-                      {{cl.comments}}
-                      <small class="text-muted">Today 4:21 pm</small>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="tab-pane" ng-class="{active: tab.id == 'Correspondence'}">
-              <div class="sidebar-title">
-                <button class="btn btn-xs btn-danger pull-right upper-right-corner"
-                        ng-click="bdc.dismissSidebar('correspondence');"><i class="fa fa-times"></i></button>
-                <h3>Latest Correspondence</h3>
-                <small><i class="fa fa-tim"></i> You have 400 Emails and 10 Texts.</small>
-                <button class="btn btn-xs btn-warning margin-top-10"><i class="fa fa-sliders">&nbsp;&nbsp;</i>Clear
-                  {{tab.contentFilter}} Filter
-                </button>
-              </div>
-              <ul class="sidebar-list">
-                <li ng-repeat="cr in tab.contentData">
-                  <a href="#">
-                    <div class="small pull-right m-t-xs">9
-                    hours ago</div>
-                    <h4><i ng-class="{'fa fa-envelope': cr.crtype == 'Mail', 'fa fa-comments': cr.crtype == 'Text'}">
-                      &nbsp;&nbsp;</i>
-                      {{cr.crname}}</h4>
-                    <div ng-show="cr.crsubject" class="small subject-blue">Subject: {
-
-                    {
-                      cr . crsubject
-                    }
-                    }</div>
-                    {{cr.crcontent}}
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-
-            <div class="tab-pane" ng-class="{active: tab.id == 'Appointments'}">
-
-              <div class="sidebar-title">
-                <button class="btn btn-xs btn-danger pull-right upper-right-corner"
-                        ng-click="bdc.dismissSidebar('appts');"><i class="fa fa-times"></i></button>
-                <h3>Appointments</h3>
-                <small><i class="fa fa-tim"></i>Your appointments summary</small>
-              </div>
-              <ul ui-sortable="sortableOptions" class="sortable-list connectList agile-list margin-left-5"
-                  ng-model="tab.contentData">
-                <li class="{{apt.statusClass}}-element" ng-repeat="apt in tab.contentData">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="col-lg-2 text-left text-{{apt.statusClass}} padding-left-0">
-                        <i ng-class="{'fa fa-calendar-o fa-2x': apt.appointmentStatusClass == 'made',
-                                    'fa fa-calendar-check-o fa-2x': apt.appointmentStatusClass == 'sold',
-                                    'fa fa-calendar-times-o fa-2x' : apt.appointmentStatusClass == 'missed'}"></i>
-                      </div>
-                      <div class="col-lg-10 padding-right-0 padding-left-0">
-                        <small>{{apt.date}}</small>
-                        <br/>
-                        <strong>{{apt.cname}}</strong><br/>
-                        {{apt.comments}}
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-
-            </div>
-
-          </div>
-        </uib-tab>
-      </uib-tabset>
-
-    </div>
-  </div>
-  <!-- /. right sidebar -->
-
-
 
 </div>
+<div id="small-chat" ng-click="bdc.openChat = !bdc.openChat">
+  <!--<span class="badge badge-warning pull-right">5</span>-->
+  <a class="open-small-chat">
+    <i ng-class="bdc.openChat ? 'fa fa-times' : 'fa fa-comments'"></i>
+  </a>
+</div>
+<!-- ./small chat -->
+
+
+<!--  right sidebar -->
+<div id="right-sidebar" ng-show="bdc.sidebar" class="sidebar-open">
+  <div class="sidebar-container" full-scroll-page>
+
+    <uib-tabset class="navs-3" active="0">
+      <uib-tab index="$index" ng-repeat="tab in bdc.metricSummaryTabs" active="tab.active">
+        <uib-tab-heading><i class="{{tab.title}}"></i></uib-tab-heading>
+        <div class="tab-content">
+          <div class="tab-pane" ng-class="{active: tab.id == 'Phone'}">
+            <div class="sidebar-title">
+              <button class="btn btn-xs btn-danger pull-right upper-right-corner"
+                      ng-click="bdc.dismissSidebar('calls');"><i class="fa fa-times"></i></button>
+              <h3>Call Summary</h3>
+              <small><i class="fa fa-tim"></i> You have made 217 calls.</small>
+            </div>
+            <div>
+              <div class="sidebar-message m-h-75" ng-repeat="cl in tab.contentData">
+                <a href="#">
+                  <div class="pull-left text-center">
+                    <img alt="image" class="img-circle message-avatar" ng-src="{{cl.cavatar}}">
+                    <div class="margin-top-3">
+                      <i class="fa fa-phone">&nbsp;</i>
+                      <i
+                        ng-class="{'fa fa-long-arrow-left text-success': cl.ctype == 'incoming',
+                                  'fa fa-long-arrow-right text-warning': cl.ctype == 'outgoing',
+                                  'fa fa-times text-danger': cl.ctype == 'missed'}"></i>
+                    </div>
+                  </div>
+                  <div class="media-body">
+                    <strong>{{cl.cname}}</strong>
+                    <br>
+                    {{cl.comments}}
+                    <small class="text-muted">Today 4:21 pm</small>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" ng-class="{active: tab.id == 'Correspondence'}">
+            <div class="sidebar-title">
+              <button class="btn btn-xs btn-danger pull-right upper-right-corner"
+                      ng-click="bdc.dismissSidebar('correspondence');"><i class="fa fa-times"></i></button>
+              <h3>Latest Correspondence</h3>
+              <small><i class="fa fa-tim"></i> You have 400 Emails and 10 Texts.</small>
+              <button class="btn btn-xs btn-warning margin-top-10"><i class="fa fa-sliders">&nbsp;&nbsp;</i>Clear
+                {{tab.contentFilter}} Filter
+              </button>
+            </div>
+            <ul class="sidebar-list">
+              <li ng-repeat="cr in tab.contentData">
+                <a href="#">
+                  <div class="small pull-right m-t-xs">9
+                  hours ago</div>
+                  <h4><i ng-class="{'fa fa-envelope': cr.crtype == 'Mail', 'fa fa-comments': cr.crtype == 'Text'}">
+                    &nbsp;&nbsp;</i>
+                    {{cr.crname}}</h4>
+                  <div ng-show="cr.crsubject" class="small subject-blue">Subject: {
+
+                  {
+                    cr . crsubject
+                  }
+                  }</div>
+                  {{cr.crcontent}}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+          <div class="tab-pane" ng-class="{active: tab.id == 'Appointments'}">
+
+            <div class="sidebar-title">
+              <button class="btn btn-xs btn-danger pull-right upper-right-corner"
+                      ng-click="bdc.dismissSidebar('appts');"><i class="fa fa-times"></i></button>
+              <h3>Appointments</h3>
+              <small><i class="fa fa-tim"></i>Your appointments summary</small>
+            </div>
+            <ul ui-sortable="sortableOptions" class="sortable-list connectList agile-list margin-left-5"
+                ng-model="tab.contentData">
+              <li class="{{apt.statusClass}}-element" ng-repeat="apt in tab.contentData">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="col-lg-2 text-left text-{{apt.statusClass}} padding-left-0">
+                      <i ng-class="{'fa fa-calendar-o fa-2x': apt.appointmentStatusClass == 'made',
+                                    'fa fa-calendar-check-o fa-2x': apt.appointmentStatusClass == 'sold',
+                                    'fa fa-calendar-times-o fa-2x' : apt.appointmentStatusClass == 'missed'}"></i>
+                    </div>
+                    <div class="col-lg-10 padding-right-0 padding-left-0">
+                      <small>{{apt.date}}</small>
+                      <br/>
+                      <strong>{{apt.cname}}</strong><br/>
+                      {{apt.comments}}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+          </div>
+
+        </div>
+      </uib-tab>
+    </uib-tabset>
+
+  </div>
+</div>
+<!-- /. right sidebar -->
+

@@ -11,11 +11,6 @@ angular.module('dealScanCrmApp')
          controller: 'BDCCtrl as bdc',
          data: {pageTitle: 'BDC Dashboard', navbarColor: 'white-bg'},
          resolve: {
-           // BDCData: function (BDCService){
-           //  return BDCService.getBDCData().then(function(data){
-           //     return data;
-           //   })
-           // },
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
               {
@@ -47,7 +42,7 @@ angular.module('dealScanCrmApp')
                 files: ['.resources/plugins/moment/moment.min.js']
               },
               {
-                name: 'dataPicker',
+                name: 'datePicker',
                 files: ['.styles/plugins/datapicker/angular-datapicker.css',
                   '.resources/plugins/datapicker/angular-datepicker.js']
               },
