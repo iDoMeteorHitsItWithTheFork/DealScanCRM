@@ -106,33 +106,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             _bdc.missedAppointments = leads.missedAppointments;
             _bdc.soldAppointments = leads.soldAppointments;
           }
-            /*_bdc.totalLeads = BDC.totalLeads();
-            console.log('\n\n\n TOTAL LEADS GRAPH DATA \n\n\n');
-            console.log(_bdc.totalLeads);
-            console.log('\n\n *****************************\n\n');
-
-            _bdc.totalAppointments = BDC.totalAppointments();
-            console.log('\n\n\n TOTAL APPOINTMENTS GRAPH DATA \n\n\n');
-            console.log(_bdc.totalAppointments);
-            console.log('\n\n *****************************\n\n');
-
-            _bdc.keptAppointments = BDC.keptAppointments();
-            console.log('\n\n\n KEPT APPOINTMENTS GRAPH DATA \n\n\n');
-            console.log(_bdc.keptAppointments);
-            console.log('\n\n *****************************\n\n');
-
-
-            _bdc.soldAppointments = BDC.soldAppointments();
-            console.log('\n\n\n SOLD APPOINTMENTS GRAPH DATA \n\n\n');
-            console.log(_bdc.soldAppointments);
-            console.log('\n\n *****************************\n\n');
-
-
-            _bdc.missedAppointments = BDC.missedAppointments();
-            console.log('\n\n\n MISSED APPOINTMENTS GRAPH DATA \n\n\n');
-            console.log(_bdc.missedAppointments);
-            console.log('\n\n *****************************\n\n');*/
-
           _bdc.retreivingGraphData = false;
         }).catch(function(err){
           _bdc.retreivingGraphData = false;
@@ -337,15 +310,21 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
          */
       var getDealsData = function(status){
         var deals;
-        switch(status){
-          case 'won':
-            deals = _bdc.wonDeals;
+        switch(status.toLowerCase()){
+          case 'total leads':
+            deals = _bdc.totalLeads.tableData;
             break;
-          case 'lost':
-            deals = _bdc.lostDeals;
+          case 'total appointments':
+            deals = _bdc.totalAppointments.tableData;
             break;
-          case 'total':
-            deals = _bdc.totalDeals;
+          case 'kept appointments':
+            deals = _bdc.keptAppointments.tableData;
+            break;
+          case 'missed appointments':
+            deals = _bdc.missedAppointments.tableData;
+            break;
+          case 'sold appointments':
+            deals = _bdc.soldAppointments.tableData;
             break;
         }
         return deals;
@@ -367,20 +346,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.setTableData = function(chart, status, category){
         console.log(chart);
         console.log(status);
-        if (status){
-          _bdc.sectionTitle.status = status;
-          _bdc.sectionTitle.category = chart ? chart.series.label: '';
-        } else {
-          var barData = getDealsData(_bdc.sectionTitle.status).bar;
-          for(var i= 0; i < barData.length; i++){
-            if (barData[i].category == category){
-              _bdc.sectionTitle.category = barData[i].models[chart.dataIndex];
-              break;
-            }
-          }
-        }
 
-        var tableData = getDealsData(_bdc.sectionTitle.status).tableData;
+        _bdc.sectionTitle.status = status;
+        _bdc.sectionTitle.category = chart ? chart.series.label: '';
+
+        var tableData = getDealsData(_bdc.sectionTitle.status);
         console.log(tableData);
         console.log(_bdc.sectionTitle.category);
         var data = $filter('filter')(tableData, {$: _bdc.sectionTitle.category});

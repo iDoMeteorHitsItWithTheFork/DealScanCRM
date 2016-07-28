@@ -534,7 +534,9 @@ export function totalLeads(req, res){
 
       /* Return Query results */
       return Q.all(promises).then(function(leads){
-        return res.status(200).json({stats: leads[0], data: leads[1]});
+        var _leads = [];
+        for(var i = 0; i < leads[1].length; i++) _leads.push(formatLead(leads[1][i]));
+        return res.status(200).json({stats: leads[0], data: _leads});
       });
 
     } else return res.status(200).json([]);
@@ -590,7 +592,9 @@ export function totalAppointments(req, res){
          }));
 
          return Q.all(promises).then(function(appointments){
-           return res.status(200).json({stats:appointments[0], data:appointments[1]});
+           var _leads = [];
+           for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
+           return res.status(200).json({stats:appointments[0], data:_leads});
          });
 
      } else return res.status(200).json([]);
@@ -648,7 +652,9 @@ export function keptAppointments(req, res){
       }));
 
       return Q.all(promises).then(function(appointments){
-        return res.status(200).json({stats:appointments[0], data:appointments[1]});
+        var _leads = [];
+        for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
+        return res.status(200).json({stats:appointments[0], data:_leads});
       });
 
     } else return res.status(200).json([]);
@@ -705,7 +711,9 @@ export function missedAppointments(req, res){
       }));
 
       return Q.all(promises).then(function(appointments){
-        return res.status(200).json({stats:appointments[0], data:appointments[1]});
+        var _leads = [];
+        for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
+        return res.status(200).json({stats:appointments[0], data:_leads});
       });
 
     } else return res.status(200).json([]);
@@ -762,7 +770,9 @@ export function soldAppointments(req, res){
       }));
 
       return Q.all(promises).then(function(appointments){
-        return res.status(200).json({stats:appointments[0], data:appointments[1]});
+        var _leads = [];
+        for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
+        return res.status(200).json({stats:appointments[0], data:_leads});
       });
 
     } else return res.status(200).json([]);
