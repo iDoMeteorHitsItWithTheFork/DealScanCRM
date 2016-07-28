@@ -687,7 +687,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="lead in bdc.dealsTableData">
+                <tr ng-repeat="lead in bdc.dealsTableData" ng-click="bdc.viewOptions = 'list'; bdc.showInDetails(lead); ">
                   <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
                   <td><a class="client-link">{{lead.name}}</a></td>
                   <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
