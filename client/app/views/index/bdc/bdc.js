@@ -47,7 +47,7 @@ angular.module('dealScanCrmApp')
                 files: ['.resources/plugins/moment/moment.min.js']
               },
               {
-                name: 'datePicker',
+                name: 'dataPicker',
                 files: ['.styles/plugins/datapicker/angular-datapicker.css',
                   '.resources/plugins/datapicker/angular-datepicker.js']
               },

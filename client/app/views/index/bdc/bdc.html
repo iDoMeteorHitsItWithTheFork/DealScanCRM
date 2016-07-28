@@ -51,7 +51,7 @@
 </div>
 
 <!-- Middle section  ==> graph -->
-<div class="row p-t-10">
+<div class="row p-t-10" style="margin:0;">
   <div class="col-lg-12">
     <div class="ibox float-e-margins">
 
@@ -70,11 +70,11 @@
         <div class="row "
              style="background-color: rgba(238,238,238, 0.5) !important; padding-top:13px !important; padding-bottom:9px !important;">
           <!-- Resources  -->
-          <div class="col-lg-7">
+          <div class="col-md-5">
             <div class="row">
               <!-- Data Filters -->
-              <div class="col-lg-3">
-                <ui-select ng-model="bdc.selectedDealership" theme="bootstrap">
+              <div class="col-md-6">
+                <ui-select on-select="bdc.getLeads()" ng-model="bdc.selectedDealership" theme="bootstrap">
                   <ui-select-match placeholder="Dealerships">{{$select.selected.name}}
                   </ui-select-match>
                   <ui-select-choices
@@ -84,8 +84,8 @@
                 </ui-select>
               </div>
 
-              <div class="col-lg-3">
-                <ui-select ng-model="bdc.selectedEmployee" theme="bootstrap">
+              <div class="col-md-6">
+                <ui-select on-select="bdc.getLeads()" ng-model="bdc.selectedEmployee" theme="bootstrap">
                   <ui-select-match placeholder="Employees">{{$select.selected.name}}
                   </ui-select-match>
                   <ui-select-choices
@@ -100,33 +100,31 @@
           <!-- /.Resources Filters -->
 
           <!-- Date Filters -->
-          <div class="col-lg-3">
-            <div class="col-lg-9 no-margins" style="position:relative;">
-                  <span class="form-control date-picker" date-range-picker
-                        options="bdc.datePickerOptions"
-                        ng-model="dashboard.dateRange">
-                    {{bdc.dateRange.startDate.format('YYYY/MM/DD')}} - {{bdc.dateRange.endDate.format('YYYY/MM/DD')}}</span>
-            </div>
-            <div class="col-lg-3 no-margins">
-              <button class="btn btn-sm btn-primary custom-btn" ng-click="bdc.getLeads()"
-                      ng-disabled="bdc.retreivingLeads"><i class="fa fa-download">&nbsp;&nbsp;</i>Load
-              </button>
-            </div>
-          </div>
-          <!-- ./Date Filters -->
+          <div class="col-md-7">
+            <div class="col-md-7 no-margins" >
+              <input class="form-control date-picker" style="margin-right:10px" date-range-picker
+                     options="bdc.datePickerOptions"
+                     ng-model="bdc.dateRange">
+              </input>
 
-          <!-- View Selectors -->
-          <div class="col-lg-2">
-            <div class="btn-group pull-right margin-right-10">
-              <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'list'">
-                <i class="fa fa-tasks">&nbsp;</i> List
-              </button>
-              <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'chart'">
-                <i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
-              </button>
             </div>
+            <!-- ./Date Filters -->
+            <!-- View Selectors -->
+            <div class="col-lg-5">
+              <div class="btn-group pull-right margin-right-10">
+                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'list'">
+                  <i class="fa fa-tasks">&nbsp;</i> List
+                </button>
+                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'chart'">
+                  <i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
+                </button>
+              </div>
+            </div>
+            <!-- /.View selectors -->
           </div>
-          <!-- /.View selectors -->
+
+
+
 
         </div>
         <!-- ./filters -->
@@ -138,7 +136,7 @@
 
         <!-- metrics -->
         <div class="row p-l-10">
-          <div class="col-xs-2 margin-top-10">
+          <div class="col-xs-12 margin-top-10">
             <h3 class="no-margins">Prospects Summary</h3>
             <small>All Employee's Data</small>
           </div>
@@ -163,16 +161,17 @@
         <div ng-show="bdc.viewOptions == 'list'" class="row">
           <div class="col-sm-12" ng-class="{'col-sm-8': bdc.activeLead}">
             <div class="ibox">
-              <div class="ibox-content">
+              <div class="ibox-content no-padding">
+                <div class="p-r-15 p-l-15" style="padding-top:15px;">
                 <span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span>
                 <p>
                   All leads need to be verified before you can send email and set a project.
                 </p>
-
+                </div>
                 <div class="clients-list">
 
 
-                  <ul class="nav nav-tabs">
+                  <ul class="nav nav-tabs p-r-15">
                     <span class="pull-right small text-muted">{{bdc.leads.new_leads.length + bdc.leads.working_leads.length + bdc.leads.follow_up_leads.length   || 0}} Leads</span>
                     <li ng-click="bdc.viewTab(tab)" ng-repeat="tab in bdc.tabs"
                         ng-class="{'active' : tab == bdc.activeTab}">
@@ -294,27 +293,27 @@
               <div class="ibox-content">
                 <div class="tab-content">
                   <div id="contact-1" class="tab-pane active">
-                    <div class="row m-b-lg">
-                      <div class="col-lg-4 text-center">
-                        <h2>{{bdc.activeLead.name}}</h2>
-                        <div class="m-b-sm">
-                          <img alt="image" class="img-circle" src="assets/images/profile.jpg"
-                               style="width: 62px">
-                        </div>
-                        <a class="text-muted" ng-click="bdc.editLead(bdc.activeLead);">
-                          <small><i class="fa fa-pencil">&nbsp;</i> Edit</small>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h2 style="display:inline;">{{bdc.activeLead.name}}</h2>
+                        <a class="text-muted pull-right m-t-5" ng-click="bdc.editLead(bdc.activeLead);">
+                        <small><i class="fa fa-pencil">&nbsp;</i> Edit</small>
                         </a>
                       </div>
-                      <div class="col-lg-8">
+                    </div>
+                    <hr style="margin-top: 7px; margin-bottom:7px;">
+                    <div class="row" style="margin-bottom:5px;">
+                      <div class="col-md-3 text-center">
+                          <img alt="image" class="img-circle" src="assets/images/profile.jpg" style="width: 62px; margin-top:5px;">
+                      </div>
+                      <div class="col-md-9">
                         <div class="table-responsive">
-                          <table class="table lead-details-table">
-                            <tbody>
+                          <table class="table lead-details-table" style="margin-bottom:0">
+                            <tbody id="lead-info">
                             <tr>
                               <td class="contact-type">
                                 <i class="fa fa-phone"></i></td>
                               <td> {{bdc.activeLead.phone || 'Phone Unavailable'}}</td>
-                              <td class="contact-type" ng-if="bdc.activeLead.phone">
-                                <i class="fa fa-comment"></i></td>
                             </tr>
                             <tr>
                               <td class="contact-type">
@@ -329,103 +328,35 @@
                             </tbody>
                           </table>
                         </div>
-                        <strong>
-                          Interested In
-                        </strong>
-                        <p>
-                          {{bdc.activeLead.interest || 'Not Specified'}}
-                        </p>
-                        <button type="button" ng-click="bdc.newNote = !bdc.newNote" class="btn btn-primary btn-sm"><i
-                          class="fa fa-sticky-note">&nbsp;&nbsp;</i>Add Note
-                        </button>
-
-                        <button type="button" ng-click="bdc.setAppointment = !bdc.setAppointment"
-                                class="btn btn-primary btn-sm"><i
-                          class="fa fa-calendar">&nbsp;&nbsp;</i>Schedule Appointment
-                        </button>
-
-                        <div class="animated fadeInDown m-t-25 m-b-20 hideSansDelay" ng-if="bdc.newNote">
-                          <form name="addNoteForm" role="form">
-                            <div class="row margin-negative-left-15 margin-negative-right-15">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                  <label>Notes</label>
-                                  <div>
-                                    <textarea class="form-control" style="height: 100px !important;"
-                                              ng-model="bdc.note.content" ng-required="true"></textarea>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <button ladda="bdc.savingNote" type="button"
-                                    ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || bdc.savingNote"
-                                    ng-click="bdc.addNote(bdc.activeLead)" class="ladda-button btn btn-primary btn-sm btn-block">
-                              Create
-                            </button>
-                          </form>
-                        </div>
-
-                        <div class="animated fadeInDown m-t-25 hideSansDelay" ng-if="bdc.setAppointment">
-                          <form name="scheduleLeadForm" role="form">
-                            <div class="row margin-negative-left-15 margin-negative-right-15">
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <input type="text" placeholder="Date" class="form-control"
-                                         uib-datepicker-popup="{{bdc.appointment.format}}"
-                                         ng-model="bdc.appointment.dt"
-                                         is-open="bdc.appointment.opened"
-                                         datepicker-options="bdc.appointment.dateOptions" ng-required="true"
-                                         close-text="Close"
-                                         alt-input-formats="bdc.appointment.altInputFormats"
-                                         min-date="bdc.appointment.minDate"
-                                         ng-click="bdc.appointment.opened = !bdc.appointment.opened"/>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <div class="input-group " clock-picker data-autoclose="true">
-                                    <input type="text" class="form-control" ng-model="bdc.appointment.time"
-                                           placeholder="Time" ng-required="true">
-                                    <span class="input-group-addon">
-                                        <span class="fa fa-clock-o"></span>
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="row margin-negative-left-15 margin-negative-right-15">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                  <label>Notes</label>
-                                  <div>
-                                    <textarea class="form-control" style="height: 100px !important;"
-                                              ng-model="bdc.appointment.description"></textarea>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <button ladda="bdc.savingAppointment" type="button"
-                                    ng-disabled="scheduleLeadForm.$pristine || !scheduleLeadForm.$valid || bdc.savingAppointment"
-                                    ng-click="bdc.scheduleLeadAppointment(bdc.activeLead, bdc.setAppointment)"
-                                    class="ladda-button btn btn-primary btn-sm btn-block">Create
-                            </button>
-
-                          </form>
-
-                        </div>
-
 
                       </div>
+
+                      </div>
+                    <div style="margin-top:3px;">
+                      <p><strong>Interested In: </strong>{{bdc.activeLead.interest || 'Not Specified'}}</p>
                     </div>
+                      <div class="clear-fix"></div>
+                      <div class="row">
+                        <div class="col-md-12">
+                        <button type="button" ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm"><i
+                          class="fa fa-sticky-note">&nbsp;&nbsp;</i>Add Note
+                        </button>
+                        <button type="button" ng-click="bdc.addAppointment(bdc.activeLead)" class="btn btn-primary btn-sm">
+                          <i class="fa fa-calendar-plus-o">&nbsp;&nbsp;</i>Schedule Appointment
+                        </button>
+                      </div>
+                      </div>
+
+
+              <div class="row" style="margin-top:10px">
+                <div class="col-md-12" style="padding-right:0;">
                     <div class="client-detail">
-                      <div class="full-height-scroll" full-scroll>
+                      <div class="full-height-scroll" full-scroll style="padding-right:15px;">
                         <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
                         <p ng-if="bdc.activeLead.additionalInfo">
                           {{bdc.activeLead.additionalInfo}}
                         </p>
-                        <hr/>
+                        <hr style="margin-top:7px; margin-bottom:7px;"/>
                         <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent Notes</strong>
                         <ul class="list-group clear-list" ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">
                           <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item" ng-class="{'fist-item': $index == 0}">
@@ -866,6 +797,9 @@
 <!-- ./data Tables -->
 
 <!-- /.Middle Section -->
+</div>
+    </div>
+  </div>
 
 <!-- Bottom section ==> Timeline, Tasks, Active Users, Social Activities-->
 <div class="row">

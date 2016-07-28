@@ -48,20 +48,6 @@ angular.module('dealScanCrmApp')
                 files: ['.resources/plugins/moment/moment.min.js']
               },
               {
-                name: 'datePicker',
-                files: ['.styles/plugins/datapicker/angular-datapicker.css',
-                        '.resources/plugins/datapicker/angular-datepicker.js']
-              },
-              {
-                serie: true,
-                files: ['.resources/plugins/daterangepicker/daterangepicker.js',
-                        '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
-              },
-              {
-                name: 'daterangepicker',
-                files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
-              },
-              {
                 files: ['.resources/plugins/jasny/jasny-bootstrap.min.js']
               },
               {
@@ -119,6 +105,18 @@ angular.module('dealScanCrmApp')
                 name: 'summernote',
                 files: ['.styles/plugins/summernote/summernote.css','.styles/plugins/summernote/summernote-bs3.css',
                         '.resources/plugins/summernote/summernote.min.js','.resources/plugins/summernote/angular-summernote.min.js']
+              },
+              {
+                name: 'datePicker',
+                files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+              },
+              {
+                serie: true,
+                files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+              },
+              {
+                name: 'daterangepicker',
+                files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
               }
             ]);
           }

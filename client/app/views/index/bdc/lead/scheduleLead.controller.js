@@ -5,7 +5,7 @@ angular.module('dealScanCrmApp')
   .controller('ScheduleLeadCtrl', ['$scope','$uibModalInstance', '$filter', 'Lead', 'toaster', 'lead',
     function ($scope, $uibModalInstance, $filter, Lead, toaster, lead) {
       console.log("add lead controller loaded");
-
+      console.log(lead);
       var _scheduleLead = this;
       _scheduleLead.saving = false;
 
@@ -54,16 +54,18 @@ angular.module('dealScanCrmApp')
       };
 
       _scheduleLead.create = function () {
+        console.log('*** Schedule Lead ****');
         if (_scheduleLead.saving) return;
         _scheduleLead.saving  = true;
         var details = {};
         details.name = _scheduleLead.appointment.name;
         details.phone = _scheduleLead.appointment.phone;
         details.description = _scheduleLead.appointment.description;
-        details.appointment = moment(_scheduleLead.appointment.date + _scheduleLead.appointment.time);
+        details.appointment = moment(_scheduleLead.appointment.date).format('YYYY-MM-DD') +' '+_scheduleLead.appointment.time;
+        details.leadID = lead.leadID;
 
         Lead.appointment(details).then(function(appointment){
-          console.log(lead);
+          console.log(appointment);
           if (appointment && !appointment.error){
             toaster.success({title:'New Appointment', body: 'Appointment for Lead ('+details.name+') was scheduled for '+details.appointment});
             $uibModalInstance.close(appointment);

@@ -8,28 +8,39 @@
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-6">
         <div class="form-group">
-          <input type="text" class="form-control" ng-disabled="true" required ng-model="scheduleLead.name" placeholder="Name...">
+          <label>Customer Name</label>
+          <input type="text" class="form-control" ng-disabled="true" required ng-model="scheduleLead.appointment.name" placeholder="Name...">
         </div>
 
         <div class="form-group">
           <label>Schedule Appointment</label>
-          <input type="text" placeholder="Appointment Date" class="form-control"
-                 uib-datepicker-popup="{{scheduleLead.format}}"
-                 ng-model="scheduleLead.dt"
-                 is-open="scheduleLead.opened"
-                 datepicker-options="scheduleLead.dateOptions" ng-required="true" close-text="Close"
-                 alt-input-formats="scheduleLead.altInputFormats" min-date="scheduleLead.minDate"
-                 ng-click="scheduleLead.opened = !scheduleLead.opened"/>
+          <div class="input-group date">
+            <input type="datetime" class="form-control" placeholder="Appointment Date" date-time
+                   ng-model="scheduleLead.appointment.date"
+                   view="date"
+                   auto-close="true"
+                   min-view="date"
+                   format="YYYY-MM-DD"
+                   ng-required="true">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+          <!--<input type="text" placeholder="Appointment Date" class="form-control"-->
+                 <!--uib-datepicker-popup="{{scheduleLead.format}}"-->
+                 <!--ng-model="scheduleLead.appointment.date"-->
+                 <!--is-open="scheduleLead.opened"-->
+                 <!--datepicker-options="scheduleLead.dateOptions" ng-required="true" close-text="Close"-->
+                 <!--alt-input-formats="scheduleLead.altInputFormats" min-date="scheduleLead.minDate"-->
+                 <!--ng-click="scheduleLead.opened = !scheduleLead.opened"/>-->
         </div>
       </div>
       <div class="col-md-6">
-
         <div class="form-group">
-          <input type="text" class="form-control" required ng-model="scheduleLead.phone" placeholder="Phone...">
+          <label>Phone Number</label>
+          <input type="text" class="form-control" ng-disabled="true" required ng-model="scheduleLead.appointment.phone" placeholder="Phone...">
         </div>
 
         <div class="form-group">
-          <div class="m-t-38" uib-timepicker ng-model="scheduleLead.appointmentTime"
+          <div class="m-t-38" uib-timepicker ng-model="scheduleLead.appointment.time"
                show-spinners = "false"
                show-meridian="true" type="text"
                placeholder="Appointment Time"></div>
@@ -41,9 +52,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label>Notes</label>
-          <div class="note-editor">
-            <textarea class="form-control" style="height: 200px !important;" ng-model="scheduleLead.description"></textarea>
-          </div>
+            <textarea class="form-control" ng-required="true" style="height: 200px !important;" ng-model="scheduleLead.appointment.description"></textarea>
         </div>
       </div>
     </div>
