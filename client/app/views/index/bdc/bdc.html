@@ -696,23 +696,19 @@
                   <td class="contact-type"><i class="fa fa-envelope">&nbsp;&nbsp;</i>{{lead.email || 'No Email Provided'}}</td>
                   <td class="contact-type"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided'}}</td>
                   <td class="client-status">
-                                <span class="label"
-                                      ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-info': lead.sourceType.toLowerCase() == 'social media',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'third party',
-                                                  'label-danger': lead.sourceType.toLowerCase() == 'website',
-                                                  'label-default': lead.sourceType.toLowerCase() == 'other'}">
-                                  {{lead.sourceName}}</span>
+                    <span class="label"
+                          ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
+                                      'label-info': lead.sourceType.toLowerCase() == 'social media',
+                                      'label-warning': lead.sourceType.toLowerCase() == 'third party',
+                                      'label-danger': lead.sourceType.toLowerCase() == 'website',
+                                      'label-default': lead.sourceType.toLowerCase() == 'other'}">
+                      {{lead.sourceName}}</span>
                   </td>
                   <td></td>
                   <td>{{lead.timeAgo}}</td>
                 </tr>
                 </tbody>
               </table>
-
-
-
-
 
             </div>
           </div>
