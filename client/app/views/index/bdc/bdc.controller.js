@@ -32,7 +32,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.viewOptions = 'charts';
       _bdc.showBarChart = false;
       _bdc.selectedPie = null;
-
+      _bdc.showTable = false;
+      _bdc.showTableDetails = false;
 
       _bdc.tabs = [
         {
@@ -187,7 +188,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.setTableData = function(chart, status, category){
         console.log(chart);
         console.log(status);
-
+        console.log(category);
         _bdc.sectionTitle.status = status;
         _bdc.sectionTitle.category = chart ? chart.series.label: '';
 
@@ -207,10 +208,16 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
        */
       _bdc.displayTable = function($event, pos, item, status, category){
         if (!_bdc.showTable) _bdc.showTable = true;
+        console.log(category);
         _bdc.setTableData(item, status, category);
       }
 
-
+      _bdc.showDetails = function($event, pos, item, chart) {
+        console.log("******chart*******");
+        console.log(chart);
+        _bdc.showTable = true;
+        _bdc.selectedPie = chart;
+      }
       /**
        *  deals  table Data
        */
