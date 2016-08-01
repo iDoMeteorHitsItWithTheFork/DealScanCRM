@@ -22,7 +22,7 @@
     "express-session": "^1.11.3",
     "fbgraph": "^1.2.0",
     "gmail-node": "^1.0.0",
-    "imap": "^0.8.17",
+    "imap": "https://github.com/mscdex/node-imap/tarball/master",
     "ioredis": "^2.2.0",
     "jsonwebtoken": "^5.0.0",
     "lodash": "^3.10.1",
@@ -33,6 +33,7 @@
     "moment": "^2.12.0",
     "morgan": "~1.6.1",
     "mysql": "^2.10.2",
+    "node-expat": "^2.3.15",
     "node-gmail-api": "^0.6.0",
     "node-resque": "^2.0.9",
     "node-schedule": "^1.1.1",
@@ -51,7 +52,9 @@
     "sqlite3": "~3.1.1",
     "stream-json": "^0.4.2",
     "twit": "^2.2.4",
-    "twitter-stream-channels": "^1.0.0"
+    "twitter-stream-channels": "^1.0.0",
+    "xml-stream": "^0.4.5",
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.0",

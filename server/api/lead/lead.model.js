@@ -8,7 +8,8 @@ export default function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    name: DataTypes.STRING,
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     phone: DataTypes.STRING,
     email: DataTypes.STRING,
     address: DataTypes.STRING,
@@ -29,7 +30,9 @@ export default function(sequelize, DataTypes) {
       profile: function () {
         return {
           'leadID': this.getDataValue('leadID'),
-          'name': this.getDataValue('name'),
+          'firstName': this.getDataValue('firstName'),
+          'lastName': this.getDataValue('lastName'),
+          'name': this.getDataValue('firstName') +' '+this.getDataValue('lastName'),
           'phone': this.getDataValue('phone'),
           'email': this.getDataValue('email'),
           'address': this.getDataValue('address'),
@@ -46,7 +49,9 @@ export default function(sequelize, DataTypes) {
       token: function () {
         return {
           'leadID': this.getDataValue('leadID'),
-          'name': this.getDataValue('name'),
+          'firstName': this.getDataValue('firstName'),
+          'lastName': this.getDataValue('lastName'),
+          'name': this.getDataValue('firstName') +' '+this.getDataValue('lastName'),
           'phone': this.getDataValue('phone'),
           'email': this.getDataValue('email'),
           'address': this.getDataValue('address'),
@@ -59,6 +64,17 @@ export default function(sequelize, DataTypes) {
         }
       }
     },
+
+    instanceMethods: {
+
+      leadUpsert:function(data){
+
+
+
+      }
+
+    }
+
   });
 
   return Lead;
