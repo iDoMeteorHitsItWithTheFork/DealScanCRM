@@ -112,10 +112,10 @@
             <!-- View Selectors -->
             <div class="col-lg-5">
               <div class="btn-group pull-right margin-right-10">
-                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'list'">
+                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'list'" ng-click="bdc.showTableDetails = false; bdc.showTable = false;  bdc.selectedPie = null; bdc.activeLead = null;">
                   <i class="fa fa-tasks">&nbsp;</i> List
                 </button>
-                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'charts'">
+                <button class="btn btn-white btn-outline" ng-model="bdc.viewOptions" uib-btn-radio="'charts'" ng-click="bdc.showTableDetails = false; bdc.showTable = false;  bdc.selectedPie = null; bdc.activeLead = null;">
                   <i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
                 </button>
               </div>
@@ -157,7 +157,7 @@
 
 
         <!-- Lists -->
-        <div ng-show="bdc.viewOptions == 'list'" class="row">
+        <div ng-show="bdc.viewOptions == 'list';" class="row">
 
           <!-- leads list -->
           <div class="col-sm-12" ng-class="{'col-sm-8': bdc.activeLead}">
@@ -312,7 +312,7 @@
           <!-- ./ leads list -->
 
           <!-- active lead -->
-          <div ng-if="bdc.activeLead" class="col-sm-4 animated fadeInDown">
+          <div ng-if="bdc.activeLead && bdc.viewOptions === 'list'" ng-hide="bdc.viewOptions === 'charts'" class="col-sm-4 animated fadeInDown">
             <div class="ibox ">
               <div ibox-tools on-close="bdc.activeLead = null" class="ps-rl-tp-10-rt-10"></div>
               <div class="ibox-content">
@@ -504,8 +504,8 @@
 
 
             <!-- TotalLeads Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData" class="pull-left animated fadeInRight"
-                 ng-class="(bdc.showBarChart && bdc.chartView == 'charts') ? 'col-lg-3': 'col-lg-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
+                 ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- totalLeads stats-->
               <div class="ibox float-e-margins no-material">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -523,19 +523,19 @@
               </div>
               <!-- ./ totalLeads stats -->
 
-              <div ng-if="bdc.totalLeads.pie" class="flot-chart large-pie-chart animated fadeInRight">
+              <div ng-if="bdc.totalLeads.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
                 <div flot class="flot-chart-content"
                      dataset="bdc.totalLeads.pie"
                      options="bdc.totalLeads.pieOptions"
-                     on-plot-click="bdc.displayTable($event, pos, item, 'Total Leads')"></div>
+                     on-plot-click="bdc.showDetails($event, pos, item, 'total'); bdc.displayTable($event, pos, item, 'Total Leads');"></div>
               </div>
             </div>
             <!-- ./totalLeads Pie & Charts -->
 
 
             <!-- Appointments Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData" class="pull-left animated fadeInRight"
-                 ng-class="(bdc.showBarChart && bdc.chartView == 'charts') ? 'col-lg-3': 'col-lg-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
+                 ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments stats-->
               <div class="ibox float-e-margins no-material">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -553,19 +553,19 @@
               </div>
               <!-- ./appointments stats -->
 
-              <div ng-if="bdc.totalAppointments.pie" class="flot-chart large-pie-chart animated fadeInRight">
+              <div ng-if="bdc.totalAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
                 <div flot class="flot-chart-content"
                      dataset="bdc.totalAppointments.pie"
                      options="bdc.totalAppointments.pieOptions"
-                     on-plot-click="bdc.displayTable($event, pos, item, 'Total Appointments')"></div>
+                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments'); bdc.displayTable($event, pos, item, 'Total Appointments')"></div>
               </div>
             </div>
             <!-- ./appointments Pie & Charts -->
 
 
             <!-- Appointments Kept Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData" class="pull-left animated fadeInRight"
-                 ng-class="(bdc.showBarChart && bdc.chartView == 'charts') ? 'col-lg-3': 'col-lg-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_kept' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
+                 ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments kept stats-->
               <div class="ibox float-e-margins no-material">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -583,19 +583,19 @@
               </div>
               <!-- ./appointments Kept stats -->
 
-              <div ng-if="bdc.keptAppointments.pie" class="flot-chart large-pie-chart animated fadeInRight">
+              <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
                 <div flot class="flot-chart-content"
                      dataset="bdc.keptAppointments.pie"
                      options="bdc.keptAppointments.pieOptions"
-                     on-plot-click="bdc.displayTable($event, pos, item, 'Kept Appointments')"></div>
+                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments_kept'); bdc.displayTable($event, pos, item, 'Kept Appointments')"></div>
               </div>
             </div>
             <!-- ./appointments Kept Pie & Charts -->
 
 
             <!-- Appointments Missed Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData" class="pull-left animated fadeInRight"
-                 ng-class="(bdc.showBarChart && bdc.chartView == 'charts') ? 'col-lg-3': 'col-lg-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_missed' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
+                 ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments missed stats-->
               <div class="ibox float-e-margins no-material">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -613,19 +613,19 @@
               </div>
               <!-- ./appointments Missed stats -->
 
-              <div ng-if="bdc.missedAppointments.pie" class="flot-chart large-pie-chart animated fadeInRight">
+              <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
                 <div flot class="flot-chart-content"
                      dataset="bdc.missedAppointments.pie"
                      options="bdc.missedAppointments.pieOptions"
-                     on-plot-click="bdc.displayTable($event, pos, item, 'Missed Appointments')"></div>
+                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments_missed'); bdc.displayTable($event, pos, item, 'Missed Appointments')"></div>
               </div>
             </div>
             <!-- ./appointments Missed Pie & Charts -->
 
 
             <!-- Appointments sold Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData" class="pull-left animated fadeInRight"
-                 ng-class="(bdc.showBarChart && bdc.chartView == 'charts') ? 'col-lg-3': 'col-lg-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_sold' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
+                 ng-class="(bdc.showTable && bdc.chartView == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments sold stats-->
               <div class="ibox float-e-margins no-material">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -643,16 +643,249 @@
               </div>
               <!-- ./appointments sold stats -->
 
-              <div ng-if="bdc.soldAppointments.pie" class="flot-chart large-pie-chart animated fadeInRight">
+              <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
                 <div flot class="flot-chart-content"
                      dataset="bdc.soldAppointments.pie"
                      options="bdc.soldAppointments.pieOptions"
-                     on-plot-click="bdc.displayTable($event, pos, item, 'Sold Appointments')"></div>
+                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments_sold'); bdc.displayTable($event, pos, item, 'Sold Appointments')"></div>
               </div>
             </div>
             <!-- ./appointments sold Pie & Charts -->
 
+            <div class="pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'" ng-class="bdc.showTableDetails ? 'col-md-8' : 'col-md-9'" style="">
+              <div class="ibox float-e-margins no-material">
+                <!-- data tables-->
+                <div class="row animated fadeInRight">
+                  <div class="col-lg-12">
+                    <div class="ibox float-e-margins no-material">
+                      <div class="ibox-title">
+                        <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong>
+                        </h5>
+                        <div ibox-tools on-close="bdc.showTable = false; bdc.showTableDetails = false;"></div>
+                      </div>
+                      <div class="ibox-content">
+                        <table datatable="ng" dt-options="bdc.dtOptions"
+                               class="table table-striped table-bordered table-hover dataTables-example" style="padding-bottom:0">
+                          <thead>
+                          <tr>
+                            <th>Lead Name</th>
+                            <th>Expressed Interest</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Source</th>
+                            <!--<th>Agent</th>-->
+                            <th>Date</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr ng-repeat="lead in bdc.dealsTableData" ng-click="bdc.showTableDetails = true; bdc.showInDetails(lead); ">
+                            <!--<td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>-->
+                            <td><a class="client-link">{{lead.name}}</a></td>
+                            <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
+                              > 50 ? '...': ''}}
+                            </td>
+                            <td class="contact-type"><i class="fa fa-envelope">&nbsp;&nbsp;</i>{{lead.email || 'No Email Provided' | limitTo: 25}}</td>
+                            <td class="contact-type"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided' | limitTo: 25}}</td>
+                            <td class="client-status">
+                    <span class="label"
+                          ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
+                                      'label-info': lead.sourceType.toLowerCase() == 'social media',
+                                      'label-warning': lead.sourceType.toLowerCase() == 'third party',
+                                      'label-danger': lead.sourceType.toLowerCase() == 'website',
+                                      'label-default': lead.sourceType.toLowerCase() == 'other'}">
+                      {{lead.sourceName}}</span>
+                            </td>
+                            <!--<td></td>-->
+                            <td>{{lead.timeAgo}}</td>
+                          </tr>
+                          </tbody>
+                        </table>
 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- ./data Tables -->
+              </div>
+            </div>
+
+            <div ng-if="bdc.activeLead && bdc.viewOptions != 'list' && bdc.showTable" ng-hide="bdc.viewOptions === 'list'" class="col-sm-4 animated fadeInDown">
+              <div class="ibox ">
+                <div ibox-tools on-close="bdc.activeLead = null; bdc.showTableDetails = false;" class="ps-rl-tp-10-rt-10"></div>
+                <div class="ibox-content">
+                  <!-- active lead content pane-->
+                  <div class="tab-content">
+
+                    <!-- Active lead details content view -->
+                    <div id="contact-1" class="tab-pane active">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <h2 style="display:inline;">{{bdc.activeLead.name}}</h2>
+                          <a class="text-muted pull-right m-t-5" ng-click="bdc.editLead(bdc.activeLead);">
+                            <small><i class="fa fa-pencil">&nbsp;</i> Edit</small>
+                          </a>
+                        </div>
+                      </div>
+                      <hr style="margin-top: 7px; margin-bottom:7px;">
+                      <div class="row" style="margin-bottom:5px;">
+                        <div class="col-md-3 text-center">
+                          <img alt="image" class="img-circle" src="assets/images/profile.jpg"
+                               style="width: 62px; margin-top:5px;">
+                        </div>
+                        <div class="col-md-9">
+                          <div class="table-responsive">
+                            <table class="table lead-details-table" style="margin-bottom:0">
+                              <tbody id="lead-info">
+                              <tr>
+                                <td class="contact-type">
+                                  <i class="fa fa-phone"></i></td>
+                                <td> {{bdc.activeLead.phone || 'Phone Unavailable'}}</td>
+                              </tr>
+                              <tr>
+                                <td class="contact-type">
+                                  <i class="fa fa-envelope"></i></td>
+                                <td> {{bdc.activeLead.email || 'Email Unavailable'}}</td>
+                              </tr>
+                              <tr>
+                                <td class="contact-type">
+                                  <i class="fa fa-map-marker"></i></td>
+                                <td> {{bdc.activeLead.address || 'Location Unavailable'}}</td>
+                              </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+
+                      </div>
+                      <div style="margin-top:3px;">
+                        <p><strong>Interested In: </strong>{{bdc.activeLead.interest || 'Not Specified'}}</p>
+                      </div>
+                      <div class="clear-fix"></div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <button type="button" ng-click="bdc.addNote(bdc.activeLead)" class="btn btn-primary btn-sm"><i
+                                  class="fa fa-sticky-note">&nbsp;&nbsp;</i>Add Note
+                          </button>
+                          <button type="button" ng-click="bdc.addAppointment(bdc.activeLead)"
+                                  class="btn btn-primary btn-sm">
+                            <i class="fa fa-calendar-plus-o">&nbsp;&nbsp;</i>Schedule Appointment
+                          </button>
+                        </div>
+                      </div>
+
+
+                      <div class="row" style="margin-top:10px">
+                        <div class="col-md-12" style="padding-right:0;">
+                          <div class="client-detail">
+                            <div class="full-height-scroll" full-scroll style="padding-right:15px;">
+                              <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
+                              <p ng-if="bdc.activeLead.additionalInfo">
+                                {{bdc.activeLead.additionalInfo}}
+                              </p>
+                              <hr style="margin-top:7px; margin-bottom:7px;"/>
+                              <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent
+                                Notes</strong>
+                              <ul class="list-group clear-list"
+                                  ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">
+                                <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item"
+                                    ng-class="{'fist-item': $index == 0}">
+                            <span class="pull-right"> {{note.timeAgo}}
+                            </span>
+                                  {{note.content}}
+                                  <br/>
+                                  <small>{{note.creator.name}}</small>
+                                </li>
+                              </ul>
+
+
+                              <!-- timeline actitivity -->
+                              <strong>Timeline Activity</strong>
+                              <div id="vertical-timeline" class="vertical-container dark-timeline">
+                                <div class="vertical-timeline-block">
+                                  <div class="vertical-timeline-icon gray-bg">
+                                    <i class="fa fa-coffee"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p>Conference on the sales results for the previous year.
+                                    </p>
+                                    <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                  </div>
+                                </div>
+                                <div class="vertical-timeline-block">
+                                  <div class="vertical-timeline-icon gray-bg">
+                                    <i class="fa fa-briefcase"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p>Many desktop publishing packages and web page editors now use Lorem.
+                                    </p>
+                                    <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                                  </div>
+                                </div>
+                                <div class="vertical-timeline-block">
+                                  <div class="vertical-timeline-icon gray-bg">
+                                    <i class="fa fa-bolt"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p>There are many variations of passages of Lorem Ipsum available.
+                                    </p>
+                                    <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
+                                  </div>
+                                </div>
+                                <div class="vertical-timeline-block">
+                                  <div class="vertical-timeline-icon navy-bg">
+                                    <i class="fa fa-warning"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p>The generated Lorem Ipsum is therefore.
+                                    </p>
+                                    <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
+                                  </div>
+                                </div>
+                                <div class="vertical-timeline-block">
+                                  <div class="vertical-timeline-icon gray-bg">
+                                    <i class="fa fa-coffee"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p>Conference on the sales results for the previous year.
+                                    </p>
+                                    <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                  </div>
+                                </div>
+                                <div class="vertical-timeline-block">
+                                  <div class="vertical-timeline-icon gray-bg">
+                                    <i class="fa fa-briefcase"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p>Many desktop publishing packages and web page editors now use Lorem.
+                                    </p>
+                                    <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- ./ timeline activity -->
+
+
+                            </div>
+
+                          </div>
+                          <!-- ./ active lead details bottom section -->
+
+                        </div>
+                        <!-- ./Active lead details content view -->
+
+                      </div>
+                      <!-- ./active content pane -->
+                    </div>
+                  </div>
+                </div>
+                <!-- ./ active lead -->
+
+              </div>
+              <!-- /.Lists-->
+
+              <!-- /. content View -->
+            </div>
           </div>
 
 
@@ -662,59 +895,7 @@
       </div>
       <!-- /.content view -->
 
-      <!-- data tables-->
-      <div class="row animated fadeInRight" ng-if="bdc.showTable">
-        <div class="col-lg-12">
-          <div class="ibox float-e-margins">
-            <div class="ibox-title">
-              <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong>
-              </h5>
-              <div ibox-tools on-close="bdc.showTable = false"></div>
-            </div>
-            <div class="ibox-content">
-              <table datatable="ng" dt-options="bdc.dtOptions"
-                     class="table table-striped table-bordered table-hover dataTables-example" style="padding-bottom:0">
-                <thead>
-                <tr>
-                  <th></th>
-                  <th>Lead Name</th>
-                  <th>Expressed Interest</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Source</th>
-                  <th>Agent</th>
-                  <th>Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="lead in bdc.dealsTableData" ng-click="bdc.viewOptions = 'list'; bdc.showInDetails(lead); ">
-                  <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
-                  <td><a class="client-link">{{lead.name}}</a></td>
-                  <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
-                    > 50 ? '...': ''}}
-                  </td>
-                  <td class="contact-type"><i class="fa fa-envelope">&nbsp;&nbsp;</i>{{lead.email || 'No Email Provided'}}</td>
-                  <td class="contact-type"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided'}}</td>
-                  <td class="client-status">
-                    <span class="label"
-                          ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                      'label-info': lead.sourceType.toLowerCase() == 'social media',
-                                      'label-warning': lead.sourceType.toLowerCase() == 'third party',
-                                      'label-danger': lead.sourceType.toLowerCase() == 'website',
-                                      'label-default': lead.sourceType.toLowerCase() == 'other'}">
-                      {{lead.sourceName}}</span>
-                  </td>
-                  <td></td>
-                  <td>{{lead.timeAgo}}</td>
-                </tr>
-                </tbody>
-              </table>
 
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ./data Tables -->
 
     </div>
   </div>
@@ -723,11 +904,10 @@
 <!-- /.Middle Section -->
 
 <!-- Bottom section ==> Timeline, Tasks, Active Users, Social Activities-->
-<div class="row">
 
 
   <!-- Left section -->
-  <div class="col-lg-12">
+  <div class="col-md-12">
     <!-- tasks & active users -->
     <div class="row">
       <!-- active users -->
@@ -1000,102 +1180,9 @@
   </div>
   <!-- ./Right section -->
 
-</div>
+
 <!-- ./Bottom section -->
 
-<!-- small chat -->
-<div class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="bdc.openChat">
-
-  <!-- Chat header -->
-  <div class="heading padding-top-15" draggable="true">
-    <span class="small-chat-avatar pull-left">
-      <img alt="image" src="assets/images/a2.jpg">
-    </span>
-    <!--<small class="chat-date pull-right">-->
-    <!--02.19.2015-->
-    <!--</small>-->
-    {{bdc.chatRecipient.name}}
-    <p>{{bdc.chatRecipient.number}}</p>
-  </div>
-
-  <!-- Chat Content -->
-  <div class="content" chat-slim-scroll>
-
-    <div class="left">
-      <div class="author-name">
-        Monica Jackson
-        <small class="chat-date">
-          10:02 am
-        </small>
-      </div>
-      <div class="chat-message active">
-        Lorem Ipsum is simply dummy text input.
-      </div>
-
-    </div>
-    <div class="right">
-      <div class="author-name">
-        Mick Smith
-        <small class="chat-date">
-          11:24 am
-        </small>
-      </div>
-      <div class="chat-message">
-        Lorem Ipsum is simpl.
-      </div>
-    </div>
-    <div class="left">
-      <div class="author-name">
-        Alice Novak
-        <small class="chat-date">
-          08:45 pm
-        </small>
-      </div>
-      <div class="chat-message active">
-        Check this stock char.
-      </div>
-    </div>
-    <div class="right">
-      <div class="author-name">
-        Anna Lamson
-        <small class="chat-date">
-          11:24 am
-        </small>
-      </div>
-      <div class="chat-message">
-        The standard chunk of Lorem Ipsum
-      </div>
-    </div>
-    <div class="left">
-      <div class="author-name">
-        Mick Lane
-        <small class="chat-date">
-          08:45 pm
-        </small>
-      </div>
-      <div class="chat-message active">
-        I belive that. Lorem Ipsum is simply dummy text.
-      </div>
-    </div>
-
-
-  </div>
-
-  <!-- Chat Compose -->
-  <div class="form-chat">
-    <div class="input-group input-group-sm"><input type="text" class="form-control"> <span class="input-group-btn"> <button
-      class="btn btn-primary" type="button">Send
-        </button> </span></div>
-  </div>
-
-</div>
-<div id="small-chat" ng-click="bdc.openChat = !bdc.openChat">
-  <!--<span class="badge badge-warning pull-right">5</span>-->
-  <a class="open-small-chat">
-    <i ng-class="bdc.openChat ? 'fa fa-times' : 'fa fa-comments'"></i>
-  </a>
-</div>
-<!-- ./small chat -->
 
 
 <!--  right sidebar -->
