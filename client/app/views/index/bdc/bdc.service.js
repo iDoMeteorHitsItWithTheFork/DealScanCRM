@@ -115,7 +115,7 @@ angular.module('dealScanCrmApp')
                 pie: {
                   show: true,
                   combine: {
-                    color: Util.pieColors()[TOP_LIMIT],
+                    color: Util.pieColorsBySource('other'),
                     threshold: threshold
                   }
                 }
@@ -140,7 +140,7 @@ angular.module('dealScanCrmApp')
               totalDeals.push({
                 label: leads.stats[i].Source,
                 data: leads.stats[i].Leads,
-                color: Util.pieColors()[i],//"#d3d3d3",};
+                color: Util.pieColorsBySource(leads.stats[i].Source),//"#d3d3d3",};
               });
             }
 
@@ -177,7 +177,7 @@ angular.module('dealScanCrmApp')
                   pie: {
                     show: true,
                     combine: {
-                      color: Util.pieColors()[TOP_LIMIT],
+                      color: Util.pieColorsBySource('source'),
                       threshold: threshold
                     }
                   }
@@ -202,7 +202,7 @@ angular.module('dealScanCrmApp')
                 totalAppointments.push({
                   label: appointments.stats[i].Source,
                   data: appointments.stats[i].Appointments,
-                  color: Util.pieColors()[i],//"#d3d3d3",};
+                  color: Util.pieColorsBySource(appointments.stats[i].Source),//"#d3d3d3",};
                 });
               }
 
@@ -241,7 +241,7 @@ angular.module('dealScanCrmApp')
                 pie: {
                   show: true,
                   combine: {
-                    color: Util.pieColors()[TOP_LIMIT],
+                    color: Util.pieColorsBySource('other'),
                     threshold: threshold
                   }
                 }
@@ -266,7 +266,7 @@ angular.module('dealScanCrmApp')
               missedAppointments.push({
                 label: appointments.stats[i].Source,
                 data: appointments.stats[i].Appointments,
-                color: Util.pieColors()[i],//"#d3d3d3",};
+                color: Util.pieColorsBySource(appointments.stats[i].Source),//"#d3d3d3",};
               });
             }
 
@@ -305,7 +305,7 @@ angular.module('dealScanCrmApp')
                 pie: {
                   show: true,
                   combine: {
-                    color: Util.pieColors()[TOP_LIMIT],
+                    color: Util.pieColorsBySource('other'),
                     threshold: threshold
                   }
                 }
@@ -330,7 +330,7 @@ angular.module('dealScanCrmApp')
               keptAppointments.push({
                 label: appointments.stats[i].Source,
                 data: appointments.stats[i].Appointments,
-                color: Util.pieColors()[i],//"#d3d3d3",};
+                color: Util.pieColorsBySource(appointments.stats[i].Source),//"#d3d3d3",};
               });
             }
 
@@ -367,7 +367,7 @@ angular.module('dealScanCrmApp')
                 pie: {
                   show: true,
                   combine: {
-                    color: Util.pieColors()[TOP_LIMIT],
+                    color: Util.pieColorsBySource('other'),
                     threshold: threshold
                   }
                 }
@@ -392,7 +392,7 @@ angular.module('dealScanCrmApp')
               soldAppointments.push({
                 label: appointments.stats[i].Source,
                 data: appointments.stats[i].Appointments,
-                color: Util.pieColors()[i],//"#d3d3d3",};
+                color: Util.pieColorsBySource(appointments.stats[i].Source),//"#d3d3d3",};
               });
             }
 

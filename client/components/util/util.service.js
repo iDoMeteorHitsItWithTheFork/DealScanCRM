@@ -200,6 +200,42 @@
         return ['#315777', '#F5888D', '#8BC33E', '#5B9BD1', '#9A89B5', '#F18636'];
       },
 
+      pieColorsBySource(source){
+        var color = '';
+        switch(source.toLowerCase()){
+          case 'phone':
+            color = '#1c84c6'
+            break;
+          case 'truecar':
+            color = '#23c6c8';
+            break;
+          case 'fatwin':
+            color = '#f8ac59';
+            break;
+          case 'edmunds':
+            color= '#ed5565';
+            break;
+          case 'cars.com':
+            color = '#1ab394';
+            break;
+          case 'other':
+            color = '#9a89b5';
+            break;
+          case 'facebook':
+            color = '#315777';
+            break;
+          case 'twitter':
+            color = '#00aced';
+            break;
+          case 'hagerstownford.com':
+            color = '#8bc33e';
+            break;
+          case 'edmunds carcode':
+            color = '#f5888d';
+            break;
+        }
+        return color;
+      },
 
       /**
        * Dummy Data for Sales

@@ -5,9 +5,11 @@
 var imap = require ("imap");
 var mailparser = require ("mailparser").MailParser;
 var inspect = require('util').inspect;
+import {queue} from './DbSync';
 
 var fs = require("fs");
 var config = require('./gmail.config.json');
+var moment = require('moment');
 
 var server = new imap({
   user: config.username,
@@ -17,6 +19,14 @@ var server = new imap({
   tls:config.imap.secure,
   debug: console.log
 });
+
+var timestamp = null;
+
+export function init(t){
+  console.log('\n>> Connnecting to IMAP Server...\n\n');
+  timestamp = t;
+  server.connect();
+}
 
 function openInbox(cb) {
   server.openBox('INBOX', true, cb);
@@ -30,9 +40,11 @@ var exitOnErr = function(err) {
 server.once('ready', function() {
   openInbox(function(err, box) {
     if (err) throw err;
-    server.search(["ALL", ["SINCE", "Sep 18, 2011"]], function(err, results){
+    //timestamp = null;
+    var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", "Sep 18, 2011"]];
+    server.search(searchOptions, function(err, results){
       if (err) {
-        console.log('\n>> EXITING ON INBOX SEARCH ERROR...');
+        console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');
         exitOnErr(err);
       }
       if (results && results.length > 0){
@@ -44,7 +56,6 @@ server.once('ready', function() {
         fetch.on('message', function(msg, seqno){
 
           var parser = new mailparser();
-          var prefix = '(#' + seqno + ') ';
 
 
           msg.on('body', function(stream, info) {
@@ -52,7 +63,7 @@ server.once('ready', function() {
           });
 
           parser.on("end", function(mail_object){
-            processMail(mail_object);
+            processMail(mail_object, seqno);
           });
 
           msg.once('end', function() {
@@ -62,13 +73,13 @@ server.once('ready', function() {
         });
 
         fetch.on('end', function(){
-          console.log('Done fetching all messages!');
-          displayMails();
+          console.log('\n\n>> Done fetching all messages!\n\n');
+          generateLeads();
         });
 
       }
       else {
-        console.log('>> THERE ARE NOT MESSAGE TO READ');
+        console.log('\n>> THERE ARE NOT MESSAGE TO READ\n\n');
         server.end();
         return;
       }
@@ -78,7 +89,7 @@ server.once('ready', function() {
 });
 
 server.once('error', function(err) {
-  console.log('\n>> EXITING ON SERVER IMAP SERVER ERROR...');
+  console.log('\n>> EXITING ON SERVER IMAP SERVER ERROR...\n\n');
   exitOnErr(err);
 });
 
@@ -87,10 +98,8 @@ server.once('end', function() {
 });
 
 
-var emails = [];
-function processMail(mail){
-  console.log('\n>> Processing EMAIL...');
-  //console.log(mail);
+var emails = {};
+function processMail(mail, msgID){
   var m = {
     from: mail['from'],
     replyTo: mail['replyTo'],
@@ -100,8 +109,7 @@ function processMail(mail){
     receivedDate: mail['receivedDate'],
     content: mail['text']
   }
-  emails.push(parseLead(m));
-  console.log('\n\n ***********************\n\n');
+  emails[msgID] = parseLead(m);
 }
 
 /**
@@ -118,6 +126,7 @@ function isXML(data){
  * @param mail
  */
 function parseLead(mail) {
+
   /* Lead Model */
   var lead = {
     firstName: '',
@@ -261,20 +270,150 @@ function parseLead(mail) {
     /**
      * Parse Text Data
      */
-    console.log(mail.content);
+    var components = mail.content.split('\n');
+    var c = [];
+    var obj = {};
+    for (var i = 0; i < components.length; i++) {
+      if (components[i].indexOf(':') != -1) {
+        c.push(components[i]);
+        var idx = components[i].indexOf(':');
+        var key = components[i].substr(0, idx).trim();
+        if (key.indexOf('*') == 0) key = key.substr(1);
+        var value = components[i].substr(idx + 1).trim();
+        obj[key.trim().toLowerCase()] = value;
+      }
+    }
+
+    var customer = {}, vehicle = {}, provider = {};
+    if (obj['first name'] || obj['firstname']) customer.firstName = obj['first name'] || obj['firstname'];
+    if (obj['last name'] || obj['lastname']) customer.lastName = obj['lastname'] || obj['last name'];
+    if (obj['name'] || obj['fullname']) customer.fullName = obj['name'] || obj['fullname'];
+    if (obj['address']) {
+      var adr = obj['address'];
+      if (obj['city']) adr += ', ' + obj['city'];
+      if (obj['st'] || obj['state']) adr += ' ' + (obj['st'] || obj['state']);
+      if (obj['zip'] || obj['zip code'] || obj['zipcode'] || obj['postalcode'] || obj['postal code'])
+        adr += ' ' + (obj['zip'] || obj['zip code'] || obj['zipcode'] || obj['postalcode'] || obj['postal code']);
+      customer.address = adr;
+    }
+    if (obj['email'] || obj['email address']) customer.email = obj['email'] || obj['email address'];
+    if (obj['phone'] || obj['phone number']) customer.phone = obj['phone'] || obj['phone number'];
+
+    if (customer.firstName) lead.firstName = customer.firstName;
+    if (customer.lastName)  lead.lastName = customer.lastName;
+    if (customer.fullName) {
+      var ns = customer.fullName.split(' ');
+      if (ns.length == 3) {
+        lead.firstName = ns[0];
+        lead.middleInitial = ns[1];
+        lead.lastName = ns[2];
+      }
+      else {
+        lead.firstName = ns[0];
+        lead.lastName = ns[1];
+      }
+    }
+    if (customer.email) lead.email = customer.email;
+    if (customer.address) lead.address = customer.address;
+    if (customer.phone) lead.phone = customer.phone;
+
+    if (obj['make']) vehicle.make = obj['make'];
+    if (obj['model']) vehicle.model = obj['model'];
+    if (obj['year']) vehicle.year = obj['year'];
+    if (obj['trim'] || obj['trim level'] || obj['trimlevel']) vehicle.trim = obj['trim'] || obj['trim level'] || obj['trimlevel'];
+    if (obj['vin'] || obj['vinnumber'] || obj['vin number'] || obj['vin#'] || obj['vin #'])
+      vehicle.vin = obj['vin'] || obj['vinnumber'] || obj['vin number'] || obj['vin#'] || obj['vin #'];
+    if (obj['stock#'] || obj['stocknumber'] || obj['stock number']) vehicle.stockNumber =
+      obj['stock#'] || obj['stocknumber'] || obj['stock number'];
+    if (obj['mileage']) vehicle.mileage = obj['mileage'];
+
+    if (Object.keys(vehicle).length > 0) lead.interest = vehicle;
+
+    if (mail.subject) lead.sourceName = mail.subject;
+    if (mail.from) lead.sourceType = mail.from;
+
+    lead.additionalInfo = mail.content;
+    lead.createdAt = mail.receivedDate || mail.date;
+
+    if (lead.interest && (!lead.interest.make && !lead.interest.model && !lead.interest.year)) {
+      var s = lead.sourceName.split(' ');
+      if (s[0].toLowerCase() == 'cars.com') {
+        lead.sourceName = 'Cars.com';
+        var idx = s.indexOf('-');
+        if (idx != -1) {
+          lead.interest.year = s[idx + 1];
+          lead.interest.make = s[idx + 2];
+          lead.interest.model = s[idx + 3];
+        }
+      }
+    }
+
+
+    if (lead.sourceName.trim().split(' ').length > 1){
+      var s = lead.sourceName.toLowerCase().split(' ');
+      var cars_com_idx = s.indexOf('cars.com');
+      var edmunds_idx = s.indexOf('edmunds');
+      var true_car_idx = s.indexOf('truecar');
+      var auto_trader_idx = s.indexOf('autotrader');
+
+      if (cars_com_idx != -1) lead.sourceName = 'Cars.com';
+      else if (edmunds_idx != -1) lead.sourceName = 'Edmunds';
+      else if (true_car_idx != -1) lead.sourceName = 'TrueCar';
+      else if (auto_trader_idx != -1) lead.sourceName = 'AutoTrader'
+      else {
+
+        cars_com_idx = lead.additionalInfo.trim().toLowerCase().indexOf('cars.com');
+        edmunds_idx = lead.additionalInfo.trim().toLowerCase().indexOf('edmunds');
+        true_car_idx = lead.additionalInfo.trim().toLowerCase().indexOf('truecar');
+        auto_trader_idx = lead.additionalInfo.trim().toLowerCase().indexOf('autotrader');
+
+        if (cars_com_idx != -1) lead.sourceName = 'Cars.com';
+        else if (edmunds_idx != -1) lead.sourceName = 'Edmunds';
+        else if (true_car_idx != -1) lead.sourceName = 'TrueCar';
+        else if (auto_trader_idx != -1) lead.sourceName = 'AutoTrader'
+      }
+
+    }
+
   }
   return lead;
 }
 
-function displayMails(){
-  console.log(emails);
+function generateLeads() {
   server.end();
+  var keys = Object.keys(emails);
+  var leads = [];
+  for(var k in emails) if (emails.hasOwnProperty(k)) leads.push(emails[k]);
+  var ArrayStream = require('arraystream');
+  var stream = ArrayStream.create(emails);
+  stream.on("data", function(value, key){
+    console.log(value);
+    if (value.firstName || value.lastName) {
+      queue.scheduledAt('Leads', 'GenerateLead', value, function (err, timestamps) {
+        if (timestamps.length > 0) {
+          return true;
+        } else {
+          queue.enqueueIn(20000, 'Leads', 'GenerateLead', value, function (err, res) {
+            if (err) {
+              console.log(err);
+              return err;
+            }
+            console.log('\n\n>> Enqueue Lead(s) For [' + value.firstName + ' , ' + value.lastName + ']');
+            return res;
+          });
+        }
+      })
+    }
+  });
+
+  stream.on("end", function(){
+    console.log('stream ended!');
+  });
+
+  stream.on('error', function(err){
+     console.log(err);
+     return err;
+  })
+
 }
 
-function init(){
-  console.log('\n>> Connnecting to IMAP Server...');
-  server.connect();
-}
-
-
-export {init}

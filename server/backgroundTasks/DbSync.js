@@ -13,7 +13,7 @@ var Q  = require('q');
 var Promise = require('bluebird');
 Promise.promisifyAll(NR);
 var StreamArray = require("stream-json/utils/StreamArray");
-
+var Inbox = require('./gmail.inbox');
 
 import {Dealership} from '../sqldb';
 import {User} from '../sqldb';
@@ -21,6 +21,8 @@ import {Deal} from '../sqldb';
 import {Customer} from '../sqldb';
 import {Vehicle} from '../sqldb';
 import {Trade} from '../sqldb';
+import {Lead} from '../sqldb';
+
 
 var connectionDetails = { redis: new Redis() };
 var jobs = {
@@ -33,16 +35,45 @@ var jobs = {
       callback(null, 'API -> fetch data in : '+(new Date().getTime() - start)+' (ms)');
     },
   },
-  "ProcessData": {
+  "FetchEmails": {
     plugins: [],
     pluginOptions: {},
+    perform: function(time, callback){
+      var start = time;
+      Inbox.init(start);
+      callback(null, 'IMAP -> fetch mails in : '+(new Date().getTime() - start)+' (ms)');
+    },
+  },
+  "ProcessData": {
+    plugins: [],
+    pluginOptions: {
+      retry: {
+        retryLimit: 3,
+        retryDelay: (1000 * 5),
+      }
+    },
     perform: function(deal, callback){
-       console.log('\n\n>> Processing Deal...');
+       console.log('\n\n>> Processing Lead...');
        setTimeout(function(){
          syncDeal(deal, callback);
        },1000);
     },
-  }
+  },
+  "GenerateLead": {
+    plugins: [],
+    pluginOptions: {
+      retry: {
+        retryLimit: 3,
+        retryDelay: (1000 * 5),
+      }
+    },
+    perform: function(lead, callback){
+      console.log('\n\n>> Generating Lead...');
+      setTimeout(function(){
+        insertLead(lead, callback);
+      },1000);
+    },
+  },
 };
 
 var queue = new NR.queue({ connection:connectionDetails }, jobs);
@@ -79,9 +110,57 @@ var syncDeal = function(deal, callback){
       console.log(err);
       callback(err);
     });
-
 }
 
+/**
+ * Insert Lead
+ * @param lead
+ * @param callback
+ */
+var insertLead = function(lead, callback){
+  console.log(lead);
+  return Lead.sequelize.transaction(function (t) {
+    console.log('\n\n>> Finding System');
+    return User.find({
+      where: {
+        firstName: 'System',
+        lastName: 'Automaton'
+      },
+      transaction: t
+    }).then(function(user){
+       var creator = user;
+       console.log('\n\n>> Finding Dealership');
+       return Dealership.find({
+         where: {
+           dealershipName: 'Hagerstown Ford'
+         },
+         transaction: t
+       }).then(function(dealership){
+          var dealership = dealership;
+          console.log('\n\n>> Upserting Lead..');
+          return Lead.dscUpsert(lead, t)
+            .then(function(_lead){
+             console.log('\n\n>> Adding Creator...');
+             return _lead.setCreator(creator, t)
+               .then(function(){
+                   console.log('\n\n>> Setting Dealership....');
+                   return _lead.setDealership(dealership, t)
+                     .then(function(){
+                      console.log('\n\n>> Lead created!');
+                      return _lead;
+                   });
+             })
+          });
+       })
+    }).then(function(l){
+        console.log('\n>> Lead inserted!\n\n');
+        callback(null, l);
+    });
+  }).catch(function(err){
+       console.log(err);
+       callback(err);
+    });
+}
 
 var extractDataToSync = function (dbRecords) {
   console.log('\n\n\n>> DB Records....');
@@ -101,7 +180,7 @@ var extractDataToSync = function (dbRecords) {
   return _dealsToProcess;
 }
 
-var i = 0;
+var i = 1;
 var fetchData = function(time) {
   var username, password;
   username = password = 'admin';
@@ -172,9 +251,9 @@ var start = function () {
 
     worker = new NR.multiWorker({
       connection: connectionDetails,
-      queues: ['DBSync'],
+      queues: ['DBSync', 'Leads'],
       minTaskProcessors: 1,
-      maxTaskProcessors: 100,
+      maxTaskProcessors: 15,
     }, jobs);
 
     /////////////////////////
@@ -214,12 +293,21 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/1 * * * *', () => {
+    schedule.scheduleJob('*/10 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...');
       }
     })
+
+    schedule.scheduleJob('*/10 * * * *', () => {
+      if (scheduler.master) {
+        queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
+        console.log('\n\n\n>> Enqueued FetchEmails...');
+      }
+    })
+
+
   })
 
 }
@@ -244,3 +332,4 @@ process.on('SIGINT', stop);
 
 
 export {start}
+export {queue}

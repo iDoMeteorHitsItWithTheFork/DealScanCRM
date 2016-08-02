@@ -47,7 +47,7 @@
         <div>
           <div class="ibox-content no-padding border-left-right">
             <div class="customer-cover-photo">
-              <img alt="image" class="img-responsive" src="assets/images/a1.jpg">
+              <img alt="image" class="img-responsive" src="assets/images/img-profile-missing.png">
             </div>
           </div>
           <div class="ibox-content profile-content p-b-0">
@@ -58,7 +58,7 @@
                     <span class="fa fa-home fa-lg m-r-sm"></span>
                   </div>
                   <div class="col-lg-11 p-l-10">
-                    <span>{{customer.thisCustomer.profile.address || 'unavailable'}}</span>
+                    <span>{{customer.thisCustomer.profile.address || 'No Address Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -68,7 +68,7 @@
                     <span class="fa fa-phone fa-lg m-r-sm"></span>
                   </div>
                   <div class="col-lg-11 p-l-10">
-                    <span>{{customer.thisCustomer.profile.phone || 'unavailable'}}</span>
+                    <span>{{customer.thisCustomer.profile.phone || 'No Phone Number Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -78,7 +78,7 @@
                     <span class="fa fa-envelope m-r-sm"></span>
                   </div>
                   <div class="col-lg-11 p-l-10">
-                    <span>{{customer.thisCustomer.profile.email || 'unavailable'}}</span>
+                    <span>{{customer.thisCustomer.profile.email || 'No Email Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -88,7 +88,7 @@
                     <span class="fa fa-credit-card-alt m-r-sm"></span>
                   </div>
                   <div class="col-lg-11 p-l-10">
-                    <span>{{customer.thisCustomer.driverLicenseID|| 'unavailable'}}</span>
+                    <span>{{customer.thisCustomer.driverLicenseID|| 'No License Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -208,30 +208,39 @@
         </div>
 
         <div class="ibox-content">
-          <div ng-hide="true">
+          <div>
             <div class="deals-activity">
-              <div class="deal">
+
+
+
+              <div class="deal" ng-repeat="deal in customer.thisCustomer.purchases">
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="media">
                       <div class="media-left pull-left vehicle-of-interest">
                         <a href="#">
-                          <img class="media-object" src="http://67.media.tumblr.com/793ddbefed69c85bf663ca653b3727cd/tumblr_n57kfgYQz91sbyy0vo1_500.png" alt="Generic placeholder image">
+                          <img class="media-object" src="assets/images/no_vehicle_avatar.png" alt="Generic placeholder image">
                         </a>
                       </div>
                       <div class="media-body">
-                        <h4 class="media-heading f-s-13 m-t-0">2017 Ford F-150 Raptor &nbsp;&nbsp;<span class="badge badge-primary source-badge-align">Walk In</span></h4>
+                        <h4 class="media-heading f-s-13 m-t-0">
+                          {{::deal.Purchase.profile.state | uppercase}}
+                          {{::deal.Purchase.profile.year | uppercase}}
+                          {{::deal.Purchase.profile.make | uppercase}}
+                          {{::deal.Purchase.profile.model | uppercase}}
+                          {{::deal.Purchase.profile.trimLevel | uppercase}}
+                          &nbsp;&nbsp;<span class="badge badge-primary source-badge-align">{{::customer.thisCustomer.profile.source}}</span></h4>
                         <ul class="unstyled p-l-0 p-t-5">
                           <li>
                             <div class="feed-element">
                               <a href="" class="pull-left">
-                                <img alt="image" class="img-circle" src="assets/images/a1.jpg">
+                                <img alt="image" class="img-circle" src="assets/images/profile.jpg">
                               </a>
                               <div class="media-body ">
-                                <small class="pull-right text-navy">1m ago</small>
-                                <strong>John Smith</strong> sold this truck to <strong>Aaron Ferguson</strong>.<br>
-                                Aaron traded 2 cars in for this deal, a <a>2015 Ford Mustang</a>, and a <a>2011 Honda Civic SE</a>.<br/>
-                                <small class="text-muted">Thrusday 4:21 pm - 12.06.2016</small><br>
+                                <small class="pull-right text-navy">{{::customer.timeAgo(deal.createdAt)}}</small>
+                                <strong>{{::deal.SaleRep.profile.name}}</strong> sold this {{::customer.displayClassification(deal.Purchase.profile.classification)}} to <strong>{{::customer.thisCustomer.profile.name}}</strong>.<br>
+                                {{deal.Purchase.tradeVerbiage}}<br ng-if="deal.Purchase.tradeVerbiage">
+                                <small class="text-muted">{{::customer.dealTime(deal.createdAt)}}</small><br>
                                 <div class="actions">
                                   <a class="btn btn-xs btn-warning" tooltip-placement="top" uib-tooltip="Email John"><i class="fa fa-envelope-o"></i> Email </a>
                                   <a class="btn btn-xs btn-primary" tooltip-placement="top" uib-tooltip="Text John"><i class="fa fa-comments-o"></i> Chat</a>
@@ -251,7 +260,7 @@
                         </div>
                         <div class="media">
                           <a class="media-left pull-left" href="#">
-                            <img class="media-object deal-poster" src="http://66.media.tumblr.com/f6d6f342afcc8fc6aa6318768a2f4942/tumblr_n57kfgYQz91sbyy0vo2_500.png" alt="Generic placeholder image">
+                            <img class="media-object deal-poster" src="assets/images/upload-placeholder.jpg" alt="Generic placeholder image">
                           </a>
                           <div class="media-body">
                             <h4 class="media-heading">Financial Sheet</h4>
@@ -260,49 +269,49 @@
                                 <tr>
                                   <td>Sale Price</td>
                                   <td class="success text-right">
-                                    <strong>$50,0000</strong>
+                                    <strong>${{::deal.salePrice}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Rebate</td>
                                   <td class="success text-right">
-                                    <strong>$2,500</strong>
+                                    <strong>${{::deal.Purchase.rebate || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Trade Allowance</td>
                                   <td class="success text-right">
-                                    <strong>$15,000</strong>
+                                    <strong>${{::deal.Purchase.tradeAllowance || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Trade Payoff</td>
                                   <td class="success text-right">
-                                    <strong>$12,000</strong>
+                                    <strong>${{::deal.Purchase.tradePayOff || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Amount Financed</td>
                                   <td class="success text-right">
-                                    <strong>$40,000</strong>
+                                    <strong>${{::deal.Financing.amountFinanced || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Interest Rate</td>
                                   <td class="success text-right">
-                                    <strong>7.5%</strong>
+                                    <strong>{{::deal.Financing.interestRate}}%</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Terms</td>
                                   <td class="success text-right">
-                                    <strong>60</strong>
+                                    <strong>{{::deal.Financing.installments || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Payment</td>
                                   <td class="success text-right">
-                                    <strong>$450</strong>
+                                    <strong>${{::deal.Financing.monthlyPayment || 0}}</strong>
                                   </td>
                                 </tr>
                               </tbody>
@@ -314,6 +323,8 @@
                   </div>
                 </div>
               </div>
+
+
             </div>
             <div class="feed-activity-list">
               <div class="feed-element">
@@ -446,216 +457,4 @@
 </div>
 
 
-
-
-
-
-
-
-
-<!-- start: BREADCRUMB
-<div class="wrap-content container fade-in-up ng-cloak" id="container">
-  <div class="breadcrumb-wrapper margin-negative-top-20">
-    <h4 class="mainTitle no-margin inline">{{customer.info.name}}</h4>
-    <span class="pull-right" style="margin-top:-5px">
-			<a ui-sref="home.customer" ng-show="$state.includes('home.customer.profile')" class="btn btn-primary btn-sm btn-o"
-         href><i class="fa fa-reply"></i>&nbsp;&nbsp;Back</a>
-			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Assign as Lead</a>
-			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Schedule Appointment</a>
-			<a class="btn btn-wide btn-primary btn-sm btn-o" href="#">Edit Customer</a>
-		</span>
-  </div>
-  <!-- end: BREADCRUMB -->
-  <!-- start: USER PROFILE
-  <div class="container-fluid container-fullw bg-white">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-2 padding-left-0 padding-right-0" style="width: 25.263158% !important; margin-bottom:20px;">
-            <div class="row" style="background-color: #E6E8E8;">
-              <h4 class="customer-info-header fs-11" style="color: darkslategray;">Contact Information</h4>
-            </div>
-            <table class="table table-condensed" style="border: none; margin-top:10px;">
-              <tbody style="border: none !important;">
-              <tr>
-                <td class="padding-left-10 padding-top-10 padding-bottom-10" style="color: darkslategray;">Email</td>
-                <td class="padding-left-10 padding-top-10 padding-bottom-10">
-                  <a href="#">
-                    {{customer.info.email}}
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td class="padding-left-10 padding-top-10 padding-bottom-10" style="color: darkslategray;">Phone:</td>
-                <td>
-                  <a href>
-                    {{customer.info.phone}}
-                  </a>
-                </td>
-              </tr>
-              <tr style="border: none;">
-                <td class="padding-left-10 padding-top-10"
-                    style="color: darkslategray; padding-bottom: 13px !important;">Address:
-                </td>
-                <td>
-                  <a href>
-                    {{customer.info.address}}
-                  </a>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-md-6 padding-left-15 padding-right-10" style="width:48% !important;">
-            <div class="row" style="background-color: #E6E8E8; position: relative;">
-              <h4 class="customer-info-header fs-11" style="color: darkslategray;">Purchased Vehicles</h4>
-
-              <div class="purchase-vehicle-header">
-                <div class="col-md-12" style="margin-right:10px !important; margin-top:-3px !important;">
-                  <span>
-                    <select ng-show="customer.purchases.length > 0"
-                            class="cs-select cs-skin-elastic span-height-25 ft-sz-12" ng-model="customer.purchase"
-                            ng-options="purchase.vehicle for purchase in customer.purchases">
-                      <option value="" disabled="" style="margin-top: -38px; margin-left: 35px;">
-                        {{customer.purchase.vehicle}}
-                      </option>
-                    </select>
-                  </span>
-                </div>
-
-              </div>
-            </div>
-
-
-            <div class="row" style="margin-top: 10px !important; margin-left: -5px; margin-right: -20px;">
-              <div class="col-md-6" style="margin-left: -10px; width: 50%;">
-                <ul class="list-group" style="border-top: 0 none; !important;">
-
-                  <li class="list-group-item border-bottom"
-                      style="border-top: none; border-left: none; border-right: none;">
-                    <div class="row inline">
-                      <p style="color: darkslategray; margin-left: -10px;">Trades</p>
-                      <div class="text-right" style="margin-top: -25px;">
-                        <span ng-repeat="trade in customer.purchase.trades" class="label label-default"
-                              style="padding-top: 5px !important; margin-right: 5px;">{{trade}}</span>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item"
-                      style="height: 80px !important; border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; padding-top:6px !important; padding-bottom: 0px;">
-                    <div class="row inline">
-                      <p class="pull-left" style="color: darkslategray; padding-top: 4px; margin-left: -10px;">Date Of
-                        Action</p>
-
-                      <p class="pull-right" style="padding-top: 4px;">{{customer.purchase.date}}</p>
-
-                    </div>
-                    <span class="label label-dealscan pull-right"
-                          style="padding-left: 10px !important; padding-right:10px !important; height: 25px; cursor:pointer; margin-top: 10px !important;">
-                        <i class="fa fa-folder-open" aria-hidden="true" style="padding-top: 5px;">&nbsp;&nbsp;</i>View Details
-                      </span>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-6" style="width: 51%;">
-                <ul class="list-group">
-                  <li class="list-group-item"
-                      style="height: 38px; border-top: none; border-left: none; border-right: none;">
-                    <div class="row inline">
-                      <p class="pull-left" style="color: darkslategray;">Source</p>
-
-                      <p class="pull-right">{{customer.purchase.source}}</p>
-                    </div>
-                  </li>
-                  <li class="list-group-item" style="height: 38px; border-left: none; border-right: none;">
-                    <div class="row inline">
-                      <p class="pull-left" style="color: darkslategray;">Sales Rep</p>
-
-                      <p class="pull-right">{{customer.purchase.salePerson.name}}.</p>
-                    </div>
-                  </li>
-                  <li class="list-group-item"
-                      style="border-left: none; border-right: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
-                    <div class="row inline">
-                      <p style="color: darkslategray;">Status</p>
-                      <div class="" style="margin-top: -25px;">
-                        <span class="label pull-right" ng-class="{'label-warning': customer.purchase.status == 'Pending',
-                         'label-danger': customer.purchase.status == 'Lost', 'label-success': customer.purchase.status == 'Completed'}"
-                              style="padding-top:5px !important; padding-bottom: 5px !important;">{{customer.purchase.status}}</span>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-
-          </div>
-          <div class="col-md-4 padding-left-0 padding-right-0" style="width:26.105263% !important;">
-            <div class="row">
-              <div class="row" style="margin-left: 3px; background-color: #E6E8E8;">
-                <h4 class="customer-info-header fs-11">
-                  Purchase Details</h4>
-              </div>
-              <div class="row" style="margin-top: 10px;">
-                <div class="col-md-6 no-padding padding-left-5">
-                  <table class="table table-striped table-condensed" style="border: none; margin-top:10px;">
-                    <tbody style="border: none !important;">
-                    <tr class="success">
-                      <td class="" style="color: darkslategray;">Sale Price</td>
-                      <td class="text-bold text-right ">${{customer.purchase.financing.salePrice}}</td>
-                    </tr>
-                    <tr>
-                      <td class="" style="color: darkslategray;">Trade Allowance:</td>
-                      <td class="text-bold text-right ">${{customer.purchase.financing.tradeAllowance}}</td>
-                    </tr>
-                    <tr class="success" style="border: none;">
-                      <td class="" style="color: darkslategray;">Trade Payoff:</td>
-                      <td class="text-bold text-right ">${{customer.purchase.financing.tradePayOff}}</td>
-                    </tr>
-                    <tr style="border: none;">
-                      <td class="" style="color: darkslategray;">Financed:</td>
-                      <td class="text-bold text-right ">${{customer.purchase.financing.financed}}</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="col-md-6 no-padding padding-left-10">
-                  <table class="table table-striped table-condensed" style="border: none; margin-top:10px;">
-                    <tbody style="border: none !important;">
-                    <tr class="success">
-                      <td class="" style="color: darkslategray;">Rebate</td>
-                      <td class="text-right text-bold">${{customer.purchase.financing.rebate}}</td>
-                    </tr>
-                    <tr>
-                      <td class="" style="color: darkslategray;">IR:</td>
-                      <td class="text-right text-bold">{{customer.purchase.financing.ir}}%</td>
-                    </tr>
-                    <tr class="success" style="border: none;">
-                      <td class="" style="color: darkslategray;">Terms:</td>
-                      <td class="text-right text-bold">{{customer.purchase.financing.terms}}</td>
-                    </tr>
-                    <tr style="border: none;">
-                      <td class="" style="color: darkslategray;">Payment:</td>
-                      <td class="text-right text-bold">${{customer.purchase.financing.payment}}</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div style="height: auto;" class="panel-wrapper in collapse">
-          <div class="tabbable no-padding no-margin">
-            <div ui-view="tabs"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end: USER PROFILE -->
 

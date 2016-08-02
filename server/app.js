@@ -29,11 +29,10 @@ require('./routes')(app);
 function startServer() {
   app.angularFullstack = server.listen(config.port, config.ip, function() {
     console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
-    //require('./backgroundTasks/DbSync').start();
   });
 }
 
-require('./backgroundTasks/gmail.inbox').init();
+
 
 sqldb.sequelize.sync()
   .then(startServer)
@@ -41,5 +40,9 @@ sqldb.sequelize.sync()
     console.log('Server failed to start due to error: %s', err);
   });
 
+//require('./backgroundTasks/DbSync').start();
+
+
 // Expose app
 var exports = module.exports = app;
+

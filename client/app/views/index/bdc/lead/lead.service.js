@@ -23,6 +23,7 @@ angular.module('dealScanCrmApp')
         return LeadResource.save(details)
           .$promise.then(function (lead) {
             if (lead && !lead.error) {
+              lead.interest = JSON.parse(JSON.stringify(lead.interest));
               _leads.unshift(lead);
             } return categorizeLeads(_leads);
           }).catch(function (err) {
@@ -130,6 +131,7 @@ angular.module('dealScanCrmApp')
               for (var i = 0; i < leads.length; i++) {
                  leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
                  leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
+                // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
                 _leads.push(leads[i]);
               } return categorizeLeads(_leads);
            } else return {error: {msg:leads.error.msg}};

@@ -79,17 +79,22 @@ export default function (sequelize, DataTypes) {
       profile: function () {
         var middleInitial = this.getDataValue('middleInitial') ? this.getDataValue('middleInitial') : '';
         if (middleInitial.length > 0) middleInitial += '.';
-
+        var address = ''
+        if (this.getDataValue('streetAddress')) address += this.getDataValue('streetAddress');
+        if (this.getDataValue('city')) address += ' '+this.getDataValue('city');
+        if (this.getDataValue('state')) address += ' '+this.getDataValue('state');
+        if (this.getDataValue('postalCode')) address += ' '+this.getDataValue('postalCode');
         return {
           'customerID': this.getDataValue('customerID'),
           'driverLicenseID': this.getDataValue('driverLicenceID'),
           'name': this.getDataValue('firstName') +' '+middleInitial+' ' + this.getDataValue('lastName'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
-          'address': this.getDataValue('streetAddress') + ', ' + this.getDataValue('city') + ', ' + this.getDataValue('state') + ' ' + this.getDataValue('postalCode'),
+          'streetAddress': this.getDataValue('streetAddress'),
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
+          'address': address,
           'source': this.getDataValue('source')
         };
       },

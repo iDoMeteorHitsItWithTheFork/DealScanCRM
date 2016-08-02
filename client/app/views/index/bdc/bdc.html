@@ -504,7 +504,7 @@
 
 
             <!-- TotalLeads Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight m-t-125"
                  ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- totalLeads stats-->
               <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
@@ -541,7 +541,7 @@
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
-                      <h2>{{'Total Appointments' | uppercase}}</h2>
+                      <h2>{{'Scheduled Appointments' | uppercase}}</h2>
                     </div>
                   </div>
                 </div>
@@ -553,11 +553,11 @@
               </div>
               <!-- ./appointments stats -->
 
-              <div ng-if="bdc.totalAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
+              <div ng-if="bdc.totalAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
                 <div flot class="flot-chart-content"
                      dataset="bdc.totalAppointments.pie"
                      options="bdc.totalAppointments.pieOptions"
-                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments'); bdc.displayTable($event, pos, item, 'Total Appointments')"></div>
+                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments'); bdc.displayTable($event, pos, item, 'Scheduled appointments')"></div>
               </div>
             </div>
             <!-- ./appointments Pie & Charts -->
@@ -571,7 +571,7 @@
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
-                      <h2>{{'Appointments Kept' | uppercase}}</h2>
+                      <h2>{{'Kept Appointments' | uppercase}}</h2>
                     </div>
                   </div>
                 </div>
@@ -583,7 +583,7 @@
               </div>
               <!-- ./appointments Kept stats -->
 
-              <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
+              <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
                 <div flot class="flot-chart-content"
                      dataset="bdc.keptAppointments.pie"
                      options="bdc.keptAppointments.pieOptions"
@@ -601,7 +601,7 @@
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
-                      <h2>{{'Appointments Missed' | uppercase}}</h2>
+                      <h2>{{'Missed Appointments' | uppercase}}</h2>
                     </div>
                   </div>
                 </div>
@@ -613,7 +613,7 @@
               </div>
               <!-- ./appointments Missed stats -->
 
-              <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
+              <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" >
                 <div flot class="flot-chart-content"
                      dataset="bdc.missedAppointments.pie"
                      options="bdc.missedAppointments.pieOptions"
@@ -631,7 +631,7 @@
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
-                      <h2>{{'Appointments sold' | uppercase}}</h2>
+                      <h2>{{'Sold Appointments' | uppercase}}</h2>
                     </div>
                   </div>
                 </div>
@@ -643,7 +643,7 @@
               </div>
               <!-- ./appointments sold stats -->
 
-              <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
+              <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
                 <div flot class="flot-chart-content"
                      dataset="bdc.soldAppointments.pie"
                      options="bdc.soldAppointments.pieOptions"
@@ -654,13 +654,12 @@
 
             <div class="pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'" ng-class="bdc.showTableDetails ? 'col-md-8' : 'col-md-9'" style="">
               <div class="ibox float-e-margins no-material">
-                <!-- data tables-->
+                <!-- data tables -->
                 <div class="row animated fadeInRight">
                   <div class="col-lg-12">
                     <div class="ibox float-e-margins no-material">
                       <div class="ibox-title">
-                        <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong>
-                        </h5>
+                        <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong></h5>
                         <div ibox-tools on-close="bdc.showTable = false; bdc.showTableDetails = false;"></div>
                       </div>
                       <div class="ibox-content">
@@ -673,29 +672,21 @@
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Source</th>
-                            <!--<th>Agent</th>-->
                             <th>Date</th>
                           </tr>
                           </thead>
                           <tbody>
                           <tr ng-repeat="lead in bdc.dealsTableData" ng-click="bdc.showTableDetails = true; bdc.showInDetails(lead); ">
-                            <!--<td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>-->
-                            <td><a class="client-link">{{lead.name}}</a></td>
-                            <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
-                              > 50 ? '...': ''}}
-                            </td>
-                            <td class="contact-type"><i class="fa fa-envelope">&nbsp;&nbsp;</i>{{lead.email || 'No Email Provided' | limitTo: 25}}</td>
-                            <td class="contact-type"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided' | limitTo: 25}}</td>
+                            <td style="vertical-align: middle;"><a class="client-link">{{lead.name}}</a></td>
+                            <td style="vertical-align: middle; width:25% !important;"> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
+                            <td class="contact-type" style="vertical-align: middle; width:25% !important;"><i class="fa fa-envelope">&nbsp;&nbsp;</i>{{lead.email || 'No Email Provided' | limitTo: 25}}</td>
+                            <td class="contact-type" style="vertical-align: middle; width:13% !important;"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided' | limitTo: 25}}</td>
                             <td class="client-status">
-                    <span class="label"
-                          ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                      'label-info': lead.sourceType.toLowerCase() == 'social media',
-                                      'label-warning': lead.sourceType.toLowerCase() == 'third party',
-                                      'label-danger': lead.sourceType.toLowerCase() == 'website',
-                                      'label-default': lead.sourceType.toLowerCase() == 'other'}">
-                      {{lead.sourceName}}</span>
-                            </td>
-                            <!--<td></td>-->
+                                <span class="label" ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
+                                      'label-info': lead.sourceType.toLowerCase() == 'internet'}">
+                                  {{lead.sourceName}}
+                                </span>
+                            </td>>
                             <td>{{lead.timeAgo}}</td>
                           </tr>
                           </tbody>

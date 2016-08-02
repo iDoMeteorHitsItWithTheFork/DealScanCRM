@@ -34,8 +34,8 @@ export default function(sequelize, DataTypes) {
     },
     status: {
       type: DataTypes.ENUM,
-      values: ['working', 'won', 'pending', 'sold', 'delivered','lost', 'other'],
-      defaultValue: 'working',
+      values: ['won','lost','other'],
+      defaultValue: 'lost',
       allowNull: false,
       validate:{
         notEmpty: true
@@ -150,13 +150,26 @@ export default function(sequelize, DataTypes) {
 
         var searchOptions = {};
         if (data.DealId) searchOptions.dscDealID = data.DealId;
-
+        var dealStatus  = '';
+        switch(data.DealStatusTypeName){
+          case 'working':
+          case 'pending':
+              dealStatus = 'lost';
+              break;
+          case 'sold':
+          case 'delivered':
+             dealStatus = 'won';
+             break;
+          default:
+            dealStatus = 'lost';
+            break;
+        }
         var upsertValues = {
           dscDealID: data.DealId,
           retailValue: data.RetailValue,
           salePrice: data.SalesPrice,
           paymentOption: (data.SelectedPaymentOptions && data.SelectedPaymentOptions[0] && data.SelectedPaymentOptions[0].Term > 1) ? 'financed' : 'cash',
-          status: data.DealStatusTypeName,
+          status: dealStatus,
         }
 
         return Deal.sequelize.transaction(function (t) {

@@ -11,7 +11,14 @@
 
 import _ from 'lodash';
 import {Customer} from '../../sqldb';
+import {Deal} from '../../sqldb';
+import {Vehicle} from '../../sqldb';
+import {Trade} from '../../sqldb';
+import {Financing} from '../../sqldb';
+import {User} from '../../sqldb';
 import config from '../../config/environment';
+
+var moment  = require('moment');
 
 
 function respondWithResult(res, statusCode) {
@@ -56,6 +63,8 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function (err) {
+    console.log(err);
+    throw err;
     res.status(statusCode).send(err);
   };
 }
@@ -89,12 +98,81 @@ export function index(req, res) {
 export function show(req, res) {
   Customer.find({
     where: {
-      customerID: req.params.id
-    }
+      customerID: req.params.id,
+    },
+    attributes: [
+      'customerID',
+      'driverLicenseID',
+      'firstName',
+      'middleInitial',
+      'lastName',
+      'phone',
+      'email',
+      'streetAddress',
+      'city',
+      'state',
+      'country',
+      'postalCode',
+      'source'],
+    include: [{
+      model: Deal,
+      include: [
+        {
+          model: User,
+          as: 'SaleRep',
+          attributes: ['userID', 'firstName', 'lastName', 'role'],
+        },
+        {
+          model: Customer,
+          as: 'CoBuyers',
+          attributes: [
+            'customerID',
+            'driverLicenseID',
+            'firstName',
+            'middleInitial',
+            'lastName',
+            'phone',
+            'email',
+            'streetAddress',
+            'city',
+            'state',
+            'country',
+            'postalCode',
+            'source']
+        },
+        {
+          model: Vehicle,
+          as: 'Purchase',
+          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+        },
+        {
+          model: Trade,
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN'],
+        },
+        {
+          model: Financing,
+          attributes: ['financingID', 'installments', 'interestRate', 'monthlyPayment', 'amountFinanced'],
+        },
+      ]
+    }]
   })
     .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
+    .then(function(customer){
+      return res.status(200).json(formatCustomer(customer));
+    })
     .catch(handleError(res));
+}
+
+
+function formatCustomer(customer){
+  var _customer = {};
+  _customer.profile = customer.profile;
+  _customer.purchases = [];
+  for(var i = 0; i < customer.Deals.length; i++){
+    var deal = customer.Deals[i];
+    _customer.purchases.push(deal);
+  }
+  return _customer;
 }
 
 // Creates a new Customer in the DB

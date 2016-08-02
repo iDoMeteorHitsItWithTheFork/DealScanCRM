@@ -15,89 +15,98 @@ angular.module('dealScanCrmApp')
       phone: _customer.thisCustomer.profile.phone,
       email: _customer.thisCustomer.profile.email,
       address: _customer.thisCustomer.profile.address,
-      streetAddress: _customer.thisCustomer.streetAddress,
-      city: _customer.thisCustomer.city,
-      state: _customer.thisCustomer.state,
-      zipCode: _customer.thisCustomer.postalCode,
+      streetAddress: _customer.thisCustomer.profile.streetAddress,
+      city: _customer.thisCustomer.profile.city,
+      state: _customer.thisCustomer.profile.state,
+      zipCode: _customer.thisCustomer.profile.postalCode,
+      driverLicense: _customer.thisCustomer.profile.driverLicense
     }
 
-    _customer.purchases = [{
-      vehicle: '2011 Escape',
-      trades:['1973 Pinto'],
-      date:'03/02/2016',
-      source: 'Walk-In',
-      salePerson:{name: 'Bryan M'},
-      status: 'Pending',
-      financing: {
-        salePrice: '20,000',
-        tradeAllowance:'5,000',
-        tradePayOff: '7,000',
-        financed: '14,000',
-        rebate:'500',
-        ir: '7.5',
-        terms :'60',
-        payment: '500'
-      }
-    },{
-      vehicle: '2015 Escape',
-      trades:['2001 BMW 323 ci', '2007 Honda Accord'],
-      date:'03/02/2016',
-      source: 'Web',
-      salePerson:{name: 'Eric C.'},
-      status: 'Completed',
-      financing:  {
-        salePrice: '30,000',
-        tradeAllowance:'1,000',
-        tradePayOff: '2,000',
-        financed: '50,000',
-        rebate:'1500',
-        ir: '2.5',
-        terms :'72',
-        payment: '1000'
-      }
-    },
-      {
-        vehicle: '2014 Escape',
-        trades:['2000 Mitsubishi Lancer Evo'],
-        date:'03/02/2016',
-        source: 'Phone',
-        salePerson:{name: 'Rick K'},
-        status: 'Lost',
-        financing:  {
-          salePrice: '25,000',
-          tradeAllowance:'1,000',
-          tradePayOff: '10,000',
-          financed: '14,000',
-          rebate:'1000',
-          ir: '5.5',
-          terms :'60',
-          payment: '800'
+    _customer.purchases = _customer.thisCustomer.purchases;
+    var generateTradeDetails = function(purchases){
+      for(var i=0; i < purchases.length; i++){
+        if (purchases[i].Trades.length > 0){
+          var tradePayOff = 0;
+          var tradeAllowance = 0;
+          var verbiage = _customer.thisCustomer.firstName+' traded '+purchases[i].Trades.length+' for this deal, ';
+          for(var j =0; j < purchases[i].Trades.length; j++){
+             tradePayOff += parseFloat(purchases[i].Trades[j].payOffAmount).toFixed(2);
+             tradeAllowance += parseFloat(purchases[i].Trades[j].tradeAllowance).toFixed(2);
+             if (j > 0) verbiage += ", ";
+             if (j == purchases[i].Trades.length) verbiage += " and ";
+             verbiage += "a <a>"+purchases[i].Trades[j].profile.year+"  "+purchases[i].Trades[j].profile.make+"  "+purchases[i].Trades[j].profile.model+"</a>";
+          } purchases[i].tradeVerbiage = verbiage;
+          purchases[i].tradePayOff = tradePayOff;
+          purchases[i].tradeAllowance = tradeAllowance;
         }
-      },
-    ];
+      }
+      //customer.thisCustomer.firstName traded 2 cars in for this deal, a <a>2015 Ford Mustang</a>, and a <a>2011 Honda Civic SE</a>.
+    }
+
+
+    _customer.timeAgo = function(time){
+       return moment(time).fromNow();
+    }
+
+    _customer.dealTime  = function(time){
+      //Thrusday 4:21 pm - 12.06.2016
+      return moment(time).format('dddd H:mm a - MM.DD.YYYY');
+    }
+
+    _customer.displayClassification = function(classification){
+      var cl = '';
+       switch(classification.toLowerCase()){
+         case 'car':
+         case 'cars':
+           cl =  'car';
+           break;
+         case 'truck':
+         case 'trucks':
+           cl = 'truck';
+           break;
+         case 'van':
+         case 'vans':
+           cl =  'van';
+           break;
+         case 'utility':
+         case 'utilities':
+           cl = 'SUV';
+           break;
+         case 'other':
+         case 'others':
+           cl =  'vehicle';
+           break;
+         default:
+            cl = 'vehicle';
+            break;
+       }
+       return cl;
+    }
+
+    if (_customer.purchases.length > 0) generateTradeDetails(_customer.purchases);
     _customer.purchase = _customer.purchases[0];
 
 
-
-    _customer.tabs = [  {
-      id: 'tasks',
-      heading: 'TASKS',
-      route: 'index.customer.profile.tasks',
-      icon: 'fa-list',
-      bg_color: 'navy-bg'
-    }, {
-      id: 'notes',
-      heading: 'NOTES',
-      route: 'index.customer.profile.notes',
-      icon: 'fa-files-o',
-      bg_color: 'yellow-bg'
-    }, {
-      id: 'messages',
-      heading: 'MESSAGES',
-      route: 'index.customer.profile.messages',
-      icon: 'fa-envelope-o',
-      bg_color: 'blue-bg'
-    },
+    _customer.tabs = [
+      {
+        id: 'tasks',
+        heading: 'TASKS',
+        route: 'index.customer.profile.tasks',
+        icon: 'fa-list',
+        bg_color: 'navy-bg'
+      }, {
+        id: 'notes',
+        heading: 'NOTES',
+        route: 'index.customer.profile.notes',
+        icon: 'fa-files-o',
+        bg_color: 'yellow-bg'
+      }, {
+        id: 'messages',
+        heading: 'MESSAGES',
+        route: 'index.customer.profile.messages',
+        icon: 'fa-envelope-o',
+        bg_color: 'blue-bg'
+      },
       {
         id: 'documents',
         heading: 'DOCUMENTS',
@@ -116,8 +125,6 @@ angular.module('dealScanCrmApp')
     _customer.setActiveTab = function(tab){
       $state.go(tab.route);
     };
-
-    //_customer.setActiveTab();
 
     _customer.navButtons = [
       {
@@ -317,9 +324,5 @@ angular.module('dealScanCrmApp')
         controller: 'EmailCustomerCtrl',
       });
     }
-
-    // _customer.openLightboxModal = function (index) {
-    //   Lightbox.openModal(_customer.photos, index);
-    // };
 
   });

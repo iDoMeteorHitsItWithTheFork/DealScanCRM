@@ -47,9 +47,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           icon: 'fa fa-cog fa-spin'
         },
         {
-          id: 'follow_up',
-          title: 'Follow Up',
-          icon: 'fa fa-recycle'
+          id: 'missed',
+          title: 'Missed',
+          icon: 'fa fa-exclamation-triangle'
         }
       ]
 
@@ -156,7 +156,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           case 'total leads':
             deals = _bdc.totalLeads.tableData;
             break;
-          case 'total appointments':
+          case 'scheduled appointments':
             deals = _bdc.totalAppointments.tableData;
             break;
           case 'kept appointments':
@@ -195,7 +195,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         var tableData = getDealsData(_bdc.sectionTitle.status);
         console.log(tableData);
         console.log(_bdc.sectionTitle.category);
-        var data = $filter('filter')(tableData, {$: _bdc.sectionTitle.category});
+        var data = $filter('filter')(tableData, function(val, idx, arr){
+          return val.sourceName == _bdc.sectionTitle.category;
+        });
         console.log(data);
         _bdc.dealsTableData = data;
       }
@@ -295,25 +297,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           console.log('*** Deals Filtered ***');
         }
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

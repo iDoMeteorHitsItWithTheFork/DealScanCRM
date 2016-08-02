@@ -15,7 +15,7 @@ export default function(sequelize, DataTypes) {
     address: DataTypes.STRING,
     sourceType: DataTypes.STRING,
     sourceName: DataTypes.STRING,
-    interest: DataTypes.STRING,
+    interest: DataTypes.TEXT,
     additionalInfo: DataTypes.TEXT,
     status: {
       type:DataTypes.STRING,
@@ -65,15 +65,64 @@ export default function(sequelize, DataTypes) {
       }
     },
 
-    instanceMethods: {
+    classMethods : {
 
-      leadUpsert:function(data){
+      dscUpsert: function(data, t){
 
+        var searchOptions = {};
+        //Customer Identifiers
 
+        if (data.firstName) searchOptions.firstName = data.firstName;
+        if (data.lastName) searchOptions.lastName = data.lastName;
+        if (data.phone) searchOptions.phone = data.phone;
+        if (data.email) searchOptions.email = data.email;
+        if (data.interest) searchOptions.interest = JSON.stringify(data.interest);
 
+        //customer values to upsert
+        var upsertValues = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          email: data.email,
+          address: data.address,
+          sourceType: 'Internet',
+          sourceName: data.sourceName,
+          interest: JSON.stringify(data.interest),
+          additionalInfo: data.additionalInfo,
+          createdAt: data.createdAt
+        };
+
+        //find existing customer or create
+        return this.findOrCreate({
+          where: searchOptions,
+          defaults: upsertValues,
+          transaction: t
+        }).spread(function(lead, created){
+          if (!lead){
+            //console.log(' *** I am updated the lead data ****');
+            return lead.update(upsertValues,
+              { fields: [
+               'firstName',
+               'lastName',
+               'phone',
+               'email',
+               'address',
+               'sourceType',
+               'sourceName',
+               'interest',
+               'additionalInfo',
+              ] }, {transaction: t})
+              .then(function(lead){
+                return lead;
+              })
+          } else return lead;
+        }).catch(function(err){
+          console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);
+          console.log(err);
+          return err;
+        });
       }
-
-    }
+    },
 
   });
 

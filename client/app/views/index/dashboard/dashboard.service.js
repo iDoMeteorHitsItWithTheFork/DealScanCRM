@@ -90,7 +90,6 @@ angular.module('dealScanCrmApp')
         function filterData(status, sources){
             //var df = $q.defer();
             console.log(status);
-            status = status == 'won' ? 'working' : status;
             console.log(sources);
             filteredData = $filter('filter')(salesData, function(value, index, arr){
               var filtered = false;
@@ -112,7 +111,7 @@ angular.module('dealScanCrmApp')
             });
             console.log(filteredData);
             switch(status){
-                case 'working':
+                case 'won':
                   wonDeals();
                   break;
                 case 'lost':
@@ -434,11 +433,11 @@ angular.module('dealScanCrmApp')
          */
         function wonDeals(){
            //process data to generate won deals
-          var cars = getModels(filteredData, "car", "working");
-          var trucks = getModels(filteredData, "truck", "working");
-          var utilities = getModels(filteredData, "utility", "working");
-          var vans = getModels(filteredData, "van", "working");
-          var other = getModels(filteredData, "other", "working");
+          var cars = getModels(filteredData, "car", "won");
+          var trucks = getModels(filteredData, "truck", "won");
+          var utilities = getModels(filteredData, "utility", "won");
+          var vans = getModels(filteredData, "van", "won");
+          var other = getModels(filteredData, "other", "won");
           var wonDeals = [{
                 label: "Cars",
                 data: cars.data,
@@ -496,7 +495,7 @@ angular.module('dealScanCrmApp')
            _wonDeals.bar = barData;
             var tableData = [];
             angular.forEach(filteredData, function(value, key){
-               if(value.status == 'working'){
+               if(value.status == 'won'){
                   tableData.push({
                    vehicleInformation: {
                      vehicleID: value.vehicleID,

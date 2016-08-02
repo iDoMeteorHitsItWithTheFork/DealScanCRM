@@ -119,17 +119,26 @@ db.Team.belongsToMany(db.User, {as: 'TeamManagers', through: 'Managers', foreign
 db.User.belongsToMany(db.Team, {as: 'ManagesTeams', through: 'Managers', foreignKey:'teamManagerID'});
 
 db.Deal.belongsTo(db.Dealership, {through:'Purchases', foreignKey:'dealershipID'});
+db.Dealership.hasMany(db.Deal, {foreignKey:'dealershipID'});
 db.Deal.belongsTo(db.User, {as:'SaleRep', through: 'Purchases', foreignKey: 'saleRepID'});
+db.User.hasMany(db.Deal, {foreignKey: 'saleRepID'});
 db.Deal.belongsTo(db.Customer, {as:'Buyer', through:'Purchases', foreignKey:'buyerID'});
+db.Customer.hasMany(db.Deal, {foreignKey: 'buyerID'});
 db.Deal.belongsTo(db.Vehicle, {as:'Purchase', through: 'Purchases', foreignKey: 'vehicleID'});
-
 db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'coBuyerID'});
 db.Customer.belongsToMany(db.Deal, {as:'CoSignedDeals' , through:'CoSigners', foreignKey:'dealID'});
 
 db.Financing.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Deal.hasOne(db.Financing, {foreignKey:'dealID'});
+
 db.Trade.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Deal.hasMany(db.Trade, {foreignKey:'dealID'});
+
 db.Rebate.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Deal.hasMany(db.Rebate, {foreignKey:'dealID'});
+
 db.Document.belongsTo(db.Deal, {foreignKey:'dealID'});
+db.Deal.hasMany(db.Document, {foreignKey:'dealID'});
 
 db.Watchlist.belongsTo(db.Dealership, {foreignKey: 'dealershipID'});
 db.Watchlist.belongsTo(db.User, {as:'ListOwner', foreignKey: 'ownerID'});
