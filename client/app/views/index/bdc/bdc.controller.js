@@ -511,7 +511,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           animation: true,
           windowClass: 'slide-up',
           templateUrl: 'app/views/index/bdc/lead/addLead.html',
-          controller: 'AddLeadCtrl',
+          controller: 'AddLeadCtrl as newLead',
         });
       }
 
@@ -554,7 +554,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           animation: true,
           windowClass: 'slide-up',
           templateUrl: 'app/views/index/task/addTask.html',
-          controller: 'AddTaskCtrl',
+          controller: 'AddTaskCtrl as addTask',
           resolve: {
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
@@ -566,16 +566,21 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 },
                 {
                   name: 'datePicker',
-                  files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
+                  files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
                 },
                 {
                   serie: true,
-                  files: ['js/plugins/daterangepicker/daterangepicker.js', 'css/plugins/daterangepicker/daterangepicker-bs3.css']
+                  files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
                 },
                 {
                   name: 'daterangepicker',
-                  files: ['js/plugins/daterangepicker/angular-daterangepicker.js']
+                  files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
                 },
+                {
+                  name: 'ui.select',
+                  files: ['.resources/plugins/ui-select/select.min.js',
+                    '.styles/plugins/ui-select/select.min.css']
+                }
               ]);
             }
           }
@@ -589,8 +594,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           animation: true,
           windowClass: 'slide-up',
           templateUrl: 'app/views/index/events/addEvent.html',
-          controller: 'AddEventCtrl',
-          controllerAs: 'scheduleLead',
+          controller: 'AddEventCtrl as addEvent',
           resolve: {
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
@@ -602,15 +606,15 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 },
                 {
                   name: 'datePicker',
-                  files: ['css/plugins/datapicker/angular-datapicker.css','js/plugins/datapicker/angular-datepicker.js']
+                  files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
                 },
                 {
                   serie: true,
-                  files: ['js/plugins/daterangepicker/daterangepicker.js', 'css/plugins/daterangepicker/daterangepicker-bs3.css']
+                  files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
                 },
                 {
                   name: 'daterangepicker',
-                  files: ['js/plugins/daterangepicker/angular-daterangepicker.js']
+                  files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
                 },
               ]);
             }

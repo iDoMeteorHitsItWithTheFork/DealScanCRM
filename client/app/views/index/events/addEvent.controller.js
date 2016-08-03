@@ -2,29 +2,30 @@ angular.module('dealScanCrmApp')
 .controller('AddEventCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$uibModal', '$uibModalInstance','$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $uibModal, $uibModalInstance, $filter) {
   console.log("add appointment controller loaded");
   
-   $scope.today = function () {
-        $scope.dt = new Date();
+  var _addEvent = this;
+  _addEvent.today = function () {
+    _addEvent.dt = new Date();
     };
-    $scope.today();
+  _addEvent.today();
 
-    $scope.clear = function () {
-        $scope.dt = null;
+  _addEvent.clear = function () {
+    _addEvent.dt = null;
     };
 
-    $scope.dateOptions = {
+  _addEvent.dateOptions = {
         formatYear: 'yy',
         startingDay: 1
     };
 
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
+  _addEvent.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  _addEvent.format = _addEvent.formats[0];
 
-  $scope.lead = {'Assignee':'Cary'};
-    $scope.ok = function () {
-    $uibModalInstance.close($scope.lead);
+  _addEvent.newEvent = {'Assignee':'Cary'};
+  _addEvent.ok = function () {
+    $uibModalInstance.close(_addEvent.newEvent);
   };
 
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
+  _addEvent.cancel = function () {
+    $uibModalInstance.dismiss();
   };
   }]);

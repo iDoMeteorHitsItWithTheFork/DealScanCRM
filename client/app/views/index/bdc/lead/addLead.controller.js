@@ -100,7 +100,7 @@ angular.module('dealScanCrmApp')
         };
 
         _newLead.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss();
         };
 
     }]);
