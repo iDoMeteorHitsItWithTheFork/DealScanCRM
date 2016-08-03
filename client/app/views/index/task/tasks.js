@@ -28,8 +28,16 @@ angular.module('dealScanCrmApp')
                     name: 'datatables.buttons',
                     files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
                   },
+                  {
+                    insertBefore: '#loadBefore',
+                    files: ['.styles/plugins/fullcalendar/fullcalendar.css','.resources/plugins/fullcalendar/fullcalendar.min.js','.resources/plugins/fullcalendar/gcal.js']
+                  },
+                  {
+                    name: 'ui.calendar',
+                    files: ['.resources/plugins/fullcalendar/calendar.js']
+                  }
                 ])
-              },
+              }
             }
           })
     });
