@@ -1,6 +1,6 @@
 <div class="modal-header p-b-15">
-  <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times fs-14"></i></button>
-            <h3 class="modal-title" style="margin-left:-5px;">Task Assignment</h3>
+  <button type="button" class="close" ng-click="addTask.cancel()"><i class="fa fa-times fs-14"></i></button>
+            <h3 class="modal-title">Task Assignment</h3>
   <label class="tl" style="float: left;">Assign Task to a Sales Rep</label>
         </div>
         <div class="modal-body p-b-10">
@@ -8,71 +8,69 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Sales Rep</label>
-                  <select class="cs-select cs-skin-elastic">
-                      <option value="" disabled selected>Select a Sales Rep</option>
-                      <option value="Sales Rep 1">Sales Rep 1</option>
-                      <option value="Sales Rep 2">Sales Rep 2</option>
-                      <option value="Sales Rep 3">Sales Rep 3</option>
-                      <option value="Sales Rep 4">Sales Rep 4</option>
-                  </select>
+                  <ui-select ng-model="addTask.newTask.rep" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+                      <ui-select-match placeholder="Assign Sales Rep...">{{$select.selected.name | cut:true:35}}
+                      </ui-select-match>
+                      <ui-select-choices repeat="rep in addTask.salesReps | filter: $select.search">
+                          <div ng-bind-html="rep.name | highlight: $select.search"></div>
+                          <small>{{rep.email}}</small>
+                      </ui-select-choices>
+                  </ui-select>
               </div>
+
 
              <div class="form-group">
                 <label>Customer</label>
-                  <select class="cs-select cs-skin-elastic">
-                      <option value="" disabled selected>Select a Customer</option>
-                      <option value="Customer 1">Customer 1</option>
-                      <option value="Customer 2">Customer 2</option>
-                      <option value="Customer 3">Customer 3</option>
-                      <option value="Customer 4">Customer 4</option>
-                  </select>
+                 <ui-select ng-model="addTask.newTask.customer" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+                     <ui-select-match placeholder="Assign Customer...">{{$select.selected.name | cut:true:35}}
+                     </ui-select-match>
+                     <ui-select-choices repeat="customer in addTask.customers | filter: $select.search">
+                         <div ng-bind-html="customer.name | highlight: $select.search"></div>
+                         <small>{{customer.email}}</small>
+                     </ui-select-choices>
+                 </ui-select>
               </div>
 
               <div class="form-group">
               <label>Schedule Appointment</label>
-                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" show-weeks="false" is-open="inputopened" ng-init="inputopened = false" ng-click="inputopened = !inputopened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="addTask.newTask.date" show-weeks="false" is-open="inputopened" ng-init="inputopened = false" ng-click="inputopened = !inputopened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>Task Category</label>
-                  <select class="cs-select cs-skin-elastic">
-                      <option value="" disabled selected>Select a Category</option>
-                      <option value="Follow-Up">Follow-Up</option>
-                      <option value="Category 2">Category 2</option>
-                      <option value="Vehicle 3">Category 3</option>
-                      <option value="Category 4">Category 4</option>
-                  </select>
+                  <ui-select ng-model="addTask.newTask.category" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+                      <ui-select-match placeholder="Select Category...">{{$select.selected.name | cut:true:35}}
+                      </ui-select-match>
+                      <ui-select-choices repeat="cat in addTask.categories | filter: $select.search">
+                          <div ng-bind-html="cat.title | highlight: $select.search"></div>
+                      </ui-select-choices>
+                  </ui-select>
               </div>
               <div class="form-group">
                   <label>Vehicle</label>
-                    <select class="cs-select cs-skin-elastic">
-                        <option value="" disabled selected>Select a Vehicle</option>
-                            <option value="2011 Escape">2011 Escape</option>
-                            <option value="Vehicle 2">Vehicle 2</option>
-                            <option value="Vehicle 3">Vehicle 3</option>
-                            <option value="Vehicle 4">Vehicle 4</option>
-                    </select>
+                  <ui-select ng-model="addTask.newTask.vehicle" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+                      <ui-select-match placeholder="Select Category...">{{$select.selected.name | cut:true:35}}
+                      </ui-select-match>
+                      <ui-select-choices repeat="vehicle in addTask.vehicles | filter: $select.search">
+                          <div ng-bind-html="vehicle.title | highlight: $select.search"></div>
+                      </ui-select-choices>
+                  </ui-select>
                 </div>
                 <div class="form-group">
                   <label>Appointment Time</label>
-                    <select class="cs-select cs-skin-elastic">
-                        <option value="" disabled selected>Select a Time</option>
-                            <option value="9:45 am">9:45 am</option>
-                            <option value="10:00 am">10:00 am</option>
-                            <option value="10:15 am">10:15 am</option>
-                            <option value="10:30 am">10:30 am</option>
-                    </select>
+                        <div class="" uib-timepicker ng-model="addTask.newTask.time"
+                             show-spinners = "false"
+                             show-meridian="true" type="text"
+                             placeholder="Appointment Time"></div>
                 </div>
             </div>
          </div>
       <div class="row margin-negative-left-15 margin-negative-right-15">
         <div class="col-md-12">
           <div class="form-group">
-            <label>Notes</label>
-                <div class="note-editor">
-                    <textarea class="form-control"></textarea>
-                </div>
+            <label>Task Details</label>
+                <textarea class="form-control" rows="5" ng-model="addTask.newTask.details"></textarea>
             </div>
         </div>
       </div>

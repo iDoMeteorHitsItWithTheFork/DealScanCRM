@@ -1,30 +1,85 @@
 angular.module('dealScanCrmApp')
 .controller('AddTaskCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window', '$uibModal', '$uibModalInstance','$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $uibModal, $uibModalInstance, $filter) {
   console.log("add task controller loaded");
-  
-   $scope.today = function () {
-        $scope.dt = new Date();
-    };
-    $scope.today();
 
-    $scope.clear = function () {
-        $scope.dt = null;
+  var _addTask = this;
+
+  _addTask.saving = false;
+
+  _addTask.newTask = {
+      rep: '',
+      customer: '',
+      date: '',
+      time: '',
+      category: '',
+      details: ''
+  }
+
+  _addTask.categories = [
+    {title: 'Follow-up'},
+    {title: 'Documentation'},
+    {title: 'Another category'}
+  ]
+
+  _addTask.vehicles = [
+    {title: '2011 Escape'},
+    {title: '2007 Explorer'},
+  ]
+
+  _addTask.salesReps = [
+    {
+      id: 1,
+      name: 'Cary Gaskell',
+      email: 'carylgaskell@gmail.com'
+    },
+    {
+      id: 2,
+      name: 'Luda',
+      email: 'luda@gmail.com'
+    }
+  ]
+
+  _addTask.customers = [
+    {
+      id: 1,
+      name: 'Cary Gaskell',
+      email: 'carylgaskell@gmail.com'
+    },
+    {
+      id: 2,
+      name: 'Luda',
+      email: 'luda@gmail.com'
+    }
+  ]
+
+
+
+
+
+
+  _addTask.today = function () {
+    _addTask.dt = new Date();
     };
 
-    $scope.dateOptions = {
+  _addTask.today();
+
+  _addTask.clear = function () {
+    _addTask.dt = null;
+    };
+
+  _addTask.dateOptions = {
         formatYear: 'yy',
         startingDay: 1
     };
 
-    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
+  _addTask.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  _addTask.format = _addTask.formats[0];
 
-  $scope.lead = {'Assignee':'Cary'};
-    $scope.ok = function () {
-    $uibModalInstance.close($scope.lead);
+  _addTask.ok = function () {
+    $uibModalInstance.close(_addTask.newTask);
   };
 
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
+  _addTask.cancel = function () {
+    $uibModalInstance.dismiss();
   };
   }]);

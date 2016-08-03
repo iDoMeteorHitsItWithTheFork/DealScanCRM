@@ -1,5 +1,5 @@
 angular.module('dealScanCrmApp')
-    .controller('TasksCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window','$filter', function ($scope, $rootScope, $timeout, $compile, $state, $window, $filter) {
+    .controller('TasksCtrl',['$scope', '$rootScope', '$timeout', '$compile', '$state', '$window','$filter', '$uibModal', function ($scope, $rootScope, $timeout, $compile, $state, $window, $filter, $uibModal) {
 
         var _task = this;
 
@@ -102,7 +102,6 @@ angular.module('dealScanCrmApp')
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
-        console.log(new Date(y, m, 1));
         // Events
         _task.events = [
             {title: 'All Day Event', start: new Date(y, m, 1)},
@@ -145,5 +144,43 @@ angular.module('dealScanCrmApp')
 
         /* Event sources array */
         _task.eventSources = [_task.events];
-        
+
+
+        _task.addTask = function (lead) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                windowClass: 'slide-up',
+                templateUrl: 'app/views/index/task/addTask.html',
+                controller: 'AddTaskCtrl as addTask',
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                serie: true,
+                                name: 'angular-ladda',
+                                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                            },
+                            {
+                                name: 'datePicker',
+                                files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+                            },
+                            {
+                                serie: true,
+                                files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+                            },
+                            {
+                                name: 'daterangepicker',
+                                files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
+                            },
+                            {
+                                name: 'ui.select',
+                                files: ['.resources/plugins/ui-select/select.min.js',
+                                    '.styles/plugins/ui-select/select.min.css']
+                            }
+                        ]);
+                    }
+                }
+            });
+        }
     }]);
