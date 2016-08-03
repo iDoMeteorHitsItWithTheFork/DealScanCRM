@@ -507,7 +507,7 @@
             <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
                  ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- totalLeads stats-->
-              <div class="ibox float-e-margins no-material">
+              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
@@ -537,7 +537,7 @@
             <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
                  ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments stats-->
-              <div class="ibox float-e-margins no-material">
+              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
@@ -567,7 +567,7 @@
             <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_kept' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
                  ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments kept stats-->
-              <div class="ibox float-e-margins no-material">
+              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
@@ -597,7 +597,7 @@
             <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_missed' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
                  ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments missed stats-->
-              <div class="ibox float-e-margins no-material">
+              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
@@ -625,9 +625,9 @@
 
             <!-- Appointments sold Pie & Stats -->
             <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_sold' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight"
-                 ng-class="(bdc.showTable && bdc.chartView == 'charts') ? 'col-md-3': 'col-md-4'">
+                 ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
               <!-- appointments sold stats-->
-              <div class="ibox float-e-margins no-material">
+              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
                   <div class="row">
                     <div class="col-lg-12 text-center">
