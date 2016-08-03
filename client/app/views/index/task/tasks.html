@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading p-r-0">
+<div class="row wrapper border-bottom white-bg page-heading p-r-0" style="margin:0;">
     <!-- breadcrumns -->
     <div class="col-md-4">
         <h2>Tasks</h2>
@@ -20,7 +20,7 @@
         </div>
         <div class="col-sm-8 no-padding">
             <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
-                <div class="profile-tab navy-bg" ng-click="sm.setCurrentView('monitor')">
+                <div class="profile-tab navy-bg" ng-click="task.viewOptions = 'calendar'">
                     <div class="profile-tab-icon m-t-5 m-l-26 no-border">
                         <i class="fa fa-calendar f-sz-22"></i>
                     </div>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
-                <div class="profile-tab blue-bg no-border-right" ng-click="sm.broadcast()">
+                <div class="profile-tab blue-bg no-border-right" ng-click="task.viewOptions = 'list'">
                     <div class="profile-tab-icon m-t-5 m-l-26 no-border">
                         <i class="fa fa-list f-sz-22"></i>
                     </div>
@@ -40,7 +40,7 @@
     <!-- ./ tabs -->
 </div>
 
-<div class="wrapper wrapper-content  animated fadeInRight">
+<div class="wrapper wrapper-content  animated fadeInRight" ng-hide="task.viewOptions === 'calendar'">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
@@ -127,4 +127,43 @@
     </div>
 
 
+</div>
+
+<div class="wrapper wrapper-content  animated fadeInRight" ng-if="task.viewOptions === 'calendar'">
+    <div class="row animated fadeInDown">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Events List</h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div id='external-events'>
+                        <strong>Click, Drop or Resize event on calendar!</strong>
+                        <p>Message from functions:
+                            <br/>
+                        <div class="alert alert-warning" ng-show="task.alertMessage">
+                            {{task.alertMessage}}
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Striped Table</h5>
+                    <div ibox-tools></div>
+                </div>
+
+                <div class="ibox-content ui-calendar">
+                    <div class="btn-toolbar">
+                        <p class="lead">Angular Calendar (Ui-calendar)</p>
+                    </div>
+                    <div ui-calendar="task.uiConfig.calendar" calendar="myCalendar1" class="calendar" ng-model="task.eventSources"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
