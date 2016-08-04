@@ -141,7 +141,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             x: 20,
             y: 0
           },
-          defaultTheme: false
+          defaultTheme: true
         }
       };
 
