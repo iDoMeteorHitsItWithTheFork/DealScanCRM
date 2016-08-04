@@ -317,3 +317,41 @@ div.navs-3 > ul.nav-tabs > li {
   vertical-align:text-top;
   text-align:right!important;
 }
+
+.flot-chart .legendColorBox > div:first-of-type{
+  border-width:0px !important;
+
+}
+
+.flot-chart .legendColorBox div:nth-of-type(2),
+.flot-chart .legendColorBox div div{
+  width: 13px!important;
+  height: 13px!important;
+  border-width: 7px!important;
+  overflow: hidden!important;
+
+}
+
+.legendLabel{
+  font-size:15px !important;
+
+}
+
+.legend table {
+   background-color:#fff!important;
+   padding:5px!important;
+   top: 0!important;
+   right: -65px!important;
+ }
+
+.legend div {
+  top: 0!important;
+  right: -65px!important;
+}
+
+#flotTip {
+
+font-size:15px!important;
+  z-index:9999!important;
+}
+
