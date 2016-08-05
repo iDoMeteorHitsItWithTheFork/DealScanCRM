@@ -14,6 +14,7 @@ var Promise = require('bluebird');
 Promise.promisifyAll(NR);
 var StreamArray = require("stream-json/utils/StreamArray");
 var Inbox = require('./gmail.inbox');
+var moment = require('moment');
 
 import {Dealership} from '../sqldb';
 import {User} from '../sqldb';
@@ -141,10 +142,10 @@ var insertLead = function(lead, callback){
           return Lead.dscUpsert(lead, t)
             .then(function(_lead){
              console.log('\n\n>> Adding Creator...');
-             return _lead.setCreator(creator, t)
+             return _lead.setCreator(creator, {transaction: t})
                .then(function(){
                    console.log('\n\n>> Setting Dealership....');
-                   return _lead.setDealership(dealership, t)
+                   return _lead.setDealership(dealership, {transaction: t})
                      .then(function(){
                       console.log('\n\n>> Lead created!');
                       return _lead;
@@ -155,6 +156,7 @@ var insertLead = function(lead, callback){
     }).then(function(l){
         console.log('\n>> Lead inserted!\n\n');
         callback(null, l);
+        return l;
     });
   }).catch(function(err){
        console.log(err);
@@ -180,12 +182,13 @@ var extractDataToSync = function (dbRecords) {
   return _dealsToProcess;
 }
 
-var i = 1;
+var i = 0;
 var fetchData = function(time) {
   var username, password;
   username = password = 'admin';
   var api = 'http://tdealscan.softeq.net:8080/Admin/Dealerships/ExportCustomersToJson';
-  time = i > 0 ? Math.floor(time / 1000) : 1451606400; //January 1st 2016
+  var yesterday = moment().subtract(1, 'days').unix();
+  time = i > 0 ? Math.floor(time / 1000) : yesterday; //January 1st 2016
   var params = '?dealershipId=1&since=' + time;
   api += params;
   ++i;
@@ -293,14 +296,14 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/10 * * * *', () => {
+    schedule.scheduleJob('*/15 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...');
       }
     })
 
-    schedule.scheduleJob('*/10 * * * *', () => {
+    schedule.scheduleJob('*/5 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');
@@ -333,3 +336,58 @@ process.on('SIGINT', stop);
 
 export {start}
 export {queue}
+
+export function generateDocSet(){
+  console.log('\n\n\n>> ATTEMPTING TO GENERATE & FILL DOC SET....\n\n\n ');
+  var pdfFiller = require('pdffiller');
+  var sourcePDF = "server/backgroundTasks/DocSet.pdf";
+  var data = {
+    amount_payOff_authorization: '15000',
+    customerFullName: 'Luda Agodio',
+    make_payOff_authorization: 'BMW',
+    model_payOff_authorization: '645 ci',
+    mileage_payOff_authorization: '57000',
+    serial_number_payOff_authorization: 'AHLNKLKASMACADD',
+    stockNumber: '234567',
+    odometer_mileage_odometer_statement: '567',
+    make_odomoter_statement: 'Ford',
+    model_odometer_statement: 'F150',
+    body_type_odometer_statement: 'XL',
+    vin_number_odometer_statement: 'VFNKHADMADSDCSDSD',
+    year_odometer_statement: '2017',
+    transferror_address_odometer_statement: '1714 Massey boulevard, Hagerstown MD 20781',
+    transferror_state_odometer_statement: 'MD',
+    transferror_streetAddress_odometer_statement: '1714 Massey boulevard',
+    transferror_zipCode_odometer_statement: '20781',
+    statement_date_odometer_statement: moment().format('YYYY-MM-DD'),
+    transfferee_streetAddress_odometer_statement: '4835 Cordell Ave, Apt 1208',
+    transferree_zipCode_odometer_statement: '20814',
+    transferree_state_odometer_statement: 'MD',
+    transferree_city_odometer_statement: 'Bethesda',
+    year_disclosure_of_former_use: '2017',
+    make_disclosure_of_former_use: 'Ford',
+    model_disclosure_of_former_use: 'F150',
+    body_type_discloser_of_former_use: 'XL',
+    vin_number_disclosure_of_former_use: 'CVHLADNALKDNALD',
+    dealershipName: 'Hagerstown Ford',
+    vehicel_model_leman_law: 'F150',
+    vehicle_year_lemon_law: '2017',
+    vehicle_vin_leman_law: 'VADNDADSSDDAADF',
+    financing_approval_signature_date:  moment().format('YYYY-MM-DD'),
+    vehicle_year_financing_approval: '2017',
+    vehicle_make_financing_approval: 'Ford',
+    vehicle_model_financing_approval: 'F150',
+    vehicle_vin_finaning_approval: 'VMALDMAKNDLADKMM',
+    dealer_rep_sign_date:  moment().format('YYYY-MM-DD'),
+    customerHomeAddress: '4835 Cordell Ave, Apt 1208, Bethesda MD 20814',
+    customerEmailAddress: 'lagodio@alvsoftwarellc.com',
+    customerCellPhone: '2029971908',
+  };
+  var shouldFlatten = false;
+  var destinationPDF = 'server/backgroundTasks/filledDocSet.pdf'
+  pdfFiller.fillForm(sourcePDF, destinationPDF, data, function(err) {
+    if (err) throw err;
+    console.log('\n\n\n\n\n>> FILLED PDF GENERATED....\n\n\n');
+    console.log("In callback (we're done).");
+  });
+}

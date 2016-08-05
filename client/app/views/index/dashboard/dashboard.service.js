@@ -599,6 +599,7 @@ angular.module('dealScanCrmApp')
                   trim: value.trimLevel,
                 },
                 customerDetails: {
+                  customerID: value.customerID,
                   name: value.name,
                   phone: value.phone,
                   email : value.email,
@@ -691,6 +692,7 @@ angular.module('dealScanCrmApp')
                   trim: value.trimLevel,
                 },
                 customerDetails: {
+                  customerID: value.customerID,
                   name: value.name,
                   phone: value.phone,
                   email : value.email,

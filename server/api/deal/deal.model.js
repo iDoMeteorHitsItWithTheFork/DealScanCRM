@@ -136,6 +136,9 @@ export default function(sequelize, DataTypes) {
       dscSetRebate: function(){
 
       },
+      dscGenerateDocSet: function(){
+
+      },
       dscUpsert: function (data, customer) {
 
         console.log('\n\n>> Upserting Deal[' + data.DealId + ']...');

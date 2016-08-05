@@ -41,7 +41,8 @@ server.once('ready', function() {
   openInbox(function(err, box) {
     if (err) throw err;
     //timestamp = null;
-    var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", "Sep 18, 2011"]];
+    var yesterday = moment().subtract(1, 'days').format('MMM DD[,] YYYY');
+    var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", yesterday]];
     server.search(searchOptions, function(err, results){
       if (err) {
         console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');
@@ -333,7 +334,7 @@ function parseLead(mail) {
     if (mail.from) lead.sourceType = mail.from;
 
     lead.additionalInfo = mail.content;
-    lead.createdAt = mail.receivedDate || mail.date;
+    lead.createdAt = moment(mail.receivedDate);
 
     if (lead.interest && (!lead.interest.make && !lead.interest.model && !lead.interest.year)) {
       var s = lead.sourceName.split(' ');
