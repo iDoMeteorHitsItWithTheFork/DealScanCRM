@@ -1,16 +1,14 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('SocialMediaCtrl', function ($scope, $timeout, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q, toaster) {
+  .controller('SocialMediaCtrl', function ($scope, $timeout, Auth, Util, $filter, $aside, SocialMedia, NgMap, $q, toaster, $uibModal) {
     $("#page-wrapper").css("overflow-x", "hidden");//little hack for scroll issue
 
     var _sm =this;
     _sm.user = Auth.getCurrentUser();
     _sm.searchResults = SocialMedia.searchResults();
     _sm.watchlists = SocialMedia.watchlists();
-    console.log(_sm.watchlists);
-
-
+    _sm.mapCenter = [39.628, -77.766];
     _sm.views  = [{id:'discover', name:'Social Media Discovery', active: true},
                   {id: 'monitor', name: 'Social Media Monitoring', active: false}];
 
@@ -463,11 +461,49 @@ angular.module('dealScanCrmApp')
         });
      }
 
+    _sm.createWatchlist = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/views/index/socialMedia/createWatchlist.html',
+        controller: 'CreateWatchlistCtrl as wl',
+        resolve: {
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                serie: true,
+                name: 'angular-ladda',
+                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                  '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+              },
+              {
+                name: 'datePicker',
+                files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+              },
+              {
+                serie: true,
+                files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+              },
+              {
+                name: 'daterangepicker',
+                files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
+              },
+            ]);
+          }
+        }
+      });
+    }
 
+    _sm.placeChanged = function() {
+      var pl = this.getPlace();
+      if (angular.isDefined(pl.geometry)){
+        if (pl.geometry.location) {
+          _sm.mapCenter[0] = pl.geometry.location.lat();
+          _sm.mapCenter[1] = pl.geometry.location.lng();
+        }
+      } else {
+        console.log("error on location select...");
+      }
+    };
 
-
-
- _sm.testWatchlists = function () {
-   console.log(_sm.watchlists);
- }
   });

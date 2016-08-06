@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
   .controller('NavigationCtrl', function ($scope, $state, Auth, appConfig) {
-
+    
     var _navigation = this;
     _navigation.user = Auth.getCurrentUser();
     console.log(_navigation.user);
