@@ -227,10 +227,143 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           categoryId = 'Appointments';
           filter = 'Missed';
           break;
-
       }
       _dashboard.showStatsSummary(categoryId, filter);
     }
+
+    /**
+     * sales metrics
+     * @type {*[]}
+     */
+
+    _dashboard.dismissSidebar = function(from){
+      console.log('*** called From: '+from+' **');
+      _dashboard.sidebar = false;
+    }
+    _dashboard.activeTab = 0;
+    _dashboard.showStatsSummary = function(stats, filter){
+      var idx = Util.indexOfObject(_dashboard.metricSummaryTabs, 'id', stats);
+      if (idx != -1) {
+        _dashboard.activeTab = idx;
+        if (filter) _dashboard.metricSummaryTabs[idx].contentFilter = filter;
+      }
+    }
+
+
+    _dashboard.metricSummaryTabs = [
+      {
+        id: 'Phone', title: 'fa fa-phone', contentFilter: '',
+        contentData: [
+          {
+            cname: 'Job Bloe', cavatar: 'assets/images/a1.jpg', ctype: 'outgoing',
+            ctime: 'Today 4:21 pm', comments: 'Follow up with customer regarding service calls'
+          },
+          {
+            cname: 'John Cacron', cavatar: 'assets/images/a2.jpg', ctype: 'incoming',
+            ctime: 'Today 4:21 pm', comments: 'Customer wanted to know when his car was going to be ready'
+          },
+          {
+            cname: 'OJ Simpson', cavatar: 'assets/images/a3.jpg', ctype: 'missed',
+            ctime: 'Today 4:21 pm', commments: ''
+          },
+          {
+            cname: 'Bob Shapiro', cavatar: 'assets/images/a4.jpg', ctype: 'outgoing',
+            ctime: 'Today 4:21 pm', comments: ''
+          },
+          {
+            cname: 'Jesus Christ', cavatar: 'assets/images/a5.jpg', ctype: 'missed',
+            ctime: 'Today 4:21 pm', comments: ''
+          }
+        ]
+      },
+      {
+        id: 'Correspondence', title: 'fa fa-exchange', contentFilter: '',
+        contentData: [
+          {
+            crname: 'Luda Agodio',
+            crtype: 'Text',
+            crsubject: '',
+            crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+            crtime: '9hours ago'
+          },
+          {
+            crname: 'Eric Carper',
+            crtype: 'Text',
+            crsubject: '',
+            crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+            crtime: '9hours ago'
+          },
+          {
+            crname: 'Miles Johnson',
+            crtype: 'Mail',
+            crsubject: 'Attention Required',
+            crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+            crtime: '9hours ago'
+          },
+          {
+            crname: 'Ronda Roussey',
+            crtype: 'Mail',
+            crsubject: 'Re: Luda is good',
+            crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+            crtime: '9hours ago'
+          },
+          {
+            crname: 'Chris Brown',
+            crtype: 'Mail',
+            crsubject: 'Progress Report',
+            crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+            crtime: '9hours ago'
+          },
+        ]
+      },
+      {
+        id: 'Appointments', title: 'fa fa-calendar-o', contentFilter: '',
+        sortableOptions: {connectWith: ".connectList"},
+        contentData: [
+          {
+            cname: 'Johnny Bloe',
+            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
+            date: '16.11.2015',
+            statusClass: 'info',
+            tagName: 'Mark',
+            appointmentStatusClass: 'made',
+          },
+          {
+            cname: 'Johnny Bloe',
+            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
+            date: '16.11.2015',
+            statusClass: 'danger',
+            tagName: 'Mark',
+            appointmentStatusClass: 'missed',
+          },
+          {
+            cname: 'Johnny Bloe',
+            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
+            date: '16.11.2015',
+            statusClass: 'danger',
+            tagName: 'Mark',
+            appointmentStatusClass: 'missed',
+          },
+          {
+            cname: 'Johnny Bloe',
+            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
+            date: '16.11.2015',
+            statusClass: 'success',
+            tagName: 'Mark',
+            appointmentStatusClass: 'sold',
+          },
+          {
+            cname: 'Johnny Bloe',
+            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
+            date: '16.11.2015',
+            statusClass: 'success',
+            tagName: 'Mark',
+            appointmentStatusClass: 'sold',
+          },
+        ]
+      },
+    ]
+
 
     var updateBarChart = function(status, category){
       var barData, idx;
@@ -719,6 +852,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.dealsTableData = [];
       _dashboard.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
+          .withOption('order', [[6, 'asc']])
           .withButtons([
               {extend: 'copy'},
               {extend: 'csv'},
@@ -734,99 +868,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           }
         }
       ]);
-
-
-
-
-    /**
-     * sales metrics
-     * @type {*[]}
-     */
-
-    _dashboard.dismissSidebar = function(from){
-      console.log('*** called From: '+from+' **');
-      _dashboard.sidebar = false;
-    }
-
-    _dashboard.showStatsSummary = function(stats, filter){
-       var idx = Util.indexOfObject(_dashboard.metricSummaryTabs, 'id', stats);
-       if (idx != -1) {
-         _dashboard.metricSummaryTabs[idx].active = true;
-         if (filter) _dashboard.metricSummaryTabs[idx].contentFilter = filter;
-       }
-    }
-
-
-    _dashboard.metrics = {};
-    _dashboard.metricSummaryTabs = [
-      {id: 'Phone', title: 'fa fa-phone', contentFilter: '', active: false,
-        contentData: [
-          {cname: 'Job Bloe', cavatar: 'assets/images/a1.jpg', ctype: 'outgoing',
-            ctime: 'Today 4:21 pm', comments: 'Follow up with customer regarding service calls'},
-          {cname: 'John Cacron', cavatar: 'assets/images/a2.jpg', ctype: 'incoming',
-            ctime: 'Today 4:21 pm', comments: 'Customer wanted to know when his car was going to be ready'},
-          {cname: 'OJ Simpson', cavatar: 'assets/images/a3.jpg', ctype: 'missed',
-            ctime: 'Today 4:21 pm', commments: ''},
-          {cname: 'Bob Shapiro', cavatar: 'assets/images/a4.jpg', ctype: 'outgoing',
-            ctime: 'Today 4:21 pm', comments: ''},
-          {cname: 'Jesus Christ', cavatar: 'assets/images/a5.jpg', ctype: 'missed',
-            ctime: 'Today 4:21 pm', comments: ''}
-        ]},
-      {id: 'Correspondence', title:'fa fa-exchange', contentFilter: '', active: false,
-        contentData: [
-          {crname: 'Luda Agodio', crtype: 'Text',   crsubject:'',  crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ', crtime: '9hours ago'},
-          {crname: 'Eric Carper', crtype: 'Text',   crsubject: '', crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ', crtime: '9hours ago'},
-          {crname: 'Miles Johnson', crtype: 'Mail', crsubject: 'Attention Required', crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ', crtime: '9hours ago'},
-          {crname: 'Ronda Roussey', crtype: 'Mail', crsubject:'Re: Luda is good',  crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ', crtime: '9hours ago'},
-          {crname: 'Chris Brown',  crtype: 'Mail',  crsubject:'Progress Report',  crcontent: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ', crtime: '9hours ago'},
-        ]},
-      {id: 'Appointments', title:'fa fa-calendar-o', contentFilter: '', active: false,
-        sortableOptions: {connectWith: ".connectList"},
-        contentData: [
-          {
-            cname: 'Johnny Bloe',
-            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
-            date: '16.11.2015',
-            statusClass: 'info',
-            tagName: 'Mark',
-            appointmentStatusClass: 'made',
-          },
-          {
-            cname: 'Johnny Bloe',
-            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
-            date: '16.11.2015',
-            statusClass: 'danger',
-            tagName: 'Mark',
-            appointmentStatusClass: 'missed',
-          },
-          {
-            cname: 'Johnny Bloe',
-            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
-            date: '16.11.2015',
-            statusClass: 'danger',
-            tagName: 'Mark',
-            appointmentStatusClass: 'missed',
-          },
-          {
-            cname: 'Johnny Bloe',
-            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
-            date: '16.11.2015',
-            statusClass: 'success',
-            tagName: 'Mark',
-            appointmentStatusClass: 'sold',
-          },
-          {
-            cname: 'Johnny Bloe',
-            comments: 'Sometimes by accident, sometimes on purpose (injected humour and the like).',
-            date: '16.11.2015',
-            statusClass: 'success',
-            tagName: 'Mark',
-            appointmentStatusClass: 'sold',
-          },
-        ]},
-    ]
-
-
 
 
     /**
@@ -902,14 +943,16 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
 
     _dashboard.chatRecipient = {name: '', number: ''};
-    _dashboard.composeText = function(deal){
+    _dashboard.composeText = function(deal, event){
+       event.stopPropagation();
        if (!_dashboard.openChat) _dashboard.openChat = true;
       console.log('*** Compose Text ***');
       console.log(deal);
       _dashboard.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
     }
 
-    _dashboard.composeMail = function(deal){
+    _dashboard.composeMail = function(deal, event){
+      event.stopPropagation();
       console.log('*** Compose Mail ****');
       console.log(deal);
       var modalInstance = $uibModal.open({
@@ -951,25 +994,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         controller: 'AddTaskCtrl',
       });
     }
-
-
   });
 
-function dashboardMap() {
-  var data = {
-    "US": 298,
-    "SA": 200,
-    "DE": 220,
-    "FR": 540,
-    "CN": 120,
-    "AU": 760,
-    "BR": 550,
-    "IN": 200,
-    "GB": 120
-  };
-
-  this.data = data;
-}
-
-angular.module('dealScanCrmApp').controller('dashboardMap', dashboardMap);
 

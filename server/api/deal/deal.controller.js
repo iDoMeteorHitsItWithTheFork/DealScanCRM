@@ -86,33 +86,35 @@ export function index(req, res) {
   };
   if (req.query.hasOwnProperty('employee') && req.query.employee && req.query.employee.trim() != '')
     searchOptions.saleRepID = req.query.employee;
+  var includeOptions = [
+    {
+      model: User,
+      as: 'SaleRep',
+      attributes: ['userID', 'firstName', 'lastName', 'role'],
+      required: true
+    },
+    {
+      model: Customer,
+      as: 'Buyer',
+      attributes: ['customerID', 'firstName', 'lastName', 'phone', 'email', 'source'],
+      required: true
+    },
+    {
+      model: Customer,
+      as: 'CoBuyers',
+      attributesL: ['customerID', 'firstName', 'lastName', 'phone', 'email', 'source']
+    },
+    {
+      model: Vehicle,
+      as: 'Purchase',
+      attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+      required: true
+    }];
+  if (req.query.hasOwnProperty('type') && req.query.type && req.query.type.trim() != '')
+      includeOptions[3].where = { state: req.query.type.toLowerCase()};
   Deal.findAll({
       where: searchOptions,
-      include:[
-        {
-          model: User,
-          as:'SaleRep',
-          attributes: ['userID','firstName', 'lastName', 'role'],
-          required: true
-        },
-        {
-          model: Customer,
-          as: 'Buyer',
-          attributes: ['customerID','firstName', 'lastName', 'phone', 'email', 'source'],
-          required: true
-        },
-        {
-          model: Customer,
-          as: 'CoBuyers',
-          attributesL: ['customerID','firstName', 'lastName', 'phone', 'email', 'source']
-        },
-        {
-          model: Vehicle,
-          as: 'Purchase',
-          attributes: ['vehicleID','make', 'model', 'year','invoice','trimLevel', 'state', 'classification'],
-          required: true
-        },
-      ]
+      include: includeOptions
     })
     .then(function(deals){
       if (deals && deals.length > 0){

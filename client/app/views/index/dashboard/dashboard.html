@@ -125,7 +125,7 @@
                   <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
                           uib-btn-radio="'chart'"><i class="fa fa-pie-chart">&nbsp;&nbsp;</i> Charts
                   </button>
-                  <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
+                  <button ng-hide="true" class="btn btn-white btn-outline" ng-model="dashboard.chartView"
                           uib-btn-radio="'map'" ng-click="dashboard.refreshMap()"><i
                           class="fa fa-map-marker">&nbsp;&nbsp;</i> Map
                   </button>
@@ -789,14 +789,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="deal in dashboard.dealsTableData" class="dashboard-table-w-avatar">
+            <tr ng-repeat="deal in dashboard.dealsTableData" class="dashboard-table-w-avatar" ng-click="dashboard.goToProfile(deal)" >
               <td >{{::deal.vehicleInformation.year}}</td>
               <td >{{::deal.vehicleInformation.model}}</td>
               <td >{{::deal.vehicleInformation.trim }}</td>
 
-              <td style="cursor:pointer;" ng-click="dashboard.goToProfile(deal)" ><img alt="image" src="assets/images/profile.jpg" class="dashboard-table-avatar"> {{::deal.customerDetails.name}}</td>
-              <td ng-click="dashboard.composeText(deal)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}</td>
-              <td ng-click="dashboard.composeMail(deal)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.email}}</td>
+              <td style="cursor:pointer;"><img alt="image" src="assets/images/profile.jpg" class="dashboard-table-avatar"> {{::deal.customerDetails.name}}</td>
+              <td ng-click="dashboard.composeText(deal, $event)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}</td>
+              <td ng-click="dashboard.composeMail(deal, $event)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.email}}</td>
 
               <td >{{::deal.dealDetails.date}}</td>
               <td >{{::deal.dealDetails.salesman}}</td>
@@ -1188,7 +1188,7 @@
   <!-- Chat header -->
   <div class="heading padding-top-15" draggable="true">
     <span class="small-chat-avatar pull-left">
-      <img alt="image" src="assets/images/a2.jpg">
+      <img alt="image" src="assets/images/profile.jpg">
     </span>
     <!--<small class="chat-date pull-right">-->
       <!--02.19.2015-->
@@ -1280,12 +1280,12 @@
 <!--  right sidebar -->
 <div id="right-sidebar" ng-show="dashboard.sidebar" class="sidebar-open">
   <div class="sidebar-container" full-scroll>
-
-    <uib-tabset class="navs-3" active="0">
-      <uib-tab index="$index" ng-repeat="tab in dashboard.metricSummaryTabs" active="tab.active">
+    <uib-tabset class="navs-3" active="dashboard.activeTab">
+      <uib-tab index="$index" ng-repeat="tab in dashboard.metricSummaryTabs">
         <uib-tab-heading><i class="{{tab.title}}"></i></uib-tab-heading>
         <div class="tab-content">
-          <div class="tab-pane" ng-class="{active: tab.id == 'Phone'}">
+
+          <div class="tab-pane active" ng-if="tab.id == 'Phone'">
             <div class="sidebar-title">
               <button class="btn btn-xs btn-danger pull-right upper-right-corner" ng-click="dashboard.dismissSidebar('calls');"><i class="fa fa-times"></i></button>
               <h3>Call Summary</h3>
@@ -1315,15 +1315,16 @@
             </div>
           </div>
 
-          <div class="tab-pane" ng-class="{active: tab.id == 'Correspondence'}">
+
+          <div class="tab-pane active" ng-if="tab.id == 'Correspondence'">
             <div class="sidebar-title">
               <button class="btn btn-xs btn-danger pull-right upper-right-corner" ng-click="dashboard.dismissSidebar('correspondence');"><i class="fa fa-times"></i></button>
               <h3>Latest Correspondence</h3>
               <small><i class="fa fa-tim"></i> You have 400 Emails and  10 Texts.</small>
-              <button class="btn btn-xs btn-warning margin-top-10" ><i class="fa fa-sliders">&nbsp;&nbsp;</i>Clear {{tab.contentFilter}} Filter</button>
+              <button ng-hide="tab.contentFilter == ''" class="btn btn-xs btn-warning margin-top-10" ng-click="tab.contentFilter = ''"><i class="fa fa-sliders">&nbsp;&nbsp;</i>Clear {{tab.contentFilter}} Filter</button>
             </div>
             <ul class="sidebar-list">
-              <li ng-repeat="cr in tab.contentData">
+              <li ng-repeat="cr in content = (tab.contentFilter == '' ? tab.contentData : (tab.contentData | filter:{crtype: tab.contentFilter}))">
                 <a href="#">
                   <div class="small pull-right m-t-xs">9hours ago</div>
                   <h4><i ng-class="{'fa fa-envelope': cr.crtype == 'Mail', 'fa fa-comments': cr.crtype == 'Text'}">&nbsp;&nbsp;</i>
@@ -1336,8 +1337,7 @@
           </div>
 
 
-          <div class="tab-pane" ng-class="{active: tab.id == 'Appointments'}">
-
+          <div class="tab-pane active" ng-if="tab.id == 'Appointments'">
             <div class="sidebar-title">
               <button class="btn btn-xs btn-danger pull-right upper-right-corner" ng-click="dashboard.dismissSidebar('appts');"><i class="fa fa-times"></i></button>
               <h3>Appointments</h3>
@@ -1361,11 +1361,16 @@
                 </div>
               </li>
             </ul>
-
           </div>
+
 
         </div>
       </uib-tab>
+
+
+
+
+
     </uib-tabset>
 
   </div>

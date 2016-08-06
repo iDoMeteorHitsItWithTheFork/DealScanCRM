@@ -25,7 +25,6 @@ require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
 
-app.use(express.static(__dirname + '/users'));
 // Start server
 function startServer() {
   app.angularFullstack = server.listen(config.port, config.ip, function() {

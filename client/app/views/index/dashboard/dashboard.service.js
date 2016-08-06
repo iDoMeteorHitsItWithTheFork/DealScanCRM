@@ -68,6 +68,7 @@ angular.module('dealScanCrmApp')
           if (searchOptions.employee.MemberID) query.employee = searchOptions.employee.MemberID;
           query.from = searchOptions.from;
           query.to = searchOptions.to;
+          if (searchOptions.type.text && searchOptions.type.text.toLowerCase() != 'all') query.type = searchOptions.type.text;
           salesData.length = 0;
           return DealResource.query(query)
             .$promise.then(function(deals){
