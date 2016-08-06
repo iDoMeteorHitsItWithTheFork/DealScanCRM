@@ -191,6 +191,7 @@
   border: 1px solid #517fa4;
 }
 .social-row {
+  margin:0;
   position: relative;
 }
 #monitor-pane .slimScrollDiv {
@@ -310,4 +311,18 @@ tags-input .host {
 
 
 
+.jump-to-location-discover {
+  padding-left:500px;
+  z-index:1;
+  position:absolute;
+  top:8px;
+  left: 10px;
+}
 
+.jump-to-location-monitor {
+  padding-left:700px;
+  z-index:1;
+  position:absolute;
+  top:8px;
+  left: 10px;
+}
