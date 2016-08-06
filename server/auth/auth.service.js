@@ -6,6 +6,9 @@ import jwt from 'jsonwebtoken';
 import expressJwt from 'express-jwt';
 import compose from 'composable-middleware';
 import {User} from'../sqldb';
+import {Client} from '../sqldb';
+import {AccessToken} from '../sqldb';
+import {RefreshToken} from '../sqldb';
 
 var validateJwt = expressJwt({
   secret: config.secrets.session

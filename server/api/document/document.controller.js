@@ -69,7 +69,7 @@ export function index(req, res) {
 export function show(req, res) {
   Document.find({
     where: {
-      _id: req.params.id
+      documentID: req.params.id
     }
   })
     .then(handleEntityNotFound(res))
@@ -84,14 +84,27 @@ export function create(req, res) {
     .catch(handleError(res));
 }
 
+export function generateCompletedDoc(req, res){
+  var body = '';
+  req.on('data', function(chunk){
+    body += chunk;
+  })
+  req.on('end', function(){
+    console.log('\n\n>> FDF Stream Ended!\n\n');
+    console.log(body);
+    res.write('%FDF-1.2 1 0 obj << /FDF << /Status (Data Received) >> >> endobj trailer << /Root 1 0 R >> %%EOF');
+    return res.end();
+  });
+}
+
 // Updates an existing Document in the DB
 export function update(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  if (req.body.id) {
+    delete req.body.id;
   }
   Document.find({
     where: {
-      _id: req.params.id
+      documentID: req.params.id
     }
   })
     .then(handleEntityNotFound(res))
@@ -104,7 +117,7 @@ export function update(req, res) {
 export function destroy(req, res) {
   Document.find({
     where: {
-      _id: req.params.id
+      documentID: req.params.id
     }
   })
     .then(handleEntityNotFound(res))

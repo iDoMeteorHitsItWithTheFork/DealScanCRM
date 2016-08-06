@@ -22,7 +22,9 @@ var db = {
 
 
 // Insert models below
-
+db.Client = db.sequelize.import('../api/client/client.model');
+db.AccessToken = db.sequelize.import('../api/client/accessToken.model');
+db.RefreshToken = db.sequelize.import('../api/client/refreshToken.model');
 
 
 // db.SocialMedia = db.sequelize.import('../api/socialMedia/socialMedia.model');
@@ -49,7 +51,14 @@ db.Participants = db.sequelize.import('../api/event/event.participants.model');
 db.NoteActivities = db.sequelize.import('../api/note/note.activity.model');
 
 
+db.AccessToken.belongsTo(db.Client, {foreignKey:'clientId'});
+db.RefreshToken.belongsTo(db.Client, {foreignKey:'clientId'});
 
+db.Client.hasMany(db.AccessToken, {foreignKey:'clientId'});
+db.Client.hasMany(db.RefreshToken, {foreignKey: 'clientId'});
+
+db.AccessToken.belongsTo(db.User, {foreignKey:'userID'});
+db.RefreshToken.belongsTo(db.User, {foreignKey:'userID'});
 
 
 db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
