@@ -254,7 +254,7 @@ export function getDocuments(req, res){
         },
         {
           model: Document,
-          attributes: ['title', 'type', 'description', 'path', 'status']
+          attributes: ['title', 'type', 'description', 'path', 'status', 'createdAt','required']
         }
       ]
     }]
@@ -266,7 +266,7 @@ export function getDocuments(req, res){
       for (var i=0; i < deals.length; i++){
         (deals[i].Documents.length == 0) ?
           promises.push(generateDocSet(customer.profile, deals[i])) :
-          docs.push(deals[i].Documents);
+          docs = docs.concat(deals[i].Documents);
       }
       if (promises.length > 0){
         return Q.all(promises).then(function(documents){
@@ -375,7 +375,9 @@ function generateDocSet(customer, deal){
           title: 'New Purchase Documents',
           type: 'pdf',
           path: destinationPDF,
-          status: 'pending'
+          status: 'pending',
+          createdAt: moment(deal.createdAt).format('DD/MM/YYYY'),
+          required: true
         }).then(function(document){
           return document.setDeal(deal)
             .then(function(document){

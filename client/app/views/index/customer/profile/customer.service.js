@@ -141,6 +141,33 @@ angular.module('dealScanCrmApp')
         })
     }
 
+    function docAttributes(type){
+      var d = {};
+      switch(type.toLowerCase()){
+        case 'pdf':
+          d.img = "http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png";
+          d.icon = 'fa-file-pdf-o';
+          break;
+        case 'doc':
+          d.img = "http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png";
+          d.icon = 'fa-file';
+          break;
+        case 'img':
+          d.img = "https://www.cstatic-images.com/stock/1680x1680/28/img-1773720671-1468609294128.jpg";
+          d.icon = null;
+          break;
+        case 'xls':
+          d.img = "http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/excel-doc-48.png";
+          d.icon = 'fa-bar-chart-o';
+          break;
+        case 'ppt':
+          d.img = "http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/ppt-doc-48.png";
+          d.icon = 'fa-file-powerpoint-o';
+          break;
+      }
+      return d;
+    }
+
       /**
        * Get Customer documents
        * @param customerID
@@ -151,7 +178,26 @@ angular.module('dealScanCrmApp')
       return CustomerResource.getDocuments({id:customerID}).$promise
         .then(function(documents){
           console.log(documents);
-          return documents;
+          if (documents){
+            var docs = [];
+            for(var i = 0; i < documents.length; i++){
+              console.log(documents[i]);
+              var d = {
+                name: documents[i].title,
+                ext: documents[i].type,
+                added: moment(documents[i].createdAt).format('MMMM DD, YYYY'),
+                url: documents[i].path,
+                status: documents[i].status,
+                requested: documents[i].required
+              }
+              console.log(d);
+              var _i = docAttributes(documents[i].type);
+              if (_i.img) d.img = _i.img;
+              if (_i.icon) d.icon = _i.icon;
+              docs.push(d);
+            }
+            return docs;
+          }
       }).catch(function(err){
         console.log(err);
         return err;

@@ -21,6 +21,10 @@ export default function(sequelize, DataTypes) {
     },
     description: DataTypes.TEXT,
     path: DataTypes.TEXT,
+    required: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     status: {
       type: DataTypes.ENUM,
       allowNull: false,

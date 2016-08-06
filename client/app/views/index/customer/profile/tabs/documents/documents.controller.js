@@ -5,9 +5,7 @@ angular.module('dealScanCrmApp')
 
     var _documents = this;
     _documents.user = Auth.getCurrentUser();
-    console.log('\n\n Selected Customer \n\n');
     console.log(selectedCustomer);
-    console.log('\n\n --------------------- \n\n');
     _documents.thisCustomer = selectedCustomer;
     _documents.retreivingDocs = false;
     _documents.searchTerm = '';
@@ -88,79 +86,7 @@ angular.module('dealScanCrmApp')
       }
     }
 
-    _documents.docs = [{
-      name: 'Purchase Vehicle Odometer',
-      ext: 'pdf',
-      added: 'July 18, 2016',
-      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
-      icon: 'fa-file-pdf-o',
-      size: '25kb',
-      status: true,
-      requested: true,
-      url: ''
-    }, {
-      name: 'Trade Vehicle Odometer',
-      ext: 'pdf',
-      added: 'July 18, 2016',
-      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
-      icon: 'fa-file-pdf-o',
-      size: '25kb',
-      status: true,
-      requested: true,
-      url: ''
-    }, {
-      name: 'Rebate Incentive Approval',
-      ext: 'doc',
-      added: 'July 18, 2016',
-      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-      icon: 'fa-file',
-      size: '25kb',
-      status: false,
-      requested: true,
-      url: ''
-    }, {
-      name: 'We Owe',
-      ext: 'xls',
-      added: 'July 18, 2016',
-      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/excel-doc-48.png',
-      icon: 'fa-bar-chart-o',
-      size: '25kb',
-      status: true,
-      requested: true,
-      url: ''
-    }, {
-      name: 'Lemon Law',
-      ext: 'ppt',
-      added: 'July 18, 2016',
-      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/ppt-doc-48.png',
-      icon: 'fa-file-powerpoint-o ',
-      size: '25kb',
-      status: false,
-      requested: true,
-      url: ''
-    }, {
-      name: 'Power Of Attorney',
-      ext: 'pdf',
-      added: 'July 18, 2016',
-      img: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png',
-      icon: 'fa-file-pdf-o',
-      status: false,
-      requested: true,
-      size: '25kb',
-      url: ''
-    },
-      {
-        name: 'Trade-in Vehicle',
-        ext: 'img',
-        added: 'July 18, 2016',
-        img: 'https://www.cstatic-images.com/stock/1680x1680/28/img-1773720671-1468609294128.jpg',
-        icon: null,
-        status: false,
-        requested: false,
-        size: '25kb',
-        url: ''
-      }
-    ];
+    _documents.docs = [];
 
     _documents.getRequestedDocs = function(){
       _documents.requestedDocs = $filter('filter')(_documents.docs, function(val, index, arr){
@@ -178,7 +104,7 @@ angular.module('dealScanCrmApp')
         .then(function(documents){
           if (documents){
             console.log(documents);
-            //_documents.docs = documents;
+            _documents.docs = documents;
           }
           _documents.retreivingDocs = false;
         }).catch(function(err){
