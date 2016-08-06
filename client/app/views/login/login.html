@@ -1,9 +1,8 @@
 <div class="middle-box text-center loginscreen  animated fadeInDown">
   <div>
-    <div>
-      <h1 class="logo-name">DS</h1>
+    <div style="padding:25px; padding-bottom:0;">
+      <img class="img-responsive" src="../../assets/images/squrl_logo.png"/>
     </div>
-    <h3>Welcome to DealScan</h3>
     <p>Please login to continue</p>
     <form class="m-t" role="form" name="loginForm" ng-submit="landing.login(loginForm)">
       <div class="form-group">
@@ -12,7 +11,7 @@
       <div class="form-group">
         <input type="password" class="form-control" placeholder="Password" required="" ng-model="landing.user.password">
       </div>
-      <button type="submit" ladda="landing.submitted" class="ladda-button btn btn-primary btn-o full-width m-b"
+      <button type="submit" ladda="landing.submitted" class="ladda-button btn btn-sq btn-o full-width m-b"
               ng-disabled="!loginForm.$valid || loginForm.$pristine || landing.submitted">Login
       </button>
       <a ui-sref="forgot_password">

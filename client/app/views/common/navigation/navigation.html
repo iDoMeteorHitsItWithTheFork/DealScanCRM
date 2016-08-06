@@ -1,11 +1,10 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul side-navigation class="nav metismenu" id="side-menu">
-
-
-          <li class="nav-header">
-            <div class="profile-element" uib-dropdown>
-              <img alt="image" class="img-circle" src="assets/images/profile.jpg" style="width: 48px; height: 48px;"/>
+          <li class="nav-header" style="padding-top: 8px;">
+              <img alt="squrl" class="img-responsive squrl-logo" src="../../assets/images/squrl_logo_sm.png" style="margin-bottom: 16px; max-width:90%"/>
+              <div class="profile-element" uib-dropdown>
+              <!--<img alt="image" class="img-circle" src="assets/images/profile.jpg" style="width: 48px; height: 48px;"/>-->
               <a uib-dropdown-toggle href>
                             <span class="clear">
                                 <span class="block m-t-xs">
@@ -22,14 +21,16 @@
                 <li><a ui-sref="login">Logout</a></li>
               </ul>
             </div>
-            <div class="logo-element">
-              DS
+            <div class="logo-element" style="padding:10px; padding-top:5px;">
+                <img alt="squrl" class="img-responsive" src="../../assets/images/squrl_logo_white.png" style=""/>
             </div>
           </li>
 
           <li  ng-repeat="item in navigation.menu" ng-class="{active: $state.includes(item.state)}">
             <a ui-sref="{{item.state}}"><i class="{{item.icon}}"></i> <span class="nav-label">{{item.title}}</span> </a>
           </li>
+            <li style="height:500px; width:100%">
+            </li>
 
         </ul>
 
