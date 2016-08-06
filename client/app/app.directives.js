@@ -42,7 +42,7 @@ function pageTitle($rootScope, $timeout) {
         // Default title - load on Dashboard 1
         var title = 'DealScan CRM | A Customer Relationship Management for the Automotive Industry';
         // Create your own title pattern
-        if (toState.data && toState.data.pageTitle) title = 'DealScan CRM | ' + toState.data.pageTitle;
+        if (toState.data && toState.data.pageTitle) title = 'SQURL | ' + toState.data.pageTitle;
         $timeout(function() {
           element.text(title);
         });
