@@ -2,12 +2,13 @@
 
 angular.module('dealScanCrmApp')
 
-  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal) {
+  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, toaster) {
 
     var _customer = this;
     _customer.user = Auth.getCurrentUser();
     console.log('customer controller loaded....');
     _customer.thisCustomer = selectedCustomer;
+    _customer.retreivingDocs = false;
     console.log(selectedCustomer);
 
     _customer.info = {
@@ -28,7 +29,7 @@ angular.module('dealScanCrmApp')
         if (purchases[i].Trades.length > 0){
           var tradePayOff = 0;
           var tradeAllowance = 0;
-          var verbiage = _customer.thisCustomer.firstName+' traded '+purchases[i].Trades.length+' for this deal, ';
+          var verbiage = _customer.thisCustomer.profile.name.split(' ')[0]+' traded '+purchases[i].Trades.length+' for this deal, ';
           for(var j =0; j < purchases[i].Trades.length; j++){
              tradePayOff += parseFloat(purchases[i].Trades[j].payOffAmount).toFixed(2);
              tradeAllowance += parseFloat(purchases[i].Trades[j].tradeAllowance).toFixed(2);
@@ -42,7 +43,6 @@ angular.module('dealScanCrmApp')
       }
       //customer.thisCustomer.firstName traded 2 cars in for this deal, a <a>2015 Ford Mustang</a>, and a <a>2011 Honda Civic SE</a>.
     }
-
 
     _customer.timeAgo = function(time){
        return moment(time).fromNow();
@@ -125,196 +125,6 @@ angular.module('dealScanCrmApp')
     _customer.setActiveTab = function(tab){
       $state.go(tab.route);
     };
-
-    _customer.navButtons = [
-      {
-        text: 'Add Appointment',
-        icon: 'glyphicon-calendar'
-      },
-      {
-        text: 'Assign Task',
-        icon: 'glyphicon-tasks'
-      },
-      {
-        text: 'Assign Lead',
-        icon: 'glyphicon-bullhorn'
-      }
-    ]
-    _customer.activity = [
-      {
-        time: '11:18 AM',
-        description: 'John S. assigned some tasks to Ryan H.'
-      },
-      {
-        time: 'Thur, 12 Jan',
-        description: 'description Ryan H. sent text message'
-      },
-      {
-        time: 'Tue, 10 Jun',
-        description: 'Cary Gaskell bought 2001 Escape'
-      },
-      {
-        time: 'Sun, 11 Apr',
-        description: 'Ryan H. uploaded Credit Application'
-      },
-      {
-        time: 'Wed, 25 Mar',
-        description: 'Appointment with Ryan H.'
-      }
-    ]
-
-    _customer.documents = [
-      {
-        image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-        name: 'Purchase Vehicle Odometer',
-        applicable: true,
-        checked: true,
-        size: '25 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Trade Vehicle Odometer',
-        applicable: true,
-        checked: true,
-        size: '15 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Rebate Incentive Approval',
-        applicable: true,
-        checked: true,
-        size: '1.2 Mb',
-      },
-      {
-        image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-        name: 'We Owe',
-        applicable: true,
-        checked: true,
-        size: '245 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Lemon Law',
-        applicable: true,
-        checked: true,
-        size: '25 Kb',
-      },
-      {
-        image: 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/word-doc-48.png',
-        name: 'Power Of Attorney',
-        applicable: true,
-        checked: true,
-        size: '5 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Pay Off Verification',
-        applicable: true,
-        checked: true,
-        size: '2 Mb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Insurance Verification',
-        applicable: true,
-        checked: false,
-        size: '25 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'First Free Oil Change Certificate',
-        applicable: true,
-        checked: false
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Pay Off Authorization',
-        applicable: true,
-        checked: false,
-        size: '25 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Tittle Guarantee',
-        applicable: true,
-        checked: false,
-        size: '25 Kb',
-      },
-      {
-        image: 'http://www.hotel-dioklecijan.com/wp-content/themes/dioklecijan/img/press/press-icon-pdf.png',
-        name: 'Used Car Warranty',
-        applicable: false,
-        checked: false,
-        size: '25 Kb',
-      }
-    ]
-    _customer.photos = [
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'https://pbs.twimg.com/profile_images/650236170480189440/-1U1Fzij.jpg',
-        alt: 'Audi'
-      },
-      {
-        url: 'http://ep.yimg.com/ay/yhst-59923783762737/2008-2014-3d-carbon-ford-f150-dual-hood-scoop-style-kits-3.jpg',
-        alt: 'Ford'
-      }
-    ]
-
 
     _customer.emailCustomer = function () {
       var modalInstance = $uibModal.open({

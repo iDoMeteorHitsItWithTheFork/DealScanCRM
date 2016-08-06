@@ -16,12 +16,8 @@ export default function(sequelize, DataTypes) {
       }
     },
     type: {
-      type: DataTypes.ENUM,
-      values: ['media', 'file', 'other'],
-      allowNull: false,
-      validate: {
-        notEmpty:true
-      }
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     description: DataTypes.TEXT,
     path: DataTypes.TEXT,

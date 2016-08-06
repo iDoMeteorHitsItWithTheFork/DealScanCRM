@@ -141,12 +141,29 @@ angular.module('dealScanCrmApp')
         })
     }
 
+      /**
+       * Get Customer documents
+       * @param customerID
+       * @returns {*}
+       */
+    function getDocuments(customerID){
+      console.log(customerID);
+      return CustomerResource.getDocuments({id:customerID}).$promise
+        .then(function(documents){
+          console.log(documents);
+          return documents;
+      }).catch(function(err){
+        console.log(err);
+        return err;
+      })
+    }
 
     // Public API here
     return {
       get: getCustomer,
       find: findCustomer,
       getCustomers: getCustomers,
+      documents: getDocuments,
       filterCustomers: filterCustomers,
       sortCustomers: sortCustomers,
       add: addCustomer,

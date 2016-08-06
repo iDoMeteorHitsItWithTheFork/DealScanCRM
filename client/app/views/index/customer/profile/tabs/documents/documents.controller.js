@@ -1,12 +1,17 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('DocumentsCtrl', function ($scope, Auth, selectedCustomer, $filter) {
+  .controller('DocumentsCtrl', function ($scope, Auth, selectedCustomer, $filter, Customer, toaster) {
 
     var _documents = this;
     _documents.user = Auth.getCurrentUser();
+    console.log('\n\n Selected Customer \n\n');
+    console.log(selectedCustomer);
+    console.log('\n\n --------------------- \n\n');
     _documents.thisCustomer = selectedCustomer;
+    _documents.retreivingDocs = false;
     _documents.searchTerm = '';
+
 
     _documents.uploadOptions = {
       target: '/api/uploads',
@@ -17,7 +22,7 @@ angular.module('dealScanCrmApp')
       progressCallbacksInterval: 1,
       withCredentials: true,
       fileParameterName: 'customerDocs',
-      query: {'userID': _documents.user.userID, 'customerID': _documents.thisCustomer.customerID},
+      query: {'userID': _documents.user.userID, 'customerID': _documents.thisCustomer.profile.customerID},
       headers: {Authorization: 'Bearer ' + Auth.getToken()}
     };
 
@@ -67,6 +72,7 @@ angular.module('dealScanCrmApp')
           img = 'http://swanseaandbrecon.churchinwales.org.uk/wp-content/themes/ciw/images/pdf-doc-48.png';
           break;
       }
+
       var doc = {
         name: name,
         ext: ext,
@@ -162,9 +168,29 @@ angular.module('dealScanCrmApp')
       });
     }
 
+    _documents.getDocuments = function(){
+      console.log('\n\n\n>> This Customer  \n\n\n');
+      console.log(_documents.thisCustomer);
+      console.log('\n\n ------------------------\n\n\n');
+      if (_documents.retreivingDocs) return;
+      _documents.retreivingDocs = true;
+      Customer.documents(_documents.thisCustomer.profile.customerID)
+        .then(function(documents){
+          if (documents){
+            console.log(documents);
+            //_documents.docs = documents;
+          }
+          _documents.retreivingDocs = false;
+        }).catch(function(err){
+        console.log(err);
+        _documents.retreivingDocs = false;
+        toaster.error({title: 'Document Error', body:'An error occured while retreiving documents'});
+      })
+    }
+
+
     _documents.getRequestedDocs();
-
-
+    _documents.getDocuments();
 
   });
 

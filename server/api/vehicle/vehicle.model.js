@@ -98,7 +98,7 @@ export default function(sequelize, DataTypes) {
             'color': this.getDataValue('color'),
             'mileage': this.getDataValue('mileage'),
             'state': this.getDataValue('state'),
-            'msrp': this.getDataValue('msrp'),
+            'retailValue': this.getDataValue('retailvalue'),
             'invoice': this.getDataValue('invoice'),
             'bodyStyle': this.getDataValue('bodyStyle'),
             'classification': this.getDataValue('classification'),

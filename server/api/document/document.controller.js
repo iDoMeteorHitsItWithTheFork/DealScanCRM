@@ -11,6 +11,11 @@
 
 import _ from 'lodash';
 import {Document} from '../../sqldb';
+import {Deal} from '../../sqldb';
+import {Customer} from '../../sqldb';
+import {Trade} from '../../sqldb';
+import {Vehicle} from '../../sqldb';
+import {Dealership} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -83,6 +88,7 @@ export function create(req, res) {
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
+
 
 export function generateCompletedDoc(req, res){
   var body = '';
