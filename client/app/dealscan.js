@@ -8,7 +8,35 @@
 
 $(document).ready(function () {
 
+  var size;
+  function resizeFnc() {
+    size = $(document).width();
+    minimalize()
+  }
 
+  window.onresize = function(event) {
+    resizeFnc();
+  };
+
+  function minimalize (fire) {
+    if (size < 1136) {
+      $("body").addClass("mini-navbar");
+      // For smoothly turn on menu
+      setTimeout(
+          function () {
+            $('#side-menu').fadeIn(400);
+          }, 100);
+    } else {
+      $("body").removeClass("mini-navbar");
+      $('#side-menu').removeAttr('style');
+
+
+
+    }
+
+  }
+
+  resizeFnc();
   // Full height of sidebar
   function fix_height() {
     var heightWithoutNavbar = $("body > #wrapper").height() - 61;
