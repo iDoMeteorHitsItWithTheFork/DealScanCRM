@@ -19,7 +19,7 @@ $(document).ready(function () {
   };
 
   function minimalize (fire) {
-    if (size < 1000) {
+    if (size < 1136) {
       $("body").addClass("mini-navbar");
       // For smoothly turn on menu
       setTimeout(
