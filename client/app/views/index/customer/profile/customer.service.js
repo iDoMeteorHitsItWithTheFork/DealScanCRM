@@ -37,6 +37,16 @@ angular.module('dealScanCrmApp')
       console.log(customerID);
       return CustomerResource.get({id: customerID})
         .$promise.then(function (customer) {
+          console.log(customer);
+          if (customer && customer.purchases.length > 0){
+            var img = '';
+            for(var i = 0; i < customer.purchases.length; i++){
+              if (customer.purchases[i].Purchase.model){
+                img = Util.dummyPhotos(customer.purchases[i].Purchase.model);
+                if (img.trim() != '') customer.purchases[i].vehiclePhoto = img;
+              }
+            }
+          }
           return customer;
         }).catch(function (err) {
           console.log(err);
