@@ -69,6 +69,18 @@ textarea {
   margin-right: 0;
 }
 
-.row {
+.mini-navbar .squrl-logo {
+  display:none;
+}
 
+.btn-sq {
+  background-color: #243a50;
+  border-color: #29445e;
+  color: #FFFFFF;
+}
+
+.btn-sq:hover {
+  background-color: #29445e;
+  border-color: #29445e;
+  color: #FFFFFF;
 }
