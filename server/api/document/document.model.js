@@ -47,6 +47,7 @@ export default function(sequelize, DataTypes) {
           'type': this.getDataValue('type'),
           'description': this.getDataValue('description'),
           'path': this.getDataValue('path'),
+          'required': this.getDataValue('required'),
           'status' : this.getDataValue('status')
         }
       },
@@ -59,6 +60,7 @@ export default function(sequelize, DataTypes) {
           'type': this.getDataValue('type'),
           'description': this.getDataValue('description'),
           'path': this.getDataValue('path'),
+          'required': this.getDataValue('required'),
           'status' : this.getDataValue('status')
         }
       }

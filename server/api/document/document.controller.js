@@ -17,6 +17,8 @@ import {Trade} from '../../sqldb';
 import {Vehicle} from '../../sqldb';
 import {Dealership} from '../../sqldb';
 
+var fs = require('fs');
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
@@ -72,13 +74,29 @@ export function index(req, res) {
 
 // Gets a single Document from the DB
 export function show(req, res) {
+  console.log('\n\n\n\n HERE \n\n\n');
   Document.find({
     where: {
       documentID: req.params.id
     }
   })
     .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
+    .then(function(document){
+        if (document){
+          var path = document.path;
+          console.log(path);
+          fs.readFile(path, function (err, data) {
+            if (err) {res.writeHead(400); res.end("" + err); return;}
+            res.writeHead(200,
+              {
+                "content-type" : "application/pdf",
+                "Content-Disposition": "attachment; filename=filledDocSet.pdf "
+              }
+            );
+            res.end(data);
+          });
+        }
+    })
     .catch(handleError(res));
 }
 
@@ -91,13 +109,13 @@ export function create(req, res) {
 
 
 export function generateCompletedDoc(req, res){
-  var body = '';
+  var body = [], buffer = [];
   req.on('data', function(chunk){
-    body += chunk;
+    body.push(chunk);
   })
   req.on('end', function(){
     console.log('\n\n>> FDF Stream Ended!\n\n');
-    console.log(body);
+    buffer  = buffer.concat(body);
     res.write('%FDF-1.2 1 0 obj << /FDF << /Status (Data Received) >> >> endobj trailer << /Root 1 0 R >> %%EOF');
     return res.end();
   });

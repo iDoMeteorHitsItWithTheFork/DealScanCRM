@@ -118,5 +118,14 @@ angular.module('dealScanCrmApp')
     _documents.getRequestedDocs();
     _documents.getDocuments();
 
+    _documents.displayDocSet = function(id){
+      Customer.viewDoc(id).then(function(){
+
+      }).catch(function(err){
+         console.log(err);
+         toaster.error({title: 'PDF Error', body: 'An error occured while attempting to display the document'});
+      })
+    }
+
   });
 

@@ -254,7 +254,7 @@ export function getDocuments(req, res){
         },
         {
           model: Document,
-          attributes: ['title', 'type', 'description', 'path', 'status', 'createdAt','required']
+          attributes: ['documentID', 'title', 'type', 'description', 'path', 'status', 'createdAt','required']
         }
       ]
     }]

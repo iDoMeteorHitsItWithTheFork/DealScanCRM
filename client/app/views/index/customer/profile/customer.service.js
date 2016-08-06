@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('Customer', function (Auth, Util, $q, $filter, CustomerResource) {
+  .factory('Customer', function (Auth, Util, $q, $filter, CustomerResource, DocumentResource) {
     // Service logic
     // ...
 
@@ -196,7 +196,7 @@ angular.module('dealScanCrmApp')
                 name: documents[i].title,
                 ext: documents[i].type,
                 added: moment(documents[i].createdAt).format('MMMM DD, YYYY'),
-                url: documents[i].path,
+                id: documents[i].documentID,
                 status: documents[i].status,
                 requested: documents[i].required
               }
@@ -214,12 +214,34 @@ angular.module('dealScanCrmApp')
       })
     }
 
+    /**
+     * Get Documents
+     * @param documentID
+       */
+    function getDoc(documentID){
+        return DocumentResource.get({id:documentID},
+          {responseType: 'arraybuffer'}).$promise
+          .then(function(doc){
+            var blob = new Blob([doc.data], { type : 'application/pdf' });
+            var pdfLink = (window.URL || window.webkitURL).createObjectURL( blob );
+            window.open(
+              pdfLink,
+              '_blank' // <- This is what makes it open in a new window.
+            );
+
+        }).catch(function(err){
+          console.log(err);
+          return err;
+        });
+    }
+
     // Public API here
     return {
       get: getCustomer,
       find: findCustomer,
       getCustomers: getCustomers,
       documents: getDocuments,
+      viewDoc: getDoc,
       filterCustomers: filterCustomers,
       sortCustomers: sortCustomers,
       add: addCustomer,
