@@ -2,9 +2,12 @@
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
   function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, toaster) {
-    $("#page-wrapper").css("overflow-x", "scroll");
 
-    console.log("dashboard controller loaded");
+    setTimeout(
+        function () {
+          $("#page-wrapper").css("overflow-x", "scroll");
+        }, 100);
+
 
     var _dashboard = this;
 
