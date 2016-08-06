@@ -71,6 +71,21 @@ export default function(sequelize, DataTypes) {
     },
 
     classMethods: {
+      dscUpsertCoBuyer: function(data, deal, t){
+
+      },
+      dscUpsertBuyer: function(Buyer,data, deal, t){
+
+      },
+      dscUpsertFinancing: function(data, deal, t){
+
+      },
+      dscUpsertTrade: function(data, deal, t) {
+
+      },
+      dscUpsertVehicle: function(data, deal, t){
+
+      },
       dscSetCoBuyer: function(Buyer, data, deal, t){
         if (data.CoBuyer) {
           return Buyer.dscUpsert(data.CoBuyer, t)
@@ -136,11 +151,7 @@ export default function(sequelize, DataTypes) {
       dscSetRebate: function(){
 
       },
-      dscGenerateDocSet: function(){
-
-      },
       dscUpsert: function (data, customer) {
-
         console.log('\n\n>> Upserting Deal[' + data.DealId + ']...');
 
         //required entities
@@ -153,6 +164,7 @@ export default function(sequelize, DataTypes) {
 
         var searchOptions = {};
         if (data.DealId) searchOptions.dscDealID = data.DealId;
+
         var dealStatus  = '';
         switch(data.DealStatusTypeName){
           case 'working':
@@ -167,6 +179,7 @@ export default function(sequelize, DataTypes) {
             dealStatus = 'lost';
             break;
         }
+
         var upsertValues = {
           dscDealID: data.DealId,
           retailValue: data.RetailValue,
@@ -181,7 +194,8 @@ export default function(sequelize, DataTypes) {
             defaults: upsertValues,
             transaction: t
           }).spread(function (deal, created) {
-            console.log('\n>> Deal['+data.DealId+']  -> Deal Created...');
+
+            console.log('\n>> Deal['+data.DealId+']  -> Deal Initiated...');
             var Dealership = sequelize.models.Dealership;
             var User = sequelize.models.User;
             var Buyer = sequelize.models.Customer;
@@ -236,9 +250,41 @@ export default function(sequelize, DataTypes) {
               })
             } else {
 
+              console.log('>> Updating Existing Deal');
+              return deal.update(
+                {
+                  retailValue: upsertValues.retailValue,
+                  salePrice: upsertValues.salePrice,
+                  paymentOption: upsertValues.paymentOption,
+                  status: upsertValues.status
+                }, {
+                  fields: [
+                    'retailValue',
+                    'salePrice',
+                    'paymentOption',
+                    'status'
+                  ]
+                }, {transaction: t}).then(function(deal){
+                  if (!deal) throw new Error('Failed to update deal info');
+                  console.log('\n>> Deal['+deal.dscDealID+'] Info Updated!');
+                  if (deal){
+
+
+
+
+
+
+                  }
+              });
+
+
             }
           })
-        }).catch(function (err) {
+        }).then(function(deal){
+          console.log(deal);
+          return deal;
+        })
+          .catch(function (err) {
           console.log('An error occurred while trying to upsert Deal[' + data.DealId + ']!');
           console.log(err);
           return err;

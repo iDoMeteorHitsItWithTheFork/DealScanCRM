@@ -41,7 +41,7 @@ sqldb.sequelize.sync()
     console.log('Server failed to start due to error: %s', err);
   });
 
-require('./backgroundTasks/DbSync').generateDocSet();
+//require('./backgroundTasks/DbSync').generateDocSet();
 
 
 // Expose app

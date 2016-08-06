@@ -10,6 +10,13 @@
          update: {
            method:'PUT',
          },
+         getDocuments: {
+          method:'GET',
+          isArray: true,
+          params: {
+            controller: 'documents'
+          }
+        },
          sync: {
            method:'POST',
            params: {

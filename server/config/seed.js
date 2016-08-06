@@ -595,7 +595,6 @@ var data = [
   {"name": "Zephania Patrick", "phone": "(312) 494-6606", "email": "semper@acfermentumvel.com", "address": "6366 Nec, Road", "interest": "eget mollis lectus", "additionalInfo": "arcu. Sed eu nibh vulputate mauris sagittis placerat. Cras dictum", "sourceName": "Third Party", "sourceType": "Internet"}
 ];
 
-
 User.find({
   where: {
     firstName: 'System',

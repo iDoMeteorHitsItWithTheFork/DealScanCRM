@@ -42,6 +42,11 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.STRING(4),
       allowNull: true,
     },
+    mileage: {
+      type: DataTypes.DOUBLE,
+      allowNull: true,
+      defaultValue: 0
+    },
     color: {
       type: DataTypes.STRING(45),
       allowNull: true,
@@ -81,6 +86,7 @@ export default function(sequelize, DataTypes) {
           'actualCashValue': this.getDataValue('actualCashValue'),
           'payOffAmount': this.getDataValue('payOffAmount'),
           'tradeAllowance': this.getDataValue('tradeAllowance'),
+          'mileage': this.getDataValue('mileage'),
           'displayName': this.getDataValue('color')+' '+this.getDataValue('year')+' '+this.getDataValue('make')+' '+this.getDataValue('model')
         }
       }
@@ -101,6 +107,7 @@ export default function(sequelize, DataTypes) {
           make: data.Vehicle.Make,
           model: data.Vehicle.Model,
           year: data.Vehicle.Year,
+          mileage: data.Vehicle.Mileage,
           color: data.Vehicle.Color,
           bodyStyle: data.Vehicle.BodyStyle,
           createdAt: data.ScanDate,
@@ -124,6 +131,7 @@ export default function(sequelize, DataTypes) {
                   'make',
                   'model',
                   'year', //new or used
+                  'mileage',
                   'color',
                   'bodyStyle',
                   'createdAt'

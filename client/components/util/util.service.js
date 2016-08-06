@@ -434,10 +434,77 @@
           else if (location) path = 'Location';
         }
         return path;
+      },
+
+      dummyPhotos(model){
+        var p = '';
+        var i = 0;
+        var models = ['cmax', 'c-max', 'edge', 'escape', 'expedition', 'explorer', 'f150', 'f-150',
+        'f250', 'f-250', 'flex', 'focus', 'ranger', 'taurus'];
+        var m ='';
+        for(var i =0; i < models.length; i++){
+          if (model.toLowerCase().indexOf(models[i]) != -1) {
+            m = models[i];
+            break;
+          }
+        }
+
+        switch(m){
+          case 'cmax':
+          case 'c-max':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/cmax-'+i+'.jpg';
+            break;
+          case 'edge':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/edge-'+i+'.jpg';
+            break;
+          case 'escape':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/escape-'+i+'.jpg';
+            break;
+          case 'expedition':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/expedition-'+i+'.jpg';
+            break;
+          case 'explorer':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/explorer-'+i+'.jpg';
+            break;
+          case 'f150':
+          case 'f-150':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/f150-'+i+'.jpg';
+            break;
+          case 'f250':
+          case 'f-250':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/f250-'+i+'.jpg';
+            break;
+          case 'flex':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/flex-'+i+'.jpg';
+            break;
+          case 'focus':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/focus-'+i+'.jpg';
+            break;
+          case 'ranger':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/ranger-'+i+'.jpg';
+            break;
+          case 'taurus':
+            i = Math.floor((Math.random() * 5) + 1);
+            p = 'assets/vehicle_images/taurus-'+i+'.jpg';
+            break;
+          default:
+            p = 'assets/images/upload-placeholder.jpg';
+            break;
+        }
+        return p;
       }
 
     }
-
 
     return Util;
   }

@@ -8,6 +8,7 @@ var router = express.Router();
 
 router.get('/', auth.isAuthenticated(), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);
+router.get('/:id/documents', auth.isAuthenticated(), controller.getDocuments);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 //router.post('/sync', auth.isAuthenticated(), controller.sync);
