@@ -16,6 +16,10 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     },
+    location:{
+      type: DataTypes.TEXT,
+      allowNull: true
+    }
   }, {
         getterMethods: {
           // Public profile information
@@ -24,6 +28,7 @@ export default function(sequelize, DataTypes) {
               'watchlistID': this.getDataValue('watchlistID'),
               'watchlistName': this.getDataValue('watchlistName'),
               'watchlistInfo': this.getDataValue('watchlistInfo'),
+              'location': this.getDataValue('location')
             }
           },
 
@@ -33,6 +38,7 @@ export default function(sequelize, DataTypes) {
               'watchlistID': this.getDataValue('watchlistID'),
               'watchlistName': this.getDataValue('watchlistName'),
               'watchlistInfo': this.getDataValue('watchlistInfo'),
+              'location': this.getDataValue('location')
             }
           }
         }

@@ -1,6 +1,8 @@
 'use strict';
 angular.module('dealScanCrmApp')
   .factory('BDC', function (Auth, User, Util, $q, $filter, $resource, LeadResource) {
+
+
     var _leads = [];
     var _appointments = [];
     var _totalLeads = {};
@@ -103,7 +105,6 @@ angular.module('dealScanCrmApp')
       //process data to generate won deals
       return LeadResource.totalLeads()
         .$promise.then(function(leads){
-          console.log(leads);
           if (leads) {
             var threshold = 0;
             if (leads.stats.length > TOP_LIMIT) {

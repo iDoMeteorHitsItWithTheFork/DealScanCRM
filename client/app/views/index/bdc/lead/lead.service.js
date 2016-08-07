@@ -66,7 +66,7 @@ angular.module('dealScanCrmApp')
         if (appointment){
           var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
           if (idx != -1) _leads[idx].appointments.unshift(appointment);
-          return categorizeLeads(_leads);;
+          return appointment;
         } else return {error: {msg: '', code:''}};
       }).catch(function(err){
          console.log(err);
@@ -89,7 +89,7 @@ angular.module('dealScanCrmApp')
         if (note){
            var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
            if (idx != -1) _leads[idx].notes.unshift(note);
-           return categorizeLeads(_leads);
+           return note;
         } else return {error: {msg: '', code: ''}};
       }).catch(function(err){
           console.log(err);
@@ -131,6 +131,21 @@ angular.module('dealScanCrmApp')
               for (var i = 0; i < leads.length; i++) {
                  leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
                  leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
+                 leads[i].agents = $filter('orderBy')(leads[i].agents, "createdAt", true);
+                 if (leads[i].interest && leads[i].interest.trim() != ''){
+                   try {
+                     var js = JSON.parse(leads[i].interest);
+                     var parseInterest = '';
+                     if (js.type) parseInterest += js.type;
+                     if (js.year) parseInterest += ' '+js.year;
+                     if (js.make) parseInterest += ' '+js.make;
+                     if (js.model) parseInterest += ' '+js.model;
+                     if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                     if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                     if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                     leads[i].interest = Util.slimTrim(parseInterest);
+                   } catch(ex){}
+                 }
                 // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
                 _leads.push(leads[i]);
               } return categorizeLeads(_leads);
@@ -145,9 +160,19 @@ angular.module('dealScanCrmApp')
       /**
        * assign lead to User
        */
-    function assignLead(){
-
-
+    function assignLead(leadID){
+      console.log('\n\n\n LeadID  \n\n');
+      console.log(leadID);
+      console.log('\n\n ---------- \n\n');
+      if (!leadID) throw Error('Lead is required!');
+      return LeadResource.assignLead({id: leadID})
+        .$promise.then(function(res){
+          if (res.success) return true;
+          else return {error: {code:'', msg: ''}};
+      }).catch(function(err){
+           console.log(err);
+           return err;
+        });
     }
 
       /**

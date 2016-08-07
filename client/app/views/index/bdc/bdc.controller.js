@@ -17,6 +17,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.loadingLeads = false;
       _bdc.savingAppointment  = false;
       _bdc.savingNote = false;
+      _bdc.assigningLead = false;
       _bdc.note = {content: ''};
 
       _bdc.leads = [];
@@ -79,6 +80,19 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.activeLead = null;
       _bdc.showInDetails = function(lead){
         _bdc.activeLead = lead;
+        if (lead.agents && lead.agents.length == 0){
+          if (_bdc.assigningLead) return;
+          _bdc.assigningLead = true;
+          Lead.assign(lead.leadID).then(function(res){
+              _bdc.assigningLead = false;
+              if (res === true) toaster.success({title: 'Lead Assignment', body: 'Lead ('+lead.name+') is now assigned to you!'})
+              else toaster.error({title: 'Lead Error', body: 'An error occured while attempting to assign lead'});
+          }).catch(function(err){
+              _bdc.assigningLead = false;
+              console.log(err);
+              return err;
+          })
+        }
       }
 
 
@@ -278,22 +292,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
          * Filter Deals based on Selection
          * @param status
          */
-      _bdc.filterDeals = function(status){
-        var idx = Util.indexOfObject(_bdc.stats, 'id', status);
-        console.log(idx);
-        if (idx != -1){
-          var s = _bdc.stats[idx].sources;
-          console.log(s);
-          var sources = [];
-          for(var i= 0; i < s.length; i++){
-            if (s[i].state) sources.push(s[i].id)
-          }
-          Dashboard.filter(status, sources);
-          if (_bdc.showBarChart) updateBarChart(status, _bdc.displayingCategory);
-          if (_bdc.showTable) updateTableData(status, _bdc.displayingCategory);
-          console.log('*** Deals Filtered ***');
-        }
-      }
 
 
 
@@ -420,10 +418,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           }
         });
 
-        modalInstance.result.then(function (leads) {
-          console.log(leads);
-          _bdc.leads = leads;
-
+        modalInstance.result.then(function (lead) {
+          console.log(lead);
+          _bdc.activeLead = lead;
         }).catch(function(e){
           console.log(e);
         });
@@ -520,13 +517,10 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
 
         modalInstance.result.then(function (leads) {
-          console.log(leads);
-          _bdc.leads = leads;
-
+          _bdc.activeLead = leads;
         }).catch(function(e){
           console.log(e);
         });
-
       }
 
       _bdc.addTask = function (lead) {

@@ -129,6 +129,12 @@ export function index(req, res) {
             order: [['noteID', 'DESC']]
           },
           {
+            model: User,
+            as: 'Agents',
+            attributes: ['firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
+          },
+          {
             model: Event,
             include: [
               {
@@ -173,6 +179,12 @@ export function show(req, res) {
         order: [['noteID', 'DESC']]
       },
       {
+        model: User,
+        as: 'Agents',
+        attributes: ['firstName', 'lastName', 'userID', 'email', 'role'],
+        through: 'AssignedLeads'
+      },
+      {
         model: Event,
         include: [
           {
@@ -204,6 +216,15 @@ function formatLead(lead){
       noteProfile.timeAgo = moment(lead.Notes[i].profile.createdAt).fromNow();
       noteProfile.creator = lead.Notes[i].Creator.profile;
       formattedLead.notes.push(noteProfile);
+    }
+  }
+
+  if (lead.Agents){
+    formattedLead.agents = [];
+    for (var i = 0; i < lead.Agents.length; i++) {
+      var agentProfile = lead.Agents[i].profile;
+      agentProfile.timeAgo = moment(lead.Agents[i].profile.createdAt).fromNow();
+      formattedLead.agents.push(agentProfile);
     }
   }
 
@@ -780,6 +801,39 @@ export function soldAppointments(req, res){
   }).catch(handleError(res));
 }
 
+export function assignLead(req, res){
+  if (!req.body.id) return res.status(500).send('LeadID is required');
+  return Lead.sequelize.transaction(function(t){
+    return Lead.find({
+      where:{
+        leadID: req.body.id
+      },
+      transaction: t
+    }).then(function(lead){
+      if (!lead) return res.status(500).send('Unable to find lead');
+      else {
+        return User.find({
+          where: {
+            userID: req.user.userID
+          },
+          transaction: t
+        }).then(function(user){
+          if (!user) return res.status(500).send('Unable to authenticate your request');
+          return user.addLead(lead, {transaction: t})
+            .then(function(){
+              return lead.update({
+                status: 'working'
+              }, {transaction:t}).then(function(){
+                 return lead;
+              })
+            })
+        })
+      }
+    })
+  }).then(function(){
+    return res.status(200).json({success: true});
+  }).catch(handleError(res));
+}
 
 // Deletes a Lead from the DB
 export function destroy(req, res) {
