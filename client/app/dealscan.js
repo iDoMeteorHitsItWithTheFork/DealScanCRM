@@ -15,7 +15,7 @@ $(document).ready(function () {
   }
 
   window.onresize = function(event) {
-
+    resizeFnc();
   };
 
   function minimalize (fire) {

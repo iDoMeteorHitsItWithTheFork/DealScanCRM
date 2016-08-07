@@ -97,6 +97,12 @@ angular.module('dealScanCrmApp')
                 name: 'datatables.buttons',
                 files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
               },
+              // {
+              //   serie: true,
+              //   name: 'datatables.responsive',
+              //   files: ['.resources/plugins/dataTables/responsive-table.js',
+              //     '.resources/plugins/dataTables/responsive-table.css']
+              // },
               {
                 files: ['.styles/plugins/summernote/summernote.css','.styles/plugins/summernote/summernote-bs3.css',
                         '.resources/plugins/summernote/summernote.min.js']
