@@ -2,7 +2,7 @@
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
   function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, toaster) {
-    
+
     var _dashboard = this;
 
     _dashboard.user = Auth.getCurrentUser();
@@ -849,7 +849,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.dealsTableData = [];
       _dashboard.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
-          .withOption('order', [[6, 'asc']])
+          .withOption('order', [[7, 'asc']])
           .withOption('responsive', true)
           .withButtons([
               {extend: 'copy'},

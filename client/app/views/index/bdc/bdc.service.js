@@ -110,6 +110,8 @@ angular.module('dealScanCrmApp')
             if (leads.stats.length > TOP_LIMIT) {
               threshold = (leads.stats[TOP_LIMIT].Percentage) / 100;
             }
+
+
             /* Set total lead Pie Options */
             var pieOptions = {
               series: {
@@ -147,7 +149,27 @@ angular.module('dealScanCrmApp')
 
             _totalLeads.pie = totalDeals;
             _totalLeads.pieOptions = pieOptions;
+
+            for(var i = 0; i < leads.data.length; i++){
+              leads.data[i].agents = $filter('orderBy')(leads.data[i].agents, "createdAt", true);
+              if (leads.data[i].interest && leads.data[i].interest.trim() != ''){
+                try {
+                  var js = JSON.parse(leads.data[i].interest);
+                  var parseInterest = '';
+                  if (js.type) parseInterest += js.type;
+                  if (js.year) parseInterest += ' '+js.year;
+                  if (js.make) parseInterest += ' '+js.make;
+                  if (js.model) parseInterest += ' '+js.model;
+                  if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                  if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                  if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                  leads.data[i].interest = Util.slimTrim(parseInterest);
+                } catch(ex){}
+              }
+            }
+             leads.data = $filter('orderBy')(leads.data, 'createdAt', true);
             _totalLeads.tableData = leads.data;
+            _totalLeads.sourceSummary = leads.sourceSummary;
 
              return _totalLeads;
 
@@ -207,9 +229,29 @@ angular.module('dealScanCrmApp')
                 });
               }
 
+              for(var i = 0; i < appointments.data.length; i++){
+                appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
+                if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
+                  try {
+                    var js = JSON.parse(appointments.data[i].interest);
+                    var parseInterest = '';
+                    if (js.type) parseInterest += js.type;
+                    if (js.year) parseInterest += ' '+js.year;
+                    if (js.make) parseInterest += ' '+js.make;
+                    if (js.model) parseInterest += ' '+js.model;
+                    if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                    if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                    if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                    appointments.data[i].interest = Util.slimTrim(parseInterest);
+                  } catch(ex){}
+                }
+              }
+              appointments.data = $filter('orderBy')(appointments.data, 'createdAt', true);
+
               _totalAppointments.pie = totalAppointments;
               _totalAppointments.pieOptions = pieOptions;
               _totalAppointments.tableData = appointments.data;
+              _totalAppointments.sourceSummary = appointments.sourceSummary;
 
               return _totalAppointments;
 
@@ -271,9 +313,29 @@ angular.module('dealScanCrmApp')
               });
             }
 
+            for(var i = 0; i < appointments.data.length; i++){
+              appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
+              if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
+                try {
+                  var js = JSON.parse(appointments.data[i].interest);
+                  var parseInterest = '';
+                  if (js.type) parseInterest += js.type;
+                  if (js.year) parseInterest += ' '+js.year;
+                  if (js.make) parseInterest += ' '+js.make;
+                  if (js.model) parseInterest += ' '+js.model;
+                  if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                  if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                  if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                  appointments.data[i].interest = Util.slimTrim(parseInterest);
+                } catch(ex){}
+              }
+            }
+            appointments.data = $filter('orderBy')(appointments.data, 'createdAt', true);
+
             _missedAppointments.pie = missedAppointments;
             _missedAppointments.pieOptions = pieOptions;
             _missedAppointments.tableData = appointments.data;
+            _missedAppointments.sourceSummary = appointments.sourceSummary;
 
             return _missedAppointments;
 
@@ -335,9 +397,29 @@ angular.module('dealScanCrmApp')
               });
             }
 
+            for(var i = 0; i < appointments.data.length; i++){
+              appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
+              if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
+                try {
+                  var js = JSON.parse(appointments.data[i].interest);
+                  var parseInterest = '';
+                  if (js.type) parseInterest += js.type;
+                  if (js.year) parseInterest += ' '+js.year;
+                  if (js.make) parseInterest += ' '+js.make;
+                  if (js.model) parseInterest += ' '+js.model;
+                  if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                  if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                  if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                  appointments.data[i].interest = Util.slimTrim(parseInterest);
+                } catch(ex){}
+              }
+            }
+            appointments.data = $filter('orderBy')(appointments.data, 'createdAt', true);
+
             _keptAppointments.pie = keptAppointments;
             _keptAppointments.pieOptions = pieOptions;
             _keptAppointments.tableData = appointments.data;
+            _keptAppointments.sourceSummary = appointments.sourceSummary;
 
             return _keptAppointments;
 
@@ -397,9 +479,31 @@ angular.module('dealScanCrmApp')
               });
             }
 
+            for(var i = 0; i < appointments.data.length; i++){
+              appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
+              if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
+                try {
+                  var js = JSON.parse(appointments.data[i].interest);
+                  var parseInterest = '';
+                  if (js.type) parseInterest += js.type;
+                  if (js.year) parseInterest += ' '+js.year;
+                  if (js.make) parseInterest += ' '+js.make;
+                  if (js.model) parseInterest += ' '+js.model;
+                  if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                  if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                  if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                  appointments.data[i].interest = Util.slimTrim(parseInterest);
+                } catch(ex){}
+              }
+            }
+            appointments.data = $filter('orderBy')(appointments.data, 'createdAt', true);
+
+
+
             _soldAppointments.pie = soldAppointments;
             _soldAppointments.pieOptions = pieOptions;
             _soldAppointments.tableData = appointments.data;
+            _soldAppointments.sourceSummary = appointments.sourceSummary;
 
             return _soldAppointments;
 

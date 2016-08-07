@@ -73,25 +73,27 @@ module.exports = function (sequelize, DataTypes) {
          * Virtual Getters
          */
         getterMethods: {
-            // Public profile information
-            profile: function () {
-                return {
-                    'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
-                    'email': this.getDataValue('email'),
-                    'phone': this.getDataValue('phone'),
-                    'role': config.getDisplayRole(this.getDataValue('role'))
-                };
-            },
+          // Public profile information
+          profile: function () {
+            return {
+              'userID': this.getDataValue('userID'),
+              'name': this.getDataValue('firstName') + ' ' + this.getDataValue('lastName'),
+              'email': this.getDataValue('email'),
+              'phone': this.getDataValue('phone'),
+              'role': config.getDisplayRole(this.getDataValue('role'))
+            };
+          },
 
-            // Non-sensitive info we'll be putting in the token
-            token: function () {
-                return {
-                    'userID': this.getDataValue('customerID'),
-                    'email': this.getDataValue('email'),
-                    'phone': this.getDataValue('phone'),
-                    'role': this.getDataValue('role')
-                };
-            }
+          // Non-sensitive info we'll be putting in the token
+          token: function () {
+            return {
+              'userID': this.getDataValue('customerID'),
+              'email': this.getDataValue('email'),
+              'phone': this.getDataValue('phone'),
+              'role': this.getDataValue('role'),
+              'displayRole': config.getDisplayRole(this.getDataValue('role'))
+            };
+          }
         },
 
         /**
