@@ -850,6 +850,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
           .withOption('order', [[6, 'asc']])
+          .withOption('responsive', true)
           .withButtons([
               {extend: 'copy'},
               {extend: 'csv'},

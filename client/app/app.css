@@ -95,6 +95,9 @@ textarea {
 .navbar-fixed-top {
   left: 220px;
 }
+.hide-tooltips .sidebar-collapse .tooltip {
+  display:none!important;
+}
 /*.md-skin .navbar-static-side {*/
 /*height:100%*/
 /*}*/

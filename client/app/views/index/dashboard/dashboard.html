@@ -189,7 +189,7 @@
             <div ng-show="!dashboard.retreivingDeals && !dashboard.emptyResults && dashboard.viewIsReady">
 
               <!-- Won Pie & Stats -->
-              <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart')? 'col-sm-12 col-sm-4 col-md-3': 'col-sm-6 col-md-4'"
+              <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart')? 'col-xs-12 col-sm-4 col-sm-4 col-md-3': 'col-sm-6 col-md-4'"
                    ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart && dashboard.chartView == 'chart'">
                 <div class="text-center animated bounceIn hideSansDelay"
                      ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length == 0 && dashboard.noWonDeals">
@@ -291,7 +291,7 @@
 
 
               <!-- Lost Pie & Stats -->
-              <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-sm-12 col-sm-4 col-md-3': 'col-sm-6 col-md-4'"
+              <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-xs-12 col-sm-4 col-sm-4 col-md-3': 'col-sm-6 col-md-4'"
                    ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart && dashboard.chartView == 'chart'">
                 <div class="text-center animated bounceIn hideSansDelay"
                      ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length == 0 && dashboard.noLostDeals">
@@ -766,18 +766,20 @@
           <div ibox-tools on-close="dashboard.showTable = false"></div>
         </div>
         <div class="ibox-content">
-          <table datatable="ng" dt-options="dashboard.dtOptions"
+
+          <table datatable="ng" dt-options="dashboard.dtOptions" width="100%"
                  class="table table-striped table-bordered table-hover dataTables-example">
             <thead>
             <tr>
               <th colspan="3" class="text-center">Vehicle Details</th>
-              <th colspan="3" class="text-center">Customer Details</th>
+              <th colspan="4" class="text-center">Customer Details</th>
               <th colspan="4" class="text-center">Deal Details</th>
             </tr>
             <tr>
               <th>Year</th>
               <th>Model</th>
               <th>Trim Level</th>
+              <th></th>
               <th>Name</th>
               <th>Phone</th>
               <th>Email</th>
@@ -788,12 +790,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="deal in dashboard.dealsTableData" class="dashboard-table-w-avatar" ng-click="dashboard.goToProfile(deal)" >
+            <tr ng-repeat="deal in dashboard.dealsTableData" class="dashboard-table-w-avatar" >
               <td >{{::deal.vehicleInformation.year}}</td>
               <td >{{::deal.vehicleInformation.model}}</td>
               <td >{{::deal.vehicleInformation.trim }}</td>
-
-              <td style="cursor:pointer;"><img alt="image" src="assets/images/profile.jpg" class="dashboard-table-avatar"> {{::deal.customerDetails.name}}</td>
+              <td ng-click="dashboard.goToProfile(deal)"><img alt="image" src="assets/images/profile.jpg" class="dashboard-table-avatar"></td>
+              <td style="cursor:pointer;" ng-click="dashboard.goToProfile(deal)" ><a href>{{::deal.customerDetails.name}}</a></td>
               <td ng-click="dashboard.composeText(deal, $event)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}</td>
               <td ng-click="dashboard.composeMail(deal, $event)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.email}}</td>
 
