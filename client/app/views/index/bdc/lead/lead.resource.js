@@ -58,6 +58,13 @@
             controller:'appointment',
           }
         },
+        assignLead: {
+          method: 'PUT',
+          params: {
+            id: 'assign',
+            controller: 'agent'
+          }
+        },
         note :{
           method: 'PUT',
           params: {

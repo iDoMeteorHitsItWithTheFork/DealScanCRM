@@ -409,53 +409,6 @@ angular.module('dealScanCrmApp')
     }
 
 
-    function createWatchlist(details){
-
-      try {
-
-        if (!details) throw {errorCode: '', errorMessage: 'Error[]: Monitoring Details are required'};
-        if (!details.Watchlist) throw {errorCode: '', errorMessage: 'Error[]: Watchlist Details are required'};
-        if (!details.Watchlist.WatchlistName || details.Watchlist.WatchlistName.trim() == '') throw {
-          errorCode: '',
-          errorMessage: 'Error[]: WatchlistName is required'
-        };
-        if (!details.Watchlist.dealershipName || details.Watchlist.dealershipName.trim() == '') throw {
-          errorCode: '',
-          errorMessage: 'Error[]: DealershipName is required'
-        };
-        if (!details.Keywords || !Array.isArray(details.Keywords) ||
-          (Array.isArray(details.Keywords) && details.Keywords.length == 0)) throw {
-          errorCode: '',
-          errorMessage: 'Error[]: Keywords Array is required and cannot be empty'
-        };
-        if (!details.Sources || !Array.isArray(details.Sources) ||
-          (Array.isArray(details.Sources) && details.Sources.length == 0)) throw {
-          errorCode: '',
-          errorMessage: 'Error[]: Sources Array is required and cannot be empty'
-        };
-
-        //Start monitoring social media
-        return WatchlistResource.save(details).$promise
-          .then(function (res) {
-            console.log(res);
-            toaster.success({
-              title: 'Monitoring Started!',
-              body: 'The watchlist was created and is currently being monitored!'
-            });
-          })
-          .catch(function (err) {
-            console.log(err);
-            return err;
-          });
-
-      }
-      catch(err) {
-        return err;
-      }
-
-
-    }
-
 
       /**
        * getWatchlists
@@ -551,40 +504,59 @@ angular.module('dealScanCrmApp')
 
 
 
-    // console.log(createWatchlist({
-    //   Watchlist: {
-    //     WatchlistName: 'Online Reputation Monitoring',
-    //     WatchlistInfo: 'Monitor negative online activities pertaining to dealership',
-    //     dealershipName: 'Hagerstown Ford'
-    //   },
-    //   Keywords: [
-    //     {keyword: 'Hagerstown Ford'},
-    //     {keyword: 'Ford'},
-    //     {keyword: 'Toyota'},
-    //     {keyword: ' Nissan'}
-      //   {keyword: ' Kent Parsons'}
-      //   {keyword: ' Car'}
-      //   {keyword: ' Truck'}
-      //   {keyword: ' F150'}
-      //   {keyword: ' Focus'}
-      //   {keyword: ' Explorer'}
-      //   {keyword: ' Fusion'}
-      //   {keyword: ' Escape'}
-      //   {keyword: 'Edge'}
-      //   {keyword: ' New car'}
-      //   {keyword: ' Used car'}
-      //   {keyword: ' New truck'}
-      //   {keyword: 'Used truck'}
-      //   {keyword: 'Fiesta'}
-      //   {keyword: 'Service department'}
-      //   {keyword: 'Oil change'}
-      //   {keyword: 'Mustang'}
-      //   {keyword: 'Younger Toyota'}
-      //   {keyword: 'Hamilton Nissan'}
-      //   {keyword: 'Malloy Ford}
-    //   ],
-    //   Sources: ['facebook', 'twitter']
-    // }));
+      function createWatchlist(details){
+
+        try {
+
+          if (!details) throw {errorCode: '', errorMessage: 'Error[]: Monitoring Details are required'};
+          if (!details.Watchlist) throw {errorCode: '', errorMessage: 'Error[]: Watchlist Details are required'};
+          if (!details.Watchlist.WatchlistName || details.Watchlist.WatchlistName.trim() == '') throw {
+            errorCode: '',
+            errorMessage: 'Error[]: WatchlistName is required'
+          };
+
+          if (!details.Watchlist.DealershipName || details.Watchlist.DealershipName.trim() == '') throw {
+            errorCode: '',
+            errorMessage: 'Error[]: DealershipName is required'
+          };
+
+          if (!details.Watchlist.Location) throw {
+            errorCode: '',
+            errorMessage: 'Error[]: Location is required'
+          };
+
+
+          if (!details.Keywords || !Array.isArray(details.Keywords) ||
+            (Array.isArray(details.Keywords) && details.Keywords.length == 0)) throw {
+            errorCode: '',
+            errorMessage: 'Error[]: Keywords Array is required and cannot be empty'
+          };
+          if (!details.Sources || !Array.isArray(details.Sources) ||
+            (Array.isArray(details.Sources) && details.Sources.length == 0)) throw {
+            errorCode: '',
+            errorMessage: 'Error[]: Sources Array is required and cannot be empty'
+          };
+
+          //Start monitoring social media
+          return WatchlistResource.save(details).$promise
+            .then(function (watchlist) {
+              console.log(watchlist);
+              if (watchlist && watchlist.status && watchlist.status == 500) return {error:{code: watchlist.status, message: watchlist.statusText}};
+              else {
+                _watchlists.unshift(watchlist);
+                return watchlist;
+              }
+            })
+            .catch(function (err) {
+              console.log(err);
+              return err;
+            });
+        }
+        catch(err) {
+          return err;
+        }
+
+      }
 
     // Public API here
     return {
@@ -602,7 +574,8 @@ angular.module('dealScanCrmApp')
         stopStream: stopMonitoring,
         postToFb: postToFb,
         getFbPages: getFbPages,
-        broadcastSocial: broadcastSocial
+        broadcastSocial: broadcastSocial,
+        create: createWatchlist
     };
 
   });

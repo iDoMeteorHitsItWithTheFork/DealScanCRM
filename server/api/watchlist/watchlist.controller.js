@@ -130,12 +130,13 @@ export function create(req, res) {
   var keywords = req.body.Keywords;
 
   if (!watchlist.WatchlistName || watchlist.WatchlistName.trim() == '') res.status(500).send('WatchlistName cannot be empty');
-  if (!watchlist.dealershipName || watchlist.dealershipName.trim() == '') res.status(500).send('Dealership Name is required')
+  if (!watchlist.DealershipName || watchlist.DealershipName.trim() == '') res.status(500).send('Dealership Name is required')
 
   /* Set Watchlist Object */
   var new_watchlist = {};
   new_watchlist.WatchlistName = watchlist.WatchlistName;
-  new_watchlist.dealershipName = watchlist.dealershipName;
+  new_watchlist.DealershipName = watchlist.DealershipName;
+  new_watchlist.Location = watchlist.Location;
   if (watchlist.WatchlistInfo) new_watchlist.WatchlistInfo = watchlist.WatchlistInfo;
 
   /* Validating the presences of Social Sources and Keywords */
@@ -157,6 +158,7 @@ export function create(req, res) {
     return Watchlist.create({
         watchlistName: new_watchlist.WatchlistName,
         watchlistInfo: new_watchlist.WatchlistInfo,
+        location: JSON.stringify(new_watchlist.Location),
         Keywords: keywords
       }, {include: [Keyword]},
       {transaction: t})
@@ -171,7 +173,7 @@ export function create(req, res) {
             .then(function (results) {
               return Dealership.find({
                 where: {
-                  dealershipName: new_watchlist.dealershipName
+                  dealershipName: new_watchlist.DealershipName
                 },
                 transaction: t
               }).then(function (dealership) {
@@ -192,7 +194,7 @@ export function create(req, res) {
                         } else return res.status(500).send('Error[]: Unable to authenticate you request');
                       });
                     });
-                } else return res.status(500).send('Error[]: Unable to find dealership ' + new_watchlist.dealershipName);
+                } else return res.status(500).send('Error[]: Unable to find dealership ' + new_watchlist.DealershipName);
               });
             });
         });

@@ -23,12 +23,12 @@ angular.module('dealScanCrmApp')
           details.leadID = _addNote.note.leadID;
           details.note = _addNote.note.content;
           console.log(details);
-          Lead.note(details).then(function(leads){
-            console.log(leads);
-            if (leads && !leads.error){
+          Lead.note(details).then(function(note){
+            console.log(note);
+            if (note && !note.error){
               toaster.success({title:'New Note', body: 'Note added for Lead ('+lead.name+')'});
-              $uibModalInstance.close(leads);
-            } else toaster.error({title:'New Note Error', body: appointment.error.msg});
+              $uibModalInstance.close(lead);
+            } else toaster.error({title:'New Note Error', body: note.error.msg});
             _addNote.saving = false;
           }).catch(function(err){
             console.log(err);

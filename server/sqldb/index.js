@@ -167,6 +167,9 @@ db.Dealership.hasMany(db.Lead, {foreignKey:'dealershipID'});
 db.Lead.belongsTo(db.User, {as:'Creator', foreignKey:'creatorID'});
 db.User.hasMany(db.Lead, {foreignKey: 'creatorID'});
 
+db.Lead.belongsToMany(db.User, {as: 'Agents', through:'AssignedLeads', foreignKey: 'leadID'});
+db.User.belongsToMany(db.Lead, {through: 'AssignedLeads', foreignKey: 'agentID'});
+
 db.Event.belongsTo(db.User, {as: 'Host', foreignKey:'hostID'});
 db.User.hasMany(db.Event, {foreignKey: 'hostID'});
 

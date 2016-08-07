@@ -114,6 +114,7 @@ angular.module('dealScanCrmApp')
 
       //update on each postprocessed tweet
       _socket.on('data', function(msg) {
+        console.log(msg);
         var channelId, i, keyword;
 //            console.log(msg.text);
         //feed channels infos

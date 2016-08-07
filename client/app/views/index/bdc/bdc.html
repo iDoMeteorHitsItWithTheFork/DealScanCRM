@@ -316,11 +316,14 @@
             <div class="ibox ">
               <div ibox-tools on-close="bdc.activeLead = null" class="ps-rl-tp-10-rt-10"></div>
               <div class="ibox-content">
+                <div class="height-337 p-t-150" ng-hide="!bdc.assigningLead">
+                  <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px;"></i>
+                  <span class="sr-only">Loading...</span>
+                </div>
                 <!-- active lead content pane-->
                 <div class="tab-content">
-
                   <!-- Active lead details content view -->
-                  <div id="contact-1" class="tab-pane active">
+                  <div ng-hide="bdc.assigningLead" id="contact-1" class="tab-pane active">
                     <div class="row">
                       <div class="col-md-12">
                         <h2 style="display:inline;">{{bdc.activeLead.name}}</h2>

@@ -63,6 +63,7 @@
        * @return {String}                    - trimmed string
        */
       slimTrim(string) {
+        if (!string || string.length == 0) return '';
         return string.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ") || string;
       },
 

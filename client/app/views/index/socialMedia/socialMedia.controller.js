@@ -492,6 +492,10 @@ angular.module('dealScanCrmApp')
           }
         }
       });
+
+
+
+
     }
 
     _sm.placeChanged = function() {

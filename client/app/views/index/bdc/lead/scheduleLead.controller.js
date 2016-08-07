@@ -68,8 +68,8 @@ angular.module('dealScanCrmApp')
           console.log(appointment);
           if (appointment && !appointment.error){
             toaster.success({title:'New Appointment', body: 'Appointment for Lead ('+details.name+') was scheduled for '+details.appointment});
-            $uibModalInstance.close(appointment);
-          } else toaster.error({title:'New Lead Error', body: lead.error.msg});
+            $uibModalInstance.close(lead);
+          } else toaster.error({title:'Appointment Error', body: appointment.error.msg});
           _scheduleLead.saving = false;
         }).catch(function(err){
           console.log(err);
