@@ -496,7 +496,7 @@
 
 
             <!-- TotalLeads Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight m-t-125" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-125" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
               <!-- totalLeads stats-->
               <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -556,7 +556,7 @@
 
 
             <!-- Appointments Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-md-3': 'col-md-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
               <!-- appointments stats-->
               <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -617,7 +617,7 @@
 
 
             <!-- Appointments Kept Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_kept' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-md-3': 'col-md-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_kept' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
               <!-- appointments kept stats-->
               <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -678,7 +678,7 @@
 
 
             <!-- Appointments Missed Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_missed' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_missed' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
               <!-- appointments missed stats-->
               <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -739,7 +739,7 @@
 
 
             <!-- Appointments sold Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_sold' && bdc.showTable) || bdc.showTableDetails" class="pull-left animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-md-3': 'col-md-4'">
+            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_sold' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
               <!-- appointments sold stats-->
               <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
                 <div class="ibox-title" style="border-top-width:1px;">
@@ -798,7 +798,7 @@
             </div>
             <!-- ./appointments sold Pie & Charts -->
 
-            <div class="pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'" ng-class="bdc.showTableDetails ? 'col-md-8' : 'col-md-9'" style="">
+            <div id="bdc-table" class="pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'" ng-class="bdc.showTableDetails ? 'col-sm-8 col-md-8' : 'col-sm-7 col-md-9'" style="">
               <div class="ibox float-e-margins no-material">
                 <!-- data tables -->
                 <div class="row animated fadeInRight">
@@ -809,32 +809,36 @@
                         <div ibox-tools on-close="bdc.showTable = false; bdc.showTableDetails = false;"></div>
                       </div>
                       <div class="ibox-content">
-                        <table datatable="ng" dt-options="bdc.dtOptions"
+                        <table datatable="ng" dt-options="bdc.dtOptions" width="100%"
                                class="table table-striped table-bordered table-hover dataTables-example" style="padding-bottom:0">
                           <thead>
                           <tr>
                             <th>Lead Name</th>
-                            <th>Expressed Interest</th>
-                            <th>{{bdc.sectionTitle.status == 'Total Leads' ? 'Emails' : 'Appointments'}}</th>
+                            <th>{{bdc.sectionTitle.status == 'Total Leads' ? 'Email' : 'Appointments'}}</th>
+                            <th>Date</th>
                             <th>Phone</th>
                             <th>Agent</th>
-                            <th>Date</th>
+                            <th>Expressed Interest</th>
                           </tr>
                           </thead>
                           <tbody>
-                          <tr ng-repeat="lead in bdc.dealsTableData" ng-click="bdc.showTableDetails = true; bdc.showInDetails(lead); ">
-                            <td style="vertical-align: middle;"><a class="client-link">{{lead.name}}</a></td>
-                            <td style="vertical-align: middle; width:25% !important;"> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
-                            <td class="contact-type" style="vertical-align: middle; width:25% !important;">
-                              <i ng-class="bdc.sectionTitle.status == 'Total Leads' ? 'fa fa-envelope' : 'fa fa-calendar-o'">&nbsp;&nbsp;</i>
-                              {{bdc.sectionTitle.status == 'Total Leads' ? (lead.email || 'No Email Provided' | limitTo: 25) : (lead.appointments | limitTo:25)}}
+                          <tr ng-repeat="lead in bdc.dealsTableData">
+                            <td style="vertical-align: middle;"><a href ng-click="bdc.showTableDetails = true; bdc.showInDetails(lead); " class="">{{lead.name}}</a></td>
+                            <td ng-if="bdc.sectionTitle.status != 'Total Leads'" class="contact-type" style="vertical-align: middle; width:25% !important;">
+                              <a ng-if="lead.appointments.length !== 0" href ng-click="bdc.openAppointment(lead.appointments)">{{lead.appointments.length}} Appointments</a>
+                              <p ng-if="lead.appointments.length === 0">No Appointments</p>
                             </td>
+                            <td ng-if="bdc.sectionTitle.status == 'Total Leads'" class="contact-type" style="vertical-align: middle; width:25% !important;">
+                              <a ng-if="lead.email" href ng-click="">{{lead.email}}</a>
+                              <p ng-if="!lead.email">No Email Provided</p>
+                            </td>
+                            <td>{{lead.timeAgo}}</td>
                             <td class="contact-type" style="vertical-align: middle; width:13% !important;"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided' | limitTo: 25}}</td>
                             <td class="client-status">
                               <i ng-class="lead.agents[0].name ? 'fa fa-user text-navy' : 'fa fa-user-times text-danger'">&nbsp;&nbsp;</i>
                               {{lead.agents[0].name || 'Unassigned'}}
                             </td>
-                            <td>{{lead.timeAgo}}</td>
+                            <td style="vertical-align: middle; width:25% !important;"> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
                           </tr>
                           </tbody>
                         </table>

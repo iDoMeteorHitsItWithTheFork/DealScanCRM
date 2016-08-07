@@ -1,0 +1,36 @@
+<div class="modal-header p-b-15">
+    <button type="button" class="close" ng-click="apt.cancel()"><i class="fa fa-times fs-14"></i></button>
+    <h3 class="modal-title">Appointments</h3>
+    <label class="tl" style="float: left;"></label>
+</div>
+<div class="modal-body p-b-10">
+    <table datatable="ng" dt-options="apt.dtOptions" width="100%"
+           class="table table-striped table-bordered table-hover dataTables-example" style="padding-bottom:0">
+        <thead>
+        <tr>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Source Type</th>
+            <th>Source</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="appointment in apt.appointments">
+            <td>{{appointment.status | uppercase}}</td>
+            <td>{{appointment.priority | uppercase}}</td>
+            <td>{{appointment.name}}</td>
+            <td>{{appointment.time}}</td>
+            <td>{{appointment.location}}</td>
+            <td>{{appointment.sourceType | uppercase}}</td>
+            <td>{{appointment.sourceName | uppercase}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-sq btn-o" type="button" ng-click="apt.cancel()">Okay</button>
+</div>

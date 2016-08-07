@@ -239,6 +239,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
           .withOption('order', [[5, 'asc']])
+          .withOption('responsive', true)
           .withButtons([
             {extend: 'copy'},
             {extend: 'csv'},
@@ -594,6 +595,41 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 },
               ]);
             }
+          }
+        });
+      }
+
+      _bdc.openAppointment = function(appointments){
+        var modalInstance = $uibModal.open({
+          animation: true,
+          windowClass: 'slide-up',
+          size: 'xl',
+          templateUrl: 'app/views/index/bdc/openAppointment.html',
+          controller: 'OpenAppointmentCtrl as apt',
+          resolve: {
+            appointments: function () {
+              return appointments;
+            },
+            loadPlugin: function ($ocLazyLoad) {
+              return $ocLazyLoad.load([
+                {
+                  serie: true,
+                  files: ['.resources/plugins/dataTables/datatables.min.js',
+                    '.styles/plugins/dataTables/datatables.min.css']
+                },
+                {
+                  serie: true,
+                  name: 'datatables',
+                  files: ['.resources/plugins/dataTables/angular-datatables.min.js']
+                },
+                {
+                  serie: true,
+                  name: 'datatables.buttons',
+                  files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
+                }
+              ]);
+            }
+
           }
         });
       }

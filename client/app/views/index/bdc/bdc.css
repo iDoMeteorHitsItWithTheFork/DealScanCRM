@@ -28,3 +28,21 @@
 .m-t-125{
   margin-top: 125px !important;
 }
+
+
+.modal-xl {
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  padding: 10px;
+  z-index: 1050;
+}
+
+@media screen and (min-width: 768px) {
+  .modal-xl {
+    width: 900px!important;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+}
