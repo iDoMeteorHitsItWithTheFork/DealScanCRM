@@ -83,10 +83,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         if (lead.agents && lead.agents.length == 0){
           if (_bdc.assigningLead) return;
           _bdc.assigningLead = true;
-          Lead.assign(lead.leadID).then(function(res){
+          Lead.assign(lead).then(function(res){
               _bdc.assigningLead = false;
               if (res === true) toaster.success({title: 'Lead Assignment', body: 'Lead ('+lead.name+') is now assigned to you!'})
               else toaster.error({title: 'Lead Error', body: 'An error occured while attempting to assign lead'});
+              console.log(lead);
           }).catch(function(err){
               _bdc.assigningLead = false;
               console.log(err);

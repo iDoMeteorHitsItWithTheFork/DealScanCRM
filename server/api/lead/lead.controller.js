@@ -122,7 +122,7 @@ export function index(req, res) {
               {
                 model: User,
                 as: 'Creator',
-                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
             through: NoteActivities,
@@ -131,7 +131,7 @@ export function index(req, res) {
           {
             model: User,
             as: 'Agents',
-            attributes: ['firstName', 'lastName', 'userID', 'email', 'role'],
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
             through: 'AssignedLeads'
           },
           {
@@ -140,7 +140,7 @@ export function index(req, res) {
               {
                 model: User,
                 as: 'Host',
-                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
             through: Participants,
@@ -172,7 +172,7 @@ export function show(req, res) {
           {
             model: User,
             as: 'Creator',
-            attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
           }
         ],
         through: NoteActivities,
@@ -181,7 +181,7 @@ export function show(req, res) {
       {
         model: User,
         as: 'Agents',
-        attributes: ['firstName', 'lastName', 'userID', 'email', 'role'],
+        attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
         through: 'AssignedLeads'
       },
       {
@@ -190,7 +190,7 @@ export function show(req, res) {
           {
             model: User,
             as: 'Host',
-            attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+            attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
           }
         ],
         through: Participants,
@@ -265,35 +265,45 @@ export function create(req, res) {
   if (req.body.hasOwnProperty('appointment') && req.body.appointment && req.body.appointment.Date && req.body.appointment.Time)
     appointment = req.body.appointment;
 
-  return User.find({
-    where:{
-      userID: req.user.userID
-    },
-    include: [
-      {
-        model: Dealership,
-        as: 'Employer',
-        required: true
-      }
-    ]
-  }).then(function(user){
-    return Lead.findOrCreate({
+  return Lead.sequelize.transaction(function (t) {
+    return User.find({
       where: {
-        name: details.name,
-        phone: details.phone
+        userID: req.user.userID
       },
-      defaults:details
-    })
-      .spread(function(lead, created){
-        console.log("Created: "+created);
-        return (created) ?
-          lead.setCreator(user).then(function(result){
-             return lead.setDealership(user.Employer[0])
-               .then(function(){
-                  return res.status(200).json(formatLead(lead));
-             })
-          }) : res.status(200).json({error: {msg: 'Sorry, this lead already exist', code:''}});
+      include: [
+        {
+          model: Dealership,
+          as: 'Employer',
+          required: true
+        }
+      ],
+      transaction: t
+    }).then(function (user) {
+      return Lead.findOrCreate({
+        where: {
+          name: details.name,
+          phone: details.phone
+        },
+        defaults: details,
+        transaction: t
       })
+        .spread(function (lead, created) {
+          console.log("Created: " + created);
+          return (created) ?
+            lead.setCreator(user, {transaction: t})
+              .then(function () {
+              return lead.setDealership(user.Employer[0], {transaction: t})
+                .then(function () {
+                  return lead.addAgent(user, {transaction:t})
+                    .then(function () {
+                      return lead;
+                    })
+                })
+            }) : res.status(200).json({error: {msg: 'Sorry, this lead already exist', code: ''}});
+        })
+    })
+  }).then(function (lead) {
+      return res.status(200).json(formatLead(lead));
   }).catch(handleError(res));
 }
 
@@ -346,8 +356,8 @@ export function scheduleAppointment(req, res) {
                   {
                     model: User,
                     as: 'Host',
-                    attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
-                  }
+                    attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+                  },
                 ],
                 transaction: t
               }).then(function(newEvent){
@@ -411,7 +421,7 @@ export function addNote(req,res) {
                   {
                     model: User,
                     as: 'Creator',
-                    attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                    attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
                   }
                 ],
                 transaction: t
@@ -459,11 +469,17 @@ export function update(req, res) {
               {
                 model: User,
                 as: 'Creator',
-                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
             through: NoteActivities,
             order: [['noteID', 'DESC']]
+          },
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
           {
             model: Event,
@@ -471,7 +487,7 @@ export function update(req, res) {
               {
                 model: User,
                 as: 'Host',
-                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
             through: Participants,
@@ -519,6 +535,11 @@ export function totalLeads(req, res){
           ' CROSS JOIN (SELECT COUNT(1) AS cnt FROM Leads) t GROUP BY lds.sourceName ORDER BY Percentage DESC',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
+      promises.push(Lead.sequelize
+        .query('SELECT sourceType AS Source, ' +
+        'COUNT( * ) Total FROM Leads GROUP BY sourceType',
+          {type: Lead.sequelize.QueryTypes.SELECT}));
+
       /* Get table Data */
       promises.push(Lead.findAll({
         where:{
@@ -531,11 +552,17 @@ export function totalLeads(req, res){
               {
                 model: User,
                 as: 'Creator',
-                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
             through: NoteActivities,
             order: [['noteID', 'DESC']]
+          },
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
           {
             model: Event,
@@ -543,7 +570,7 @@ export function totalLeads(req, res){
               {
                 model: User,
                 as: 'Host',
-                attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
             through: Participants,
@@ -556,8 +583,8 @@ export function totalLeads(req, res){
       /* Return Query results */
       return Q.all(promises).then(function(leads){
         var _leads = [];
-        for(var i = 0; i < leads[1].length; i++) _leads.push(formatLead(leads[1][i]));
-        return res.status(200).json({stats: leads[0], data: _leads});
+        for(var i = 0; i < leads[2].length; i++) _leads.push(formatLead(leads[2][i]));
+        return res.status(200).json({stats: leads[0], sourceSummary: leads[1], data: _leads});
       });
 
     } else return res.status(200).json([]);
@@ -597,6 +624,15 @@ export function totalAppointments(req, res){
            'WHERE category="appointment" AND attendable="lead") t GROUP BY sourceName ORDER BY Percentage DESC',
            {type: Lead.sequelize.QueryTypes.SELECT}));
 
+
+         promises.push(Lead.sequelize
+           .query('SELECT sourceType AS Source, ' +
+             'COUNT(*) AS Total FROM Events ' +
+             'JOIN Participants ON Events.eventID = Participants.eventID ' +
+             'JOIN Leads ON Participants.participantID = Leads.leadID' +
+             '  WHERE category="appointment" AND attendable="lead" GROUP BY sourceType',
+           {type: Lead.sequelize.QueryTypes.SELECT}));
+
          /* Get All Appointments */
          promises.push(Lead.findAll({
            include: {
@@ -605,7 +641,7 @@ export function totalAppointments(req, res){
                {
                  model: User,
                  as: 'Host',
-                 attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+                 attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
                }
              ],
            },
@@ -614,8 +650,8 @@ export function totalAppointments(req, res){
 
          return Q.all(promises).then(function(appointments){
            var _leads = [];
-           for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
-           return res.status(200).json({stats:appointments[0], data:_leads});
+           for(var i = 0; i < appointments[2].length; i++) _leads.push(formatLead(appointments[2][i]));
+           return res.status(200).json({stats:appointments[0], sourceSummary: appointments[1], data:_leads});
          });
 
      } else return res.status(200).json([]);
@@ -654,6 +690,15 @@ export function keptAppointments(req, res){
           'WHERE Events.status="kept" GROUP BY sourceName ORDER BY Percentage DESC',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
+      promises.push(Lead.sequelize
+          .query('SELECT sourceType AS Source, ' +
+            'COUNT(*) AS Total FROM Events ' +
+            'JOIN Participants ON Events.eventID = Participants.eventID ' +
+            'JOIN Leads ON Participants.participantID = Leads.leadID' +
+            '  WHERE category="appointment" AND attendable="lead" AND Events.status="kept" GROUP BY sourceType',
+        {type: Lead.sequelize.QueryTypes.SELECT}));
+
+
       /* Get All Appointments */
       promises.push(Lead.findAll({
         include: {
@@ -665,7 +710,7 @@ export function keptAppointments(req, res){
             {
               model: User,
               as: 'Host',
-              attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
             }
           ],
         },
@@ -674,8 +719,8 @@ export function keptAppointments(req, res){
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
-        for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
-        return res.status(200).json({stats:appointments[0], data:_leads});
+        for(var i = 0; i < appointments[2].length; i++) _leads.push(formatLead(appointments[2][i]));
+        return res.status(200).json({stats:appointments[0], sourceSummary: appointments[1], data:_leads});
       });
 
     } else return res.status(200).json([]);
@@ -713,6 +758,14 @@ export function missedAppointments(req, res){
           'WHERE Events.status="missed" GROUP BY sourceName ORDER BY Percentage DESC',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
+      promises.push(Lead.sequelize
+          .query('SELECT sourceType AS Source, ' +
+            'COUNT(*) AS Total FROM Events ' +
+            'JOIN Participants ON Events.eventID = Participants.eventID ' +
+            'JOIN Leads ON Participants.participantID = Leads.leadID' +
+            ' WHERE category="appointment" AND attendable="lead" AND Events.status="missed" GROUP BY sourceType',
+        {type: Lead.sequelize.QueryTypes.SELECT}));
+
       /* Get All Appointments */
       promises.push(Lead.findAll({
         include: {
@@ -724,7 +777,7 @@ export function missedAppointments(req, res){
             {
               model: User,
               as: 'Host',
-              attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
             }
           ],
         },
@@ -733,8 +786,8 @@ export function missedAppointments(req, res){
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
-        for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
-        return res.status(200).json({stats:appointments[0], data:_leads});
+        for(var i = 0; i < appointments[2].length; i++) _leads.push(formatLead(appointments[2][i]));
+        return res.status(200).json({stats:appointments[0], sourceSummary: appointments[1], data:_leads});
       });
 
     } else return res.status(200).json([]);
@@ -772,6 +825,14 @@ export function soldAppointments(req, res){
           'WHERE Events.status="sold" GROUP BY sourceName ORDER BY Percentage DESC',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
+      promises.push(Lead.sequelize
+          .query('SELECT sourceType AS Source, ' +
+            'COUNT(*) AS Total FROM Events ' +
+            'JOIN Participants ON Events.eventID = Participants.eventID ' +
+            'JOIN Leads ON Participants.participantID = Leads.leadID' +
+            '  WHERE category="appointment" AND attendable="lead" AND Events.status="sold" GROUP BY sourceType',
+        {type: Lead.sequelize.QueryTypes.SELECT}));
+
       /* Get All Appointments */
       promises.push(Lead.findAll({
         include: {
@@ -783,7 +844,7 @@ export function soldAppointments(req, res){
             {
               model: User,
               as: 'Host',
-              attributes: ['firstName', 'lastName', 'userID', 'email', 'role']
+              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
             }
           ],
         },
@@ -792,8 +853,8 @@ export function soldAppointments(req, res){
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
-        for(var i = 0; i < appointments[1].length; i++) _leads.push(formatLead(appointments[1][i]));
-        return res.status(200).json({stats:appointments[0], data:_leads});
+        for(var i = 0; i < appointments[2].length; i++) _leads.push(formatLead(appointments[2][i]));
+        return res.status(200).json({stats:appointments[0], sourceSummary: appointments[1], data:_leads});
       });
 
     } else return res.status(200).json([]);
@@ -816,6 +877,7 @@ export function assignLead(req, res){
           where: {
             userID: req.user.userID
           },
+          attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
           transaction: t
         }).then(function(user){
           if (!user) return res.status(500).send('Unable to authenticate your request');
@@ -824,14 +886,14 @@ export function assignLead(req, res){
               return lead.update({
                 status: 'working'
               }, {transaction:t}).then(function(){
-                 return lead;
+                 return user;
               })
             })
         })
       }
     })
-  }).then(function(){
-    return res.status(200).json({success: true});
+  }).then(function(user){
+    return res.status(200).json({success: true, agent: user.profile});
   }).catch(handleError(res));
 }
 

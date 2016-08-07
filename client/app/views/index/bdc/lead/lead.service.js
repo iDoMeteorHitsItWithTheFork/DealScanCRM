@@ -160,15 +160,18 @@ angular.module('dealScanCrmApp')
       /**
        * assign lead to User
        */
-    function assignLead(leadID){
+    function assignLead(lead){
       console.log('\n\n\n LeadID  \n\n');
-      console.log(leadID);
+      console.log(lead);
       console.log('\n\n ---------- \n\n');
-      if (!leadID) throw Error('Lead is required!');
-      return LeadResource.assignLead({id: leadID})
+      if (!lead) throw Error('Lead is required!');
+      return LeadResource.assignLead({id: lead.leadID})
         .$promise.then(function(res){
-          if (res.success) return true;
-          else return {error: {code:'', msg: ''}};
+          if (res.success === true) {
+            if(!lead.agents) lead.agents = [];
+            lead.agents.unshift(res.agent);
+            return true;
+          } else return {error: {code:'', msg: ''}};
       }).catch(function(err){
            console.log(err);
            return err;
