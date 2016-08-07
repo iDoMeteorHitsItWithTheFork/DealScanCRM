@@ -33,8 +33,6 @@
   <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
   <!-- endbower -->
 
-
-
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
   <link rel="stylesheet" href=".styles/animate.css">
@@ -67,7 +65,7 @@
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
-<body ng-controller="MainCtrl as main"  class="md-skin {{$state.current.data.specialClass}}" landing-scrollspy id="page-top" style="height: 100%; overflow:hidden;">
+<body ng-controller="MainCtrl as main" class="md-skin {{$state.current.data.specialClass}}" landing-scrollspy id="page-top">
 
 <!--[if lt IE 7]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -92,7 +90,7 @@
 }'>
 </toaster-container>
 <!-- Add your site or application content here -->
-<div ui-view full-scroll-page></div>
+<div ui-view  page-height text="{{$state.current.title}}" ></div>
 
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->

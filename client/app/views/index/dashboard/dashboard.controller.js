@@ -2,13 +2,7 @@
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
   function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, toaster) {
-
-    setTimeout(
-        function () {
-          $("#page-wrapper").css("overflow-x", "scroll");
-        }, 100);
-
-
+    
     var _dashboard = this;
 
     _dashboard.user = Auth.getCurrentUser();

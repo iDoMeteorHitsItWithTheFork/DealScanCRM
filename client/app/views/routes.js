@@ -34,6 +34,10 @@ angular.module('dealScanCrmApp')
       console.log(' --- state change success ---> Current State: '+next.name);
       console.log(next);
       console.log(prev);
+      setTimeout(function(){
+        console.log("fucking page on chage");
+        fix_height()
+      },1000);
     });
 
 
@@ -53,5 +57,20 @@ angular.module('dealScanCrmApp')
       //App ID From Facebook App Dashboard
       appId: '126507794443463'
     });
+    function fix_height() {
+      console.log($('#page-wrapper').hasClass('social_media'));
+      if ($('#page-wrapper').hasClass('social_media')) {
+        $('#page-wrapper').css("height", $(window).height() + 15 + "px");
+        $('body').css("overflow", "hidden");
+        console.log("page wrapper has class")
+        return;
+      } else {
 
+        setTimeout(function(){
+          console.log("fucking page timeout");
+          $('#page-wrapper').css("height", "100%");
+          $('body').css("overflow", "auto");
+        },1);
+      }
+    }
   });

@@ -91,3 +91,10 @@ textarea {
 .pac-container {
   z-index: 9999999 !important;
 }
+
+.navbar-fixed-top {
+  left: 220px;
+}
+/*.md-skin .navbar-static-side {*/
+/*height:100%*/
+/*}*/
