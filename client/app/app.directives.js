@@ -583,28 +583,31 @@ function pageHeight(){
     link: function(scope, element) {
 
       if (scope.text === 'social_media'){
+        //element.css("overflow", "hidden");
         console.log("setting height for social media page...");
-        element.css("height", $(window).height() + "px");
-        element.css("min-height", $(window).height() + "px");
+        element.css("height", $(window).height() - 51 + "px");
+        //element.css("min-height", $(window).height() - 53 + "px");
         //element.css("overflow", "hidden");
 
         addEvent(window, "resize", function(event) {
-          element.css("height", $(window).height() + "px");
-          element.css("min-height", $(window).height() + "px");
+          //element.css("height", $(window).height() + "px");
+          //element.css("min-height", $(window).height() + "px");
+          //element.css("overflow", "hidden");
           //element.css("overflow", "hidden");
         });
       }
       console.log(scope.text);
       if (scope.text === 'Dashboard'){
-        console.log("setting overflow for dashboard...");
-        element.css("height", $(window).height() + "px");
-        element.css("min-height", $(window).height() + "px");
-       // element.css("overflow", "scroll");
-        addEvent(window, "resize", function(event) {
-          element.css("height", $(window).height() + "px");
-          element.css("min-height", $(window).height() + "px");
-          //element.css("overflow", "scroll");
-        });
+       //  console.log("setting overflow for dashboard...");
+       //  element.css("height", $(window).height() + "px");
+       //  element.css("min-height", $(window).height() + "px");
+       // // element.css("overflow", "scroll");
+       //  addEvent(window, "resize", function(event) {
+       //    element.css("height", $(window).height() + "px");
+       //    element.css("min-height", $(window).height() + "px");
+       //    //element.css("overflow", "scroll");
+       //  });
+        element.css("overflow", "scroll");
       }
     }
   };

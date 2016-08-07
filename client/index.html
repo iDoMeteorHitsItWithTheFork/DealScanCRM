@@ -15,6 +15,7 @@
   <title page-title></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/images/squrl_favicon.png">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
   <!-- Google Open Sans -->
@@ -31,8 +32,6 @@
   <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css" />
   <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
   <!-- endbower -->
-
-
 
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
@@ -66,7 +65,7 @@
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
-<body ng-controller="MainCtrl as main"  class="md-skin {{$state.current.data.specialClass}}" landing-scrollspy id="page-top" style="height: 100%; overflow:hidden;">
+<body ng-controller="MainCtrl as main" class="md-skin {{$state.current.data.specialClass}}" landing-scrollspy id="page-top">
 
 <!--[if lt IE 7]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -91,7 +90,7 @@
 }'>
 </toaster-container>
 <!-- Add your site or application content here -->
-<div ui-view full-scroll-page></div>
+<div ui-view  page-height text="{{$state.current.title}}" ></div>
 
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -164,7 +163,7 @@
 <script src="components/auth/auth.module.js"></script>
 <script src="components/dataSync/dataSync.module.js"></script>
 <script src="components/util/util.module.js"></script>
-<script src="app/views/index/dashboard/dashboard.js"></script>
+<script src="app/views/index/dashboard/dashboard.controller.js"></script>
 <script src="app/views/admin/admin.controller.js"></script>
 <script src="app/app.constant.js"></script>
 <script src="app/views/admin/admin.router.js"></script>
@@ -203,8 +202,8 @@
 <script src="app/views/index/customer/profile/tabs/task/task.controller.js"></script>
 <script src="app/views/index/customer/sideviews/email/email.controller.js"></script>
 <script src="app/views/index/customer/sideviews/text/text.controller.js"></script>
-<script src="app/views/index/dashboard/dashboard.controller.js"></script>
 <script src="app/app.controller.js"></script>
+<script src="app/views/index/dashboard/dashboard.js"></script>
 <script src="app/views/index/dashboard/dashboard.service.js"></script>
 <script src="app/views/index/dashboard/deal/deal.resource.js"></script>
 <script src="app/views/index/dashboard/deal/deal.service.js"></script>
