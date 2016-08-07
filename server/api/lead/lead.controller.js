@@ -90,29 +90,7 @@ export function index(req, res) {
     var searchOptions = {
       dealershipID: user.Employer[0].token.dealerID
     }
-    /*if (req.params.hasOwnProperty('category') && req.params.category && req.params.category.trim() != '')
-      category = req.params.category;
-    if (category) {
-      switch (category.toLowerCase()) {
-        case 'new':
-          searchOptions.createdAt = {
-            $gte: moment().startOf('day'),
-            $lte: moment().endOf('day')
-          };
-          searchOptions.status = 'new';
-          break;
-        case 'working':
-          searchOptions.status = 'working';
-          break;
-        case 'followup':
-          searchOptions.createdAt = {
-            $gt: moment().endOf('day')
-          };
-          searchOptions.status = 'new';
-          break;
-      }
-    }
-    console.log(searchOptions);*/
+    console.log(searchOptions);
       return Lead.findAll({
         where:searchOptions,
         include: [
@@ -245,12 +223,14 @@ function formatLead(lead){
 export function create(req, res) {
    if (!req.body) return res.status(500).send('Lead Details are required!');
    if (!req.user) return res.status(500).send('Unable to authenticate request');
-   if (!req.body.name) return res.status(500).send('Lead Name is required');
+   if (!req.body.firstName) return res.status(500).send('FirstName is required');
+   if (!req.body.lastName) return res.status(500).send('LastName is required');
    if (!req.body.phone) return res.status(500).send('Lead Phone is required');
    if (!req.body.source) return res.status(500).send('Lead Source is required');
 
   var details = {};
-  details.name = req.body.name;
+  details.firstName = req.body.firstName;
+  details.lastName = req.body.lastName;
   details.phone = req.body.phone;
   details.email = req.body.email;
   details.address = req.body.address;
@@ -281,7 +261,8 @@ export function create(req, res) {
     }).then(function (user) {
       return Lead.findOrCreate({
         where: {
-          name: details.name,
+          firstName: details.firstName,
+          lastName: details.lastName,
           phone: details.phone
         },
         defaults: details,
@@ -296,7 +277,21 @@ export function create(req, res) {
                 .then(function () {
                   return lead.addAgent(user, {transaction:t})
                     .then(function () {
-                      return lead;
+                      if (appointment){
+                        return lead.createEvent({
+                          name: lead.name,
+                          location: user.Employer[0].dealerInfo.address,
+                          time: appointment,
+                          category: 'appointment',
+                          status: 'scheduled',
+                        },{transaction: t}).
+                        then(function(appointment){
+                          return appointment.setHost(user, {transaction: t})
+                            .then(function(){
+                             return lead;
+                          })
+                        })
+                      } else return lead;
                     })
                 })
             }) : res.status(200).json({error: {msg: 'Sorry, this lead already exist', code: ''}});
@@ -635,18 +630,26 @@ export function totalAppointments(req, res){
 
          /* Get All Appointments */
          promises.push(Lead.findAll({
-           include: {
-              model: Event,
-              include: [
-               {
-                 model: User,
-                 as: 'Host',
-                 attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-               }
-             ],
-           },
-           through: Participants
-         }));
+           include: [
+             {
+               model: User,
+               as: 'Agents',
+               attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+               through: 'AssignedLeads'
+             },
+             {
+               model: Event,
+               include: [
+                 {
+                   model: User,
+                   as: 'Host',
+                   attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+                 }
+               ],
+               through: Participants,
+               required: true
+             }
+           ]}));
 
          return Q.all(promises).then(function(appointments){
            var _leads = [];
@@ -701,21 +704,26 @@ export function keptAppointments(req, res){
 
       /* Get All Appointments */
       promises.push(Lead.findAll({
-        include: {
-          model: Event,
-          where: {
-            status: 'kept'
+        include: [
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
-          include: [
-            {
-              model: User,
-              as: 'Host',
-              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-            }
-          ],
-        },
-        through: Participants
-      }));
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            required: true
+          }
+        ]}));
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
@@ -768,21 +776,26 @@ export function missedAppointments(req, res){
 
       /* Get All Appointments */
       promises.push(Lead.findAll({
-        include: {
-          model: Event,
-          where: {
-            status: 'missed'
+        include: [
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
-          include: [
-            {
-              model: User,
-              as: 'Host',
-              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-            }
-          ],
-        },
-        through: Participants
-      }));
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            required: true
+          }
+        ]}));
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
@@ -835,21 +848,26 @@ export function soldAppointments(req, res){
 
       /* Get All Appointments */
       promises.push(Lead.findAll({
-        include: {
-          model: Event,
-          where: {
-            status: 'sold'
+        include: [
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
-          include: [
-            {
-              model: User,
-              as: 'Host',
-              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-            }
-          ],
-        },
-        through: Participants
-      }));
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            required: true
+          }
+        ]}));
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];

@@ -26,24 +26,41 @@ angular.module('dealScanCrmApp')
           type: 'Phone'
         },
         {
-          id: 'social',
-          name: 'Social Media',
+          id: 'true_car',
+          name: 'TrueCar',
           type: 'Internet'
         },
         {
+          id: 'car_dot_com',
+          name: 'Cars.com',
+          type: 'Internet'
+        },
+        {
+          id: 'autoTrader',
+          name: 'AutoTrader',
+          type: 'Internet'
+        },
+        {
+          id: 'edmunds',
+          name: 'Edmunds',
+          type: 'Internet'
+        },{
+          id: 'carCode',
+          name: 'Edmunds CarCode',
+          type: 'Internet'
+        },{
           id: 'website',
-          name: 'Website',
+          name: 'hagerstownford.com',
           type: 'Internet'
         },
         {
-          id: 'thirdParty',
-          name: 'Third Party',
+          id:'carfax',
+          name: 'Carfax',
           type: 'Internet'
-        },
-        {
-          id: 'Other',
-          name: 'Other',
-          type: 'Other'
+        },{
+          id: 'fatwin',
+          name: 'FATWIN',
+          type: 'Internet'
         }
       ];
 
@@ -73,7 +90,9 @@ angular.module('dealScanCrmApp')
             if (_newLead.saving) return;
             _newLead.saving  = true;
             var details = {};
-            details.name = _newLead.prospect.name;
+            var n = _newLead.prospect.name.split(' ');
+            details.firstName = n[0];
+            details.lastName = (n.length > 2 )  ? n.join(' ') : n[1];
             details.phone = _newLead.prospect.phone;
             details.email = _newLead.prospect.email;
             details.address = _newLead.prospect.address;

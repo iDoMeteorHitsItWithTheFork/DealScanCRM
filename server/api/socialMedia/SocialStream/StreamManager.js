@@ -33,8 +33,8 @@ StreamManager.prototype.getWatchlists = function(){
     return require('./channelsDescription.mock.json');
   }
   else {
-
-    return Watchlist.findAll({
+    return require('./channelsDescription.json');
+    /*return Watchlist.findAll({
       attributes: ['watchlistName', 'watchlistInfo'],
       include: [
         {
@@ -61,7 +61,7 @@ StreamManager.prototype.getWatchlists = function(){
     }).catch(function(err){
        console.log(err);
        throw new Error({errorCode: '', errorMessage: 'Unable to retreive Watchlists Details'});
-    })
+    })*/
   }
 };
 
@@ -83,12 +83,10 @@ StreamManager.prototype.getStreamChannelsTrackOptions = function(){
       return this.streamChannelsTrackOptions;
     }
     else {
-      return this.getWatchlists().then(function(channels){
-        channels.forEach(function (item, i) {
-          that.streamChannelsTrackOptions[i] = item.track;
-        });
-        return this.streamChannelsTrackOptions;
-      })
+      this.getWatchlists().forEach(function (item, i) {
+        that.streamChannelsTrackOptions[i] = item.track;
+      });
+      return this.streamChannelsTrackOptions;
     }
   }
 };
@@ -101,7 +99,23 @@ StreamManager.prototype.getStreamChannelsTrackOptions = function(){
  */
 StreamManager.prototype.launch = function(initCallback,timeoutCallback){
 
+
   var that = this;
+  this._stream = this.client.streamChannels({track:this.getStreamChannelsTrackOptions()});
+  console.log('>.streamChannels() called - twitter should be requested anytime');
+  if(typeof initCallback === 'function'){
+    initCallback.call({},this._stream);
+  }
+  //scheddle the timeout callback when the stream should close - in order to let the socket layer check if there is still someone listening
+  if(typeof timeoutCallback === 'function'){
+    setTimeout((function(currentStream){
+      return function(){
+        timeoutCallback.call({},currentStream);
+      };
+    })(that._stream),STREAM_TOLERANCE);
+  }
+
+  /*var that = this;
   return Watchlist.findAll({
     attributes: ['watchlistName', 'watchlistInfo'],
     include: [
@@ -126,13 +140,16 @@ StreamManager.prototype.launch = function(initCallback,timeoutCallback){
       }
     }
 
-    var streamChannelsTrackOptions = {};
-    channels.forEach(function (item, i) {
-      streamChannelsTrackOptions[i] = item.track;
-    });
-    console.log(streamChannelsTrackOptions);
-
-    that._stream = that.client.streamChannels({track:streamChannelsTrackOptions});
+    that.streamChannelsTrackOptions = {};
+    var jsonfile= require('jsonfile');
+    var file = 'server/api/socialMedia/SocialStream/channelsDescription.json';
+    //jsonfile.writeFileSync(file, channels);
+    var _c = require('./channelsDescription.json');
+    _c.forEach(function (item, i) {
+      that.streamChannelsTrackOptions[i] = item.track;
+    })
+    console.log(that.streamChannelsTrackOptions);
+    that._stream = that.client.streamChannels({track:that.streamChannelsTrackOptions});
     console.log('>.streamChannels() called - twitter should be requested anytime');
     if(typeof initCallback === 'function'){
       initCallback.call({},that._stream);
@@ -149,7 +166,7 @@ StreamManager.prototype.launch = function(initCallback,timeoutCallback){
   }).catch(function (err) {
     console.log(err);
     throw new Error({errorCode: '', errorMessage: 'Unable to retreive Watchlists Details'});
-  });
+  });*/
 };
 
 module.exports = StreamManager;
