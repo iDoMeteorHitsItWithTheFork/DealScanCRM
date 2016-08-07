@@ -211,10 +211,7 @@
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-info': lead.sourceType.toLowerCase() == 'social media',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'third party',
-                                                  'label-danger': lead.sourceType.toLowerCase() == 'website',
-                                                  'label-default': lead.sourceType.toLowerCase() == 'other'}">
+                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet'}">
                                   {{lead.sourceName}}</span>
                               </td>
                             </tr>
@@ -240,6 +237,8 @@
                               <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
                                 > 50 ? '...': ''}}
                               </td>
+                              <td><i ng-class="lead.agents[0].name ? 'fa fa-user text-navy' : 'fa fa-user-times text-danger'">&nbsp;&nbsp;</i>
+                                {{lead.agents[0].name || 'Unassigned'}}</td>
                               <td><i class="fa fa-clock-o">&nbsp;&nbsp;</i> {{lead.timeAgo}}</td>
                               <td class="contact-type">
                                 <i ng-class="{'fa fa-envelope': !lead.phone && lead.email,
@@ -251,10 +250,7 @@
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-info': lead.sourceType.toLowerCase() == 'social media',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'third party',
-                                                  'label-danger': lead.sourceType.toLowerCase() == 'website',
-                                                  'label-default': lead.sourceType.toLowerCase() == 'other'}">{{lead.sourceName}}</span>
+                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet'}">{{lead.sourceName}}</span>
                               </td>
                             </tr>
                             </tbody>
@@ -290,10 +286,7 @@
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-info': lead.sourceType.toLowerCase() == 'social media',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'third party',
-                                                  'label-danger': lead.sourceType.toLowerCase() == 'website',
-                                                  'label-default': lead.sourceType.toLowerCase() == 'other'}">{{lead.sourceName}}</span>
+                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet'}">{{lead.sourceName}}</span>
                               </td>
                             </tr>
                             </tbody>
@@ -827,9 +820,9 @@
                           <tr>
                             <th>Lead Name</th>
                             <th>Expressed Interest</th>
-                            <th>Email</th>
+                            <th>{{bdc.sectionTitle.status == 'Total Leads' ? 'Emails' : 'Appointments'}}</th>
                             <th>Phone</th>
-                            <th>Source</th>
+                            <th>Agent</th>
                             <th>Date</th>
                           </tr>
                           </thead>
@@ -837,13 +830,14 @@
                           <tr ng-repeat="lead in bdc.dealsTableData" ng-click="bdc.showTableDetails = true; bdc.showInDetails(lead); ">
                             <td style="vertical-align: middle;"><a class="client-link">{{lead.name}}</a></td>
                             <td style="vertical-align: middle; width:25% !important;"> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length > 50 ? '...': ''}}</td>
-                            <td class="contact-type" style="vertical-align: middle; width:25% !important;"><i class="fa fa-envelope">&nbsp;&nbsp;</i>{{lead.email || 'No Email Provided' | limitTo: 25}}</td>
+                            <td class="contact-type" style="vertical-align: middle; width:25% !important;">
+                              <i ng-class="bdc.sectionTitle.status == 'Total Leads' ? 'fa fa-envelope' : 'fa fa-calendar-o'">&nbsp;&nbsp;</i>
+                              {{bdc.sectionTitle.status == 'Total Leads' ? (lead.email || 'No Email Provided' | limitTo: 25) : (lead.appointments | limitTo:25)}}
+                            </td>
                             <td class="contact-type" style="vertical-align: middle; width:13% !important;"><i class="fa fa-phone">&nbsp;&nbsp;</i>{{lead.phone || 'No Phone Provided' | limitTo: 25}}</td>
                             <td class="client-status">
-                                <span class="label" ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                      'label-info': lead.sourceType.toLowerCase() == 'internet'}">
-                                  {{lead.sourceName}}
-                                </span>
+                              <i ng-class="lead.agents[0].name ? 'fa fa-user text-navy' : 'fa fa-user-times text-danger'">&nbsp;&nbsp;</i>
+                              {{lead.agents[0].name || 'Unassigned'}}
                             </td>
                             <td>{{lead.timeAgo}}</td>
                           </tr>

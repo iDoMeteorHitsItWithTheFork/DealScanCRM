@@ -238,6 +238,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.dealsTableData = [];
       _bdc.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
+          .withOption('order', [[5, 'asc']])
           .withButtons([
             {extend: 'copy'},
             {extend: 'csv'},

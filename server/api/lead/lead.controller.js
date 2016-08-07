@@ -635,18 +635,26 @@ export function totalAppointments(req, res){
 
          /* Get All Appointments */
          promises.push(Lead.findAll({
-           include: {
-              model: Event,
-              include: [
-               {
-                 model: User,
-                 as: 'Host',
-                 attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-               }
-             ],
-           },
-           through: Participants
-         }));
+           include: [
+             {
+               model: User,
+               as: 'Agents',
+               attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+               through: 'AssignedLeads'
+             },
+             {
+               model: Event,
+               include: [
+                 {
+                   model: User,
+                   as: 'Host',
+                   attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+                 }
+               ],
+               through: Participants,
+               required: true
+             }
+           ]}));
 
          return Q.all(promises).then(function(appointments){
            var _leads = [];
@@ -701,21 +709,26 @@ export function keptAppointments(req, res){
 
       /* Get All Appointments */
       promises.push(Lead.findAll({
-        include: {
-          model: Event,
-          where: {
-            status: 'kept'
+        include: [
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
-          include: [
-            {
-              model: User,
-              as: 'Host',
-              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-            }
-          ],
-        },
-        through: Participants
-      }));
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            required: true
+          }
+        ]}));
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
@@ -768,21 +781,26 @@ export function missedAppointments(req, res){
 
       /* Get All Appointments */
       promises.push(Lead.findAll({
-        include: {
-          model: Event,
-          where: {
-            status: 'missed'
+        include: [
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
-          include: [
-            {
-              model: User,
-              as: 'Host',
-              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-            }
-          ],
-        },
-        through: Participants
-      }));
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            required: true
+          }
+        ]}));
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
@@ -835,21 +853,26 @@ export function soldAppointments(req, res){
 
       /* Get All Appointments */
       promises.push(Lead.findAll({
-        include: {
-          model: Event,
-          where: {
-            status: 'sold'
+        include: [
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
           },
-          include: [
-            {
-              model: User,
-              as: 'Host',
-              attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-            }
-          ],
-        },
-        through: Participants
-      }));
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            required: true
+          }
+        ]}));
 
       return Q.all(promises).then(function(appointments){
         var _leads = [];
