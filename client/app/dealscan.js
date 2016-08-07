@@ -21,13 +21,12 @@ $(document).ready(function () {
   function minimalize (fire) {
     if (size < 1136) {
       $("body").addClass("mini-navbar");
+      $('body').removeClass('hide-tooltips');
       // For smoothly turn on menu
-      setTimeout(
-          function () {
             $('#side-menu').fadeIn(400);
-          }, 100);
     } else {
       $("body").removeClass("mini-navbar");
+      $('body').addClass('hide-tooltips');
       $('#side-menu').removeAttr('style');
     }
 
@@ -60,6 +59,7 @@ $(function() {
       $('body').addClass('body-small')
     } else {
       $('body').removeClass('body-small')
+      $('body').removeClass('hide-tooltips');
     }
   })
 });
