@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="bower_components/angular-aside/dist/css/angular-aside.css" />
   <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css" />
   <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
+  <link rel="stylesheet" href="bower_components/pdf.js-viewer/viewer.css">
   <!-- endbower -->
 
   <!-- endbuild -->
@@ -116,9 +117,9 @@
 <script src="bower_components/json3/lib/json3.min.js"></script>
 <![endif]-->
 
-
 <!-- build:js({client,node_modules}) app/vendor.js -->
 <!-- bower:js -->
+<script src="bower_components/pdfjs-dist/build/pdf.js"></script>
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -142,6 +143,7 @@
 <script src="bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.js"></script>
 <script src="bower_components/flow.js/dist/flow.js"></script>
 <script src="bower_components/ng-flow/dist/ng-flow.js"></script>
+<!--<script src="bower_components/angular-pdfjs-viewer/dist/angular-pdfjs-viewer.js"></script>-->
 <!-- endbower -->
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry,visualization&key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
@@ -155,6 +157,8 @@
 <script src=".resources/plugins/angular-idle/angular-idle.js"></script>
 <script src=".resources/plugins/toastr/toastr.min.js"></script>
 <script src="socket.io-client/socket.io.js"></script>
+
+
 <!-- endbuild -->
 <!-- build:js(.tmp) app/app.js -->
 <script src="app/app.js"></script>

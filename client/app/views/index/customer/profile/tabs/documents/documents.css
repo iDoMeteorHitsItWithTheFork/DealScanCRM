@@ -25,3 +25,8 @@
 .text-crm-red {
   color: #ed5565!important;
 }
+
+.some-pdf-container {
+  width: 100%;
+  height: 100%;
+}
