@@ -1,21 +1,21 @@
 <!-- Wrapper-->
-<div id="wrapper">
+<div id="wrapper" >
 
     <!-- Navigation -->
     <navigation></navigation>
 
     <!-- Page wrapper -->
     <!-- ng-class with current state name give you the ability to extended customization your view -->
-    <div id="page-wrapper" class="gray-bg {{$state.current.title}}" page-height text="{{$state.current.title}}" style="padding-right:0; padding-left:0;">
+    <div id="page-wrapper" class="gray-bg {{$state.current.title}}" style="padding-right:0; padding-left:0;">
 
         <!-- Top Navbar -->
         <navbar></navbar>
 
         <!-- Main view  -->
-        <div ui-view style="overflow-y: hidden;"></div>
+        <div ui-view  ></div>
 
         <!-- Footer -->
-        <footer ng-if="$state.current.title === 'social_media'"></footer>
+        <!--<footer ng-if="$state.current.title != 'social_media'"></footer>-->
 
     </div>
     <!-- End page wrapper-->

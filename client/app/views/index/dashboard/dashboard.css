@@ -341,12 +341,12 @@ div.navs-3 > ul.nav-tabs > li {
    background-color:#fff!important;
    padding:5px!important;
    top: 0!important;
-   right: -65px!important;
+   right: -20px!important;
  }
 
 .legend div {
   top: 0!important;
-  right: -65px!important;
+  right: -20px!important;
 }
 
 #flotTip {
@@ -355,3 +355,13 @@ font-size:15px!important;
   z-index:9999!important;
 }
 
+.p-t-0 {
+  padding-top:0;
+}
+.m-b-5 {
+  margin-bottom:5px!important;
+}
+
+.sq-bg {
+  background-color: #394d61!important;
+}
