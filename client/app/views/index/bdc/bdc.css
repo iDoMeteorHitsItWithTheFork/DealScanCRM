@@ -4,7 +4,9 @@
 .table.lead-details-table td {
   border-top-color: transparent; !important;
 }
-
+.m-t-8 {
+  margin-top:8px!important;
+}
 .m-t-25 {
   margin-top:25px !important;
 }

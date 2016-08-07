@@ -305,6 +305,9 @@ div.navs-3 > ul.nav-tabs > li {
   box-shadow: none!important;
 }
 
+.tc {
+  text-align: center
+}
 .crm-bar-chart div.xAxis div.tickLabel
 {
   transform: rotate(-90deg);
@@ -334,7 +337,22 @@ div.navs-3 > ul.nav-tabs > li {
 
 .legendLabel{
   font-size:15px !important;
+}
 
+#bdc-charts .legendLabel{
+   font-size:14px !important;
+
+ }
+#bdc-charts .legend table {
+  background-color:#fff!important;
+  padding:5px!important;
+  top: 0!important;
+  right: -60px!important;
+}
+
+#bdc-charts .legend div {
+  top: 0!important;
+  right: -60px!important;
 }
 
 .legend table {
