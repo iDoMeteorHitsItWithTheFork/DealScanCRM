@@ -57,22 +57,30 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function (err) {
+    console.log(err);
+    throw err;
     res.status(statusCode).send(err);
   };
 }
 
 // Gets a list of Notes
 export function index(req, res) {
-  Note.findAndCountAll({
-    include: [{
-      model: User,
-      as: 'Creator',
-      attributes: ['userID', 'email', 'firstName', 'lastName', 'phone', 'role']
-    }],
-    where: {
-      customerID: req.query.customerID
-    }
-  }, {logging: console.log}).then(handleEntityNotFound(res))
+  Note.findAll({
+    include: [
+      {
+        model: Customer,
+        through: 'NoteActivities',
+        where: {
+          customerID: req.query.customerID
+        }
+      },
+      {
+        model: User,
+        as: 'Creator',
+        attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role']
+      }
+    ]
+  }).then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -91,19 +99,55 @@ export function show(req, res) {
 
 // Creates a new Note in the DB
 export function create(req, res) {
-  Note.create(req.body)
-    .then(function(note){
-        return Note.find({
-          include: [{
-            model: User,
-            as: 'Creator',
-            attributes: ['userID', 'email', 'firstName', 'lastName', 'phone', 'role']
-          }],
-          where: {
-            noteID: note.noteID
-          }
-        })
+  return Note.sequelize.transaction(function(t){
+    return Customer.find({
+      where: {
+        customerID: req.body.customerID
+      },
+      transaction: t
+    }).then(function(customer){
+      if (!customer) return res.status(500).send('Unable to identify customer');
+      else {
+        return customer.createNote({
+          content: req.body.content
+        }, {transaction: t}).then(function(note){
+             if (!note) res.status(500).send('An error occured whilte attempting to record your note');
+             return note.setCreator(req.user.userID, {transaction: t})
+               .then(function(){
+                 return Note.find({
+                   where: {
+                     noteID: note.noteID
+                   },
+                   include: [
+                     {
+                       model: Customer,
+                       through: 'NoteActivities',
+                       where: {
+                         customerID: req.body.customerID
+                       }
+                     },
+                     {
+                       model: User,
+                       as: 'Creator',
+                       attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role']
+                     }
+                   ],
+                   transaction: t
+                 }).then(function(note){
+                     return note;
+                 })
+             });
+        });
+      }
     })
+  }).then(function(note){
+    return res.status(200).json(note);
+  }).catch(handleError(res));
+
+  Note.create({
+
+  })
+    .then()
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }

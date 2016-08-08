@@ -13,14 +13,12 @@ angular.module('dealScanCrmApp')
      * @param userID
      */
     function getNotes(customerID, userID) {
-      var payload = {'customerID': customerID};
-      if (userID) payload.userID = userID;
-      return NoteResource.get(payload).
+      console.log(customerID);
+      return NoteResource.query({customerID: customerID}).
         $promise.then(function (notes) {
           _notes.length = 0;
-          _notes = notes || [];
-          _notesInfo = notes ? notes.rows : [];
-          return _notesInfo;
+           _notes = notes;
+          return _notes;
         }).catch(function (err) {
           console.log(err);
           return err;
@@ -43,15 +41,17 @@ angular.module('dealScanCrmApp')
      */
 
     function addNote(note) {
+      console.log(note);
       if (!note.content || !note.creatorID || !note.customerID) return;
       return NoteResource.save({
         content: note.content,
-        creatorID: note.creatorID,
         customerID: note.customerID
       }).$promise.then(function (newNote) {
           console.log(newNote);
-          if (_notes.rows) _notes.rows.push(newNote);
-          return newNote;
+        if (newNote){
+          _notes.unshift(newNote);
+          return {success:true, note: newNote};
+        } else return {success: false, error: {code: '', msg: ''}};
       }).catch(function(err){
           console.log(err);
           return err;
