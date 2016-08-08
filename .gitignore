@@ -3,7 +3,7 @@ public
 .tmp
 .idea
 dump.rdb
-.rdb
+*.rdb
 client/bower_components
 dist
 /server/config/local.env.js

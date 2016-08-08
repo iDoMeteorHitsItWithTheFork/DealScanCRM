@@ -79,7 +79,8 @@ export function index(req, res) {
         as: 'Creator',
         attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role']
       }
-    ]
+    ],
+    order: [['noteID', 'DESC']]
   }).then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));

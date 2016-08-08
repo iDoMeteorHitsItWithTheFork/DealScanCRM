@@ -7,17 +7,19 @@
     </div>
 
     <div class="wrapper wrapper-content animated fadeInUp" ng-hide="note.processingNotes" style="padding-top: 20px;">
-      <div class="row">
+      <div class="row m-b-30" >
         <div class="col-xs-12">
-        <form name="addNoteForm">
-          <div class="form-group">
-            <textarea class="form-control" rows="3" placeholder="Add a note..." ng-disabled="note.addingNote" ng-model="note.newNote.content" ng-required="true"></textarea>
-            <button ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || note.saving" type="submit"
-                    class="btn btn-white btn-sm btn-wide" ng-click="note.addNote()">
-              <i ng-class="note.addingNote ? 'fa fa-spinner fa-spin' : 'fa fa-plus'">&nbsp;&nbsp;</i>Add Note
-            </button>
-          </div>
-        </form>
+          <form name="addNoteForm" class="add-note-style">
+            <div class="input-group">
+              <input type="text" ng-model="note.newNote.content" ng-required="true" class="form-control input-sm"
+                     name="search" placeholder="Add a note..." ng-disabled="note.addingNote">
+              <div class="input-group-btn">
+                <button ladda="note.addingNote" ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || note.addingNote" type="submit"
+                        class="ladda-button btn btn-sm btn-primary" ng-click="note.addNote(addNoteForm)">Add
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       <ul class="notes">

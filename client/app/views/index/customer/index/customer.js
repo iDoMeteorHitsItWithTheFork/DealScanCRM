@@ -120,9 +120,20 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/note/note.html',
         controller: 'NoteCtrl as note',
         resolve: {
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                serie: true,
+                name: 'angular-ladda',
+                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                  '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+              }
+            ])
+          },
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
-          }
+          },
+
         },
         data: {pageTitle: 'Customer Notes'},
       })

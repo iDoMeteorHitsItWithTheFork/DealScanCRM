@@ -39,14 +39,14 @@ angular.module('dealScanCrmApp')
      * add a note
      *
      * */
-    _note.addNote = function () {
+    _note.addNote = function (noteForm) {
       if (_note.addingNote) return;
       _note.addingNote = true;
       Note.add(_note.newNote).then(function (newNote) {
         console.log(newNote);
         if (newNote.success) {
           _note.newNote.content = '';
-          _note.addNoteForm.$setPristine();
+          noteForm.$setPristine();
           toaster.success({title: 'New Note', body:'your note was added to the customer profile'});
         } else toaster.error({title: 'Note Error', body: 'An error occured while attempting to create note'});
         _note.addingNote = false;

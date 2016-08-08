@@ -77,29 +77,10 @@ var Lead = sqldb.Lead;
       });
 */
 
-/*
-    User.sync()
-      .then(() => User.destroy({where: {}}))
+
+   /* User.sync()
       .then(() => {
-        User.bulkCreate([{
-          firstName: 'Luda',
-          lastName: 'Agodio',
-          email: 'lagodio@alvsoftwarellc.com',
-          phone: '2029971908',
-          password: 'Baiser12!',
-          role: 'admin',
-          provider: 'local',
-        },
-          {
-            firstName: 'Richard',
-            lastName: 'Kelly',
-            dscUserID: 8,
-            email: 'Richard.Kelly.8@HagerstownFord.com',
-            phone: '8006905984',
-            password: 'a',
-            role: 'sale_rep',
-            provider: 'local',
-          },
+        User.bulkCreate([
           {
           firstName: 'Miles',
           lastName: 'Johnson',
@@ -117,6 +98,33 @@ var Lead = sqldb.Lead;
             password: 'a',
             role: 'admin',
             provider: 'local',
+          },
+          {
+            firstName: "Chris",
+            lastName: "Edwards",
+            phone: '4109609006',
+            email: "chirsEdwards@hagerstownford.com",
+            password: 'a',
+            role: "sale_mgr",
+            provider: "local"
+          },
+          {
+            firstName: "Chris",
+            lastName: "Black",
+            phone: '4109609006',
+            email: "chirsBlack@hagerstownford.com",
+            password: 'a',
+            role: "sale_mgr",
+            provider: "local"
+          },
+          {
+            firstName: "Sales",
+            lastName: "Manager",
+            phone: '4106691642',
+            email: "sale_mgr@hagerstownford.com",
+            password: 'a',
+            role: "sale_mgr",
+            provider: "local"
           },
           {
             firstName: 'Marcus',
@@ -488,9 +496,10 @@ var Lead = sqldb.Lead;
             })
           })
       });
-
 */
 
+
+/*
 
 var data = [
   {"name": "Clark Parsons", "phone": "(681) 299-6486", "email": "Aenean@imperdietdictum.com", "address": "Ap #390-2060 Tellus Street", "interest": "sodales at, velit.", "additionalInfo": "ullamcorper magna. Sed", "sourceName": "Social Media", "sourceType": "Internet"},
@@ -631,6 +640,7 @@ User.find({
 }).catch(function(err){
    console.log(err);
 })
+*/
 
 
 
