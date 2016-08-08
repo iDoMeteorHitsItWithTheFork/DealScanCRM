@@ -144,11 +144,9 @@ angular.module('dealScanCrmApp')
        * Start Monitoring Session
        * @returns {Array}
          */
-      function statMonitoring(){
+      function startMonitoring(){
         console.log('>> Initiate Monitoring Session');
-        _watchlists.length = 0;
-        _watchlists  = SocialMediaMonitoring.start();
-        return _watchlists;
+        return SocialMediaMonitoring.start(_watchlists);
       }
 
         /**
@@ -157,8 +155,7 @@ angular.module('dealScanCrmApp')
          */
       function stopMonitoring(){
         console.log('>> Stoping Montioting session');
-        _watchlists = SocialMediaMonitoring.stop();
-        return _watchlists;
+        SocialMediaMonitoring.stop();
       }
 
     /**
@@ -570,7 +567,7 @@ angular.module('dealScanCrmApp')
         comment: addCommentFbPost,
         searchResults: getSocialSearchResults,
         clear: clearResults,
-        monitor:statMonitoring,
+        monitor:startMonitoring,
         stopStream: stopMonitoring,
         postToFb: postToFb,
         getFbPages: getFbPages,

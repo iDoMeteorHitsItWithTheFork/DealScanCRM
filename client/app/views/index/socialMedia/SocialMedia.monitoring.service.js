@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .factory('SocialMediaMonitoring', function (socket, $q, $timeout, $interval, Util) {
+  .factory('SocialMediaMonitoring', function (socket, $q, $timeout, $interval, Util, ) {
 
       var deferred = $q.defer();
       var STATE_DISCONNECTED = 'disconnected';
@@ -23,7 +23,19 @@ angular.module('dealScanCrmApp')
         channelsDescription: []
       };
 
-
+      var _formattedData = {};
+      var  list = [];
+      function _initData(watchlists){
+        list = watchlists;
+        for(var i =0; i < list.length; i++){
+          var d = {watchlistName: list[i].watchlistName};
+          var keywords = {};
+          for(var k =0; k < list[i].Keywords.length; k++)
+             keywords[list[i].Keywords[k].keyword.toLowerCase()] = 0;
+          _formattedData[list[i].watchlistName] = {keywords: keywords};
+        }
+        console.log(_formattedData);
+      }
 
       var _state = {
         socket: null,
@@ -68,14 +80,8 @@ angular.module('dealScanCrmApp')
       _socket.on('connected', function(msg) {
         console.log('connected', msg);
         deferred.resolve('init');
-        _data.channelsDescription = msg.channelsDescription;
-        _initData();
         _state.socket = STATE_CONNECTED;
         _state.twitter = msg.twitterState;
-        // _socketMaxAgeInfos.socketMaxAge = msg.socketMaxAge;
-        // _socketMaxAgeInfos.socketMaxAgeAlertBefore = msg.socketMaxAgeAlertBefore;
-        // prepareSocketTimeout(msg.socketMaxAge,msg.socketMaxAgeAlertBefore);
-        // updateStateConnexionTime();
       });
 
       //if the client looses the socket connection to the server
@@ -114,16 +120,10 @@ angular.module('dealScanCrmApp')
 
       //update on each postprocessed tweet
       _socket.on('data', function(msg) {
-        console.log(msg);
+        //console.log(msg);
         var channelId, i, keyword;
-//            console.log(msg.text);
         //feed channels infos
         for (channelId in msg.$channels) {
-          _data.channels[channelId].count++;
-          _data.channels[channelId].lastTweets = [msg].concat(_data.channels[channelId].lastTweets);
-          if (_data.channels[channelId].lastTweets.length > lastTweetsMaxlength) {
-            _data.channels[channelId].lastTweets.pop();
-          }
           _formattedData[channelId].data = [{
             datasource: 'twitter',
             username: msg.tweet.user.screen_name,
@@ -144,61 +144,15 @@ angular.module('dealScanCrmApp')
             retweeted: msg.tweet.retweeted,
             favorited: msg.tweet.favorited
           }].concat(_formattedData[channelId].data);
+
           if (_formattedData[channelId].data.length > lastTweetsMaxlength){
             _formattedData[channelId].data.pop();
           }
-
-          for (i = 0; i < msg.$channels[channelId].length; i++) {
-            if (typeof _data.channels[channelId].keywords[msg.$channels[channelId][i]] === 'undefined') {
-              _data.channels[channelId].keywords[msg.$channels[channelId][i]] = {
-                count: 0,
-                name: msg.$channels[channelId][i]
-              };
-            }
-            var idx = Util.indexOfObject(_formattedData[channelId].Keywords, 'keyword', msg.$channels[channelId][i]);
-            if (idx != -1) _formattedData[channelId].Keywords[idx].count++;
-            _data.channels[channelId].keywords[msg.$channels[channelId][i]].count++;
-          }
+          for (i = 0; i < msg.$channels[channelId].length; i++)
+            _formattedData[channelId].keywords[msg.$channels[channelId][i]]++;
         }
-        for (i = 0; i < msg.$keywords.length; i++) {
-          if (typeof _data.keywords[msg.$keywords[i]] === 'undefined') {
-            _data.keywords[msg.$keywords[i]] = {
-              count: 0,
-              name: _data.keywords[msg.$keywords[i]]
-            };
-          }
-          _data.keywords[msg.$keywords[i]].count++;
-        }
-        _data.count++;
       });
 
-      var _formattedData = [];
-
-      var _initData = function() {
-        var channelId;
-        for (channelId in _data.channelsDescription) {
-          _data.channels[channelId] = {
-            lastTweets: [],
-            keywords: {},
-            count: 0
-          };
-           /* Initialize formatted data */
-          _formattedData.push({
-            watchlistName: _data.channelsDescription[channelId].title,
-            watchlistDescription: _data.channelsDescription[channelId].description,
-            Keywords: _data.channelsDescription[channelId].track,
-            data: []
-          })
-        }
-
-        for(var i = 0; i < _formattedData.length; i++){
-          var reformattedArray = _formattedData[i].Keywords.map(function(obj){
-            var rObj = {keyword : obj, count: 0};
-            return rObj;
-          });
-          _formattedData[i].Keywords = reformattedArray;
-        }
-      };
 
       var getData = function() {
         return _data;
@@ -221,12 +175,6 @@ angular.module('dealScanCrmApp')
         return _socketMaxAgeInfos;
       };
 
-      // var extendConnexion = function(){
-      //   _socket.emit('extend-connexion');
-      //   console.log('extend-connexion');
-      //   prepareSocketTimeout(_socketMaxAgeInfos.socketMaxAge,_socketMaxAgeInfos.socketMaxAgeAlertBefore);
-      // };
-
       /**
        * Returns a promise to use in a route resolver to be sure not to launch some controllers that should have socket connection init before their creation
        * @returns {$q.promise}
@@ -236,14 +184,14 @@ angular.module('dealScanCrmApp')
       };
 
 
-       var startMonitoring = function(){
+       var startMonitoring = function(watchlists){
          _socket.emit('startMonitoring');
-          return getFormattedData();
+         _initData(watchlists);
+         return getFormattedData();
        }
 
        var stopMonitoring = function(){
          _socket.emit('stopMonitoring');
-          return getFormattedData();
        }
 
       //public API
@@ -256,30 +204,6 @@ angular.module('dealScanCrmApp')
         isInit: isInit,
         start: startMonitoring,
         stop: stopMonitoring
-        // extendConnexion : extendConnexion,
-        // _debug: {
-        //   state: {
-        //     switchSocketState: function() {
-        //       if (_state.socket === STATE_CONNECTED) {
-        //         _state.socket = STATE_DISCONNECTED;
-        //       }
-        //       else {
-        //         _state.socket = STATE_CONNECTED;
-        //       }
-        //     },
-        //     inactiveSocket: function() {
-        //       _state.socket = STATE_DISCONNECTED_DUE_TO_INACTIVITY;
-        //     },
-        //     switchTwitterState: function() {
-        //       if (_state.twitter === STATE_CONNECTED) {
-        //         _state.twitter = STATE_DISCONNECTED;
-        //       }
-        //       else {
-        //         _state.twitter = STATE_CONNECTED;
-        //       }
-        //     }
-        //   }
-        // }
       };
 
     });

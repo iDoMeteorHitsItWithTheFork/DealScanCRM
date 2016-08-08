@@ -245,7 +245,7 @@
                           <li class="cursor-default" ng-repeat="item in sm.displayingList.Keywords">
                               <div style="display:block">
                                 <strong>{{item.keyword}}</strong>
-                                  <span class="badge badge-warning pull-right">{{item.count}}</span>
+                                  <span class="badge badge-warning pull-right">{{sm.stream[sm.displayingList.watchlistName].keywords[item.keyword.toLowerCase()]}}</span>
                               </div>
                           </li>
                       </ul>
@@ -253,7 +253,7 @@
                   <!-- /. monitoring list -->
                   <!-- Monitoring Details Pane -->
                   <div class="col-xs-6" style="position:absolute; left:342px; top:0px; bottom:0; right:0; padding:10px; padding-bottom:0;">
-                      <div ng-if="sm.displayingList.data.length > 0" class="social-feed-box" ng-repeat="item in sm.displayingList.data" style="width: 342px;">
+                      <div ng-if="sm.stream[sm.displayingList.watchlistName].data.length > 0" class="social-feed-box" ng-repeat="item in sm.stream[sm.displayingList.watchlistName].data" style="width: 342px;">
                           <div class="pull-right social-action">
                               <button class="btn btn-{{::item.datasource}} btn-circle">
                                   <i class="fa fa-{{::item.datasource}}"></i>

@@ -89,8 +89,8 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.{css,html}',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
+          '{..stream,<%= yeoman.client %>}/{app,components}/**/*.{css,html}',
+          '{..stream,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -174,9 +174,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/',
+          cwd: '..stream/',
           src: '{,*/}*.css',
-          dest: '.tmp/'
+          dest: '..stream/'
         }]
       }
     },
@@ -292,9 +292,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/concat',
+          cwd: '..stream/concat',
           src: '**/*.js',
-          dest: '.tmp/concat'
+          dest: '..stream/concat'
         }]
       }
     },
@@ -337,12 +337,12 @@ module.exports = function (grunt) {
       main: {
         cwd: '<%= yeoman.client %>',
         src: ['{app,components}/**/*.html'],
-        dest: '.tmp/templates.js'
+        dest: '..stream/templates.js'
       },
       tmp: {
         cwd: '.tmp',
         src: ['{app,components}/**/*.html'],
-        dest: '.tmp/tmp-templates.js'
+        dest: '..stream/.stream-templates.js'
       }
     },
 
@@ -371,7 +371,7 @@ module.exports = function (grunt) {
           ]
         }, {
           expand: true,
-          cwd: '.tmp/images',
+          cwd: '..stream/images',
           dest: '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images',
           src: ['generated/*']
         }, {
@@ -387,7 +387,7 @@ module.exports = function (grunt) {
       styles: {
         expand: true,
         cwd: '<%= yeoman.client %>',
-        dest: '.tmp/',
+        dest: '..stream/',
         src: ['{app,components}/**/*.css']
       }
     },
@@ -559,7 +559,7 @@ module.exports = function (grunt) {
           transform: function(filePath) {
             var yoClient = grunt.config.get('yeoman.client');
             filePath = filePath.replace('/' + yoClient + '/', '');
-            filePath = filePath.replace('/.tmp/', '');
+            filePath = filePath.replace('/..stream/', '');
             return '<script src="' + filePath + '"></script>';
           },
           sort: function(a, b) {
@@ -576,7 +576,7 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/index.html': [
                [
                  '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-                 '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+                 '!{..stream,<%= yeoman.client %>}/app/app.{js,ts}'
                ]
             ]
         }
@@ -588,7 +588,7 @@ module.exports = function (grunt) {
           transform: function(filePath) {
             var yoClient = grunt.config.get('yeoman.client');
             filePath = filePath.replace('/' + yoClient + '/', '');
-            filePath = filePath.replace('/.tmp/', '');
+            filePath = filePath.replace('/..stream/', '');
             return '<link rel="stylesheet" href="' + filePath + '">';
           },
           starttag: '<!-- injector:css -->',

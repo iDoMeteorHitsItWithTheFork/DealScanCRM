@@ -8,6 +8,7 @@ angular.module('dealScanCrmApp')
     _sm.user = Auth.getCurrentUser();
     _sm.searchResults = SocialMedia.searchResults();
     _sm.watchlists = SocialMedia.watchlists();
+    _sm.stream = {};
     _sm.mapCenter = [39.628, -77.766];
     _sm.views  = [{id:'discover', name:'Social Media Discovery', active: true},
                   {id: 'monitor', name: 'Social Media Monitoring', active: false}];
@@ -431,17 +432,35 @@ angular.module('dealScanCrmApp')
     }
 
     _sm.startMonitoring = function(){
-      console.log(_sm.watchlists);
+       if (_sm.intiatingStream) return;
+       console.log(_sm.watchlists);
        console.log('[Starting Monitoring]');
-      _sm.watchlists = SocialMedia.monitor();
-      console.log(_sm.watchlists);
+       _sm.intiatingStream = true;
+       _sm.stream = SocialMedia.monitor();
+
+         /*var keys = Object.keys(_sm.stream);
+         console.log(keys);
+         for(var i = 0; i < keys.length; i++){
+           var idx = Util.indexOfObject(_sm.watchlists, 'watchlistName', keys[i]);
+           if (idx != -1){
+             console.log('\n\n\n STREAM[Keys[i]] \n\n');
+             console.log(keys[i]);
+             console.log(_sm.stream[keys[i]]);
+             console.log('\n\n\n ----------------- \n\n');
+             _sm.watchlists[idx].data = _sm.stream[keys[i]].data;
+             for(var k = 0; k < _sm.watchlists[idx].Keywords.length; k++){
+               var _keyword = _sm.watchlists[idx].Keywords[k];
+               _keyword.count = _sm.stream[keys[i]].keywords[_keyword.keyword.toLowerCase()];
+             }
+           }
+         }*/
+
     }
 
 
     _sm.stopMonitoring  = function(){
        console.log('[Stoping Monitoring]');
-       _sm.watchlists = SocialMedia.stopStream();
-       console.log(_sm.watchlists);
+       SocialMedia.stopStream();
     }
 
 
