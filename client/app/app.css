@@ -98,6 +98,15 @@ textarea {
 .hide-tooltips .sidebar-collapse .tooltip {
   display:none!important;
 }
+
+.bg-sq {
+  background-color: #243a50;
+  color: #FFFFFF;
+}
+.bg-white {
+  background-color: #fff;
+  color: #414141;
+}
 /*.md-skin .navbar-static-side {*/
 /*height:100%*/
 /*}*/
