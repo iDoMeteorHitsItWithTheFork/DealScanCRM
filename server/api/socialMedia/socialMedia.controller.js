@@ -176,13 +176,13 @@ export function searchFacebook(req, res){
     limit: 25,
   };
 
-  if (location){
+  /*if (location){
     searchOptions.center = [req.query.geocode.lat, req.query.geocode.lon];
     searchOptions.distance = req.query.geocode.distance;
-  }
+  }*/
 
   var feed ='/feed?';
-  if (location && location.enforce) feed +='with=location&';
+  //if (location && location.enforce) feed +='with=location&';
   feed += 'fields=from{name, picture},message,created_time,coordinates,' +
     'attachments,comments.limit(3).summary(true){attachment,like_count,from{name, picture},' +
     'created_time,message},likes.limit(3).summary(true),actions';

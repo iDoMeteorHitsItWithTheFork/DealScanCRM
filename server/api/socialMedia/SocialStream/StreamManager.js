@@ -98,7 +98,7 @@ StreamManager.prototype.launch = function(initCallback,timeoutCallback){
   var that = this;
   this.getStreamChannelsTrackOptions().then(function(channels){
 
-    that._stream = that.client.streamChannels({track:channels});
+    that._stream = that.client.streamChannels({track:channels, location:['-115.14','36.17', '-114.14', '37.17']});
     console.log('>.streamChannels() called - twitter should be requested anytime');
     if(typeof initCallback === 'function'){
       initCallback.call({},that._stream);

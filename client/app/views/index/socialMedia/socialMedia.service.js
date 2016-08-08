@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
   .factory('SocialMedia',
-    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, SocialMediaMonitoring ,toaster, WatchlistResource, $interval) {
+    function (Auth, Util, $resource, $filter, $q, appConfig, ezfb, SocialMediaResource, SocialMediaMonitoring ,toaster, WatchlistResource, $timeout) {
     // Service logic
     var _socialSearchResults = { data: null, searchParams: null};
     var _watchlists = [];
@@ -266,7 +266,7 @@ angular.module('dealScanCrmApp')
                 break;
               case 'facebook':
                 console.log('*** Searching Facebook ***');
-                searches.push(fbSearch(searchOptions));
+                if (searchOptions.term) searches.push(fbSearch(searchOptions));
                 break;
             }
           }
