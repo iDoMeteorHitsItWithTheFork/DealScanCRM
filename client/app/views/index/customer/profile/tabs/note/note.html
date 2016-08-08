@@ -6,17 +6,19 @@
       <span class="sr-only">Loading...</span>
     </div>
 
-    <div class="wrapper wrapper-content animated fadeInUp" ng-hide="note.processingNotes">
+    <div class="wrapper wrapper-content animated fadeInUp" ng-hide="note.processingNotes" style="padding-top: 20px;">
       <div class="row">
+        <div class="col-xs-12">
         <form name="addNoteForm">
           <div class="form-group">
-            <input type="text" class="form-control" ng-model="note.newNote.content" ng-required="true">
+            <textarea class="form-control" rows="3" placeholder="Add a note..." ng-disabled="note.addingNote" ng-model="note.newNote.content" ng-required="true"></textarea>
             <button ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || note.saving" type="submit"
                     class="btn btn-white btn-sm btn-wide" ng-click="note.addNote()">
-              <i class="fa fa-plus">&nbsp;&nbsp;</i>Add Note
+              <i ng-class="note.addingNote ? 'fa fa-spinner fa-spin' : 'fa fa-plus'">&nbsp;&nbsp;</i>Add Note
             </button>
           </div>
         </form>
+        </div>
       </div>
       <ul class="notes">
         <li ng-repeat="n in note.customerNotes">
