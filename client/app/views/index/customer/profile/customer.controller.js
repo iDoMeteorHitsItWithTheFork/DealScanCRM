@@ -99,7 +99,7 @@ angular.module('dealScanCrmApp')
         heading: 'NOTES',
         route: 'index.customer.profile.notes',
         icon: 'fa-files-o',
-        bg_color: 'yellow-bg'
+        bg_color: 'danger-bg'
       }, {
         id: 'messages',
         heading: 'MESSAGES',
@@ -112,7 +112,7 @@ angular.module('dealScanCrmApp')
         heading: 'DOCUMENTS',
         route: 'index.customer.profile.documents',
         icon: 'fa-file-text',
-        bg_color: 'blue-bg'
+        bg_color: 'bg-sq'
       },
       {
         id: 'overview',
