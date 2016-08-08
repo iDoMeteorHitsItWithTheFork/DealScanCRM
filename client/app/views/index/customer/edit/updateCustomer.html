@@ -55,37 +55,33 @@
         <label>Zip Code</label>
         <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.postalCode">
       </div>
+
       <div class="row margin-negative-left-15 margin-negative-right-15">
-        <div class="col-sm-9">
+        <div class="col-lg-12">
           <div class="form-group">
             <label>State</label>
-            <select class="cs-select cs-skin-slide ft-sz-12" ng-model="updateCustomer.customerInfo.state">
-              <option value="" disabled selected>{{updateCustomer.customerInfo.state}}</option>
-              <option class="form-control" ng-repeat="state in updateCustomer.states" value="{{state.name}}">
-                {{state.name}}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="form-group">
-            <label>Code</label>
-            <input type="text" class="form-control" ng-model="updateCustomer.stateCode">
+            <ui-select ng-model="updateCustomer.customerInfo.state" theme="bootstrap" ng-required="true">
+              <ui-select-match placeholder="States">{{$select.selected.name}}</ui-select-match>
+              <ui-select-choices repeat="state in updateCustomer.states | filter: $select.search">
+                <div ng-bind-html="state.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </div>
         </div>
       </div>
+
       <div class="form-group">
         <label>Country</label>
         <input type="text" class="form-control" ng-model="updateCustomer.customerInfo.country">
       </div>
       <div class="form-group">
-        <label>Source</label>
-        <select class="cs-select cs-skin-slide ft-sz-12" ng-model="updateCustomer.customerInfo.source">
-          <option value="" disabled selected>{{updateCustomer.customerInfo.source}}</option>
-          <option class="form-control" ng-repeat="source in updateCustomer.sources" value="{{source.name}}">
-            {{source.name}}
-          </option>
-        </select>
+        <label>Sources</label>
+        <ui-select ng-model="updateCustomer.customerInfo.source" theme="bootstrap" ng-required="true">
+          <ui-select-match placeholder="Sources">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="source in updateCustomer.sources | filter: $select.search">
+            <div ng-bind-html="source.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
       </div>
     </div>
   </div>

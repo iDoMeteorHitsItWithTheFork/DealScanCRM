@@ -1,28 +1,26 @@
 /**
  * Created by ludovicagodio on 4/10/16.
  */
-/**
- * Created by milesjohnson on 4/4/16.
- */
+
 angular.module('dealScanCrmApp')
-  .controller('UpdateCustomerCtrl', function ($scope, Util, Customer, selectedCustomer, $uibModalInstance) {
+  .controller('UpdateCustomerCtrl', function ($scope, Util, Customer, thisCustomer, $uibModalInstance, toaster) {
     console.log("update customer controller loaded");
 
     var _updateCustomer = this;
     _updateCustomer.customerInfo = {
-      driverLicenseID: selectedCustomer.driverLicenseID,
-      firstName: selectedCustomer.firstName,
-      middleInitial: selectedCustomer.middleInitial,
-      lastName: selectedCustomer.lastName,
-      phone: selectedCustomer.phone,
-      dateOfBirth: selectedCustomer.dateOfBirth,
-      email: selectedCustomer.email,
-      streetAddress: selectedCustomer.streetAddress,
-      city: selectedCustomer.city,
-      state: selectedCustomer.state,
-      country: selectedCustomer.country,
-      postalCode: selectedCustomer.postalCode,
-      source: selectedCustomer.source
+      driverLicenseID: thisCustomer.profile.driverLicenseID,
+      firstName: thisCustomer.profile.firstName,
+      middleInitial: thisCustomer.profile.middleInitial,
+      lastName: thisCustomer.profile.lastName,
+      phone: thisCustomer.profile.phone,
+      dateOfBirth: thisCustomer.profile.dateOfBirth,
+      email: thisCustomer.profile.email,
+      streetAddress: thisCustomer.profile.streetAddress,
+      city: thisCustomer.profile.city,
+      state: thisCustomer.profile.state,
+      country: thisCustomer.profile.country,
+      postalCode: thisCustomer.profile.postalCode,
+      source: thisCustomer.profile.source
     };
 
 
@@ -52,13 +50,13 @@ angular.module('dealScanCrmApp')
     _updateCustomer.ok = function () {
       if (_updateCustomer.updatingCustomer) return;
       _updateCustomer.updatingCustomer = true;
-      Customer.update(selectedCustomer.customerID, _updateCustomer.customerInfo).then(function (updatedCustomer) {
+      Customer.update(thisCustomer.profile.customerID, _updateCustomer.customerInfo).then(function (updatedCustomer) {
         console.log(updatedCustomer);
         $uibModalInstance.close(updatedCustomer);
       }).catch(function (err) {
         _updateCustomer.updatingCustomer = false;
         console.log(err);
-        //SweetAlert.swal('Customer Error!', 'Sorry, an error ocurred while attempting to update customer. Please try again later.', 'error');
+        toaster.error({title:'Update Error', body:'An error occured whlle attempting to updat'});
       })
 
     };
@@ -67,7 +65,7 @@ angular.module('dealScanCrmApp')
       $uibModalInstance.dismiss('cancel');
     };
 
-    _updateCustomer.sources = [{name: 'WalkIn'}, {name: 'Internet'}, {name: 'Phone'}];
+    _updateCustomer.sources = Util.leadSources();
     _updateCustomer.states = Util.usStates();
 
   });

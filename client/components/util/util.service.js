@@ -131,6 +131,53 @@
         ];
       },
 
+      leadSources(){
+        return [
+          {
+            id: 'phone',
+            name: 'Phone',
+            type: 'Phone'
+          },
+          {
+            id: 'true_car',
+            name: 'TrueCar',
+            type: 'Internet'
+          },
+          {
+            id: 'car_dot_com',
+            name: 'Cars.com',
+            type: 'Internet'
+          },
+          {
+            id: 'autoTrader',
+            name: 'AutoTrader',
+            type: 'Internet'
+          },
+          {
+            id: 'edmunds',
+            name: 'Edmunds',
+            type: 'Internet'
+          },{
+            id: 'carCode',
+            name: 'Edmunds CarCode',
+            type: 'Internet'
+          },{
+            id: 'website',
+            name: 'hagerstownford.com',
+            type: 'Internet'
+          },
+          {
+            id:'carfax',
+            name: 'Carfax',
+            type: 'Internet'
+          },{
+            id: 'fatwin',
+            name: 'FATWIN',
+            type: 'Internet'
+          }
+        ];
+      },
+
       /**
        *  Return the index of the object with proterty value within the array
        *  */

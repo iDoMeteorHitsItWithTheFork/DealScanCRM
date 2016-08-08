@@ -87,6 +87,10 @@ export default function (sequelize, DataTypes) {
         return {
           'customerID': this.getDataValue('customerID'),
           'driverLicenseID': this.getDataValue('driverLicenceID'),
+          'firstName': this.getDataValue('firstName'),
+          'lastName': this.getDataValue('lastName'),
+          'middleInitial': this.getDataValue('middleInitial'),
+          'dateOfBirth': this.getDataValue('dateOfBirth'),
           'name': this.getDataValue('firstName') +' '+middleInitial+' ' + this.getDataValue('lastName'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
@@ -104,6 +108,10 @@ export default function (sequelize, DataTypes) {
         return {
           'customerID': this.getDataValue('customerID'),
           'driverLicenseID': this.getDataValue('driverLicenceID'),
+          'firstName': this.getDataValue('firstName'),
+          'lastName': this.getDataValue('lastName'),
+          'middleInitial': this.getDataValue('middleInitial'),
+          'dateOfBirth': this.getDataValue('dateOfBirth'),
           'email': this.getDataValue('email'),
           'phone': this.getDataValue('phone'),
           'address': this.getDataValue('streetAddress'),

@@ -135,4 +135,32 @@ angular.module('dealScanCrmApp')
       });
     }
 
+
+    _customer.editCustomer = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/views/index/customer/edit/updateCustomer.html',
+        controller: 'UpdateCustomerCtrl as updateCustomer',
+        resolve: {
+          thisCustomer: function () {
+            return selectedCustomer;
+          },
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                name: 'ui.select',
+                files: ['.resources/plugins/ui-select/select.min.js',
+                  '.styles/plugins/ui-select/select.min.css']
+              },
+            ])
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedCustomer) {
+        //
+      })
+    }
+
   });
