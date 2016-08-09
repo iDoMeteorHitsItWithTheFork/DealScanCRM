@@ -40,7 +40,7 @@ var exitOnErr = function(err) {
 server.once('ready', function() {
   openInbox(function(err, box) {
     if (err) throw err;
-    //timestamp = null;
+    timestamp = null;
     var yesterday = moment().subtract(1, 'days').format('MMM DD[,] YYYY');
     var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", yesterday]];
     server.search(searchOptions, function(err, results){

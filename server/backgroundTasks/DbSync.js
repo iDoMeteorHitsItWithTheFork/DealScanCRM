@@ -187,7 +187,7 @@ var fetchData = function(time) {
   var username, password;
   username = password = 'admin';
   var api = 'http://tdealscan.softeq.net:8080/Admin/Dealerships/ExportCustomersToJson';
-  var yesterday = moment().subtract(1, 'days').unix();
+  var yesterday = moment().subtract(3, 'days').unix();
   time = i > 0 ? Math.floor(time / 1000) : yesterday; //January 1st 2016
   var params = '?dealershipId=1&since=' + time;
   api += params;

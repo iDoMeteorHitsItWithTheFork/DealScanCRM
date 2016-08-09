@@ -37,6 +37,8 @@ module.exports = function(config) {
       'client/bower_components/ng-flow/dist/ng-flow.js',
       'client/bower_components/pdfjs-dist/build/pdf.js',
       'client/bower_components/pdfjs-dist/build/pdf.worker.js',
+      'client/bower_components/signature_pad/signature_pad.js',
+      'client/bower_components/angular-signature/src/signature.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',

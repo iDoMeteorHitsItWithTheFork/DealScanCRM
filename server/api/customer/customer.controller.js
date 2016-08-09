@@ -19,12 +19,17 @@ import {Financing} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Document} from '../../sqldb';
 import config from '../../config/environment';
+import path from 'path'
+
+
+
 
 var moment  = require('moment');
 var Promise = require('bluebird');
 var fs  = require('fs');
 var pdfFiller = require('pdffiller');
 var Q = require('q');
+
 
 
 function respondWithResult(res, statusCode) {
@@ -286,26 +291,38 @@ function generateDocSet(customer, deal){
 
   var sourcePDF = "server/api/deal/DocSet.pdf";
   if (!customer.customerID) throw new Error('CustomerID is required');
-  var path = 'server/users/'+customer.customerID+'/documents';
+  var app = require('../../app');
+  var userFolder = path.resolve(app.get('appPath') +'/app/users/'+customer.customerID+'/documents');
+  console.log('\n\n\n USER FOLDERS \n\n\n');
+  console.log(userFolder);
+  console.log('\n\n _____________________ \n\n\n');
+  var docPath = 'app/users/'+customer.customerID+'/documents';
 
   var df = Q.defer();
   /* Create Directory or use existing user directory */
   var mkdirp = require('mkdirp');
-  mkdirp(path, function (err) {
+  mkdirp(userFolder, function (err) {
     if (err){
       console.error(err);
+      throw err;
       df.reject(err);
     }
     else {
-      var destinationPDF = path+'/filledDocSet.pdf';
+      var microtime = require('microtime');
+      var n = microtime.now();
+      var destinationPDF = userFolder+'/'+n+'.pdf';
+      docPath  += '/'+n+'.pdf';
       var prefill = {};
+
+
+      var signDate = moment(deal.createdAt).format('MM/DD/YYYY');
 
       /* Customer info */
       prefill.customerFullName = customer.name;
       if (customer.address && customer.address.trim() != '') prefill.customerHomeAddress = customer.address;
       if (customer.email && customer.email.trim() != '') prefill.customerEmailAddress = customer.email;
       if (customer.phone && customer.phone.trim() != '') prefill.customerCellPhone = customer.phone;
-      prefill.customerSignatureDate = moment(deal.createdAt).format('DD/MM/YYYY') || '';
+      prefill.customerSignatureDate = signDate || '';
 
       /* Trade PayOff Authorization*/
       if (deal.Trades && deal.Trades.length > 0) {
@@ -329,7 +346,7 @@ function generateDocSet(customer, deal){
       prefill.transferror_state_odometer_statement = deal.Dealership.state || '',
       prefill.transferror_streetAddress_odometer_statement = deal.Dealership.streetAddress || '';
       prefill.transferror_zipCode_odometer_statement = deal.Dealership.zipCode || '',
-      prefill.statement_date_odometer_statement = moment(deal.createdAt).format('DD/MM/YYYY') || '';
+      prefill.statement_date_odometer_statement = signDate || '';
       prefill.transferree_name_odometer_statement = customer.name || '';
       prefill.transfferee_streetAddress_odometer_statement = customer.streetAddress || '';
       prefill.transferree_zipCode_odometer_statement = customer.zipCode || '';
@@ -352,12 +369,12 @@ function generateDocSet(customer, deal){
 
       /* Finaning Approval */
       if (deal.paymentOption == 'financed') {
-        prefill.financing_approval_signature_date = moment(deal.createdAt).format('DD/MM/YYYY') || '';
+        prefill.financing_approval_signature_date = signDate || '';
         prefill.vehicle_year_financing_approval = deal.Purchase.profile.year || '';
         prefill.vehicle_make_financing_approval = deal.Purchase.profile.make || '';
         prefill.vehicle_model_financing_approval = deal.Purchase.profile.model || '';
         prefill.vehicle_vin_finaning_approval = deal.Purchase.profile.VIN || '';
-        prefill.dealer_rep_sign_date = moment(deal.createdAt).format('DD/MM/YYYY') || '';
+        prefill.dealer_rep_sign_date = signDate || '';
       }
 
      /* console.log('\n\n\n>> Data To Prefill....\n\n\n');
@@ -372,11 +389,11 @@ function generateDocSet(customer, deal){
         }
         console.log('\n\n\n\n\n>> FILLED PDF GENERATED....\n\n\n');
         return Document.create({
-          title: 'New Purchase Documents',
+          title: deal.Purchase.profile.year+' '+deal.Purchase.profile.make+' '+deal.Purchase.profile.model,
           type: 'pdf',
-          path: destinationPDF,
+          path: docPath,
           status: 'pending',
-          createdAt: moment(deal.createdAt).format('DD/MM/YYYY'),
+          createdAt: deal.createdAt,
           required: true
         }).then(function(document){
           return document.setDeal(deal)

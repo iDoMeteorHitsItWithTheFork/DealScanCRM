@@ -5,6 +5,7 @@ public
 dump.rdb
 *.rdb
 client/bower_components
+client/app/users
 dist
 /server/config/local.env.js
 npm-debug.log

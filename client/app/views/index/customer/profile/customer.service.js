@@ -198,7 +198,8 @@ angular.module('dealScanCrmApp')
                 added: moment(documents[i].createdAt).format('MMMM DD, YYYY'),
                 id: documents[i].documentID,
                 status: documents[i].status,
-                requested: documents[i].required
+                requested: documents[i].required,
+                url: documents[i].path
               }
               console.log(d);
               var _i = docAttributes(documents[i].type);
