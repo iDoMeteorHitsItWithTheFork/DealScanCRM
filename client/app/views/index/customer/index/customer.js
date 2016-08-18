@@ -10,7 +10,7 @@ angular.module('dealScanCrmApp')
         authenticate: true,
         templateUrl: 'app/views/index/customer/index/customers.html',
         controller: 'CustomersCtrl as customers',
-        data: {pageTitle: 'Customers', navbarColor:'gray-bg'},
+        data: {pageTitle: 'Customers', navbarColor: 'gray-bg'},
         resolve: {
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
@@ -60,45 +60,44 @@ angular.module('dealScanCrmApp')
           }
         },
       })
-        .state('index.customer.profile.overview', {
-          url: '/overview',
-          title: 'Overview',
-          authenticate: true,
-          templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
-          controller: 'CustomerCtrl as customer',
-          resolve: {
-            thisCustomer: function (selectedCustomer) {
-              return selectedCustomer;
-            }
-          },
-          data: {pageTitle: 'Customer Overview'},
-        })
-
-        .state('index.customer.profile.documents', {
-          url: '/documents',
-          title: 'Documents',
-          authenticate: true,
-          templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
-          controller: 'DocumentsCtrl as documents',
-          resolve: {
-            thisCustomer: function (selectedCustomer) {
-              return selectedCustomer;
-            }
-          },
-          data: {pageTitle: 'Customer Documents'},
-        })
-      .state('index.customer.profile.summary.images', {
-        url: '/images',
-        title: 'Images',
+      .state('index.customer.profile.overview', {
+        url: '/overview',
+        title: 'Overview',
         authenticate: true,
-        templateUrl: 'app/views/index/customer/profile/tabs/images/images.html',
-        controller: 'ImagesCtrl as images',
+        templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
+        controller: 'CustomerCtrl as customer',
         resolve: {
           thisCustomer: function (selectedCustomer) {
             return selectedCustomer;
           }
         },
-        data: {pageTitle: 'Customer Images'},
+        data: {pageTitle: 'Customer Overview'},
+      })
+      .state('index.customer.profile.documents', {
+        url: '/documents',
+        title: 'Documents',
+        authenticate: true,
+        templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
+        controller: 'DocumentsCtrl as documents',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        },
+        data: {pageTitle: 'Customer Documents'},
+      })
+      .state('index.customer.profile.documents.pdfViewer', {
+        url: '/:id/:url',
+        title: 'PDF Viewer',
+        authenticate: true,
+        templateUrl: 'app/views/index/customer/profile/tabs/documents/pdfViewer/pdfViewer.html',
+        controller: 'PdfViewerCtrl as viewer',
+        resolve: {
+          thisCustomer: function (selectedCustomer) {
+            return selectedCustomer;
+          }
+        },
+        data: {pageTitle: 'PDF Viewer'},
       })
       .state('index.customer.profile.tasks', {
         url: '/tasks',
@@ -126,7 +125,7 @@ angular.module('dealScanCrmApp')
                 serie: true,
                 name: 'angular-ladda',
                 files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                  '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                  '.styles/plugins/ladda/ladda-themeless.min.css', '.resources/plugins/ladda/angular-ladda.min.js']
               }
             ])
           },

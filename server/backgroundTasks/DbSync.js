@@ -15,6 +15,7 @@ Promise.promisifyAll(NR);
 var StreamArray = require("stream-json/utils/StreamArray");
 var Inbox = require('./gmail.inbox');
 var moment = require('moment');
+var inspect = require('util').inspect;
 
 import {Dealership} from '../sqldb';
 import {User} from '../sqldb';
@@ -121,11 +122,11 @@ var syncDeal = function(deal, callback){
 var insertLead = function(lead, callback){
   console.log(lead);
   return Lead.sequelize.transaction(function (t) {
-    console.log('\n\n>> Finding System');
+    console.log('\n\n>> Retreiving System Details');
     return User.find({
       where: {
-        firstName: 'System',
-        lastName: 'Automaton'
+        firstName: 'EMAIL',
+        lastName: 'SYSTEM'
       },
       transaction: t
     }).then(function(user){
@@ -182,31 +183,340 @@ var extractDataToSync = function (dbRecords) {
   return _dealsToProcess;
 }
 
-var i = 0;
+var sqlStatement = function(time){
+  if (!time) time = moment().subtract(1, 'day');
+  return "SELECT " +
+    "[DL].[DealId]," +
+    "[DL].[DealershipId]," +
+    "[DL].[CustomerId]," +
+    "[DL].[VehicleId]," +
+    "[DL].[TradeId]," +
+    "[DL].[RetailValue]," +
+    "[DL].[SalesPrice]," +
+    "[DL].[DownPayment]," +
+    "[DL].[SalesPersonId]," +
+    "[PMT].[DealId]," +
+    "[PMT].[PaymentOptionId]," +
+    "[PMT].[isLeasePayment]," +
+    "[PMT].[Term]," +
+    "[PMT].[Rate]," +
+    "[PMT].[Payment]," +
+    "[PMT].[Selected]," +
+    "[DL].[SalesPersonFirstName]," +
+    "[DL].[SalesPersonLastName]," +
+    "[DL].[SalesManagerId]," +
+    "[DL].[SalesManagerFirstName]," +
+    "[DL].[SalesManagerLastName]," +
+    "[DL].[TradeValue]," +
+    "[DL].[DealStatusTypeName]," +
+    "[DL].[Rebates]," +
+    "[DL].[DateCreated]," +
+    "[DL].[DateStatusChanged]," +
+    "[DL].[DatePostedToADP]," +
+    "[DL].[DealershipName]," +
+    "[DL].[DealershipZip]," +
+    "[DL].[CustomerZip]," +
+    "[DL].[VehicleUpdateDate]," +
+    "[DL].[CustomerUpdateDate]," +
+    "[DL].[MarketingTypeName]," +
+    "[CST].[CustomerId]," +
+    "[CST].[FirstName]," +
+    "[CST].[MiddleInitial]," +
+    "[CST].[LastName]," +
+    "[CST].[FullName]," +
+    "[CST].[AddressLine1]," +
+    "[CST].[AddressLine2]," +
+    "[CST].[City]," +
+    "[CST].[StateName]," +
+    "[CST].[StateCode]," +
+    "[CST].[PostalCode]," +
+    "[CST].[Birthday]," +
+    "[CST].[DateCreated]," +
+    "[CST].[PhoneNumber]," +
+    "[CST].[EmailAddress],"+
+    "[CST].[DriversLicenseNo]," +
+    "[CST].[DealershipId]," +
+    "[CB].[FirstName] AS CoBuyerFirstName,"+
+    "[CB].[MiddleInitial] AS CoBuyerMiddleInitial,"+
+    "[CB].[LastName] AS CoBuyerLastName,"+
+    "[CB].[AddressLine1] AS CoBuyerAddressLine1,"+
+    "[CB].[AddressLine2] AS CoBuyerAddressLine2,"+
+    "[CB].[City] AS CoBuyerCity,"+
+    "[CB].[PostalCode] AS CoBuyerPostalCode,"+
+    "[CB].[Birthday] AS CoBuyerBirthday,"+
+    "[CB].[DateCreated] AS CoBuyerDateCreated,"+
+    "[CB].[DriversLicenseNo] AS CoBuyerDriversLicenseNo,"+
+    "[CB].[EmailAddress] AS CoBuyerEmailAddress,"+
+    "[CB].[PhoneNumber] AS CoBuyerPhoneNumber,"+
+    "[DLTRD].[TradeId]," +
+    "[DLTRD].[ActualCashValue]," +
+    "[DLTRD].[BalanceOwed]," +
+    "[DLTRD].[VehicleId]," +
+    "[DLTRD].[ScanDate]," +
+    "[TRDVHL].[VehicleId] AS TradeVehicleId," +
+    "[TRDVHL].[VIN] AS TradeVIN," +
+    "[TRDVHL].[Color] AS TradeColor," +
+    "[TRDVHL].[DateCreated] AS TradeDateCreated," +
+    "[TRDVHL].[Year] AS TradeYear," +
+    "[TRDVHL].[Make] AS TradeMake," +
+    "[TRDVHL].[Model] AS TradeModel," +
+    "[TRDVHL].[Mileage] AS TradeMileage," +
+    "[TRDVHL].[BodyStyle] AS TradeBodyStyle," +
+    "[VHL].[VehicleId],[VHL].[DealershipId]," +
+    "[VHL].[VIN],[VHL].[StockNumber]," +
+    "[VHL].[Color]," +
+    "[VHL].[Invoice]," +
+    "[VHL].[HoldBack]," +
+    "[VHL].[HardPack]," +
+    "[VHL].[Pack]," +
+    "[VHL].[Retail]," +
+    "[VHL].[New]," +
+    "[VHL].[DateCreated]," +
+    "[VHL].[NetCost]," +
+    "[VHL].[BaseCost]," +
+    "[VHL].[GrossCost]," +
+    "[VHL].[FullRetail]," +
+    "[VHL].[BodyStyle]," +
+    "[VHL].[Year]," +
+    "[VHL].[Make]," +
+    "[VHL].[Model]," +
+    "[VHL].[Mileage] " +
+    "FROM [KelCar.DeskingSuite].Deal.DealView DL" +
+    " INNER JOIN [KelCar.DeskingSuite].Customer.CustomerView CST ON DL.CustomerId = CST.CustomerId " +
+    "LEFT OUTER JOIN [KelCar.DeskingSuite].Deal.CoBuyer CB ON DL.DealId = CB.DealId "+
+    "INNER JOIN [KelCar.DeskingSuite].Vehicle.VehicleView VHL ON DL.VehicleId =  VHL.VehicleId " +
+    "INNER JOIN [KelCar.DeskingSuite].Deal.PaymentOption PMT ON PMT.DealId = DL.DealId " +
+    "LEFT OUTER JOIN [KelCar.DeskingSuite].Deal.Trade DLTRD ON DL.TradeId = DLTRD.TradeId " +
+    "LEFT OUTER JOIN [KelCar.DeskingSuite].Vehicle.VehicleView TRDVHL ON TRDVHL.VehicleId = DLTRD.VehicleId " +
+    "WHERE CST.FullName IS NOT NULL AND CST.FullName != '' AND " +
+    "(DL.DateCreated >= '"+moment(time).startOf('day').format("MM/DD/YYYY")+"' OR DL.DateStatusChanged >= '"+moment(time).format("MM/DD/YYYY HH:mm:ss a")+"') " +
+    "AND PMT.Selected = 1 " +
+    "ORDER BY DL.DealId DESC, PMT.PaymentOptionId DESC ";
+}
+
+var executeStatement = function(connection, time) {
+  var Request = require('tedious').Request;
+  var statement = sqlStatement(time);
+  var results = [];
+  var sql = new Request(statement, function(err, rowCount) {
+    if (err){
+      console.log(err);
+      return err;
+    } else {
+      console.log('\n\n\n\n QUERY \n\n\n');
+      console.log('RESULTS: '+rowCount);
+      console.log(results);
+      results = formatResults(results);
+      console.log('\n\n\n ***************** \n\n\n');
+      console.log('\n\n\n PACKAGED RESULTS \n\n\n');
+      console.log(inspect(results, false, null));
+      console.log('\n\n\n ***************** \n\n\n');
+    }
+    connection.close();
+  });
+
+  sql.on('row', function(columns) {
+    var r = {};
+    for(var col in columns) r[col] = columns[col].value;
+    results.push(r);
+  });
+
+  sql.on('done', function(rowCount, more) {
+    console.log('\n\n\n\n\n\n DONE \n\n\n\n\n');
+    console.log(rowCount + ' rows returned');
+    console.log('\n\n\n\n ____________ \n\n\n\n');
+  });
+
+  connection.execSql(sql);
+
+}
+
+
+var formatResults = function (results) {
+  var customers = {};
+  for (var i = 0; i < results.length; i++) {
+    var deal = results[i];
+    var customer = {};
+    customer = customers.hasOwnProperty(deal.CustomerId) && customers[deal.CustomerId] ? customers[deal.CustomerId] : {
+      CustomerId: deal.CustomerId,
+      FirstName: deal.FirstName,
+      MiddleInitial: deal.MiddleInitial,
+      LastName: deal.LastName,
+      FullName: deal.FullName,
+      AddressLine1: deal.AddressLine1,
+      AddressLine2: deal.AddressLine2,
+      PhoneNumbver: deal.PhoneNumber,
+      EmailAddress: deal.EmailAddress,
+      City: deal.City,
+      StateName: deal.StateName,
+      StateCode: deal.StateCode,
+      PostalCode: deal.PostalCode,
+      Birthday: deal.Birthday,
+      DriversLicenseNo: deal.DriversLicenseNo,
+      MarketingTypeName: deal.MarketingTypeName,
+      CustomerUpdateDate: deal.CustomerUpdateDate,
+      Deals: []
+    };
+
+    var proceed = true;
+    if (customer.Deals.length > 0){
+      for(var k=0; k < customer.Deals.length; k++){
+        if (deal.DealId == customer.Deals[k].DealId
+          && customer.Deals[k].SelectedPaymentOption.PaymentOptionId > deal.PaymentOptionId) {
+          proceed = false;
+          break;
+        }
+      }
+    }
+
+    if (proceed){
+
+      var custDeal = {
+
+        DealId: deal.DealId,
+        DealershipId: deal.DealershipId,
+        DealershipName: deal.DealershipName,
+        DealershipZip: deal.DealershipZip,
+        SalesPersonId: deal.SalesPersonId,
+        SalesPersonFirstName: deal.SalesPersonFirstName,
+        SalesPersonLastName: deal.SalesPersonLastName,
+        SalesManagerId: deal.SalesManagerId,
+        SalesManagerFirstName: deal.SalesManagerFirstName,
+        SalesManagerLastName: deal.SalesManagerLastName,
+        RetailValue: deal.RetailValue,
+        SalesPrice: deal.SalesPrice,
+        SelectedPaymentOption: {
+          PaymentOptionId: deal.PaymentOptionId,
+          DownPayment: deal.DownPayment,
+          isLeasePayment: deal.isLeasePayment,
+          Term: deal.Term,
+          Rate: deal.Rate,
+          Payment: deal.Payment,
+        },
+        Vehicle: {
+          VehicleId: deal.VehicleId,
+          VehicleUpdateDate: deal.VehicleUpdateDate,
+          VIN: deal.VIN,
+          StockNumber: deal.StockNumber,
+          Color: deal.Color,
+          Invoice: deal.Invoice,
+          HoldBack: deal.HoldBack,
+          HardPack: deal.HardPack,
+          Pack: deal.Pack,
+          Retail: deal.Retail,
+          New: deal.New,
+          NetCost: deal.NetCost,
+          BaseCost: deal.BaseCost,
+          GrossCost: deal.GrossCost,
+          FullRetail: deal.FullRetail,
+          BodyStyle: deal.BodyStyle,
+          Year: deal.Year,
+          Make: deal.Make,
+          Model: deal.Model,
+          Mileage: deal.Mileage
+        },
+        DealStatusTypeName: deal.DealStatusTypeName,
+        Rebates: deal.Rebates,
+        DateCreated: deal.DateCreated,
+        DateStatusChanged: deal.DateStatusChanged,
+        DatePostedToADP: deal.DatePostedToADP,
+      };
+      if (deal.TradeId) {
+        custDeal.Trades = {
+          TradeId: deal.TradeId,
+          TradeValue: deal.TradeValue,
+          ActualCashValue: deal.ActualCashValue,
+          BalanceOwed: deal.BalanceOwed,
+          VehicleID: deal.TradeVehicleId,
+          VIN: deal.TradeVIN,
+          Color: deal.TradeColor,
+          DateCreated: deal.TradeDateCreated,
+          Year: deal.TradeYear,
+          Make: deal.TradeMake,
+          Model: deal.TradeModel,
+          Mileage: deal.TradeMileage,
+          BodyStyle: deal.TradeBodyStyle,
+        }
+      }
+
+      if (deal.CoBuyerFirstName || deal.CoBuyerLastName) {
+        custDeal.CoBuyer = {
+          FirstName: deal.CoBuyerFirstName,
+          MiddleInitial: deal.CoBuyerMiddleInitial,
+          LastName: deal.CoBuyerLastName,
+          AddressLine1: deal.CoBuyerAddressLine1,
+          AddressLine2: deal.CoBuyerAddressLine2,
+          City: deal.CoBuyerCity,
+          PostalCode: deal.CoBuyerPostalCode,
+          Birthday: deal.CoBuyerBirthday,
+          DateCreated: deal.CoBuyerDateCreated,
+          DriversLicenseNo: deal.CoBuyerDriversLicenseNo,
+          EmailAddress: deal.CoBuyerEmailAddress,
+          PhoneNumber: deal.CoBuyerPhoneNumber
+        }
+      }
+      customer.Deals.push(custDeal);
+    }
+    customers[deal.CustomerId] = customer;
+  }
+
+  return Object.values(customers);
+}
+
+
 var fetchData = function(time) {
-  var username, password;
-  username = password = 'admin';
-  var api = 'http://tdealscan.softeq.net:8080/Admin/Dealerships/ExportCustomersToJson';
-  var yesterday = moment().subtract(3, 'days').unix();
+
+
+  /*var api = 'http://tdealscan.softeq.net:8080/Admin/Dealerships/ExportCustomersToJson';
+  var yesterday = moment().subtract(1, 'days').unix();
   time = i > 0 ? Math.floor(time / 1000) : yesterday; //January 1st 2016
   var params = '?dealershipId=1&since=' + time;
   api += params;
-  ++i;
+
   console.log('\n\nAPI: ' + api + '\n\n');
-  console.log('\n\n******************\n\n');
+  console.log('\n\n******************\n\n');*/
+
+
+
+  var Connection = require('tedious').Connection;
+  var config = require('./dscDbConfig.json');
+  var connection = new Connection(config);
+  connection.on('connect', function(err) {
+      if (err){
+        console.log(err);
+        return err;
+      } else {
+        executeStatement(connection);
+      }
+    }
+  );
 
   var data = [];
   var stream = StreamArray.make();
 
-  req.get(api)
-    .auth(username, password, false)
-    .on('error', function(err){
-      console.log(err);
-    }).pipe(stream.input || []);
+
+
+
+
+
+
+  // req.get(api)
+  //   .auth(username, password, false)
+  //   .on('error', function(err){
+  //     console.log(err);
+  //   }).pipe(stream.input || []);
+
+
+
+
+
 
   /* */
 
-  stream.output.on("data", function(object){
+
+
+
+  /*stream.output.on("data", function(object){
     data.push(object.value);
     if (object.value.Customer.FirstName || object.value.Customer.LastName){
       queue.scheduledAt('DBSync', 'ProcessData', object.value, function(err, timestamps){
@@ -226,9 +536,14 @@ var fetchData = function(time) {
     }
   });
 
+
+
   stream.output.on("end", function(){
      extractDataToSync(data);
-  });
+  });*/
+
+
+
 
 };
 
@@ -296,14 +611,14 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/15 * * * *', () => {
+    schedule.scheduleJob('*!/15 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...');
       }
     })
 
-    schedule.scheduleJob('*/5 * * * *', () => {
+    schedule.scheduleJob('*!/5 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');
@@ -336,5 +651,6 @@ process.on('SIGINT', stop);
 
 export {start}
 export {queue}
+export {fetchData}
 
 

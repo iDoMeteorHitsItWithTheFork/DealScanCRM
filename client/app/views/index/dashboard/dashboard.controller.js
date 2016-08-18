@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
-  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, DTOptionsBuilder, $filter, toaster) {
+  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, NgMap, DTOptionsBuilder, $filter, toaster) {
 
     var _dashboard = this;
 
@@ -22,6 +22,33 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.noLostDeals = null;
     _dashboard.noTotalDeals = null;
     _dashboard.kpis = [];
+    _dashboard.mapCenter = [39.628, -77.766];
+    NgMap.getMap().then(function (map) {
+      _dashboard.drawingManager = new google.maps.drawing.DrawingManager({
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [
+            google.maps.drawing.OverlayType.CIRCLE,
+          ]
+        },
+        circleOptions: {
+          fillColor: '#c6ccd7',
+          strokeColor: '#41577c',
+          strokeWeight: 2,
+          strokeOpacity: 0.8,
+          clickable: false,
+          editable: true,
+          zIndex: 1
+        }
+      });
+
+      _dashboard.drawingManager.setOptions({
+        drawingControl: false
+      });
+      _dashboard.drawingManager.setMap(map);
+      _dashboard.map = map;
+    });
 
     var resetDealFlags = function(){
       _dashboard.noWonDeals = null;
@@ -115,7 +142,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       eventHandlers: {'apply.daterangepicker': function(ev, picker) { _dashboard.getSales() }}
     };
 
-    _dashboard.dateRange = {startDate: moment().subtract(6, 'days'),
+    _dashboard.dateRange = {startDate: moment().subtract(29, 'days'),
       endDate: _dashboard.datePickerOptions.ranges.Today[1]};
 
 

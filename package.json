@@ -63,6 +63,7 @@
     "sqlite3": "~3.1.1",
     "stream-array": "^1.1.2",
     "stream-json": "^0.4.2",
+    "tedious": "^1.14.0",
     "twit": "^2.2.4",
     "twitter-stream-channels": "^1.0.0",
     "xml-stream": "^0.4.5",

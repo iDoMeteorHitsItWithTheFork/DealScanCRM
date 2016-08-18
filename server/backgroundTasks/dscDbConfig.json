@@ -1,10 +1,10 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
+  "userName": "kelcar",
+  "password": "unX2mY9CuRi2ZitipG1k",
+  "server": "162.242.231.55",
+  "database": "KelCar.DeskingSuite",
+  "options": {
+    "useColumnNames": true
+  }
 }
+

@@ -1,6 +1,6 @@
 <div class="wrapper wrapper-content">
-  <div class="row">
 
+  <div class="row" ng-show="$state.is('index.customer.profile.documents')">
     <div class="height-337 p-t-150" ng-hide="!documents.retreivingDocs">
       <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px;"></i>
       <span class="sr-only">Loading...</span>
@@ -12,13 +12,16 @@
           <div class="file-manager">
             <!--<div class="hr-line-dashed"></div>-->
             <button class="btn btn-primary btn-block" flow-btn flow-init="documents.uploadOptions"
-                   flow-files-submitted="$flow.upload()"
-                   flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1,doc:1,docx:1,pdf:1,xls:1,xlsx:1,ppt:1,pptx:1,txt:1}[$file.getExtension()]"
-                   flow-file-success="documents.updateDocLibrary($file)" >Upload Files</button>
+                    flow-files-submitted="$flow.upload()"
+                    flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1,doc:1,docx:1,pdf:1,xls:1,xlsx:1,ppt:1,pptx:1,txt:1}[$file.getExtension()]"
+                    flow-file-success="documents.updateDocLibrary($file)">Upload Files
+            </button>
             <div class="hr-line-dashed"></div>
             <h5>Document Checklist</h5>
             <ul class="folder-list" style="padding: 0">
-              <li ng-repeat="doc in documents.docs" ng-hide="!doc.requested"><a href=""><i class="fa" ng-class="doc.status ? 'fa-check text-crm-green' : 'fa-close text-crm-red'"></i> {{doc.name}}</a></li>
+              <li ng-repeat="doc in documents.docs" ng-hide="!doc.requested"><a href=""><i class="fa"
+                                                                                           ng-class="doc.status ? 'fa-check text-crm-green' : 'fa-close text-crm-red'"></i>
+                {{doc.name}}</a></li>
             </ul>
             <div class="clearfix"></div>
           </div>
@@ -26,23 +29,12 @@
       </div>
     </div>
 
-
     <div class="col-sm-7 col-md-9 animated fadeInRight" ng-hide="documents.retreivingDocs">
       <div class="row">
         <div class="col-xs-12">
-          <!--<div>-->
-            <!--<button id="prev">Previous</button>-->
-            <!--<button id="next">Next</button>-->
-            <!--&nbsp; &nbsp;-->
-            <!--<span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>-->
-          <!--</div>-->
-
-          <!--<div>-->
-            <!--<canvas id="the-canvas"></canvas>-->
-          <!--</div>-->
           <div class="file-box" ng-repeat="doc in documents.requireDocs">
             <div class="file">
-              <a href="{{doc.url}}" target="_self">
+              <a ng-click="documents.openPDFViewer(doc);">
                 <span class="corner"></span>
                 <div ng-if="doc.ext !== 'img'" class="icon">
                   <i class="fa {{doc.icon}}"></i>
@@ -61,7 +53,7 @@
           </div>
           <div class="file-box" ng-repeat="doc in documents.docs">
             <div class="file">
-              <a  href="{{doc.url}}" target="_self">
+              <a ng-click="documents.openPDFViewer(doc);">
                 <span class="corner"></span>
                 <div ng-if="doc.ext !== 'img'" class="icon">
                   <i class="fa {{doc.icon}}"></i>
@@ -84,5 +76,6 @@
     </div>
   </div>
 
+  <div ui-view fit-height style="background:#fff;" ng-show="$state.is('index.customer.profile.documents.pdfViewer')"></div>
 
 </div>

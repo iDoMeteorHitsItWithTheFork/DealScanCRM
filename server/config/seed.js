@@ -78,18 +78,20 @@ var Lead = sqldb.Lead;
 */
 
 
-   /* User.sync()
+
+  /* User.sync()
+     .then(() => User.destroy({where: {}}))
       .then(() => {
         User.bulkCreate([
           {
-          firstName: 'Miles',
-          lastName: 'Johnson',
-          email: 'mjohnson@alvsoftwarellc.com',
-          phone: '2039270110',
-          password: 'Apple',
-          role: 'admin',
-          provider: 'local',
-        },
+            firstName: 'Luda',
+            lastName: 'Agodio',
+            email: 'lagodio@alvsoftwarellc.com',
+            phone: '2029971908',
+            password: 'Baiser12!',
+            role: 'admin',
+            provider: 'local',
+          },
           {
             firstName: 'Cary-Lee',
             lastName: 'Gaskell',
@@ -100,38 +102,20 @@ var Lead = sqldb.Lead;
             provider: 'local',
           },
           {
-            firstName: "Chris",
-            lastName: "Edwards",
-            phone: '4109609006',
-            email: "chirsEdwards@hagerstownford.com",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
+            firstName: 'EMAIL',
+            lastName: 'SYSTEM',
+            email: 'email_system@dealscancrm.com',
+            phone: '8009631100',
+            password: 'xsd345sftre212@acxcvc12$&1',
+            role: 'admin',
+            provider: 'local',
           },
           {
-            firstName: "Chris",
-            lastName: "Black",
-            phone: '4109609006',
-            email: "chirsBlack@hagerstownford.com",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Sales",
-            lastName: "Manager",
-            phone: '4106691642',
-            email: "sale_mgr@hagerstownford.com",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: 'Marcus',
-            lastName: 'Finley',
-            email: 'finley.marcus@gmail.com',
-            phone: '5617231523',
-            password: 'a',
+            firstName: 'DealScan',
+            lastName: 'CRM',
+            email: 'dealscanCRM@dealscancrm.com',
+            phone: '8009631100',
+            password: 'xsd345sftre212@acxcvc12$&1',
             role: 'admin',
             provider: 'local',
           },
@@ -143,307 +127,299 @@ var Lead = sqldb.Lead;
             password: 'Carp3050',
             role: 'gen_mgr',
             provider: 'local',
-          }, {
+          },
+          {
             firstName: 'Rick',
             lastName: 'Kelly',
             email: 'rkelly@hagerstownford.com',
-            phone: '3042837954',
+            phone: '3018025738',
             password: 'Carp3050',
             role: 'owner',
             provider: 'local',
           },
           {
+            firstName: "Megan",
+            lastName: "Walter",
+            phone: '4106691642',
+            email: "mwalter@hagerstownford.com",
+            password: 'mwalter',
+            role: "admin",
+            provider: "local",
+            dscUserID: 1014
+          },
+          {
+            firstName: "Jody",
+            lastName: "Layman",
+            phone: '4106691642',
+            email: "jlayman@hagerstownford.com",
+            password: 'jlayman',
+            role: "admin",
+            provider: "local",
+            dscUserID: 1028
+          },
+          {
+            firstName: "Chris",
+            lastName: "Mason",
+            phone: '',
+            email: "cmason@hagerstownford.com",
+            password: 'cmason',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1012
+          },
+          {
+            firstName: "Chris",
+            lastName: "Edwards",
+            phone: '4109609006',
+            email: "cedwards@hagerstownford.com",
+            password: 'cedwards',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 2165
+          },
+          {
+            firstName: "Chris",
+            lastName: "Black",
+            phone: '4109609006',
+            email: "cblack@hagerstownford.com",
+            password: 'cblack',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 12
+          },
+          {
+            firstName: "Christian",
+            lastName: "Walter",
+            phone: '',
+            email: "cwalter@hagerstownford.com",
+            password: 'cwalter',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1034,
+          },
+          {
+            firstName: "Chuck",
+            lastName: "Wade",
+            phone: '',
+            email: "cwade@hagerstownford.com",
+            password: 'cwade',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1029
+          },
+          {
+            firstName: "DealScan",
+            lastName: "CRM",
+            phone: '8009631100',
+            email: "dscrm_@hagerstownford.com",
+            password: 'dscrm_',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 2167,
+          },
+          {
+            firstName: "John",
+            lastName: "Smith",
+            phone: '',
+            email: "jsmith@hagerstownford.com",
+            password: 'jsmith',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1015
+          },
+          {
+            firstName: "Kelly",
+            lastName: "Tress",
+            phone: '',
+            email: "ktress@hagerstownford.com",
+            password: 'ktress',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1007
+          },
+          {
+            firstName: "Micheal",
+            lastName: "Branson",
+            phone: '',
+            email: "mbranson@hagerstownford.com",
+            password: 'mbranson',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1033
+          },
+          {
+            firstName: "Mike",
+            lastName: "Reid",
+            phone: '',
+            email: "mreid@hagerstownford.com",
+            password: 'mreid',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 1025
+          },
+          {
+            firstName: "Mike",
+            lastName: "Rogers",
+            phone: '',
+            email: "mrogers@hagerstownford.com",
+            password: 'mrogers',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 2171
+          },
+          {
+            firstName: "Rob",
+            lastName: "Scofield",
+            phone: '',
+            email: "rscofield@hagerstownford.com",
+            password: 'rscofield',
+            role: "sale_mgr",
+            provider: "local",
+            dscUserID: 2139
+          },
+          {
+            firstName: "Rick",
+            lastName: "Kelly",
+            phone: '',
+            email: "happyTag@hagerstownford.com",
+            password: 'rkelly',
+            role: "sale_rep",
+            provider: "local"
+          },
+          {
+            firstName: "Andy",
+            lastName: "Brewer",
+            phone: '',
+            email: "abrewer@hagerstownford.com",
+            password: 'abrewer',
+            role: "sale_rep",
+            provider: "local",
+            dscUserID: 2170
+          },
+          {
+            firstName: "Charlie",
+            lastName: "Gesford",
+            phone: '',
+            email: "cgesford@hagerstownford.com",
+            password: 'cgesford',
+            role: "sale_rep",
+            provider: "local",
+            dscUserID: 2148
+          },
+          {
+            firstName: "Doug",
+            lastName: "Taylor",
+            phone: '',
+            email: "dtaylor@hagerstownford.com",
+            password: 'dtaylor',
+            role: "sale_rep",
+            provider: "local",
+            dscUserID: 2057
+          },
+          {
+            firstName: "Gregory",
+            lastName: "Dash",
+            phone: '',
+            email: "gdash@hagerstownford.com",
+            password: 'gdash',
+            role: "sale_rep",
+            provider: "local",
+            dscUserID: 2161
+          },
+          {
+            firstName: "Ian",
+            lastName: "Miller",
+            phone: '',
+            email: "imiller@hagerstownford.com",
+            password: 'imiller',
+            role: "sale_rep",
+            provider: "local",
+            dscUserID: 2156
+          },
+          {
             firstName: "James",
-            lastName: "Butt",
-            phone: '5046218927',
-            email: "jbutt@gmail.com",
-            password: 'a',
-            role: "gen_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Josephine",
-            lastName: "Darakjy",
-            phone: "8102929388",
-            email: "josephine_darakjy@darakjy.org",
-            password: 'a',
-            role: "gen_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Art",
-            lastName: "Venere",
-            phone: '8566368749',
-            email: "art@venere.org",
-            password: 'a',
-            role: "gen_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Lenna",
-            lastName: "Paprocki",
-            phone: '9073854412',
-            email: "lpaprocki@hotmail.com",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Donette",
-            lastName: "Foller",
-            phone: '5135701893',
-            email: "donette.foller@cox.net",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Simona",
-            lastName: "Morasca",
-            phone: '4195032484',
-            email: "simona@morasca.com",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Mitsue",
-            lastName: "Tollner",
-            phone: '7735736914',
-            email: "mitsue_tollner@yahoo.com",
-            password: 'a',
-            role: "nw_car_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Leota",
-            lastName: "Dilliard",
-            phone: '4087523500',
-            email: "leota@hotmail.com",
-            password: 'a',
-            role: "nw_car_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Sage",
-            lastName: "Wieser",
-            phone: '6054142147',
-            email: "sage_wieser@cox.net",
-            password: 'a',
-            role: "nw_car_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Kris",
-            lastName: "Marrier",
-            phone: '4106558723',
-            email: "kris@gmail.com",
-            password: 'a',
-            role: "usd_car_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Minna",
-            lastName: "Amigon",
-            phone: '2158741229',
-            email: "minna_amigon@yahoo.com",
-            password: 'a',
-            role: "usd_car_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Abel",
-            lastName: "Maclead",
-            phone: '6313353414',
-            email: "amaclead@gmail.com",
-            password: 'a',
-            role: "usd_car_sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Graciela",
-            lastName: "Ruta",
-            phone: '4407808425',
-            email: "gruta@cox.net",
-            password: 'a',
+            lastName: "Thomas",
+            phone: '',
+            email: "jthomas@hagerstownford.com",
+            password: 'jthomas',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2169
           },
           {
-            firstName: "Cammy",
-            lastName: "Albares",
-            phone: '9565376195',
-            email: "calbares@gmail.com",
-            password: 'a',
+            firstName: "Janet",
+            lastName: "Asbury",
+            phone: '',
+            email: "jasbury@hagerstownford.com",
+            password: 'jasbury',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2108
           },
           {
-            firstName: "Mattie",
-            lastName: "Poquette",
-            phone: '6022774385',
-            email: "mattie@aol.com",
-            password: 'a',
+            firstName: "Jared",
+            lastName: "Breakall",
+            phone: '',
+            email: "jared@hagerstownford.com",
+            password: 'jared',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2174
           },
           {
-            firstName: "Meaghan",
-            lastName: "Garufi",
-            phone: '9313139635',
-            email: "meaghan@hotmail.com",
-            password: 'a',
+            firstName: "Josh",
+            lastName: "Williams-Theodore",
+            phone: '',
+            email: "joshwt@hagerstownford.com",
+            password: 'joshwt',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2175
           },
           {
-            firstName: "Gladys",
-            lastName: "Rim",
-            phone: '4146619598',
-            email: "gladys.rim@rim.org",
-            password: 'a',
+            firstName: "Josh",
+            lastName: "O'neal",
+            phone: '',
+            email: "josho@hagerstownford.com",
+            password: 'josho',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2173
           },
           {
-            firstName: "Yuki",
-            lastName: "Whobrey",
-            phone: '3132887937',
-            email: "yuki_whobrey@aol.com",
-            password: 'a',
+            firstName: "Richard",
+            lastName: "Johnson",
+            phone: '',
+            email: "rjohnson@hagerstownford.com",
+            password: 'rjohnson',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2158
           },
           {
-            firstName: "Fletcher",
-            lastName: "Flosi",
-            phone: '8158282147',
-            email: "fletcher.flosi@yahoo.com",
-            password: 'a',
+            firstName: "Ryan",
+            lastName: "Harbaugh",
+            phone: '',
+            email: "rharbaugh@hagerstownford.com",
+            password: 'rharbaugh',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2111
           },
           {
-            firstName: "Bette",
-            lastName: "Nicka",
-            phone: '6105453615',
-            email: "bette_nicka@cox.net",
-            password: 'a',
+            firstName: "Santiago",
+            lastName: "Velazquez-Marcano",
+            phone: '',
+            email: "svelazquez@hagerstownford.com",
+            password: 'svelazquez',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 2088
           },
-          {
-            firstName: "Veronika",
-            lastName: "Inouye",
-            phone: '4085401785',
-            email: "vinouye@aol.com",
-            password: 'a',
-            role: "sale_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Willard",
-            lastName: "Kolmetz",
-            phone: '9723039197',
-            email: "willard@hotmail.com",
-            password: 'a',
-            role: "sale_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Maryann",
-            lastName: "Royster",
-            phone: '5189667987',
-            email: "mroyster@royster.com",
-            password: 'a',
-            role: "sale_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Alisha",
-            lastName: "Slusarski",
-            phone: '7326583154',
-            email: "alisha@slusarski.com",
-            password: 'a',
-            role: "bdc_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Allene",
-            lastName: "Iturbide",
-            phone: '7156626764',
-            email: "allene_iturbide@cox.net",
-            password: 'a',
-            role: "bdc_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Chanel",
-            lastName: "Caudy",
-            phone: '9133882079',
-            email: "chanel.caudy@caudy.org",
-            password: 'a',
-            role: "bdc_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Ezekiel",
-            lastName: "Chui",
-            phone: '4106691642',
-            email: "ezekiel@chui.com",
-            password: 'a',
-            role: "bdc_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Willow",
-            lastName: "Kusko",
-            phone: '2125824976',
-            email: "wkusko@yahoo.com",
-            password: 'a',
-            role: "bdc_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Sales",
-            lastName: "Rep",
-            phone: '9363363951',
-            email: "sale_rep@hagerstownford.com",
-            password: 'a',
-            role: "sale_rep",
-            provider: "local"
-          },
-          {
-            firstName: "Bdc",
-            lastName: "Rep",
-            phone: '6148019788',
-            email: "bdc_rep@hagerstownford.com",
-            role: "bdc_rep",
-            password: 'a',
-            provider: "local"
-          },
-          {
-            firstName: "Sales",
-            lastName: "Manager",
-            phone: '4106691642',
-            email: "sale_mgr@hagerstownford.com",
-            password: 'a',
-            role: "sale_mgr",
-            provider: "local"
-          },
-          {
-            firstName: "Bdc",
-            lastName: "Manager",
-            phone: '2125824976',
-            email: "bdc_mgr@hagerstownford.com",
-            password: 'a',
-            role: "bdc_mgr",
-            provider: "local"
-          }
         ])
           .then(function () {
             console.log('>> Finished setting up users...');
-            Dealership.find({
+            return Dealership.find({
               where: {
                 dealershipName: 'Hagerstown Ford'
               }
@@ -451,12 +427,12 @@ var Lead = sqldb.Lead;
               return User.findAll().then(function (users) {
                 return dealership.setEmployees(users).then(function () {
                   console.log('>> Finished setting up dealership employees...');
-                  User.findAll({
+                  return User.findAll({
                     where: {
                       role: 'owner'
                     }
                   }).then(function (owners) {
-                    dealership.setOwners(owners).then(function () {
+                    return dealership.setOwners(owners).then(function () {
                       console.log('>> Finished setting up dealership owners...');
                       User.findAll({
                         where: {
@@ -465,20 +441,31 @@ var Lead = sqldb.Lead;
                       }).then(function (generalManagers) {
                         dealership.setGeneralManagers(generalManagers).then(function () {
                           console.log('>> Finished setting up dealership general managers...');
-                        }).catch(function (err) {
-                          console.log(err);
+                        })
+                        return User.findAll({
+                          where: {
+                            role: 'sale_mgr'
+                          }
                         });
-                        return User.findAll();
-                      }).then(function (users) {
+                      }).then(function (managers) {
                         Team.find({
                           where: {
                             teamName: 'HagerstownFord'
                           }
                         }).then(function (team) {
                           if (!team) return null;
-                          team.setTeamMembers(users).then(function () {
-                            console.log('>> Finished setting up teammates...');
-                          });
+                          team.setTeamManagers(managers).then(function(){
+                            console.log('>> Finished setting up team managers...');
+                            User.findAll({
+                              where:{
+                                role: 'sale_rep'
+                              }
+                            }).then(function(users){
+                              team.setTeamMembers(users).then(function () {
+                                console.log('>> Finished setting up teammates...');
+                              });
+                            })
+                          })
                         })
                       }).catch(function (err) {
                         console.log(err);
@@ -495,8 +482,8 @@ var Lead = sqldb.Lead;
               console.log(err);
             })
           })
-      });
-*/
+      });*/
+
 
 
 /*

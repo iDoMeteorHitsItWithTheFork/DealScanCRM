@@ -1,23 +1,8 @@
-<nav ng-class="documents.getNavStyle(scroll)">
-    <button ng-click="documents.goPrevious()"><</span></button>
-    <button ng-click="documents.goNext()">></span></button>
+<button class="btn btn-block btn-danger" ng-click="viewer.getPDFContent()">Get Contents</button>
+<object id="pdf_o" data="{{viewer.pdf.url}}" type="application/pdf" width="100%" height="100%">
+  <iframe id="pdf_i" src="{{viewer.pdf.url}}" width="100%" height="100%" style="border: none;">
+    This browser does not support PDFs. Please download the PDF to view it: <a href="{{viewer.pdf.url}}">Download PDF</a>
+  </iframe>
+</object>
 
-    <button ng-click="documents.zoomIn()">+</span></button>
-    <button ng-click="documents.fit()">100%</span></button>
-    <button ng-click="documents.zoomOut()">-</span></button>
-
-    <button ng-click="documents.rotate()">90</span></button>
-
-    <span>Page: </span>
-    <input type="text" min=1 ng-model="pageNum">
-    <span> / {{documents.pageCount}}</span>
-
-    &nbsp;&nbsp;
-    <span>Document URL: </span>
-    <input type="text" ng-model="documents.pdfUrl">
-</nav>
-
-<hr>
-
-{{documents.loading}}
-<canvas id="pdf" class="rotate0"></canvas>
+<!--<div id="viewer"></div>-->

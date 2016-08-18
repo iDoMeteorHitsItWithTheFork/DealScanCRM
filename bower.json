@@ -35,8 +35,8 @@
     "ng-tags-input": "^3.1.1",
     "angular-bootstrap-switch": "^0.5.1",
     "ng-flow": "~2",
-    "pdfjs-dist": "^1.5.372",
-    "angular-signature": "^0.1.8"
+    "angular-signature": "^0.1.8",
+    "pdf.js.forms": "^1.1.11111"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.0"

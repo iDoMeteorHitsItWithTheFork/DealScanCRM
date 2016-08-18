@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: PdfViewerCtrlCtrl', function () {
+describe('Controller: PdfViewerCtrl', function () {
 
   // load the controller's module
   beforeEach(module('dealscanCrmApp'));

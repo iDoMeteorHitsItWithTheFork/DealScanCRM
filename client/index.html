@@ -47,6 +47,7 @@
   <link rel="stylesheet" href="app/views/index/customer/index/customers.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/customer.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/documents/documents.css">
+  <link rel="stylesheet" href="app/views/index/customer/profile/tabs/documents/pdfViewer/pdfViewer.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/images/images.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/messages/messages.css">
   <link rel="stylesheet" href="app/views/index/customer/profile/tabs/note/note.css">
@@ -141,10 +142,11 @@
 <script src="bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.js"></script>
 <script src="bower_components/flow.js/dist/flow.js"></script>
 <script src="bower_components/ng-flow/dist/ng-flow.js"></script>
-<script src="bower_components/pdfjs-dist/build/pdf.js"></script>
-<script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
 <script src="bower_components/signature_pad/signature_pad.js"></script>
 <script src="bower_components/angular-signature/src/signature.js"></script>
+<script src="bower_components/pdf.js.forms/build/pdf.combined.js"></script>
+<script src="bower_components/pdf.js.forms/build/compatibility.js"></script>
+<script src="bower_components/pdf.js.forms/build/l10n.js"></script>
 <!-- endbower -->
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry,visualization&key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
@@ -168,7 +170,7 @@
 <script src="components/auth/auth.module.js"></script>
 <script src="components/dataSync/dataSync.module.js"></script>
 <script src="components/util/util.module.js"></script>
-<script src="app/views/index/dashboard/dashboard.controller.js"></script>
+<script src="app/views/index/customer/sideviews/text/text.controller.js"></script>
 <script src="app/views/admin/admin.controller.js"></script>
 <script src="app/app.constant.js"></script>
 <script src="app/views/admin/admin.router.js"></script>
@@ -195,6 +197,7 @@
 <script src="app/views/index/customer/profile/customer.service.js"></script>
 <script src="app/views/index/customer/profile/tabs/documents/document.resource.js"></script>
 <script src="app/views/index/customer/profile/tabs/documents/documents.controller.js"></script>
+<script src="app/views/index/customer/profile/tabs/documents/pdfViewer/pdfViewer.controller.js"></script>
 <script src="app/views/index/customer/profile/tabs/images/images.controller.js"></script>
 <script src="app/views/index/customer/profile/tabs/images/images.resource.js"></script>
 <script src="app/views/index/customer/profile/tabs/images/images.service.js"></script>
@@ -207,8 +210,8 @@
 <script src="app/views/index/customer/profile/tabs/overview/overview.controller.js"></script>
 <script src="app/views/index/customer/profile/tabs/task/task.controller.js"></script>
 <script src="app/views/index/customer/sideviews/email/email.controller.js"></script>
-<script src="app/views/index/customer/sideviews/text/text.controller.js"></script>
 <script src="app/app.controller.js"></script>
+<script src="app/views/index/dashboard/dashboard.controller.js"></script>
 <script src="app/views/index/dashboard/dashboard.js"></script>
 <script src="app/views/index/dashboard/dashboard.service.js"></script>
 <script src="app/views/index/dashboard/deal/deal.resource.js"></script>

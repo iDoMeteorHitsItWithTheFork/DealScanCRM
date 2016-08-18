@@ -4,6 +4,7 @@ public
 .idea
 dump.rdb
 *.rdb
+*.fdf
 client/bower_components
 client/app/users
 dist

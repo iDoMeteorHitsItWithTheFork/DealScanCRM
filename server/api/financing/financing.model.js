@@ -8,6 +8,7 @@ export default function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
+    downPayment: DataTypes.DOUBLE,
     installments: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -33,6 +34,7 @@ export default function(sequelize, DataTypes) {
       profile: function () {
         return {
           'financingID': this.getDataValue('financingID'),
+          'downPayment': this.getDataValue('downPayment'),
           'installments': this.getDataValue('installments'),
           'interestRate': this.getDataValue('interestRate'),
           'monthlyPayment': this.getDataValue('monthlyPayment'),
@@ -44,6 +46,7 @@ export default function(sequelize, DataTypes) {
       token: function () {
         return {
           'financingID': this.getDataValue('financingID'),
+          'downPayment': this.getDataValue('downPayment'),
           'installments': this.getDataValue('installments'),
           'interestRate': this.getDataValue('interestRate'),
           'monthlyPayment': this.getDataValue('monthlyPayment'),
