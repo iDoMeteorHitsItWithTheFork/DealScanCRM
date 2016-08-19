@@ -123,6 +123,24 @@ export function index(req, res) {
     }).catch(handleError(res));
 }
 
+function translateStatus(status){
+  var s = '';
+  switch(status){
+    case 'sold':
+    case 'delivered':
+       s = 'won';
+       break;
+    case 'working':
+    case 'pending':
+      s = 'lost';
+      break;
+    default:
+      s = 'lost';
+      break;
+  }
+  return s;
+}
+
 function formatDeals(deals){
   var _deals = [];
   for(var i = 0; i < deals.length; i++){
@@ -146,7 +164,7 @@ function formatDeals(deals){
       "price": deal.salePrice,
       "retailValue": deal.retailValue,
       "cost":deal.Purchase.profile.invoice,
-      "status": deal.status,
+      "status": translateStatus(deal.status),
       "paymentOption": deal.paymentOption,
       "dealID": deal.dealID,
       "dealershipID": deal.dealershipID,

@@ -138,16 +138,16 @@ export default function (sequelize, DataTypes) {
         if (data.LastName && data.LastName.toString().trim() != '') searchOptions.lastName = data.LastName;
         if (data.MiddleInitial && data.MiddleInitial.toString().trim() != '') searchOptions.middleInitial = data.MiddleInitial.substr(0,1);
 
-        console.log('\n\n\n CUSTOMER SEARCH OPTIONS \n\n\n');
+        /*console.log('\n\n\n CUSTOMER SEARCH OPTIONS \n\n\n');
         console.log(searchOptions);
-        console.log('\n\n\n\n _______________________\n\n\n');
+        console.log('\n\n\n\n _______________________\n\n\n');*/
 
         //customer values to upsert
         var upsertValues = {
           driverLicenseID: data.DriversLicenseNo,
           dscCustomerID: data.CustomerId,
           firstName: data.FirstName,
-          middleInitial: data.MiddleInitial.substr(0,1),
+          middleInitial: (data.MiddleInitial && data.MiddleInitial.trim() != '') ? data.MiddleInitial.substr(0,1) : '',
           lastName: data.LastName,
           phone:data.PhoneNumber,
           dateOfBirth: data.Birthday,

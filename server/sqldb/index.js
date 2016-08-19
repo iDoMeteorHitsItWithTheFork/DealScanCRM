@@ -134,8 +134,8 @@ db.User.hasMany(db.Deal, {foreignKey: 'saleRepID'});
 db.Deal.belongsTo(db.Customer, {as:'Buyer', through:'Purchases', foreignKey:'buyerID'});
 db.Customer.hasMany(db.Deal, {foreignKey: 'buyerID'});
 db.Deal.belongsTo(db.Vehicle, {as:'Purchase', through: 'Purchases', foreignKey: 'vehicleID'});
-db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'coBuyerID'});
-db.Customer.belongsToMany(db.Deal, {as:'CoSignedDeals' , through:'CoSigners', foreignKey:'dealID'});
+db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'dealID'});
+db.Customer.belongsToMany(db.Deal, {as:'CoSignedDeals' , through:'CoSigners', foreignKey:'coBuyerID'});
 
 db.Financing.belongsTo(db.Deal, {foreignKey:'dealID'});
 db.Deal.hasOne(db.Financing, {foreignKey:'dealID'});

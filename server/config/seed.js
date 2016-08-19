@@ -79,7 +79,7 @@ var Lead = sqldb.Lead;
 
 
 
-  /* User.sync()
+   User.sync()
      .then(() => User.destroy({where: {}}))
       .then(() => {
         User.bulkCreate([
@@ -278,13 +278,14 @@ var Lead = sqldb.Lead;
             dscUserID: 2139
           },
           {
-            firstName: "Rick",
+            firstName: "Richard",
             lastName: "Kelly",
             phone: '',
             email: "happyTag@hagerstownford.com",
             password: 'rkelly',
             role: "sale_rep",
-            provider: "local"
+            provider: "local",
+            dscUserID: 8
           },
           {
             firstName: "Andy",
@@ -416,6 +417,16 @@ var Lead = sqldb.Lead;
             provider: "local",
             dscUserID: 2088
           },
+          {
+            firstName: "William David",
+            lastName: "Socks",
+            phone: '',
+            email: "dsocks@hagerstownford.com",
+            password: 'dsocks',
+            role: "sale_rep",
+            provider: "local",
+            dscUserID: 2040
+          },
         ])
           .then(function () {
             console.log('>> Finished setting up users...');
@@ -482,7 +493,7 @@ var Lead = sqldb.Lead;
               console.log(err);
             })
           })
-      });*/
+      });
 
 
 

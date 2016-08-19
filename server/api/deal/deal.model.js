@@ -107,17 +107,17 @@ export default function(sequelize, DataTypes) {
         if (data.Trades) {
           console.log('\n>> Deal['+data.DealId+']  -> Creating Trade');
           return Trade.create({
-            tradeAllowance: deal.TradeValue,
-            actualCashValue: deal.ActualCashValue,
-            payOffAmount: deal.BalanceOwed,
-            VIN: deal.TradeVIN,
-            color: deal.TradeColor,
-            createdAt: deal.TradeDateCreated,
-            year: deal.TradeYear,
-            make: deal.TradeMake,
-            model: deal.TradeModel,
-            mileage: deal.TradeMileage,
-            bodyStyle: deal.TradeBodyStyle,
+            tradeAllowance: data.Trades.TradeValue,
+            actualCashValue: data.Trades.ActualCashValue,
+            payOffAmount: data.Trades.BalanceOwed,
+            VIN: data.Trades.VIN,
+            color: data.Trades.Color,
+            createdAt: data.Trades.DateCreated,
+            year: data.Trades.Year,
+            make: data.Trades.Make,
+            model: data.Trades.Model,
+            mileage: data.Trades.Mileage,
+            bodyStyle: data.Trades.BodyStyle,
           },{transaction: t})
             .then(function (trade) {
               console.log('\n>> Deal['+data.DealId+']  -> Adding Trade To Deal...');
@@ -138,19 +138,19 @@ export default function(sequelize, DataTypes) {
         var Finance = sequelize.models.Financing;
         if (data.SelectedPaymentOption) {
           return Finance.create({
-              downPayment: deal.DownPayment,
-              installments: deal.Term,
-              interestRate: deal.Rate,
-              monthlyPayment: deal.Payment,
+              downPayment: data.SelectedPaymentOption.DownPayment,
+              installments: data.SelectedPaymentOption.Term,
+              interestRate: data.SelectedPaymentOption.Rate,
+              monthlyPayment: data.SelectedPaymentOption.Payment,
             },{transaction: t})
             .then(function (financing) {
               console.log('\n>> Deal['+data.DealId+']  -> Adding Financing Details to Deal...');
               return deal.setFinancing(financing, {transaction: t})
                 .then(function (res) {
                   console.log('\n>> Deal['+data.DealId+']  -> Financing Details Added to Deal.');
-                  console.log('\n\n\n\n\n*********************************')
+                  console.log('\n\n\n\n\n******************************************************')
                   console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
-                  console.log('*************************************');
+                  console.log('******************************************************');
                   return Deal.dscSetRebate(data, deal, t);
                 })
             })
@@ -169,16 +169,16 @@ export default function(sequelize, DataTypes) {
              return deal.addRebate(rebate, {transaction: t})
                .then(function(res){
                  console.log('\n>> Deal['+data.DealId+']  -> Rebate was added to Deal');
-                 console.log('\n\n\n\n\n*********************************')
+                 console.log('\n\n\n\n\n****************************************************')
                  console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
-                 console.log('*************************************');
+                 console.log('******************************************************');
                  return deal;
              });
           });
         } else {
-          console.log('\n\n\n\n\n*********************************')
+          console.log('\n\n\n\n\n****************************************************')
           console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
-          console.log('*************************************');
+          console.log('******************************************************');
           return deal;
         }
       },
@@ -297,7 +297,7 @@ export default function(sequelize, DataTypes) {
             }
           })
         }).then(function(deal){
-          console.log(deal);
+          //console.log(deal);
           return deal;
         })
           .catch(function (err) {

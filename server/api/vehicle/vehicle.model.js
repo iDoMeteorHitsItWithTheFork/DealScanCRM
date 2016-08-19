@@ -201,6 +201,7 @@ export default function(sequelize, DataTypes) {
                case "4 DR SDN":
                case "2DCV":
                case "C-CLASS":
+               case 'SD':
                   classification = 'car';
                   break;
                case "TRK":
@@ -294,8 +295,6 @@ export default function(sequelize, DataTypes) {
              }
 
            }
-
-
            if (classification) upsertValues.classification = classification;
 
            //find existing vehicle or create
