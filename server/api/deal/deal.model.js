@@ -452,7 +452,18 @@ export default function(sequelize, DataTypes) {
           })
         })
           .then(function(deal){
-          return deal;
+            if (deal.status == 'sold'){
+              return Deal.sequelize.transaction(function(t){
+                return deal.getBuyer({transaction: t}).then(function(buyer){
+                   var Buyer = sequelize.models.Customer;
+                   return Buyer.isSoldLead(buyer, t).then(function(){
+                     return deal;
+                   })
+                })
+              }).then(function(){
+                return deal;
+              });
+            } else return deal;
         })
           .catch(function (err) {
           console.log('An error occurred while trying to upsert Deal[' + data.DealId + ']!');

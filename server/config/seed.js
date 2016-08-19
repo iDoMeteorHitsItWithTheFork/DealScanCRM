@@ -84,6 +84,16 @@ var Lead = sqldb.Lead;
       .then(() => {
         User.bulkCreate([
           {
+            firstName: 'Usman',
+            lastName: 'Hussain',
+            email: 'uhussain@hagerstownford.com',
+            phone: '',
+            password: 'Usman',
+            role: 'sale_rep',
+            provider: 'local',
+            dscUserID: 2153
+          },
+          {
             firstName: 'Luda',
             lastName: 'Agodio',
             email: 'lagodio@alvsoftwarellc.com',

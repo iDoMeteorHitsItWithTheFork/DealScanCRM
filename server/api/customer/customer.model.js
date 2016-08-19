@@ -1,5 +1,6 @@
 'use strict';
 
+
 export default function (sequelize, DataTypes) {
   var Customer = sequelize.define('Customer', {
     customerID: {
@@ -125,9 +126,137 @@ export default function (sequelize, DataTypes) {
 
     classMethods : {
       isScheduledLead: function(customer, t){
-        var THRESHOLD = require('../../config/environment').leadThreshold;
+        var Lead = sequelize.models.Lead;
+        var Participants = sequelize.models.Participants;
+        var Event = sequelize.models.Event;
+        var moment = require('moment');
 
+        var searchOptions = {};
+        if (customer.firstName) searchOptions.firstName = customer.firstName;
+        if (customer.lastName) searchOptions.lastName = customer.lastName;
 
+        return Event.findAll({
+          where: {
+            category: 'appointment',
+            status: 'scheduled',
+            time: {
+              $gte: moment().subtract(2, 'days').startOf('day'),
+              $lte: moment().endOf('day')
+            }
+          },
+          include: {
+            model: Lead,
+            required: true,
+            through: Participants,
+            where: searchOptions
+          },
+          transaction: t
+        }).then(function(appointments){
+
+          if (appointments.length > 1){
+
+              var idx = -1;
+              for (var i = 0; i < appointments.length; i++){
+                var lead = appointments[i].Lead;
+                if ((lead.phone && lead.phone.toString().trim() != '') && (customer.phone && customer.phone.toString().trim() != '')){
+                   if (lead.phone == customer.phone){
+                     idx = i;
+                     break;
+                   }
+                } else if ((lead.email && lead.email.toString().trim() != '') && (customer.email && customer.email.toString().trim() != '')){
+                   if (lead.email == customer.email){
+                     idx = i;
+                     break;
+                   }
+                }
+              }
+              if (idx != -1) {
+                return appointments[idx].update({
+                  status: 'kept'
+                }, {transaction: t}).then(function(){
+                  return customer;
+                })
+              } else return customer;
+
+           } else if (appointments.length == 1) {
+             return appointments[0].update({
+               status: 'kept'
+             }, {transaction: t}).then(function(){
+                return customer;
+             });
+           } else return customer;
+
+        }).catch(function(err){
+          console.log(err);
+          return customer;
+        })
+      },
+      isSoldLead: function(customer, t){
+
+        var Lead = sequelize.models.Lead;
+        var Participants = sequelize.models.Participants;
+        var Event = sequelize.models.Event;
+        var moment = require('moment');
+
+        var searchOptions = {};
+        if (customer.firstName) searchOptions.firstName = customer.firstName;
+        if (customer.lastName) searchOptions.lastName = customer.lastName;
+
+        return Event.findAll({
+          where: {
+            category: 'appointment',
+            status: 'kept',
+            time: {
+              $gte: moment().subtract(2, 'days').startOf('day'),
+              $lte: moment().endOf('day')
+            }
+          },
+          include: {
+            model: Lead,
+            required: true,
+            through: Participants,
+            where: searchOptions
+          },
+          transaction: t
+        }).then(function(appointments){
+
+          if (appointments.length > 1){
+
+            var idx = -1;
+            for (var i = 0; i < appointments.length; i++){
+              var lead = appointments[i].Lead;
+              if ((lead.phone && lead.phone.toString().trim() != '') && (customer.phone && customer.phone.toString().trim() != '')){
+                if (lead.phone == customer.phone){
+                  idx = i;
+                  break;
+                }
+              } else if ((lead.email && lead.email.toString().trim() != '') && (customer.email && customer.email.toString().trim() != '')){
+                if (lead.email == customer.email){
+                  idx = i;
+                  break;
+                }
+              }
+            }
+            if (idx != -1) {
+              return appointments[idx].update({
+                status: 'sold'
+              }, {transaction: t}).then(function(){
+                return customer;
+              })
+            } else return customer;
+
+          } else if (appointments.length == 1) {
+            return appointments[0].update({
+              status: 'sold'
+            }, {transaction: t}).then(function(){
+              return customer;
+            });
+          } else return customer;
+
+        }).catch(function(err){
+          console.log(err);
+          return customer;
+        })
       },
       dscUpsert: function(data, t){
 
@@ -185,12 +314,12 @@ export default function (sequelize, DataTypes) {
                 'postalCode',
               ] }, {transaction: t})
               .then(function(customer){
-                //isScheduledLead(customer, t);
-                return customer;
+                return Customer.isScheduledLead(customer, t);
+                //return customer;
               })
           } else {
-            //isScheduledLead(customer, t);
-            return customer;
+            return Customer.isScheduledLead(customer, t);
+            //return customer;
           }
         }).catch(function(err){
             console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);
