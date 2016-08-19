@@ -142,18 +142,161 @@ export default function(sequelize, DataTypes) {
              createdAt: data.DateCreated
            };
 
+           var classification = null;
            if (data.BodyStyle && data.BodyStyle.trim() != ''){
-             var classification = '';
-             switch(data.BodyStyle.toLowerCase()){
 
-
-
+             switch(data.BodyStyle){
+               case "GT 500":
+               case "BULLIT":
+               case "E-350":
+               case "SLE":
+               case "E350":
+               case "SPORT TRAC LIMITED":
+               case "SED":
+               case "4D R SDN":
+               case "LX":
+               case "KOUP":
+               case "EX 2 DR":
+               case "CONV COUPE":
+               case "4DRSD/LS":
+               case "S":
+               case "2DCP":
+               case "2DR":
+               case "LS":
+               case "GT":
+               case "CR":
+               case "GT CONV":
+               case "2DR COUPE":
+               case "BULLITT":
+               case "AWD 4DSN":
+               case "2DRS":
+               case "CALIBER":
+               case "V6 2DR":
+               case "GT V8":
+               case "4DR SDN":
+               case "4DSDN":
+               case "4DSN":
+               case "CONVERTIBLE":
+               case "LS SDN":
+               case "4DRSD":
+               case "GT500":
+               case "E250":
+               case "E-250":
+               case "CAR":
+               case "4 D SEDAN":
+               case "SDN":
+               case "HARDTOP":
+               case "2 DR CONVERT":
+               case "GT COUPE":
+               case "C":
+               case "CONV":
+               case "CONV. HD":
+               case "COUPE":
+               case "CONV.":
+               case "CONV V-6":
+               case "CONV GT":
+               case "SOUL":
+               case "2 DR CPE":
+               case "SEDAN":
+               case "4 DR SDN":
+               case "2DCV":
+               case "C-CLASS":
+                  classification = 'car';
+                  break;
+               case "TRK":
+               case "LT CREW":
+               case "PICKUP":
+               case "KING RANCH":
+               case "PU":
+               case "T":
+               case "BIG HORN":
+               case "1500":
+               case "SLT":
+               case "SILVERADO":
+               case "UP":
+               case "FWD XLT":
+               case "XLT":
+               case "F-550":
+               case "TRUCK":
+               case "XLT SUPERCAB":
+               case "LTD 4WD":
+               case "2WD XLT":
+               case "4 DR XLT":
+               case "MEDIUM DUTY":
+               case "XLT CREW CAB":
+               case "XLT 2WD":
+               case "XLT 4WD":
+               case "P/U":
+               case "PICK UP":
+               case "XLT 4X4":
+               case "PU EXTENDED CAB":
+               case "XLT EXT CAB":
+               case "XLT PU":
+               case "BOX TRUCK":
+               case "TK":
+               case "F250":
+                  classification = 'truck';
+                  break;
+               case "SX AWD":
+               case "CREW CAB 4X4":
+               case "XLS":
+               case "4X4 CREW":
+               case "H2":
+               case "CRE":
+               case "DENALI LEATHER":
+               case "UV":
+               case "PLATINUM  SUPERCRE":
+               case "DENALI":
+               case "SUV HEAT PKG":
+               case "REG CAB 4X4":
+               case "AWD SUV":
+               case "CUV":
+               case "SU":
+               case "UTILITY":
+               case "4SUV":
+               case "EXPLORER":
+               case "4X4":
+               case " SUV AWD":
+               case "SUV":
+               case "UT":
+                 classification="utility";
+                 break;
+               case "WAGON EXT":
+               case "E250 VAN":
+               case "2 WD MINI VAN":
+               case "HATCH":
+               case "HB SE":
+               case "2 DR SES HATCH":
+               case "HB":
+               case "5 DR SMALL WAGON":
+               case "4 DR VAN":
+               case "5 DR HB":
+               case "WGN":
+               case "WAGON":
+               case "VAN LTD":
+               case "CV":
+               case "CARGO VAN":
+               case "PASSENGER VAN":
+               case "MV":
+               case "HATCHBACK":
+               case "VAN":
+               case "CARGO":
+               case "HATCH BACK":
+               case "STATION WAGON":
+               case "MINI VAN":
+               case "WAGON SE":
+               case "VN":
+               case "CG":
+                 classification = "van";
                default:
                  classification = 'other';
                  break;
              }
 
            }
+
+
+           if (classification) upsertValues.classification = classification;
 
            //find existing vehicle or create
            return this.findOrCreate({
@@ -177,7 +320,8 @@ export default function(sequelize, DataTypes) {
                      'color',
                      'bodyStyle',
                      'trimLevel',
-                     'package'
+                     'package',
+                     'classification'
                    ]
                  }, {transaction: t})
                  .then(function () {
