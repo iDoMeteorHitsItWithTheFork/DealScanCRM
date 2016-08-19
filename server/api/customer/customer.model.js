@@ -68,7 +68,7 @@ export default function (sequelize, DataTypes) {
     source: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: 'walkIn'
+      defaultValue: 'Walk In'
     }
   }, {
     /**
@@ -156,7 +156,7 @@ export default function (sequelize, DataTypes) {
           city:data.City,
           state:data.StateName,
           country: 'USA',
-          source: data.MarketingTypeName,
+          source: data.MarketingTypeName || 'Walk In',
           postalCode:data.PostalCode,
           createdAt: data.DateCreated
         };

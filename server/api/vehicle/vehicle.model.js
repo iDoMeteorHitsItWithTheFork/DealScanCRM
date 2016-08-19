@@ -15,12 +15,7 @@ export default function(sequelize, DataTypes) {
     },
     stockNumber: {
       type: DataTypes.STRING(45),
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'StockNo cannot be empty'
-        }
-      }
+      allowNull: true,
     },
     invoice: {
       type: DataTypes.DOUBLE,

@@ -71,41 +71,62 @@ export default function(sequelize, DataTypes) {
     },
 
     classMethods: {
-      dscUpsertCoBuyer: function(data, deal, t){
-
-      },
-      dscUpsertBuyer: function(Buyer,data, deal, t){
-
-      },
-      dscUpsertFinancing: function(data, deal, t){
-
-      },
-      dscUpsertTrade: function(data, deal, t) {
-
-      },
-      dscUpsertVehicle: function(data, deal, t){
-
-      },
+      /**
+       * Add Cobuyer to Deal Set
+       * @param Buyer
+       * @param data
+       * @param deal
+       * @param t
+         * @returns {*}
+         */
       dscSetCoBuyer: function(Buyer, data, deal, t){
         if (data.CoBuyer) {
+          /***
+           * Debug
+           */
+          console.log('\n>> Deal['+data.DealId+']  -> Creating Co-Buyer...');
           return Buyer.dscUpsert(data.CoBuyer, t)
             .then(function (coBuyer) {
+              /***
+               * Debug
+               */
               console.log('\n>> Deal['+data.DealId+']  -> Adding Co-Buyer to Deal...');
+
               return deal.addCoBuyer(coBuyer, {transaction: t})
                 .then(function (res) {
+                  /***
+                   * Debug
+                   */
                   console.log('\n>> Deal['+data.DealId+']  -> Are There Trade on this Deal?');
+
                   return Deal.dscSetTrade(data, deal, t);
                 });
             })
         } else {
+          /***
+           * Debug
+           */
           console.log('\n>> Deal['+data.DealId+']  -> There are no CoBuyers.');
+
           return Deal.dscSetTrade(data, deal, t);
         }
       },
+
+        /***
+         * Add Trade details to Deal Set
+         * @param data
+         * @param deal
+         * @param t
+         * @returns {*}
+         */
       dscSetTrade: function(data, deal, t){
         var Trade = sequelize.models.Trade;
         if (data.Trades) {
-          console.log('\n>> Deal['+data.DealId+']  -> Creating Trade');
+          /***
+           * Debug
+           */
+          console.log('\n>> Deal['+data.DealId+']  -> Creating Trade...');
+
           return Trade.create({
             tradeAllowance: data.Trades.TradeValue,
             actualCashValue: data.Trades.ActualCashValue,
@@ -120,23 +141,48 @@ export default function(sequelize, DataTypes) {
             bodyStyle: data.Trades.BodyStyle,
           },{transaction: t})
             .then(function (trade) {
+              /***
+               * Debug
+               */
               console.log('\n>> Deal['+data.DealId+']  -> Adding Trade To Deal...');
+
               return deal.addTrade(trade, {transaction: t})
                 .then(function (res) {
+                  /***
+                   * Debug
+                   */
                   console.log('\n>> Deal['+data.DealId+']  -> Trade was added to Deal.');
                   console.log('\n>> Deal['+data.DealId+']  -> Was This Deal Financed?');
+
                   return Deal.dscSetFinancing(data, deal, t);
                 })
             });
         } else {
+          /***
+           * Debug
+           */
           console.log('\n>> Deal['+data.DealId+']  -> There are no Trades.');
           console.log('\n>> Deal['+data.DealId+']  -> Was This Deal Financed?');
+
           return Deal.dscSetFinancing(data, deal, t);
         }
       },
+
+
+        /**
+         *  Add Financing Details to deal Set
+         * @param data
+         * @param deal
+         * @param t
+         * @returns {*}
+         */
       dscSetFinancing: function(data, deal, t){
         var Finance = sequelize.models.Financing;
         if (data.SelectedPaymentOption) {
+          /**
+           * Debug
+           */
+          console.log('\n>> Deal['+data.DealId+']  -> Creating Financing Details...');
           return Finance.create({
               downPayment: data.SelectedPaymentOption.DownPayment,
               installments: data.SelectedPaymentOption.Term,
@@ -144,45 +190,93 @@ export default function(sequelize, DataTypes) {
               monthlyPayment: data.SelectedPaymentOption.Payment,
             },{transaction: t})
             .then(function (financing) {
+              /***
+               * Debug
+               */
               console.log('\n>> Deal['+data.DealId+']  -> Adding Financing Details to Deal...');
+
               return deal.setFinancing(financing, {transaction: t})
                 .then(function (res) {
+                  /***
+                   * Debug
+                   */
                   console.log('\n>> Deal['+data.DealId+']  -> Financing Details Added to Deal.');
-                  console.log('\n\n\n\n\n******************************************************')
+                  console.log('\n\n\n\n\n*******************************************')
                   console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
-                  console.log('******************************************************');
+                  console.log('*****************************************************');
+
                   return Deal.dscSetRebate(data, deal, t);
                 })
             })
         } else {
+          /***
+           * Debug
+           */
           console.log('\n>> Deal['+data.DealId+']  -> There are no financing on this deal.');
           console.log('\n >> Does this deal have any rebates? ');
+
           return Deal.dscSetRebate(data, deal, t);
         }
       },
+
+        /**
+         * Add Rebate Information to Deal Set
+         * @param data
+         * @param deal
+         * @param t
+         * @returns {*}
+         */
       dscSetRebate: function(data, deal, t){
         var Rebate = sequelize.models.Rebate;
         if (data.Rebates){
+          /**
+           * Debug
+           */
+          console.log('\n>> Deal['+data.DealId+']  -> Creating Rebate...');
+
           return Rebate.create({
             amount: data.Rebates
           }, {transaction: t}).then(function(rebate){
+            /**
+             * Debug
+             */
+            console.log('\n>> Deal['+data.DealId+']  -> Adding Rebate to Deal...');
              return deal.addRebate(rebate, {transaction: t})
                .then(function(res){
+                 /***
+                  * Debug
+                  */
                  console.log('\n>> Deal['+data.DealId+']  -> Rebate was added to Deal');
-                 console.log('\n\n\n\n\n****************************************************')
+                 console.log('\n\n\n\n\n******************************************')
                  console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
-                 console.log('******************************************************');
+                 console.log('*****************************************************');
+
                  return deal;
              });
           });
         } else {
-          console.log('\n\n\n\n\n****************************************************')
+          /***
+           * Debug
+           */
+          console.log('\n\n\n\n\n*******************************************')
           console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
-          console.log('******************************************************');
+          console.log('*****************************************************');
+
           return deal;
         }
       },
+
+        /**
+         * Synchronize Deal From DealScan DB
+         * @param data
+         * @param customer
+         * @returns {*}
+         */
       dscUpsert: function (data, customer) {
+
+          /**
+           * Debug
+           */
         console.log('\n\n>> Upserting Deal[' + data.DealId + ']...');
 
         //required entities
@@ -211,25 +305,41 @@ export default function(sequelize, DataTypes) {
             transaction: t
           }).spread(function (deal, created) {
 
+            /***
+             * Debug
+             */
             console.log('\n>> Deal['+data.DealId+']  -> Deal Initiated...');
+
             var Dealership = sequelize.models.Dealership;
             var User = sequelize.models.User;
             var Buyer = sequelize.models.Customer;
             var Vehicle = sequelize.models.Vehicle;
 
             if (created) {
+              /***
+               * Debug
+               */
               console.log('\n>> Deal['+data.DealId+']  -> Looking For Dealership...');
+
               return Dealership.find({
                 where: {
                   dealershipName: data.DealershipName
                 },
                 transaction: t
               }).then(function (dealership) {
+                /***
+                 * Debug
+                 */
                 console.log('\n>> Deal['+data.DealId+']  -> Assigning Deal to [' + data.DealershipName + ']...');
+
                 return deal.setDealership(dealership, {transaction: t})
                   .then(function (res) {
+                    /***
+                     * Debug
+                     */
                     console.log('\n>> Deal['+data.DealId+']  -> Deal Assigned to [' + data.DealershipName + ']');
                     console.log('\n>> Deal['+data.DealId+']  -> Identifying Sale Person...');
+
                     return User.find({
                       where: {
                         firstName: data.SalesPersonFirstName,
@@ -239,23 +349,43 @@ export default function(sequelize, DataTypes) {
                       transaction: t
                     }).then(function (salesRep) {
                       if (!salesRep) throw new Error('SalePerson Doesn\'t Exit');
+                      /***
+                       * Debug
+                       */
                       console.log('\n\n>> Deal['+data.DealId+']  -> Sale Person Indentified.');
+
                       return deal.setSaleRep(salesRep, {transaction: t})
                         .then(function (res) {
+                          /***
+                           * Debug
+                           */
                           console.log('\n>> Deal['+data.DealId+']  -> Sale Rep was assigned to Deal.');
                           console.log('\n>> Deal['+data.DealId+']  -> Identifying Vehicle...');
+
                           return Vehicle.dscUpsert(data.Vehicle, t)
                             .then(function (vehicle) {
+                              /***
+                               * Debug
+                               */
                               console.log('\n>> Deal['+data.DealId+']  -> Vehicle Identified.');
                               console.log('\n>> Deal['+data.DealId+']  -> Assigning Vehicle to Deal...');
+
                               return deal.setPurchase(vehicle, {transaction: t})
                                 .then(function (purchase) {
+                                  /***
+                                   * Debug
+                                   */
                                   console.log('\n>> Deal['+data.DealId+']  -> Vehicle Assigned to Deal.');
                                   console.log('\n>> Deal['+data.DealId+']  -> Assigning Buyer to Deal...');
+
                                   return deal.setBuyer(customer, {transaction: t})
                                     .then(function (buyer) {
+                                      /***
+                                       * Debug
+                                       */
                                       console.log('\n>> Deal['+data.DealId+']  -> Buyer Assigned to Deal.');
                                       console.log('\n>> Deal['+data.DealId+']  -> Is there a Co-Buyer?');
+
                                       return Deal.dscSetCoBuyer(Buyer, data, deal, t);
                                     })
                                 })
@@ -265,8 +395,11 @@ export default function(sequelize, DataTypes) {
                   });
               })
             } else {
+              /**
+               * Debug
+               */
+              console.log('\n>> Deal['+data.DealId+']  -> Updating Deal Data...');
 
-              console.log('>> Updating Existing Deal');
               return deal.update(
                 {
                   retailValue: upsertValues.retailValue,
@@ -281,8 +414,12 @@ export default function(sequelize, DataTypes) {
                     'status'
                   ]
                 }, {transaction: t}).then(function(deal){
+
                   if (!deal) throw new Error('Failed to update deal info');
-                  console.log('\n>> Deal['+deal.dscDealID+'] Info Updated!');
+                  /**
+                   * Debug
+                   */
+                  console.log('\n>> Deal['+deal.dscDealID+'] -> (RetailValue, SalePrice, PaymentOption, Status) Updated!');
                   if (deal){
 
 
@@ -291,13 +428,19 @@ export default function(sequelize, DataTypes) {
 
 
                   }
+
+
+
+
+
+
+
+
               });
-
-
             }
           })
-        }).then(function(deal){
-          //console.log(deal);
+        })
+          .then(function(deal){
           return deal;
         })
           .catch(function (err) {
