@@ -55,7 +55,7 @@ var jobs = {
       }
     },
     perform: function(deal, callback){
-       console.log('\n\n>> Processing Lead...');
+       console.log('\n\n>> Processing Deal...');
        setTimeout(function(){
          syncDeal(deal, callback);
        },1000);
@@ -87,7 +87,7 @@ var queue = new NR.queue({ connection:connectionDetails }, jobs);
 
 var syncDeal = function(deal, callback){
     console.log('\n\n\n\>> Syncing Deal...\n\n');
-    var _customer = deal.Customer;
+    var _customer = deal;
     var custDeals = deal.Deals;
     return Customer.dscUpsert(_customer).then(function (customer) {
       if (customer && custDeals.length > 0) {
@@ -163,24 +163,6 @@ var insertLead = function(lead, callback){
        console.log(err);
        callback(err);
     });
-}
-
-var extractDataToSync = function (dbRecords) {
-  console.log('\n\n\n>> DB Records....');
-  //console.log(dbRecords);
-  if (!dbRecords || dbRecords.length == 0) return true;
-  var _dealsToProcess = [];
-  var _custCount = 0, _dealsCount =0;
-  for (var i = 0; i < dbRecords.length; i++) {
-    if ((dbRecords[i].Customer.FirstName || dbRecords[i].Customer.LastName)) {
-      _dealsToProcess.push(dbRecords[i]);
-      _custCount++;
-      _dealsCount += dbRecords[i].Deals.length;
-    }
-  }
-  console.log("\n\n>> Customers To Process: "+_custCount);
-  console.log("\n>> Deals to Process: "+_dealsCount);
-  return _dealsToProcess;
 }
 
 var sqlStatement = function(time){
@@ -305,12 +287,40 @@ var executeStatement = function(connection, time) {
     } else {
       console.log('\n\n\n\n QUERY \n\n\n');
       console.log('RESULTS: '+rowCount);
-      console.log(results);
       results = formatResults(results);
       console.log('\n\n\n ***************** \n\n\n');
-      console.log('\n\n\n PACKAGED RESULTS \n\n\n');
-      console.log(inspect(results, false, null));
-      console.log('\n\n\n ***************** \n\n\n');
+      var ArrayStream = require('arraystream');
+      var data = results;
+      if (data.length > 0) {
+        var stream = ArrayStream.create(data);
+        var i = 0;
+        stream.on("data", function (value, key) {
+          console.log('\n\n >> Customer ('+(++i)+')');
+          console.log(value);
+          queue.scheduledAt('DBSync', 'ProcessData', value, function (err, timestamps) {
+            if (timestamps.length > 0) {
+              return true;
+            } else {
+              queue.enqueueIn(20000, 'DBSync', 'ProcessData', value, function (err, res) {
+                if (err) {
+                  console.log(err);
+                  return err;
+                }
+                console.log('\n\n>> Enqueue Deal(s) For Customer[' +value.CustomerId + ']');
+                return res;
+              });
+            }
+          })
+
+        });
+
+        stream.on("end", function () {
+          console.log('\n\n>> Stream Ended!');
+        });
+
+      } else {
+        console.log('\n\n>> No Records To Process...End');
+      }
     }
     connection.close();
   });
@@ -464,25 +474,13 @@ var formatResults = function (results) {
 }
 
 
-var fetchData = function(time) {
-
-
-  /*var api = 'http://tdealscan.softeq.net:8080/Admin/Dealerships/ExportCustomersToJson';
-  var yesterday = moment().subtract(1, 'days').unix();
-  time = i > 0 ? Math.floor(time / 1000) : yesterday; //January 1st 2016
-  var params = '?dealershipId=1&since=' + time;
-  api += params;
-
-  console.log('\n\nAPI: ' + api + '\n\n');
-  console.log('\n\n******************\n\n');*/
-
-
+var fetchData = function (time) {
 
   var Connection = require('tedious').Connection;
   var config = require('./dscDbConfig.json');
   var connection = new Connection(config);
-  connection.on('connect', function(err) {
-      if (err){
+  connection.on('connect', function (err) {
+      if (err) {
         console.log(err);
         return err;
       } else {
@@ -490,60 +488,6 @@ var fetchData = function(time) {
       }
     }
   );
-
-  var data = [];
-  var stream = StreamArray.make();
-
-
-
-
-
-
-
-  // req.get(api)
-  //   .auth(username, password, false)
-  //   .on('error', function(err){
-  //     console.log(err);
-  //   }).pipe(stream.input || []);
-
-
-
-
-
-
-  /* */
-
-
-
-
-  /*stream.output.on("data", function(object){
-    data.push(object.value);
-    if (object.value.Customer.FirstName || object.value.Customer.LastName){
-      queue.scheduledAt('DBSync', 'ProcessData', object.value, function(err, timestamps){
-        if (timestamps.length > 0){
-          return true;
-        } else {
-          queue.enqueueIn(20000, 'DBSync', 'ProcessData', object.value, function(err, res){
-            if (err){
-              console.log(err);
-              return err;
-            }
-            console.log('\n\n>> Enqueue Deal(s) For Customer['+object.value.Customer.CustomerId+']');
-            return res;
-          });
-        }
-      })
-    }
-  });
-
-
-
-  stream.output.on("end", function(){
-     extractDataToSync(data);
-  });*/
-
-
-
 
 };
 
@@ -571,7 +515,10 @@ var start = function () {
       connection: connectionDetails,
       queues: ['DBSync', 'Leads'],
       minTaskProcessors: 1,
-      maxTaskProcessors: 15,
+      maxTaskProcessors: 20,
+      checkTimeout: 1000,
+      maxEventLoopDelay:10,
+      toDisconnectProcessors: true
     }, jobs);
 
     /////////////////////////
@@ -611,19 +558,20 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*!/15 * * * *', () => {
+    schedule.scheduleJob('*/1 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
-        console.log('\n\n\n>> Enqueued SyncDB...');
+        console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
+        console.log('****************************\n\n');
       }
     })
 
-    schedule.scheduleJob('*!/5 * * * *', () => {
+    /*schedule.scheduleJob('*!/5 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');
       }
-    })
+    })*/
 
 
   })

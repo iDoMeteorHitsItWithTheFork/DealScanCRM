@@ -124,27 +124,30 @@ export default function (sequelize, DataTypes) {
     },
 
     classMethods : {
+      isScheduledLead: function(customer, t){
+        var THRESHOLD = require('../../config/environment').leadThreshold;
 
+
+      },
       dscUpsert: function(data, t){
 
         var searchOptions = {};
         //Customer Identifiers
-        if (data.CustomerId) searchOptions.dscCustomerID = data.CustomerId;
-        if (data.FirstName) searchOptions.firstName = data.FirstName;
-        if (data.LastName) searchOptions.lastName = data.LastName;
-        if (data.MiddleInitial) searchOptions.middleInitial = data.MiddleInitial;
-        if (data.PhoneNumber) searchOptions.phone = data.PhoneNumber;
-        if (data.EmailAddress) searchOptions.email = data.EmailAddress;
+        if (data.CustomerId && data.CustomerId.toString().trim() != '') searchOptions.dscCustomerID = data.CustomerId;
+        if (data.FirstName && data.FirstName.toString().trim() != '') searchOptions.firstName = data.FirstName;
+        if (data.LastName && data.LastName.toString().trim() != '') searchOptions.lastName = data.LastName;
+        if (data.MiddleInitial && data.MiddleInitial.toString().trim() != '') searchOptions.middleInitial = data.MiddleInitial.substr(0,1);
 
-
-        //console.log(searchOptions);
+        console.log('\n\n\n CUSTOMER SEARCH OPTIONS \n\n\n');
+        console.log(searchOptions);
+        console.log('\n\n\n\n _______________________\n\n\n');
 
         //customer values to upsert
         var upsertValues = {
           driverLicenseID: data.DriversLicenseNo,
           dscCustomerID: data.CustomerId,
           firstName: data.FirstName,
-          middleInitial: data.MiddleInitial,
+          middleInitial: data.MiddleInitial.substr(0,1),
           lastName: data.LastName,
           phone:data.PhoneNumber,
           dateOfBirth: data.Birthday,
@@ -152,7 +155,8 @@ export default function (sequelize, DataTypes) {
           streetAddress:data.AddressLine1 + '' + ((data.AddressLine2 !== null ) ? data.AddressLine2 : '') ,
           city:data.City,
           state:data.StateName,
-          country: data.Country,
+          country: 'USA',
+          source: data.MarketingTypeName,
           postalCode:data.PostalCode,
           createdAt: data.DateCreated
         };
@@ -181,9 +185,13 @@ export default function (sequelize, DataTypes) {
                 'postalCode',
               ] }, {transaction: t})
               .then(function(customer){
+                //isScheduledLead(customer, t);
                 return customer;
               })
-          } else return customer;
+          } else {
+            //isScheduledLead(customer, t);
+            return customer;
+          }
         }).catch(function(err){
             console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);
             console.log(err);

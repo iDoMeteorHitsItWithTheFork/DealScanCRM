@@ -34,8 +34,8 @@ export default function(sequelize, DataTypes) {
     },
     status: {
       type: DataTypes.ENUM,
-      values: ['won','lost','other'],
-      defaultValue: 'lost',
+      values: ['pending','working','sold','delivered','other'],
+      defaultValue: 'working',
       allowNull: false,
       validate:{
         notEmpty: true
@@ -91,7 +91,7 @@ export default function(sequelize, DataTypes) {
           return Buyer.dscUpsert(data.CoBuyer, t)
             .then(function (coBuyer) {
               console.log('\n>> Deal['+data.DealId+']  -> Adding Co-Buyer to Deal...');
-              return deal.setCoBuyers(coBuyer, {transaction: t})
+              return deal.addCoBuyer(coBuyer, {transaction: t})
                 .then(function (res) {
                   console.log('\n>> Deal['+data.DealId+']  -> Are There Trade on this Deal?');
                   return Deal.dscSetTrade(data, deal, t);
@@ -104,12 +104,24 @@ export default function(sequelize, DataTypes) {
       },
       dscSetTrade: function(data, deal, t){
         var Trade = sequelize.models.Trade;
-        if (data.Trade) {
-          console.log('\n>> Deal['+data.DealId+']  -> Upserting Trade Data');
-          return Trade.dscUpsert(data.Trade, data.TradeValue, t)
+        if (data.Trades) {
+          console.log('\n>> Deal['+data.DealId+']  -> Creating Trade');
+          return Trade.create({
+            tradeAllowance: deal.TradeValue,
+            actualCashValue: deal.ActualCashValue,
+            payOffAmount: deal.BalanceOwed,
+            VIN: deal.TradeVIN,
+            color: deal.TradeColor,
+            createdAt: deal.TradeDateCreated,
+            year: deal.TradeYear,
+            make: deal.TradeMake,
+            model: deal.TradeModel,
+            mileage: deal.TradeMileage,
+            bodyStyle: deal.TradeBodyStyle,
+          },{transaction: t})
             .then(function (trade) {
-              console.log('\n>> Deal['+data.DealId+']  -> Assigning Trade To Deal...');
-              return trade.setDeal(deal, {transaction: t})
+              console.log('\n>> Deal['+data.DealId+']  -> Adding Trade To Deal...');
+              return deal.addTrade(trade, {transaction: t})
                 .then(function (res) {
                   console.log('\n>> Deal['+data.DealId+']  -> Trade was added to Deal.');
                   console.log('\n>> Deal['+data.DealId+']  -> Was This Deal Financed?');
@@ -124,68 +136,72 @@ export default function(sequelize, DataTypes) {
       },
       dscSetFinancing: function(data, deal, t){
         var Finance = sequelize.models.Financing;
-        if (data.SelectedPaymentOptions &&
-          data.SelectedPaymentOptions[0] &&
-          data.SelectedPaymentOptions[0].Term > 1) {
-          return Finance.dscUpsert(data.SelectedPaymentOptions[0],
-            deal.dealID, data.RemainingBalance, t)
+        if (data.SelectedPaymentOption) {
+          return Finance.create({
+              downPayment: deal.DownPayment,
+              installments: deal.Term,
+              interestRate: deal.Rate,
+              monthlyPayment: deal.Payment,
+            },{transaction: t})
             .then(function (financing) {
               console.log('\n>> Deal['+data.DealId+']  -> Adding Financing Details to Deal...');
-              return financing.setDeal(deal, {transaction: t})
+              return deal.setFinancing(financing, {transaction: t})
                 .then(function (res) {
                   console.log('\n>> Deal['+data.DealId+']  -> Financing Details Added to Deal.');
                   console.log('\n\n\n\n\n*********************************')
                   console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
                   console.log('*************************************');
-                  return deal;
+                  return Deal.dscSetRebate(data, deal, t);
                 })
             })
         } else {
           console.log('\n>> Deal['+data.DealId+']  -> There are no financing on this deal.');
+          console.log('\n >> Does this deal have any rebates? ');
+          return Deal.dscSetRebate(data, deal, t);
+        }
+      },
+      dscSetRebate: function(data, deal, t){
+        var Rebate = sequelize.models.Rebate;
+        if (data.Rebates){
+          return Rebate.create({
+            amount: data.Rebates
+          }, {transaction: t}).then(function(rebate){
+             return deal.addRebate(rebate, {transaction: t})
+               .then(function(res){
+                 console.log('\n>> Deal['+data.DealId+']  -> Rebate was added to Deal');
+                 console.log('\n\n\n\n\n*********************************')
+                 console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
+                 console.log('*************************************');
+                 return deal;
+             });
+          });
+        } else {
           console.log('\n\n\n\n\n*********************************')
           console.log('*    Deal['+data.DealId+'] Successfully Inserted!   *');
           console.log('*************************************');
           return deal;
         }
       },
-      dscSetRebate: function(){
-
-      },
       dscUpsert: function (data, customer) {
         console.log('\n\n>> Upserting Deal[' + data.DealId + ']...');
 
         //required entities
-        if (!data.DealershipId) throw new Error('DealershipId is required');
-        if (!data.DealershipName) throw new Error('Dealership Info is required');
+        if (!data.DealershipId || data.DealershipId.toString().trim() == '') throw new Error('DealershipId is required');
+        if (!data.DealershipName || data.DealershipName.toString().trim() == '') throw new Error('Dealership Info is required');
         if (!data.Vehicle) throw new Error('Vehicle Info is required');
-        if (!data.SalesPersonFirstName) throw new Error('SalePerson FirstName is required');
-        if (!data.SalesPersonLastName) throw new Error('SalePerson LastName is required');
-        if (!data.SalesPersonId) throw new Error('SalePersonId is required');
+        if (!data.SalesPersonFirstName || data.SalesPersonFirstName.toString().trim() == '') throw new Error('SalePerson FirstName is required');
+        if (!data.SalesPersonLastName || data.SalesPersonLastName.toString().trim() == '') throw new Error('SalePerson LastName is required');
+        if (!data.SalesPersonId || data.SalesPersonId.toString().trim() == '') throw new Error('SalePersonId is required');
 
         var searchOptions = {};
         if (data.DealId) searchOptions.dscDealID = data.DealId;
-
-        var dealStatus  = '';
-        switch(data.DealStatusTypeName){
-          case 'working':
-          case 'pending':
-              dealStatus = 'lost';
-              break;
-          case 'sold':
-          case 'delivered':
-             dealStatus = 'won';
-             break;
-          default:
-            dealStatus = 'lost';
-            break;
-        }
 
         var upsertValues = {
           dscDealID: data.DealId,
           retailValue: data.RetailValue,
           salePrice: data.SalesPrice,
-          paymentOption: (data.SelectedPaymentOptions && data.SelectedPaymentOptions[0] && data.SelectedPaymentOptions[0].Term > 1) ? 'financed' : 'cash',
-          status: dealStatus,
+          paymentOption: (data.SelectedPaymentOption && data.SelectedPaymentOption.Term > 1) ? 'financed' : 'cash',
+          status: data.DealStatusTypeName,
         }
 
         return Deal.sequelize.transaction(function (t) {

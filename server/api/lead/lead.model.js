@@ -10,6 +10,7 @@ export default function(sequelize, DataTypes) {
     },
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
+    middleInitial: DataTypes.STRING(1),
     phone: DataTypes.STRING,
     email: DataTypes.STRING,
     address: DataTypes.STRING,
@@ -28,11 +29,14 @@ export default function(sequelize, DataTypes) {
     getterMethods: {
       //Public profile information
       profile: function () {
+        var middleInitial = this.getDataValue('middleInitial') ? this.getDataValue('middleInitial') : '';
+        if (middleInitial.length > 0) middleInitial += '.';
         return {
           'leadID': this.getDataValue('leadID'),
           'firstName': this.getDataValue('firstName'),
           'lastName': this.getDataValue('lastName'),
-          'name': this.getDataValue('firstName') +' '+this.getDataValue('lastName'),
+          'middleInitial': this.getDataValue('middleInitial'),
+          'name': this.getDataValue('firstName') +' '+middleInitial+' ' +this.getDataValue('lastName'),
           'phone': this.getDataValue('phone'),
           'email': this.getDataValue('email'),
           'address': this.getDataValue('address'),
@@ -47,11 +51,14 @@ export default function(sequelize, DataTypes) {
 
       // Non-sensitive info we'll be putting in the token
       token: function () {
+        var middleInitial = this.getDataValue('middleInitial') ? this.getDataValue('middleInitial') : '';
+        if (middleInitial.length > 0) middleInitial += '.';
         return {
           'leadID': this.getDataValue('leadID'),
           'firstName': this.getDataValue('firstName'),
           'lastName': this.getDataValue('lastName'),
-          'name': this.getDataValue('firstName') +' '+this.getDataValue('lastName'),
+          'middleInitial': this.getDataValue('middleInitial'),
+          'name': this.getDataValue('firstName') +' '+middleInitial+' ' +this.getDataValue('lastName'),
           'phone': this.getDataValue('phone'),
           'email': this.getDataValue('email'),
           'address': this.getDataValue('address'),
@@ -72,11 +79,11 @@ export default function(sequelize, DataTypes) {
         var searchOptions = {};
         //Customer Identifiers
 
-        if (data.firstName) searchOptions.firstName = data.firstName;
-        if (data.lastName) searchOptions.lastName = data.lastName;
-        if (data.phone) searchOptions.phone = data.phone;
-        if (data.email) searchOptions.email = data.email;
-        if (data.interest) searchOptions.interest = JSON.stringify(data.interest);
+        if (data.firstName && data.firstName.toString().trim() != '') searchOptions.firstName = data.firstName;
+        if (data.lastName && data.lastName.toString().trim() != '') searchOptions.lastName = data.lastName;
+        if (data.phone && data.phone.toString().trim() != '') searchOptions.phone = data.phone;
+        if (data.email && data.email.toString().trim() != '') searchOptions.email = data.email;
+        if (data.interest && data.interest.toString().trim() != '') searchOptions.interest = JSON.stringify(data.interest);
 
         //customer values to upsert
         var upsertValues = {

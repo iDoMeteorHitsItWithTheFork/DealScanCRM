@@ -142,6 +142,19 @@ export default function(sequelize, DataTypes) {
              createdAt: data.DateCreated
            };
 
+           if (data.BodyStyle && data.BodyStyle.trim() != ''){
+             var classification = '';
+             switch(data.BodyStyle.toLowerCase()){
+
+
+
+               default:
+                 classification = 'other';
+                 break;
+             }
+
+           }
+
            //find existing vehicle or create
            return this.findOrCreate({
              where: searchOptions,

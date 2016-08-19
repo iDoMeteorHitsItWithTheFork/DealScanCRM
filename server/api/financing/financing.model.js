@@ -63,6 +63,7 @@ export default function(sequelize, DataTypes) {
         if (dealID) searchOptions.dealID = dealID;
         //vehicle values to upsert
         var upsertValues = {
+          downPayment: data.DownPayment,
           installments: data.Term,
           interestRate: data.Rate,
           monthlyPayment: data.Payment,
@@ -79,6 +80,7 @@ export default function(sequelize, DataTypes) {
             return financing.update(upsertValues,
               {
                 fields: [
+                  'downPayment',
                   'installments',
                   'interestRate',
                   'monthlyPayment',
