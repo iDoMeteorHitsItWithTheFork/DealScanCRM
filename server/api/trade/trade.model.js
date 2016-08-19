@@ -93,24 +93,24 @@ export default function(sequelize, DataTypes) {
     },
 
     classMethods: {
-      dscUpsert:function(data, tradeValue, t){
+      dscUpsert:function(data, t){
 
         var searchOptions = {};
         //Vehicle Identifiers
-        if (data.Vehicle.VIN) searchOptions.VIN = data.Vehicle.VIN;
+        if (data.VIN) searchOptions.VIN = data.VIN;
         //vehicle values to upsert
         var upsertValues = {
-          VIN: data.Vehicle.VIN,
+          VIN: data.VIN,
           actualCashValue:data.ActualCashValue,
           payOffAmount: data.BalanceOwed,
-          tradeAllowance: tradeValue,
-          make: data.Vehicle.Make,
-          model: data.Vehicle.Model,
-          year: data.Vehicle.Year,
-          mileage: data.Vehicle.Mileage,
-          color: data.Vehicle.Color,
-          bodyStyle: data.Vehicle.BodyStyle,
-          createdAt: data.ScanDate,
+          tradeAllowance: data.TradeValue,
+          make: data.Make,
+          model: data.Model,
+          year: data.Year,
+          mileage: data.Mileage,
+          color: data.Color,
+          bodyStyle: data.BodyStyle,
+          createdAt: data.DateCreated,
         };
 
 

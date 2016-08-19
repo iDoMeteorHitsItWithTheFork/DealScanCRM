@@ -793,8 +793,8 @@
             </tr>
             <tr>
               <th>Year</th>
+              <th>Make</th>
               <th>Model</th>
-              <th>Trim Level</th>
               <th></th>
               <th>Name</th>
               <th>Phone</th>
@@ -808,8 +808,8 @@
             <tbody>
             <tr ng-repeat="deal in dashboard.dealsTableData" class="dashboard-table-w-avatar" >
               <td >{{::deal.vehicleInformation.year}}</td>
+              <td >{{::deal.vehicleInformation.make}}</td>
               <td >{{::deal.vehicleInformation.model}}</td>
-              <td >{{::deal.vehicleInformation.trim }}</td>
               <td ng-click="dashboard.goToProfile(deal)"><img alt="image" src="assets/images/profile.jpg" class="dashboard-table-avatar"></td>
               <td style="cursor:pointer;" ng-click="dashboard.goToProfile(deal)" ><a href>{{::deal.customerDetails.name}}</a></td>
               <td ng-click="dashboard.composeText(deal, $event)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::deal.customerDetails.phone}}</td>

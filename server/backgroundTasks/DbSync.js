@@ -166,7 +166,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(time){
-  if (!time) time = moment().subtract(1, 'day');
+  if (!time) time = moment().subtract(15, 'minutes');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -271,14 +271,14 @@ var sqlStatement = function(time){
     "LEFT OUTER JOIN [KelCar.DeskingSuite].Deal.Trade DLTRD ON DL.TradeId = DLTRD.TradeId " +
     "LEFT OUTER JOIN [KelCar.DeskingSuite].Vehicle.VehicleView TRDVHL ON TRDVHL.VehicleId = DLTRD.VehicleId " +
     "WHERE CST.FullName IS NOT NULL AND CST.FullName != '' AND " +
-    "(DL.DateCreated >= '"+moment(time).startOf('day').format("MM/DD/YYYY")+"' OR DL.DateStatusChanged >= '"+moment(time).format("MM/DD/YYYY HH:mm:ss a")+"') " +
+    "(DL.DateCreated >= '"+time.startOf('day').format("MM/DD/YYYY HH:mm:ss a")+"' OR DL.DateStatusChanged >= '"+time.format("MM/DD/YYYY HH:mm:ss a")+"') " +
     "AND PMT.Selected = 1 " +
     "ORDER BY DL.DealId DESC, PMT.PaymentOptionId DESC ";
 }
 
-var executeStatement = function(connection, time) {
+var executeStatement = function(connection) {
   var Request = require('tedious').Request;
-  var statement = sqlStatement(time);
+  var statement = sqlStatement();
   var results = [];
   var sql = new Request(statement, function(err, rowCount) {
     if (err){
@@ -484,7 +484,7 @@ var fetchData = function (time) {
         console.log(err);
         return err;
       } else {
-        executeStatement(connection);
+        executeStatement(connection, time);
       }
     }
   );
@@ -515,9 +515,9 @@ var start = function () {
       connection: connectionDetails,
       queues: ['DBSync', 'Leads'],
       minTaskProcessors: 1,
-      maxTaskProcessors: 20,
-      checkTimeout: 1000,
-      maxEventLoopDelay:10,
+      maxTaskProcessors: 15,
+      checkTimeout: 500,
+      maxEventLoopDelay:5,
       toDisconnectProcessors: true
     }, jobs);
 
@@ -558,7 +558,7 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/5 * * * *', () => {
+    schedule.scheduleJob('*/15 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');

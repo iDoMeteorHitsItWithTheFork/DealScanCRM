@@ -157,7 +157,7 @@ function formatDeals(deals){
       "name": deal.Buyer.profile.name,
       "email": deal.Buyer.profile.email,
       "phone": deal.Buyer.profile.phone,
-      "date": dt.format("ddd, MMM DD YYYY HH:MM a"),
+      "date": dt.format("ddd, MMM DD YYYY"),
       "userID": deal.saleRepID,
       "salesman": deal.SaleRep.profile.name,
       "source": deal.Buyer.profile.source,

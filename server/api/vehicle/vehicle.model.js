@@ -252,7 +252,7 @@ export default function(sequelize, DataTypes) {
                case "4SUV":
                case "EXPLORER":
                case "4X4":
-               case " SUV AWD":
+               case "SUV AWD":
                case "SUV":
                case "UT":
                  classification="utility";
@@ -284,6 +284,7 @@ export default function(sequelize, DataTypes) {
                case "VN":
                case "CG":
                  classification = "van";
+                 break;
                default:
                  classification = 'other';
                  break;

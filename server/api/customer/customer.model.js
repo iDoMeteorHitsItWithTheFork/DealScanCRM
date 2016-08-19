@@ -156,7 +156,7 @@ export default function (sequelize, DataTypes) {
           city:data.City,
           state:data.StateName,
           country: 'USA',
-          source: data.MarketingTypeName || 'Walk In',
+          source: (data.MarketingTypeName && data.MarketingTypeName.trim() != '') ? data.MarketingTypeName : 'Walk In',
           postalCode:data.PostalCode,
           createdAt: data.DateCreated
         };

@@ -142,7 +142,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       eventHandlers: {'apply.daterangepicker': function(ev, picker) { _dashboard.getSales() }}
     };
 
-    _dashboard.dateRange = {startDate: moment().subtract(29, 'days'),
+    _dashboard.dateRange = {startDate: moment().startOf('month'),
       endDate: _dashboard.datePickerOptions.ranges.Today[1]};
 
 
@@ -417,7 +417,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       var tableData = getDealsData(status).tableData;
       var data = $filter('filter')(tableData, {$: category});
       console.log(data);
-      _dashboard.dealsTableData = data;
+      $scope.$applyAsync(function(){
+        _dashboard.dealsTableData = data;
+      });
     }
 
     _dashboard.filterDeals = function(status){
@@ -851,7 +853,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           break;
       }
       console.log(data);
-      _dashboard.dealsTableData = data;
+      $scope.$applyAsync(function(){
+        _dashboard.dealsTableData = data;
+      });
     }
 
 
@@ -876,7 +880,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.dealsTableData = [];
       _dashboard.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
-          .withOption('order', [[7, 'asc']])
+          .withOption('order', [[7, 'desc']])
           .withOption('responsive', true)
           .withButtons([
               {extend: 'copy'},
