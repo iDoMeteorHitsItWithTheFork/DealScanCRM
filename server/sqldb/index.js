@@ -129,11 +129,15 @@ db.User.belongsToMany(db.Team, {as: 'ManagesTeams', through: 'Managers', foreign
 
 db.Deal.belongsTo(db.Dealership, {through:'Purchases', foreignKey:'dealershipID'});
 db.Dealership.hasMany(db.Deal, {foreignKey:'dealershipID'});
+
 db.Deal.belongsTo(db.User, {as:'SaleRep', through: 'Purchases', foreignKey: 'saleRepID'});
 db.User.hasMany(db.Deal, {foreignKey: 'saleRepID'});
+
 db.Deal.belongsTo(db.Customer, {as:'Buyer', through:'Purchases', foreignKey:'buyerID'});
 db.Customer.hasMany(db.Deal, {foreignKey: 'buyerID'});
+
 db.Deal.belongsTo(db.Vehicle, {as:'Purchase', through: 'Purchases', foreignKey: 'vehicleID'});
+
 db.Deal.belongsToMany(db.Customer, {as:'CoBuyers', through: 'CoSigners', foreignKey: 'dealID'});
 db.Customer.belongsToMany(db.Deal, {as:'CoSignedDeals' , through:'CoSigners', foreignKey:'coBuyerID'});
 

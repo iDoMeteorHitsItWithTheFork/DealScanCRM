@@ -413,29 +413,28 @@ export default function(sequelize, DataTypes) {
                     'paymentOption',
                     'status'
                   ]
-                }, {transaction: t}).then(function(deal){
-
-                  if (!deal) throw new Error('Failed to update deal info');
+                }, {transaction: t}).then(function(){
                   /**
                    * Debug
                    */
                   console.log('\n>> Deal['+deal.dscDealID+'] -> (RetailValue, SalePrice, PaymentOption, Status) Updated!');
-                  if (deal){
+                  console.log('\n>> Deal['+deal.dscDealID+'] -> Retrieving SaleRep Details...');
+                  return deal.getSaleRep({transaction: t}).then(function(salesRep){
+                    /**
+                     * Debug
+                     */
+                    console.log('\n>> Deal['+deal.dscDealID+'] -> Has SalesRep Changed?');
+                    if (salesRep && salesRep.dscUserID != data.SalesPersonId) {
+                      /**
+                       * Debug
+                       */
+                      console.log('\n>> Deal[' + deal.dscDealID + '] -> Sales Rep hasn\'t changed...');
+                      console.log('\n>> Deal[' + deal.dscDealID + '] -> Has Purchase changed?');
+                      return Deal.dscUpdatePurchase(data, deal, customer, t);
 
+                    } else return Deal.dscUpdateSaleRep(data, deal, customer, t);
 
-
-
-
-
-                  }
-
-
-
-
-
-
-
-
+                  });
               });
             }
           })
@@ -450,7 +449,135 @@ export default function(sequelize, DataTypes) {
         });
       }
 
+    },
+
+      /**
+       * Update Sales Rep information
+       * @param data
+       * @param deal
+       * @param t
+       */
+      dscUpdateSaleRep: function (data, deal, customer, t) {
+        var User = sequelize.models.User;
+        /**
+         * Debug
+         * */
+        console.log('\n>> Deal[' + deal.dscDealID + '] -> Retrieving New SalesPerson Info...');
+
+        return User.find({
+          where: {
+            firstName: data.SalesPersonFirstName,
+            lastName: data.SalesPersonLastName,
+            dscUserID: data.SalesPersonId
+          },
+          transaction: t
+        }).then(function(newSalesRep){
+          /**
+           * Debug
+           */
+          console.log('\n>> Deal[' + deal.dscDealID + '] -> New SalesRep Identified...');
+          console.log('\n>> Deal[' + deal.dscDealID + '] -> Adding New SalesRep to Deal...');
+
+          return deal.setSaleRep(newSalesRep, {transaction: t}).then(function(res){
+            /**
+             * Debug
+             */
+            console.log('\n>> Deal[' + deal.dscDealID + '] -> New SalesRep Added to Deal...');
+            return Deal.dscUpdatePurchase(data, deal, customer, t);
+          })
+        })
+
+      },
+
+      /**
+       * Updating Purchase Info on Deal
+       * @param data
+       * @param deal
+       * @param t
+       */
+    dscUpdatePurchase: function(data, deal, customer, t){
+        /**
+         * Debug
+         */
+        console.log('\n>> Deal[' + deal.dscDealID + '] -> Retrieving Purchase Details...');
+
+        return deal.getPurchase({transaction: t}).then(function(purchase){
+           if (purchase && purchase.VIN != data.Vehicle.VIN && purchase.stockNumber != data.Vehicle.StockNumber) {
+             var Vehicle = sequelize.models.Vehicle;
+             /**
+              * Debug
+              */
+             console.log('\n>> Deal[' + deal.dscDealID + '] -> Creating New Purchase Details...');
+
+             return Vehicle.dscUpsert(data.Vehicle, t).then(function(newPurchase){
+               /**
+                * Debug
+                */
+               console.log('\n>> Deal['+data.DealId+']  -> New Vehicle Identified.');
+               console.log('\n>> Deal['+data.DealId+']  -> Assigning New Vehicle to Deal...');
+
+               return deal.setPurchase(newPurchase, {transaction: t}).then(function(){
+                 /**
+                  * Debug
+                  */
+                 console.log('\n>> Deal['+data.DealId+']  -> New Vehicle Assigned to Deal.');
+                 console.log('\n>> Deal['+data.DealId+']  -> Has Buyer changed?');
+
+                 return Deal.dscUpdateBuyer(data, deal, customer, t);
+               })
+
+             });
+
+           } else return Deal.dscUpdateBuyer(data, deal, customer, t);
+        })
+
+
+    },
+
+      /**
+       * Update Buyer Information
+       * @param data
+       * @param deal
+       * @param t
+       */
+    dscUpdateBuyer: function(data, deal, customer, t){
+      var Buyer  = sequelize.models.Customer;
+      return deal.getBuyer({transaction: t}).then(function(buyer){
+        if (buyer && buyer.customerID != customer.customerID && buyer.dscCustomerID != customer.dscCustomerID) {
+          /**
+           * Debug
+           */
+          console.log('\n>> Deal['+data.DealId+']  -> Assigned New Buyer to Deal...');
+
+          return deal.setBuyer(customer, {transaction: t}).then(function(){
+            /**
+             * Debug
+             */
+            console.log('\n>> Deal['+data.DealId+']  -> New Buyer Assigned to Deal.');
+            console.log('\n>> Deal['+data.DealId+']  -> Has CoBuyer changed? ');
+
+            return Deal.dscUpdateCoBuyer(data, deal, t);
+
+          });
+
+        } else return Deal.dscUpdateCoBuyer(data, deal, t);
+      })
+
+    },
+
+      /**
+       * Update CoBuyer Information
+       * @param data
+       * @param deal
+       * @param t
+       */
+    dscUpdateCoBuyer: function(data, deal, t){
+
+
     }
+
+
+
 
   });
 
