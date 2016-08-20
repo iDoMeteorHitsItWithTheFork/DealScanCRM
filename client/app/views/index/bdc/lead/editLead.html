@@ -5,7 +5,7 @@
   <label class="tl" style="float: left;">Update opportunity</label>
 </div>
 <div class="modal-body p-b-10">
-  <form name="createLeadForm" role="form">
+  <form name="editLeadForm" role="form">
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-6">
         <div class="form-group">
@@ -55,6 +55,6 @@
 <div class="modal-footer">
   <button class="btn btn-warning btn-o" type="button" ng-click="editLead.cancel()">Cancel</button>
   <button ladda="editLead.saving" data-style="zoom-in" class="ladda-button btn btn-primary btn-o" type="button" ng-click="editLead.update()"
-          ng-disabled="createLeadForm.$pristine || !createLeadForm.$valid || editLead.saving">Update Lead
+          ng-disabled="editLeadForm.$pristine || !editLeadForm.$valid || editLead.saving">Update Lead
   </button>
 </div>

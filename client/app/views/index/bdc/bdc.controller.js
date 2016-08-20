@@ -19,6 +19,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.savingNote = false;
       _bdc.assigningLead = false;
       _bdc.note = {content: ''};
+      _bdc.dealers = Auth.getDealerships();
 
       _bdc.leads = [];
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
@@ -211,7 +212,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           return val.sourceName == _bdc.sectionTitle.category;
         });
         console.log(data);
-        _bdc.dealsTableData = data;
+        $scope.$applyAsync(function(){
+          _bdc.dealsTableData = data;
+        })
       }
 
       /**
@@ -238,7 +241,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.dealsTableData = [];
       _bdc.dtOptions = DTOptionsBuilder.newOptions()
           .withDOM('<"html5buttons"B>lTfgitp')
-          .withOption('order', [[5, 'asc']])
+          .withOption('order', [[5, 'desc']])
           .withOption('responsive', true)
           .withButtons([
             {extend: 'copy'},
@@ -272,7 +275,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         },
         "alwaysShowCalendars": true,
         'opens': 'left',
-        eventHandlers: {'apply.daterangepicker': function(ev, picker) { _bdc.getLeads() }}
+        eventHandlers: {'apply.daterangepicker': function(ev, picker) {
+           console.log(ev);
+           console.log(picker);
+          _bdc.loadLeads();
+        }}
       };
 
       _bdc.dateRange = {startDate: moment().subtract(6, 'days'),
@@ -393,6 +400,12 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           controller: 'ScheduleLeadCtrl',
           controllerAs: 'scheduleLead',
           resolve: {
+            Dealers: function(){
+              return _bdc.dealers;
+            },
+            lead: function(){
+              return lead;
+            },
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
                 {
@@ -415,9 +428,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 }
               ]);
             },
-            lead: function(){
-              return lead;
-            }
           }
         });
 
@@ -492,6 +502,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           windowClass: 'slide-up',
           templateUrl: 'app/views/index/bdc/lead/addLead.html',
           controller: 'AddLeadCtrl as newLead',
+          resolve: {
+            Dealers: function(){
+              return _bdc.dealers;
+            }
+          }
         });
       }
 
@@ -533,6 +548,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           templateUrl: 'app/views/index/task/addTask.html',
           controller: 'AddTaskCtrl as addTask',
           resolve: {
+            Dealers: function(){
+              return _bdc.dealers;
+            },
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
                 {
@@ -573,6 +591,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           templateUrl: 'app/views/index/events/addEvent.html',
           controller: 'AddEventCtrl as addEvent',
           resolve: {
+            Dealers: function(){
+              return _bdc.dealers;
+            },
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
                 {

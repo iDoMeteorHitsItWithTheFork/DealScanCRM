@@ -41,8 +41,8 @@ server.once('ready', function() {
   openInbox(function(err, box) {
     if (err) throw err;
     timestamp = null;
-    var yesterday = moment().subtract(1, 'days').format('MMM DD[,] YYYY');
-    var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", yesterday]];
+    var today = moment().startOf('day').format('MMM DD[,] YYYY');
+    var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", today]];
     server.search(searchOptions, function(err, results){
       if (err) {
         console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');

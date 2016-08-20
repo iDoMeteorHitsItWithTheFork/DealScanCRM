@@ -207,7 +207,8 @@
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet'}">
+                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet',
+                                                  'label-danger': lead.sourceName.toLowerCase() == 'website'}">
                                   {{lead.sourceName}}</span>
                               </td>
                             </tr>
@@ -246,7 +247,8 @@
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet'}">{{lead.sourceName}}</span>
+                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet',
+                                                  'label-danger': lead.sourceName.toLowerCase() == 'website'}">{{lead.sourceName}}</span>
                               </td>
                             </tr>
                             </tbody>
@@ -282,7 +284,8 @@
                               <td class="client-status">
                                 <span class="label"
                                       ng-class="{'label-primary': lead.sourceType.toLowerCase() == 'phone',
-                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet'}">{{lead.sourceName}}</span>
+                                                  'label-warning': lead.sourceType.toLowerCase() == 'internet',
+                                                  'label-danger': lead.sourceName.toLowerCase() == 'website'}">{{lead.sourceName}}</span>
                               </td>
                             </tr>
                             </tbody>
@@ -514,7 +517,7 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-warning btn-outline m-rl-a">
-                         {{bdc.totalLeads.sourceSummary[1].Total}}
+                         {{bdc.totalLeads.sourceSummary[1].Total || 0}}
                         </button>
                         <br/>
                         Phone
@@ -522,14 +525,14 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.totalLeads.sourceSummary[0].Total}}
+                          {{bdc.totalLeads.sourceSummary[0].Total || 0}}
                         </button>
                         <br/>
                         Internet
                       </th>
                       <th style="border-bottom:none !important;" class="text-center">
                         <button class="btn btn-danger btn-outline m-rl-a">
-                          {{bdc.totalLeads.sourceSummary[0].Total + bdc.totalLeads.sourceSummary[1].Total}}
+                          {{(bdc.totalLeads.sourceSummary[0].Total + bdc.totalLeads.sourceSummary[1].Total) || 0}}
                         </button>
                         <br/>
                         Total
@@ -575,7 +578,7 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.totalAppointments.sourceSummary[1].Total}}
+                          {{bdc.totalAppointments.sourceSummary[1].Total || 0}}
                         </button>
                         <br/>
                         Phone
@@ -583,14 +586,14 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.totalAppointments.sourceSummary[0].Total}}
+                          {{bdc.totalAppointments.sourceSummary[0].Total || 0}}
                         </button>
                         <br/>
                         Internet
                       </th>
                       <th style="border-bottom:none !important;" class="text-center">
                         <button class="btn btn-danger btn-outline m-rl-a">
-                          {{bdc.totalAppointments.sourceSummary[0].Total + bdc.totalAppointments.sourceSummary[1].Total}}
+                          {{(bdc.totalAppointments.sourceSummary[0].Total + bdc.totalAppointments.sourceSummary[1].Total) || 0}}
                         </button>
                         <br/>
                         Total
@@ -636,7 +639,7 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.keptAppointments.sourceSummary[1].Total}}
+                          {{bdc.keptAppointments.sourceSummary[1].Total || 0}}
                         </button>
                         <br/>
                         Phone
@@ -644,14 +647,14 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.keptAppointments.sourceSummary[0].Total}}
+                          {{bdc.keptAppointments.sourceSummary[0].Total || 0}}
                         </button>
                         <br/>
                         Internet
                       </th>
                       <th style="border-bottom:none !important;" class="text-center">
                         <button class="btn btn-danger btn-outline m-rl-a">
-                         {{bdc.keptAppointments.sourceSummary[1].Total + bdc.keptAppointments.sourceSummary[0].Total}}
+                         {{(bdc.keptAppointments.sourceSummary[1].Total + bdc.keptAppointments.sourceSummary[0].Total) || 0}}
                         </button>
                         <br/>
                         Total
@@ -697,7 +700,7 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.missedAppointments.sourceSummary[1].Total}}
+                          {{bdc.missedAppointments.sourceSummary[1].Total || 0}}
                         </button>
                         <br/>
                         Phone
@@ -705,14 +708,14 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.missedAppointments.sourceSummary[0].Total}}
+                          {{bdc.missedAppointments.sourceSummary[0].Total || 0}}
                         </button>
                         <br/>
                         Internet
                       </th>
                       <th style="border-bottom:none !important;" class="text-center">
                         <button class="btn btn-danger btn-outline m-rl-a">
-                          {{bdc.missedAppointments.sourceSummary[1].Total + bdc.missedAppointments.sourceSummary[0].Total}}
+                          {{(bdc.missedAppointments.sourceSummary[1].Total + bdc.missedAppointments.sourceSummary[0].Total) || 0}}
                         </button>
                         <br/>
                         Total
@@ -758,7 +761,7 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.soldAppointments.sourceSummary[1].Total}}
+                          {{bdc.soldAppointments.sourceSummary[1].Total || 0}}
                         </button>
                         <br/>
                         Phone
@@ -766,14 +769,14 @@
                       <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
                           class="text-center">
                         <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.soldAppointments.sourceSummary[0].Total}}
+                          {{bdc.soldAppointments.sourceSummary[0].Total || 0}}
                         </button>
                         <br/>
                         Internet
                       </th>
                       <th style="border-bottom:none !important;" class="text-center">
                         <button class="btn btn-danger btn-outline m-rl-a">
-                          {{bdc.soldAppointments.sourceSummary[1].Total + bdc.soldAppointments.sourceSummary[0].Total}}
+                          {{(bdc.soldAppointments.sourceSummary[1].Total + bdc.soldAppointments.sourceSummary[0].Total) || 0}}
                         </button>
                         <br/>
                         Total

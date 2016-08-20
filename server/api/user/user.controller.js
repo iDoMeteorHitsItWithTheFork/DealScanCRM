@@ -277,6 +277,90 @@ export function me(req, res, next) {
     .catch(err => next(err));
 }
 
+export function getDealers(req, res, next) {
+  var userId = req.user.userID;
+  User.find({
+    where: {
+      userID: userId
+    },
+    attributes: [
+      'userID',
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'role',
+      'provider'
+    ],
+    include: [
+      {
+        model: Dealership,
+        required: true,
+        attributes: [
+          'dealershipID',
+          'dealershipName',
+          'streetAddress',
+          'dscDealershipID',
+          'city',
+          'state',
+          'zipCode'
+        ],
+        as: 'Employer',
+        include: [
+          {
+            model: User,
+            as: 'Owners',
+            attributes: ['userID', 'dscUserID', 'firstName', 'lastName', 'email', 'phone', 'role']
+          },
+          {
+            model: User,
+            as: 'GeneralManagers',
+            attributes: ['userID', 'dscUserID','firstName', 'lastName', 'email', 'phone', 'role']
+          },
+          {
+            model:User,
+            as: 'Employees',
+            attributes: ['userID', 'dscUserID', 'firstName', 'lastName', 'email', 'phone', 'role']
+          },
+          {
+          model: Team,
+          include:[
+            {
+              model: User,
+              as: 'TeamManagers',
+              where: {
+                firstName: {
+                  $ne: 'DealScan',
+                }
+              },
+              attributes: ['userID', 'dscUserID', 'firstName', 'lastName', 'email', 'phone', 'role']
+            },
+            {
+              model: User,
+              as: 'TeamMembers',
+              where: {
+                firstName: {
+                  $ne: 'DealScan',
+                }
+              },
+              attributes: ['userID', 'dscUserID', 'firstName', 'lastName', 'email', 'phone', 'role']
+            }
+          ]
+        }
+        ]
+      },
+    ]
+  })
+    .then(user => { // don't ever give out the password or salt
+      if (!user) {
+        return res.status(401).end();
+      }
+      res.json(user.Employer);
+    })
+    .catch(err => next(err));
+}
+
+
 
 /**
  * Authentication callback

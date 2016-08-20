@@ -9,6 +9,7 @@ var router = new Router();
 router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
+router.get('/dealers', auth.isAuthenticated(), controller.getDealers);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id/filters', auth.isAuthenticated(), controller.getFilters);
 router.get('/:id', auth.isAuthenticated(), controller.show);

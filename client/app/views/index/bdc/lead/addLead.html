@@ -20,14 +20,17 @@
         <div class="form-group">
           <label>Schedule Appointment</label>
           <input type="text" placeholder="Appointment Date" class="form-control"
-                 uib-datepicker-popup="{{newLead.format}}"
-                 ng-model="newLead.dt"
-                 is-open="newLead.opened"
-                 datepicker-options="newLead.dateOptions" ng-required="true" close-text="Close"
-                 alt-input-formats="newLead.altInputFormats" min-date="newLead.minDate"
-                 ng-click="newLead.opened = !newLead.opened"/>
+                     uib-datepicker-popup="{{newLead.format}}"
+                     ng-model="newLead.dt"
+                     is-open="newLead.opened"
+                     datepicker-options="newLead.dateOptions" close-text="Close"
+                     alt-input-formats="newLead.altInputFormats" min-date="newLead.minDate"
+                     ng-click="newLead.opened = !newLead.opened"/>
         </div>
       </div>
+
+
+
       <div class="col-md-6">
 
         <div class="form-group">
@@ -49,7 +52,7 @@
         </div>
 
         <div class="form-group">
-          <div class="m-t-38" uib-timepicker ng-model="newLead.appointmentTime"
+          <div class="m-t-38" uib-timepicker ng-model="newLead.dt"
                  show-spinners = "false"
                  show-meridian="true" type="text"
                  placeholder="Appointment Time"></div>
@@ -57,6 +60,21 @@
 
       </div>
     </div>
+
+    <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Available Managers</label>
+          <ui-select ng-model="newLead.prospect.assignedManager" theme="bootstrap" ng-required="newLead.dt">
+            <ui-select-match placeholder="Managers">{{$select.selected.profile.name}}</ui-select-match>
+            <ui-select-choices repeat="manager in newLead.dealers[0].Teams[0].TeamManagers | filter: $select.search">
+              <div ng-bind-html="manager.profile.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-12">
         <div class="form-group">

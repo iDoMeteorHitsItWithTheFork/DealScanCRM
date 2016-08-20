@@ -11,6 +11,17 @@ angular.module('dealScanCrmApp')
          controller: 'BDCCtrl as bdc',
          data: {pageTitle: 'BDC Dashboard', navbarColor: 'white-bg'},
          resolve: {
+          loadDealers: function($q, Auth){
+            var df = $q.defer();
+            Auth.loadDealerships().then(function(dealers){
+               if (dealers) df.resolve(dealers);
+               else df.reject();
+            }).catch(function(err){
+               console.log(err);
+               df.reject(err);
+            });
+            return df.promise;
+          },
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
               {

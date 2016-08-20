@@ -39,8 +39,10 @@ angular.module('dealScanCrmApp')
     function editLead(leadID, details){
         if (!leadID) throw new Error('LeadID is required');
         if (!details) throw new Error('Lead Details are required');
-        if (!details.name) throw new Error('Lead Name is required');
+        if (!details.firstName) throw new Error('Lead FirstName is required');
+        if (!details.lastName) throw new Error('Lead LastName is required');
         if (!details.phone) throw new Error('Lead phone is required');
+        if (!details.source) throw new Error('Lead Source is required');
         return LeadResource.update({id: leadID}, details)
           .$promise.then(function(lead){
             if (lead){

@@ -5,6 +5,7 @@
     function AuthService($location, $http, $cookies, $q, appConfig, Util, User, ezfb, SocialMediaResource) {
         var safeCb = Util.safeCb;
         var currentUser = {};
+        var dealerships = [];
         var fbProfile = null;
         var fbStatus = {};
         var userRoles = appConfig.userRoles || [];
@@ -209,6 +210,27 @@
                         return {};
                     });
             },
+
+            /**
+             * Load Authenticated User Dealerships
+             * @returns {*}
+             */
+            loadDealerships(){
+              return User.getDealers().$promise
+                .then(function(dealers){
+                  if (dealers) dealerships = dealers;
+                  return dealerships;
+              }).catch(function(err){
+                   console.log(err);
+                   return err;
+                })
+            },
+          /**
+           * Get Loaded Dealership
+           */
+           getDealerships(){
+              return dealerships;
+           },
 
             /**
              * Check if a user is logged in

@@ -139,10 +139,14 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       },
 
       'opens': 'left',
-      eventHandlers: {'apply.daterangepicker': function(ev, picker) { _dashboard.getSales() }}
+       eventHandlers: {'apply.daterangepicker': function(ev, picker) {
+          console.log(ev);
+          console.log(picker);
+         _dashboard.getSales();
+       }}
     };
 
-    _dashboard.dateRange = {startDate: moment().startOf('month'),
+    _dashboard.dateRange = {startDate: _dashboard.datePickerOptions.ranges['This Month'][0],
       endDate: _dashboard.datePickerOptions.ranges.Today[1]};
 
 

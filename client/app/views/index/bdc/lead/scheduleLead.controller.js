@@ -2,21 +2,20 @@
  * Created by ludovicagodio on 7/24/16.
  */
 angular.module('dealScanCrmApp')
-  .controller('ScheduleLeadCtrl', ['$scope','$uibModalInstance', '$filter', 'Lead', 'toaster', 'lead',
-    function ($scope, $uibModalInstance, $filter, Lead, toaster, lead) {
+  .controller('ScheduleLeadCtrl',
+    function ($scope, $uibModalInstance, $filter, Lead, Dealers, toaster, lead) {
       console.log("add lead controller loaded");
       console.log(lead);
       var _scheduleLead = this;
       _scheduleLead.saving = false;
-
+      _scheduleLead.dealers = Dealers;
       _scheduleLead.appointment = {
         leadID: lead.leadID,
         name:lead.name,
         phone:lead.phone,
         description: '',
         category: '',
-        date:'',
-        time: ''
+        assignedManager: ''
       };
 
 
@@ -61,8 +60,9 @@ angular.module('dealScanCrmApp')
         details.name = _scheduleLead.appointment.name;
         details.phone = _scheduleLead.appointment.phone;
         details.description = _scheduleLead.appointment.description;
-        details.appointment = moment(_scheduleLead.appointment.date).format('YYYY-MM-DD') +' '+_scheduleLead.appointment.time;
+        details.appointment = _scheduleLead.dt;
         details.leadID = lead.leadID;
+        details.manager = _scheduleLead.appointment.assignedManager;
 
         Lead.appointment(details).then(function(appointment){
           console.log(appointment);
@@ -83,4 +83,4 @@ angular.module('dealScanCrmApp')
         $uibModalInstance.dismiss('cancel');
       };
 
-    }]);
+    });

@@ -18,6 +18,13 @@ function UserResource($resource) {
         id: 'me'
       }
     },
+    getDealers: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        id: 'dealers'
+      }
+    },
     getFilters : {
         method:'GET',
         isArray: true,
@@ -25,13 +32,6 @@ function UserResource($resource) {
             controller:'filters'
         }
     },
-    getMetrics: {
-      method: 'GET',
-      isArray: true,
-      params: {
-        controller: 'metrics'
-      }
-    }
 
   });
 }

@@ -4,7 +4,7 @@
   <label class="tl" style="float: left;">Create a new opportunity</label>
 </div>
 <div class="modal-body p-b-10">
-  <form name="createLeadForm" role="form">
+  <form name="scheduleLeadForm" role="form">
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-6">
         <div class="form-group">
@@ -14,23 +14,13 @@
 
         <div class="form-group">
           <label>Schedule Appointment</label>
-          <div class="input-group date">
-            <input type="datetime" class="form-control" placeholder="Appointment Date" date-time
-                   ng-model="scheduleLead.appointment.date"
-                   view="date"
-                   auto-close="true"
-                   min-view="date"
-                   format="YYYY-MM-DD"
-                   ng-required="true">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-          </div>
-          <!--<input type="text" placeholder="Appointment Date" class="form-control"-->
-                 <!--uib-datepicker-popup="{{scheduleLead.format}}"-->
-                 <!--ng-model="scheduleLead.appointment.date"-->
-                 <!--is-open="scheduleLead.opened"-->
-                 <!--datepicker-options="scheduleLead.dateOptions" ng-required="true" close-text="Close"-->
-                 <!--alt-input-formats="scheduleLead.altInputFormats" min-date="scheduleLead.minDate"-->
-                 <!--ng-click="scheduleLead.opened = !scheduleLead.opened"/>-->
+          <input type="text" placeholder="Appointment Date" class="form-control"
+                 uib-datepicker-popup="{{scheduleLead.format}}"
+                 ng-model="scheduleLead.dt"
+                 is-open="scheduleLead.opened"
+                 datepicker-options="scheduleLead.dateOptions" ng-required="true" close-text="Close"
+                 alt-input-formats="scheduleLead.altInputFormats" min-date="scheduleLead.minDate"
+                 ng-click="scheduleLead.opened = !scheduleLead.opened"/>
         </div>
       </div>
       <div class="col-md-6">
@@ -40,7 +30,7 @@
         </div>
 
         <div class="form-group">
-          <div class="m-t-38" uib-timepicker ng-model="scheduleLead.appointment.time"
+          <div class="m-t-38" uib-timepicker ng-required="true" ng-model="scheduleLead.dt"
                show-spinners = "false"
                show-meridian="true" type="text"
                placeholder="Appointment Time"></div>
@@ -48,6 +38,21 @@
 
       </div>
     </div>
+
+    <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Available Managers</label>
+          <ui-select ng-model="scheduleLead.appointment.assignedManager" theme="bootstrap" ng-required="true">
+            <ui-select-match placeholder="Managers">{{$select.selected.profile.name}}</ui-select-match>
+            <ui-select-choices repeat="manager in scheduleLead.dealers[0].Teams[0].TeamManagers | filter: $select.search">
+              <div ng-bind-html="manager.profile.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </div>
+
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-12">
         <div class="form-group">
@@ -62,6 +67,6 @@
 <div class="modal-footer">
   <button class="btn btn-warning btn-o" type="button" ng-click="scheduleLead.cancel()">Cancel</button>
   <button ladda="scheduleLead.saving" data-style="zoom-in" class="ladda-button btn btn-primary btn-o" type="button" ng-click="scheduleLead.create()"
-          ng-disabled="createLeadForm.$pristine || !createLeadForm.$valid || scheduleLead.saving">Create Appointment
+          ng-disabled="scheduleLeadForm.$pristine || !scheduleLeadForm.$valid || scheduleLead.saving">Create Appointment
   </button>
 </div>

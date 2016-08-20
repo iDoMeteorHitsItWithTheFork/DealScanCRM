@@ -127,6 +127,7 @@ db.Team.belongsToMany(db.User, {as:'TeamMembers', through:'TeamMemberships', for
 db.Team.belongsToMany(db.User, {as: 'TeamManagers', through: 'Managers', foreignKey:'teamID'});
 db.User.belongsToMany(db.Team, {as: 'ManagesTeams', through: 'Managers', foreignKey:'teamManagerID'});
 
+
 db.Deal.belongsTo(db.Dealership, {through:'Purchases', foreignKey:'dealershipID'});
 db.Dealership.hasMany(db.Deal, {foreignKey:'dealershipID'});
 
@@ -190,9 +191,10 @@ db.User.belongsToMany(db.Event, {
 });
 
 db.Event.belongsToMany(db.User, {
+  as: 'Attendants',
   through: {
     model: db.Participants,
-    unique: false
+    unique: false,
   },
   foreignKey: 'eventID',
   constraints: false
@@ -211,9 +213,10 @@ db.Customer.belongsToMany(db.Event, {
 });
 
 db.Event.belongsToMany(db.Customer, {
+  as: 'Attendants',
   through: {
     model: db.Participants,
-    unique: false
+    unique: false,
   },
   foreignKey: 'eventID',
   constraints: false
@@ -232,9 +235,10 @@ db.Lead.belongsToMany(db.Event, {
 });
 
 db.Event.belongsToMany(db.Lead, {
+  as: 'Attendants',
   through: {
     model: db.Participants,
-    unique: false
+    unique: false,
   },
   foreignKey: 'eventID',
   constraints: false

@@ -51,34 +51,14 @@ angular.module('dealScanCrmApp')
       if (idx != -1) _editLead.prospect.source = _editLead.sources[idx];
 
 
-
-      _editLead.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-      _editLead.format = _editLead.formats[0];
-      _editLead.altInputFormats = ['M!/d!/yyyy'];
-
-
-      _editLead.today = function () {
-        _editLead.dt = new Date();
-      };
-
-      _editLead.today();
-      _editLead.minDate = new Date();
-
-      _editLead.clear = function () {
-        _editLead.dt = null;
-      };
-
-
-      _editLead.dateOptions = {
-        formatYear: 'yy',
-        startingDay: 1
-      };
-
       _editLead.update = function () {
         if (_editLead.saving) return;
         _editLead.saving  = true;
         var details = {};
-        details.name = _editLead.prospect.name;
+        var n = Util.slimTrim(_editLead.prospect.name).split(' ');
+        details.firstName = n[0];
+        details.middleInitial = (n.length > 2) ? n[1] : '';
+        details.lastName = (n.length > 2 ) ? n[2] : n[1];
         details.phone = _editLead.prospect.phone;
         details.email = _editLead.prospect.email;
         details.address = _editLead.prospect.address;
@@ -89,7 +69,7 @@ angular.module('dealScanCrmApp')
         Lead.update(lead.leadID,details).then(function(lead){
           console.log(lead);
           if (lead && !lead.error){
-            toaster.success({title:'Edit Lead', body: 'Lead ('+details.name+') was successfully updated'});
+            toaster.success({title:'Edit Lead', body: 'Lead ('+details.firstName+' '+details.lastName+') was successfully updated'});
             $uibModalInstance.close(lead);
           } else toaster.error({title:'Edit Lead Error', body: lead.error.msg});
           _editLead.saving = false;

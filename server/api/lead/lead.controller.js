@@ -227,10 +227,11 @@ export function create(req, res) {
    if (!req.body.lastName) return res.status(500).send('LastName is required');
    if (!req.body.phone) return res.status(500).send('Lead Phone is required');
    if (!req.body.source) return res.status(500).send('Lead Source is required');
-
+   //console.log(req.body);
   var details = {};
   details.firstName = req.body.firstName;
   details.lastName = req.body.lastName;
+  details.middleInitial = (req.body.middleInitial && req.body.middleInitial.toString().trim() != '') ? req.body.middleInitial.substr(0,1) : '';
   details.phone = req.body.phone;
   details.email = req.body.email;
   details.address = req.body.address;
@@ -239,11 +240,12 @@ export function create(req, res) {
   details.sourceName = req.body.source.name;
   details.sourceType = req.body.source.type;
 
-  console.log(details);
-
   var appointment;
-  if (req.body.hasOwnProperty('appointment') && req.body.appointment && req.body.appointment.Date && req.body.appointment.Time)
+  if (req.body.hasOwnProperty('appointment') && req.body.appointment && req.body.appointment.toString().trim() != '')
     appointment = req.body.appointment;
+
+  //console.log(details);
+
 
   return Lead.sequelize.transaction(function (t) {
     return User.find({
@@ -263,6 +265,7 @@ export function create(req, res) {
         where: {
           firstName: details.firstName,
           lastName: details.lastName,
+          middleInitial: details.middleInitial,
           phone: details.phone
         },
         defaults: details,
@@ -279,7 +282,7 @@ export function create(req, res) {
                     .then(function () {
                       if (appointment){
                         return lead.createEvent({
-                          name: lead.name,
+                          name: lead.profile.name,
                           location: user.Employer[0].dealerInfo.address,
                           time: appointment,
                           category: 'appointment',
@@ -288,7 +291,10 @@ export function create(req, res) {
                         then(function(appointment){
                           return appointment.setHost(user, {transaction: t})
                             .then(function(){
-                             return lead;
+                              return appointment.addAttendant(req.body.manager.profile.userID,{transaction: t})
+                                .then(function(){
+                                  return lead;
+                              });
                           })
                         })
                       } else return lead;
@@ -330,7 +336,7 @@ export function scheduleAppointment(req, res) {
         transaction: t
       }).then(function (lead) {
         var details = {
-          name: lead.name,
+          name: lead.profile.name,
           description: req.description,
           location: user.Employer[0].dealerInfo.address,
           time: req.body.appointment,
@@ -343,26 +349,29 @@ export function scheduleAppointment(req, res) {
             return event.setHost(user, {transaction: t})
               .then(function(){
               console.log('>> Added Event Host');
-              return Event.find({
-                where: {
-                  eventID: event.eventID
-                },
-                include: [
-                  {
-                    model: User,
-                    as: 'Host',
-                    attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
-                  },
-                ],
-                transaction: t
-              }).then(function(newEvent){
-                 var appointment = newEvent.profile;
-                 appointment.host = newEvent.Host.profile;
-                 return lead.update({status: 'working'}, {transaction: t})
-                   .then(function(){
-                      return appointment;
-                 });
-              });
+              return event.addAttendant(req.body.manager.profile.userID, {transaction: t})
+                .then(function(){
+                  return Event.find({
+                    where: {
+                      eventID: event.eventID
+                    },
+                    include: [
+                      {
+                        model: User,
+                        as: 'Host',
+                        attributes: ['userID','firstName', 'lastName', 'userID', 'email', 'role']
+                      },
+                    ],
+                    transaction: t
+                  }).then(function(newEvent){
+                    var appointment = newEvent.profile;
+                    appointment.host = newEvent.Host.profile;
+                    return lead.update({status: 'working'}, {transaction: t})
+                      .then(function(){
+                        return appointment;
+                      });
+                  });
+              })
             });
           })
       })
