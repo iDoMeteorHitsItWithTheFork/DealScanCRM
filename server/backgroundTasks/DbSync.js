@@ -165,8 +165,8 @@ var insertLead = function(lead, callback){
     });
 }
 
-var sqlStatement = function(time){
-  if (!time) time = moment().subtract(15, 'minutes');
+var sqlStatement = function(today){
+  if (!today) today = moment().startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -271,7 +271,7 @@ var sqlStatement = function(time){
     "LEFT OUTER JOIN [KelCar.DeskingSuite].Deal.Trade DLTRD ON DL.TradeId = DLTRD.TradeId " +
     "LEFT OUTER JOIN [KelCar.DeskingSuite].Vehicle.VehicleView TRDVHL ON TRDVHL.VehicleId = DLTRD.VehicleId " +
     "WHERE CST.FullName IS NOT NULL AND CST.FullName != '' AND " +
-    "(DL.DateCreated >= '"+time.startOf('day').format("MM/DD/YYYY HH:mm:ss a")+"' OR DL.DateStatusChanged >= '"+time.format("MM/DD/YYYY HH:mm:ss a")+"') " +
+    "(DL.DateCreated >= '"+today.format("MM/DD/YYYY HH:mm:ss a")+"' OR DL.DateStatusChanged >= '"+today.format("MM/DD/YYYY HH:mm:ss a")+"') " +
     "AND PMT.Selected = 1 " +
     "ORDER BY DL.DealId DESC, PMT.PaymentOptionId DESC ";
 }
@@ -515,7 +515,7 @@ var start = function () {
       connection: connectionDetails,
       queues: ['DBSync', 'Leads'],
       minTaskProcessors: 1,
-      maxTaskProcessors: 15,
+      maxTaskProcessors: 10,
       checkTimeout: 500,
       maxEventLoopDelay:5,
       toDisconnectProcessors: true
@@ -558,7 +558,7 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/15 * * * *', () => {
+    schedule.scheduleJob('*/60 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
@@ -566,12 +566,12 @@ var start = function () {
       }
     })
 
-    /*schedule.scheduleJob('*!/5 * * * *', () => {
+    schedule.scheduleJob('*/15 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');
       }
-    })*/
+    })
 
 
   })
@@ -597,8 +597,13 @@ process.on('SIGTERM', stop);
 process.on('SIGINT', stop);
 
 
+function fetchEmails(){
+  Inbox.init();
+}
+
 export {start}
 export {queue}
 export {fetchData}
+export {fetchEmails}
 
 

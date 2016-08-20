@@ -142,6 +142,7 @@ function parseLead(mail) {
     createdAt: '',
   }
   if (isXML(mail.content)) {
+    //console.log(mail.content);
     var parseString = require('xml2js').parseString;
     var jsQ = require('json-query');
     parseString(mail.content, function (err, data) {
@@ -195,7 +196,7 @@ function parseLead(mail) {
                 if (addressNode.street){
                   var address = '';
                   for(var i = 0; i < addressNode.street.length; i++)
-                    if (addressNode.street[0]._) address += address.street[0]._+' ';
+                    if (addressNode.street[0]._) address += addressNode.street[0]._+' ';
                   if (addressNode.city && addressNode.city[0]) address += addressNode.city[0]+' ';
                   if (addressNode.postalcode && addressNode.postalcode[0]) address += addressNode.postalcode[0]+' ';
                   address = address.trim();
@@ -225,7 +226,7 @@ function parseLead(mail) {
 
         if (_l.provider && _l.provider[0]){
           var providerDetails = _l.provider[0];
-          if (providerDetails.name && providerDetails.name[0]) provider.name = providerDetails.name[0]._;
+          if (providerDetails.name && providerDetails.name[0]) provider.name = providerDetails.name[0]._ || providerDetails.name[0];
           if (providerDetails.service && providerDetails.service[0]) provider.service = providerDetails.service[0];
           if (providerDetails.url && providerDetails.url[0]) provider.url = providerDetails.url[0];
         }
@@ -255,7 +256,10 @@ function parseLead(mail) {
 
         if (Object.keys(vehicle).length > 0) lead.interest = vehicle;
         if (Object.keys(provider).length > 0) lead.sourceType = provider;
-        if (provider.name) lead.sourceName = provider.name;
+        if (provider.name) {
+          lead.sourceName = provider.name;
+          if (lead.sourceName == 'ClickMotive') lead.sourceName = 'Website';
+        }
 
       }
       else {
@@ -377,6 +381,7 @@ function parseLead(mail) {
     }
 
   }
+  //console.log(lead);
   return lead;
 }
 

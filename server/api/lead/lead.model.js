@@ -81,6 +81,7 @@ export default function(sequelize, DataTypes) {
 
         if (data.firstName && data.firstName.toString().trim() != '') searchOptions.firstName = data.firstName;
         if (data.lastName && data.lastName.toString().trim() != '') searchOptions.lastName = data.lastName;
+        if (data.middleInitial && data.middleInitial.toString().trim() != '') searchOptions.middleInitial = data.middleInitial.substr(0,1);
         if (data.phone && data.phone.toString().trim() != '') searchOptions.phone = data.phone;
         if (data.email && data.email.toString().trim() != '') searchOptions.email = data.email;
         if (data.interest && data.interest.toString().trim() != '') searchOptions.interest = JSON.stringify(data.interest);
@@ -89,6 +90,7 @@ export default function(sequelize, DataTypes) {
         var upsertValues = {
           firstName: data.firstName,
           lastName: data.lastName,
+          middleInitial: (data.middleInitial && data.middleInitial.toString().trim() != '') ? data.middleInitial.substr(0,1) : '',
           phone: data.phone,
           email: data.email,
           address: data.address,
@@ -111,6 +113,7 @@ export default function(sequelize, DataTypes) {
               { fields: [
                'firstName',
                'lastName',
+               'middleInitial',
                'phone',
                'email',
                'address',
