@@ -275,7 +275,7 @@
           case 'twitter':
             color = '#00aced';
             break;
-          case 'hagerstownford.com':
+          case 'website':
             color = '#8bc33e';
             break;
           case 'edmunds carcode':

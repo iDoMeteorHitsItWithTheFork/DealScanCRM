@@ -150,7 +150,7 @@ angular.module('dealScanCrmApp')
             var modalInstance = $uibModal.open({
                 animation: true,
                 windowClass: 'slide-up',
-                templateUrl: 'app/views/index/task/addTask.html',
+                templateUrl: 'app/views/index/task/assignLead.html',
                 controller: 'AddTaskCtrl as addTask',
                 resolve: {
                     loadPlugin: function ($ocLazyLoad) {

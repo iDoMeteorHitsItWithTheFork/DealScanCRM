@@ -545,7 +545,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
-          templateUrl: 'app/views/index/task/addTask.html',
+          templateUrl: 'app/views/index/task/assignLead.html',
           controller: 'AddTaskCtrl as addTask',
           resolve: {
             Dealers: function(){
@@ -582,14 +582,12 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-
-      // TODO: this ui needs modified
-      _bdc.addEvent = function () {
+      _bdc.assignLead = function () {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
-          templateUrl: 'app/views/index/events/addEvent.html',
-          controller: 'AddEventCtrl as addEvent',
+          templateUrl: 'app/views/index/bdc/lead/assignLead.html',
+          controller: 'AssignLeadCtrl as assignLead',
           resolve: {
             Dealers: function(){
               return _bdc.dealers;
@@ -614,6 +612,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                   name: 'daterangepicker',
                   files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
                 },
+                {
+                  name: 'ui.select',
+                  files: ['.resources/plugins/ui-select/select.min.js',
+                    '.styles/plugins/ui-select/select.min.css']
+                }
               ]);
             }
           }

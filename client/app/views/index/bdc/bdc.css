@@ -19,6 +19,13 @@
   right: 10px;
 }
 
+.p-t-100 {
+  padding-top: 100px;
+}
+
+.m-l-40 {
+  margin-left: 40px;
+}
 #lead-info td {
   line-height: 1.42857;
   padding: 4px;

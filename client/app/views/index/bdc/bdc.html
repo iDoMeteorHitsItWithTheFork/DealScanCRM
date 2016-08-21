@@ -17,8 +17,9 @@
     </div>
     <div class="col-sm-10 no-padding">
 
+
       <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
-        <div class="profile-tab blue-bg no-border-right" ng-click="bdc.addTask()">
+        <div class="profile-tab  blue-bg no-border-right" ng-click="bdc.addTask()">
           <div class="profile-tab-icon m-t-5 m-l-26 no-border">
             <i class="fa fa-tasks f-sz-22"></i>
           </div>
@@ -27,11 +28,11 @@
       </div>
 
       <div class="col-sm-4 no-margins no-padding text-center pull-right" style="width:121px;">
-        <div class="profile-tab yellow-bg" ng-click="bdc.addEvent()">
+        <div class="profile-tab yellow-bg" ng-click="bdc.assignLead()">
           <div class="profile-tab-icon m-t-5 m-l-25 no-border">
-            <i class="fa fa-calendar-plus-o f-sz-22"></i>
+            <i class="fa fa-user-plus f-sz-22"></i>
           </div>
-          <small class="p-t-42">ADD EVENT</small>
+          <small class="p-t-42">ASSIGN LEAD</small>
         </div>
       </div>
 
@@ -58,19 +59,9 @@
       <!-- content controls -->
       <div class="ibox-title no-padding-bottom padding-top-5">
 
-        <!-- title section -->
-        <div class="row padding-bottom-10" style="border-bottom: 1px #eee solid;">
-          <div class="col-lg-12">
-            <h5 class="m-b-md m-t-8" style="margin-right:10px;">{{'Leads' | uppercase}}   - </h5>
-            <h3 class="" style="margin-bottom:0;">Prospects Summary</h3>
-            <small>All Employee's Data</small>
-          </div>
-        </div>
-        <!-- ./title-section -->
-
         <!-- Filters -->
         <div class="row "
-             style="background-color: rgba(238,238,238, 0.5) !important; padding-top:13px !important; padding-bottom:9px !important;">
+             style="background-color: rgba(238,238,238, 0.5) !important; padding-top:13px !important; padding-bottom:9px !important; margin-top:-5px;">
           <!-- Resources  -->
           <div class="col-md-5">
             <div class="row">
@@ -135,21 +126,7 @@
       <!-- content View -->
       <div class="ibox-content">
 
-        <!-- metrics -->
-        <div class="row p-t-20" ng-hide="true">
-          <div class="col-lg-2 col-md-4" ng-repeat="s in bdc.summaryStats">
-            <div class="ibox float-e-margins">
-              <div class="ibox-content" style="border: 1px solid #e7eaec;">
-                <h1 class="no-margins">{{s.value}}
-                  <span class="label label-info pull-right" style="margin-top:7px;"
-                        ng-click="bdc.displayStatsDetails(s)">View</span>
-                </h1>
-                <small>{{s.title}}</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.metrics -->
+
 
 
         <!-- Lists -->
@@ -498,308 +475,387 @@
           <div ng-hide="bdc.retreivingGraphData" id='bdc-charts'>
 
 
-            <!-- TotalLeads Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-125" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
-              <!-- totalLeads stats-->
-              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
-                <div class="ibox-title" style="border-top-width:1px;">
+            <div class="row">
+
+              <!-- TotalLeads Pie & Stats -->
+              <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'total' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-4 col-md-3': 'col-sm-4 col-md-4'">
+                <!-- totalLeads stats-->
+                <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2>{{'Leads' | uppercase}}</h2>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ibox-content p-b-0 p-t-0 m-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">
+                            {{bdc.totalLeads.sourceSummary[1].Total || 0}}
+                          </button>
+                          <br/>
+                          Phone
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">
+                            {{bdc.totalLeads.sourceSummary[0].Total || 0}}
+                          </button>
+                          <br/>
+                          Internet
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{(bdc.totalLeads.sourceSummary[0].Total + bdc.totalLeads.sourceSummary[1].Total) || 0}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+                <!-- ./ totalLeads stats -->
+
+
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="!bdc.totalLeads.pie">
+                  <p class="m-t-50">No leads to display.</p>
+                </div>
+
+                <div ng-if="bdc.totalLeads.pie" class="flot-chart animated fadeInRight large-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
+                  <div flot class="flot-chart-content"
+                       dataset="bdc.totalLeads.pie"
+                       options="bdc.totalLeads.pieOptions"
+                       on-plot-click="bdc.showDetails($event, pos, item, 'total'); bdc.displayTable($event, pos, item, 'Total Leads');"></div>
+                </div>
+              </div>
+              <!-- ./totalLeads Pie & Charts -->
+
+
+              <div class="col-lg-4 p-t-100">
+                <div class="col-lg-10 m-l-40">
+                <div class="widget style1 blue-bg">
                   <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2>{{'Total Leads' | uppercase}}</h2>
+                    <div class="col-xs-4">
+                      <i class="fa fa-phone fa-2x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                      <span> Call Completed </span>
+                      <h3 class="font-bold">23</h3>
                     </div>
                   </div>
                 </div>
 
-                <div class="ibox-content p-b-0 p-t-0 m-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">
-                         {{bdc.totalLeads.sourceSummary[1].Total || 0}}
-                        </button>
-                        <br/>
-                        Phone
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.totalLeads.sourceSummary[0].Total || 0}}
-                        </button>
-                        <br/>
-                        Internet
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">
-                          {{(bdc.totalLeads.sourceSummary[0].Total + bdc.totalLeads.sourceSummary[1].Total) || 0}}
-                        </button>
-                        <br/>
-                        Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div class="widget style1 navy-bg">
+                  <div class="row">
+                    <div class="col-xs-4">
+                      <i class="fa fa-comments-o fa-2x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                      <span> Messages Sent </span>
+                      <h3 class="font-bold">26</h3>
+                    </div>
+                  </div>
+                </div>
 
-                    </tbody>
-                  </table>
+                <div class="widget style1 yellow-bg">
+                  <div class="row">
+                    <div class="col-xs-4">
+                      <i class="fa fa-envelope fa-2x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                      <span> Email Sent </span>
+                      <h3 class="font-bold">26</h3>
+                    </div>
+                  </div>
+                </div>
                 </div>
 
               </div>
-              <!-- ./ totalLeads stats -->
 
-              <div ng-if="bdc.totalLeads.pie" class="flot-chart animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
-                <div flot class="flot-chart-content"
-                     dataset="bdc.totalLeads.pie"
-                     options="bdc.totalLeads.pieOptions"
-                     on-plot-click="bdc.showDetails($event, pos, item, 'total'); bdc.displayTable($event, pos, item, 'Total Leads');"></div>
-              </div>
-            </div>
-            <!-- ./totalLeads Pie & Charts -->
-
-
-            <!-- Appointments Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
-              <!-- appointments stats-->
-              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2 class="tc">{{'Scheduled' | uppercase}}</h2>
+              <!-- Appointments Pie & Stats -->
+              <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-4 col-md-3': 'col-sm-4 col-md-4'">
+                <!-- appointments stats-->
+                <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
                         <h2 class="tc">{{'Appointments' | uppercase}}</h2>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="ibox-content p-b-0 p-t-0 m-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.totalAppointments.sourceSummary[1].Total || 0}}
-                        </button>
-                        <br/>
-                        Phone
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.totalAppointments.sourceSummary[0].Total || 0}}
-                        </button>
-                        <br/>
-                        Internet
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">
-                          {{(bdc.totalAppointments.sourceSummary[0].Total + bdc.totalAppointments.sourceSummary[1].Total) || 0}}
-                        </button>
-                        <br/>
-                        Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                  <div class="ibox-content p-b-0 p-t-0 m-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">
+                            {{bdc.totalAppointments.sourceSummary[1].Total || 0}}
+                          </button>
+                          <br/>
+                          Phone
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">
+                            {{bdc.totalAppointments.sourceSummary[0].Total || 0}}
+                          </button>
+                          <br/>
+                          Internet
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{(bdc.totalAppointments.sourceSummary[0].Total + bdc.totalAppointments.sourceSummary[1].Total) || 0}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
 
-                    </tbody>
-                  </table>
-                </div>
-
-              </div>
-              <!-- ./appointments stats -->
-
-              <div ng-if="bdc.totalAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
-                <div flot class="flot-chart-content"
-                     dataset="bdc.totalAppointments.pie"
-                     options="bdc.totalAppointments.pieOptions"
-                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments'); bdc.displayTable($event, pos, item, 'Scheduled appointments')"></div>
-              </div>
-            </div>
-            <!-- ./appointments Pie & Charts -->
-
-
-            <!-- Appointments Kept Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_kept' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
-              <!-- appointments kept stats-->
-              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2 class="tc">{{'Kept' | uppercase}}</h2>
-                      <h2 class="tc">{{'Appointments' | uppercase}}</h2>
-                    </div>
+                      </tbody>
+                    </table>
                   </div>
+
+                </div>
+                <!-- ./appointments stats -->
+
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="!bdc.totalAppointments.pie">
+                  <p class="m-t-50">No appointments to display.</p>
                 </div>
 
-                <div class="ibox-content p-b-0 p-t-0 m-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.keptAppointments.sourceSummary[1].Total || 0}}
-                        </button>
-                        <br/>
-                        Phone
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.keptAppointments.sourceSummary[0].Total || 0}}
-                        </button>
-                        <br/>
-                        Internet
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">
-                         {{(bdc.keptAppointments.sourceSummary[1].Total + bdc.keptAppointments.sourceSummary[0].Total) || 0}}
-                        </button>
-                        <br/>
-                        Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
+                <div ng-if="bdc.totalAppointments.pie" class="flot-chart animated fadeInRight large-pie-chart">
+                  <div flot class="flot-chart-content"
+                       dataset="bdc.totalAppointments.pie"
+                       options="bdc.totalAppointments.pieOptions"
+                       on-plot-click="bdc.showDetails($event, pos, item, 'appointments'); bdc.displayTable($event, pos, item, 'Scheduled appointments')"></div>
                 </div>
-
               </div>
-              <!-- ./appointments Kept stats -->
+              <!-- ./appointments Pie & Charts -->
 
-              <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
-                <div flot class="flot-chart-content"
-                     dataset="bdc.keptAppointments.pie"
-                     options="bdc.keptAppointments.pieOptions"
-                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments_kept'); bdc.displayTable($event, pos, item, 'Kept Appointments')"></div>
-              </div>
             </div>
-            <!-- ./appointments Kept Pie & Charts -->
 
 
-            <!-- Appointments Missed Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_missed' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
-              <!-- appointments missed stats-->
-              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2 class="tc">{{'Missed' | uppercase}}</h2>
-                      <h2 class="tc">{{'Appointments' | uppercase}}</h2>
-                    </div>
-                  </div>
-                </div>
 
-                <div class="ibox-content p-b-0 p-t-0 m-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.missedAppointments.sourceSummary[1].Total || 0}}
-                        </button>
-                        <br/>
-                        Phone
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.missedAppointments.sourceSummary[0].Total || 0}}
-                        </button>
-                        <br/>
-                        Internet
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">
-                          {{(bdc.missedAppointments.sourceSummary[1].Total + bdc.missedAppointments.sourceSummary[0].Total) || 0}}
-                        </button>
-                        <br/>
-                        Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
+            <div class="row">
 
-                    </tbody>
-                  </table>
-                </div>
-
-              </div>
-              <!-- ./appointments Missed stats -->
-
-              <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" >
-                <div flot class="flot-chart-content"
-                     dataset="bdc.missedAppointments.pie"
-                     options="bdc.missedAppointments.pieOptions"
-                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments_missed'); bdc.displayTable($event, pos, item, 'Missed Appointments')"></div>
-              </div>
-            </div>
-            <!-- ./appointments Missed Pie & Charts -->
-
-
-            <!-- Appointments sold Pie & Stats -->
-            <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_sold' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
-              <!-- appointments sold stats-->
-              <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
-                <div class="ibox-title" style="border-top-width:1px;">
-                  <div class="row">
-                    <div class="col-lg-12 text-center">
-                      <h2 class="tc">{{'Sold' | uppercase}}</h2>
+              <!-- Appointments Kept Pie & Stats -->
+              <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_kept' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
+                <!-- appointments kept stats-->
+                <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2 class="tc">{{'Kept' | uppercase}}</h2>
                         <h2 class="tc">{{'Appointments' | uppercase}}</h2>
+                      </div>
                     </div>
                   </div>
+
+                  <div class="ibox-content p-b-0 p-t-0 m-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">
+                            {{bdc.keptAppointments.sourceSummary[1].Total || 0}}
+                          </button>
+                          <br/>
+                          Phone
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">
+                            {{bdc.keptAppointments.sourceSummary[0].Total || 0}}
+                          </button>
+                          <br/>
+                          Internet
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{(bdc.keptAppointments.sourceSummary[1].Total + bdc.keptAppointments.sourceSummary[0].Total) || 0}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+                <!-- ./appointments Kept stats -->
+
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="!bdc.keptAppointments.pie">
+                  <p class="m-t-50">No kept appointments to display.</p>
                 </div>
 
-                <div class="ibox-content p-b-0 p-t-0 m-b-0">
-                  <table class="table ">
-                    <thead>
-                    <tr>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-warning btn-outline m-rl-a">
-                          {{bdc.soldAppointments.sourceSummary[1].Total || 0}}
-                        </button>
-                        <br/>
-                        Phone
-                      </th>
-                      <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
-                          class="text-center">
-                        <button class="btn btn-info btn-outline m-rl-a">
-                          {{bdc.soldAppointments.sourceSummary[0].Total || 0}}
-                        </button>
-                        <br/>
-                        Internet
-                      </th>
-                      <th style="border-bottom:none !important;" class="text-center">
-                        <button class="btn btn-danger btn-outline m-rl-a">
-                          {{(bdc.soldAppointments.sourceSummary[1].Total + bdc.soldAppointments.sourceSummary[0].Total) || 0}}
-                        </button>
-                        <br/>
-                        Total
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
+                  <div flot class="flot-chart-content"
+                       dataset="bdc.keptAppointments.pie"
+                       options="bdc.keptAppointments.pieOptions"
+                       on-plot-click="bdc.showDetails($event, pos, item, 'appointments_kept'); bdc.displayTable($event, pos, item, 'Kept Appointments')"></div>
+                </div>
+              </div>
+              <!-- ./appointments Kept Pie & Charts -->
 
-                    </tbody>
-                  </table>
+
+              <!-- Appointments Missed Pie & Stats -->
+              <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_missed' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
+                <!-- appointments missed stats-->
+                <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2 class="tc">{{'Missed' | uppercase}}</h2>
+                        <h2 class="tc">{{'Appointments' | uppercase}}</h2>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ibox-content p-b-0 p-t-0 m-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">
+                            {{bdc.missedAppointments.sourceSummary[1].Total || 0}}
+                          </button>
+                          <br/>
+                          Phone
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">
+                            {{bdc.missedAppointments.sourceSummary[0].Total || 0}}
+                          </button>
+                          <br/>
+                          Internet
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{(bdc.missedAppointments.sourceSummary[1].Total + bdc.missedAppointments.sourceSummary[0].Total) || 0}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+                <!-- ./appointments Missed stats -->
+
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="!bdc.missedAppointments.pie">
+                  <p class="m-t-50">No missed appointments to display.</p>
                 </div>
 
+                <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" >
+                  <div flot class="flot-chart-content"
+                       dataset="bdc.missedAppointments.pie"
+                       options="bdc.missedAppointments.pieOptions"
+                       on-plot-click="bdc.showDetails($event, pos, item, 'appointments_missed'); bdc.displayTable($event, pos, item, 'Missed Appointments')"></div>
+                </div>
               </div>
-              <!-- ./appointments sold stats -->
+              <!-- ./appointments Missed Pie & Charts -->
 
-              <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
-                <div flot class="flot-chart-content"
-                     dataset="bdc.soldAppointments.pie"
-                     options="bdc.soldAppointments.pieOptions"
-                     on-plot-click="bdc.showDetails($event, pos, item, 'appointments_sold'); bdc.displayTable($event, pos, item, 'Sold Appointments')"></div>
+
+              <!-- Appointments sold Pie & Stats -->
+              <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments_sold' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight m-t-20" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'col-sm-5 col-md-3': 'col-sm-4 col-md-4'">
+                <!-- appointments sold stats-->
+                <div class="ibox float-e-margins no-material" style="margin-bottom: 0px;">
+                  <div class="ibox-title" style="border-top-width:1px;">
+                    <div class="row">
+                      <div class="col-lg-12 text-center">
+                        <h2 class="tc">{{'Sold' | uppercase}}</h2>
+                        <h2 class="tc">{{'Appointments' | uppercase}}</h2>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ibox-content p-b-0 p-t-0 m-b-0">
+                    <table class="table ">
+                      <thead>
+                      <tr>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-warning btn-outline m-rl-a">
+                            {{bdc.soldAppointments.sourceSummary[1].Total || 0}}
+                          </button>
+                          <br/>
+                          Phone
+                        </th>
+                        <th style="border-right:1px solid #eee !important; border-bottom:none !important;"
+                            class="text-center">
+                          <button class="btn btn-info btn-outline m-rl-a">
+                            {{bdc.soldAppointments.sourceSummary[0].Total || 0}}
+                          </button>
+                          <br/>
+                          Internet
+                        </th>
+                        <th style="border-bottom:none !important;" class="text-center">
+                          <button class="btn btn-danger btn-outline m-rl-a">
+                            {{(bdc.soldAppointments.sourceSummary[1].Total + bdc.soldAppointments.sourceSummary[0].Total) || 0}}
+                          </button>
+                          <br/>
+                          Total
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+                <!-- ./appointments sold stats -->
+
+                <div class="text-center animated bounceIn hideSansDelay"
+                     ng-if="!bdc.soldAppointments.pie">
+                  <p class="m-t-50">No sold appointments to display.</p>
+                </div>
+
+
+                <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
+                  <div flot class="flot-chart-content"
+                       dataset="bdc.soldAppointments.pie"
+                       options="bdc.soldAppointments.pieOptions"
+                       on-plot-click="bdc.showDetails($event, pos, item, 'appointments_sold'); bdc.displayTable($event, pos, item, 'Sold Appointments')"></div>
+                </div>
               </div>
+              <!-- ./appointments sold Pie & Charts -->
+
+
             </div>
-            <!-- ./appointments sold Pie & Charts -->
+
+
 
             <div id="bdc-table" class="pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'" ng-class="bdc.showTableDetails ? 'col-sm-8 col-md-8' : 'col-sm-7 col-md-9'" style="">
               <div class="ibox float-e-margins no-material">
@@ -1031,6 +1087,10 @@
 
               <!-- /. content View -->
             </div>
+
+
+
+
           </div>
 
 

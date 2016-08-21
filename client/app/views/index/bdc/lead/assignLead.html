@@ -1,0 +1,81 @@
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="assignLead.cancel()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title">Lead Assignment</h3>
+  <label class="tl" style="float: left;">Assign Lead to a Sales Rep</label>
+</div>
+<div class="modal-body p-b-10">
+  <div class="row margin-negative-left-15 margin-negative-right-15">
+    <div class="col-md-6">
+
+      <div class="form-group">
+        <label>Sales Rep</label>
+        <ui-select ng-model="addTask.newTask.rep" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+          <ui-select-match placeholder="Assign Sales Rep...">{{$select.selected.name | cut:true:35}}
+          </ui-select-match>
+          <ui-select-choices repeat="rep in addTask.salesReps | filter: $select.search">
+            <div ng-bind-html="rep.name | highlight: $select.search"></div>
+            <small>{{rep.email}}</small>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <div class="form-group">
+        <label>Appointment Details</label>
+        <input type="text" placeholder="Appointment Date" class="form-control"
+               uib-datepicker-popup="{{newLead.format}}"
+               ng-model="assignLead.dt"
+               is-open="assignLead.opened"
+               datepicker-options="assignLead.dateOptions" close-text="Close"
+               alt-input-formats="assignLead.altInputFormats" min-date="assignLead.minDate"
+               ng-click="assignLead.opened = !assignLead.opened"/>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <div class="form-group">
+        <label>Lead</label>
+        <ui-select ng-model="addTask.newTask.customer" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+          <ui-select-match placeholder="Assign Customer...">{{$select.selected.name | cut:true:35}}
+          </ui-select-match>
+          <ui-select-choices repeat="customer in addTask.customers | filter: $select.search">
+            <div ng-bind-html="customer.name | highlight: $select.search"></div>
+            <small>{{customer.email}}</small>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <div class="form-group">
+        <div class="m-t-38" uib-timepicker ng-model="assignLead.dt"
+             show-spinners = "false"
+             show-meridian="true" type="text"
+             placeholder="Appointment Time"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row margin-negative-left-15 margin-negative-right-15">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Vehicle Interest</label>
+        <input type="text" placeholder="Expressed Interest...." class="form-control" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row margin-negative-left-15 margin-negative-right-15">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Additional Details</label>
+        <textarea class="form-control" rows="5" ng-model="addTask.newTask.details"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning btn-o" type="button" ng-click="cancel()">Cancel</button>
+  <button class="btn btn-primary btn-o" type="button" ng-click="ok()">Assign Now</button>
+</div>

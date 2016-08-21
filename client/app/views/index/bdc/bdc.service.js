@@ -105,7 +105,10 @@ angular.module('dealScanCrmApp')
       //process data to generate won deals
       return LeadResource.totalLeads()
         .$promise.then(function(leads){
-          if (leads) {
+          console.log('\n\n\n LEADS   \n\n\n');
+          console.log(leads);
+          console.log('\n\n\n ________________ \n\n\n');
+          if (leads && leads.stats && leads.stats.length > 0 && leads.sourceSummary && leads.sourceSummary.length > 0) {
             var threshold = 0;
             if (leads.stats.length > TOP_LIMIT) {
               threshold = (leads.stats[TOP_LIMIT].Percentage) / 100;
@@ -188,8 +191,10 @@ angular.module('dealScanCrmApp')
         //process data to generate won deals
         return LeadResource.totalAppointments()
           .$promise.then(function(appointments){
+            console.log('\n\n\n TOTAL APPOINTMENTS   \n\n\n');
             console.log(appointments);
-            if (appointments) {
+            console.log('\n\n\n ________________ \n\n\n');
+            if (appointments && appointments.stats && appointments.stats.length > 0 && appointments.sourceSummary && appointments.sourceSummary.length > 0) {
               var threshold = 0;
               if (appointments.stats.length > TOP_LIMIT) {
                 threshold = (appointments.stats[TOP_LIMIT].Percentage) / 100;
@@ -221,7 +226,7 @@ angular.module('dealScanCrmApp')
               };
 
               var totalAppointments = [];
-              for (var i = 0; i < TOP_LIMIT; i++) {
+              for (var i = 0; i < TOP_LIMIT && i < appointments.stats.length; i++) {
                 totalAppointments.push({
                   label: appointments.stats[i].Source,
                   data: appointments.stats[i].Appointments,
@@ -272,8 +277,10 @@ angular.module('dealScanCrmApp')
       //process data to generate won deals
       return LeadResource.missedAppointments()
         .$promise.then(function(appointments){
+          console.log('\n\n\n MISSED APPOINTMENTS   \n\n\n');
           console.log(appointments);
-          if (appointments) {
+          console.log('\n\n\n ________________ \n\n\n');
+          if (appointments && appointments.stats && appointments.stats.length > 0 && appointments.sourceSummary && appointments.sourceSummary.length > 0) {
             var threshold = 0;
             if (appointments.stats.length > TOP_LIMIT) {
               threshold = (appointments.stats[TOP_LIMIT].Percentage) / 100;
@@ -305,7 +312,7 @@ angular.module('dealScanCrmApp')
             };
 
             var missedAppointments = [];
-            for (var i = 0; i < TOP_LIMIT; i++) {
+            for (var i = 0; i < TOP_LIMIT  && i < appointments.stats.length; i++) {
               missedAppointments.push({
                 label: appointments.stats[i].Source,
                 data: appointments.stats[i].Appointments,
@@ -356,8 +363,10 @@ angular.module('dealScanCrmApp')
       //process data to generate won deals
       return LeadResource.keptAppointments()
         .$promise.then(function(appointments){
+          console.log('\n\n\n KEPT APPOINTMENTS   \n\n\n');
           console.log(appointments);
-          if (appointments) {
+          console.log('\n\n\n ________________ \n\n\n');
+          if (appointments && appointments.stats && appointments.stats.length > 0 && appointments.sourceSummary && appointments.sourceSummary.length > 0) {
             var threshold = 0;
             if (appointments.stats.length > TOP_LIMIT) {
               threshold = (appointments.stats[TOP_LIMIT].Percentage) / 100;
@@ -389,7 +398,7 @@ angular.module('dealScanCrmApp')
             };
 
             var keptAppointments = [];
-            for (var i = 0; i < TOP_LIMIT; i++) {
+            for (var i = 0; i < TOP_LIMIT  && i < appointments.stats.length; i++) {
               keptAppointments.push({
                 label: appointments.stats[i].Source,
                 data: appointments.stats[i].Appointments,
@@ -438,8 +447,10 @@ angular.module('dealScanCrmApp')
       //process data to generate won deals
       return LeadResource.soldAppointments()
         .$promise.then(function(appointments){
+          console.log('\n\n\n SOLD APPOINTMENTS   \n\n\n');
           console.log(appointments);
-          if (appointments) {
+          console.log('\n\n\n ________________ \n\n\n');
+          if (appointments && appointments.stats && appointments.stats.length > 0 && appointments.sourceSummary && appointments.sourceSummary.length > 0) {
             var threshold = 0;
             if (appointments.stats.length > TOP_LIMIT) {
               threshold = (appointments.stats[TOP_LIMIT].Percentage) / 100;
@@ -471,7 +482,7 @@ angular.module('dealScanCrmApp')
             };
 
             var soldAppointments = [];
-            for (var i = 0; i < TOP_LIMIT; i++) {
+            for (var i = 0; i < TOP_LIMIT  && i < appointments.stats.length; i++) {
               soldAppointments.push({
                 label: appointments.stats[i].Source,
                 data: appointments.stats[i].Appointments,

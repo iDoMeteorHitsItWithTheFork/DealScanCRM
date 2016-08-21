@@ -72,7 +72,7 @@ angular.module('dealScanCrmApp')
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
-        templateUrl: 'app/account/task/addTask.html',
+        templateUrl: 'app/account/task/assignLead.html',
         controller: 'AddTaskCtrl',
       });
     }
