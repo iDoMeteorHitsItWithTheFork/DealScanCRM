@@ -15,12 +15,15 @@ export default function (sequelize, DataTypes) {
     },
     eventID: {
       type: DataTypes.INTEGER,
+      unique: 'participant_attentable'
     },
     attendable: {
       type: DataTypes.STRING,
+      unique: 'participant_attentable'
     },
     participantID: {
       type: DataTypes.INTEGER,
+      unique: 'participant_attentable',
       references: null
     }
   }, {

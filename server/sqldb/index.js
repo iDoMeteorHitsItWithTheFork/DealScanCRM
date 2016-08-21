@@ -191,7 +191,7 @@ db.User.belongsToMany(db.Event, {
 });
 
 db.Event.belongsToMany(db.User, {
-  as: 'Attendants',
+  as: 'AttendingUsers',
   through: {
     model: db.Participants,
     unique: false,
@@ -213,7 +213,7 @@ db.Customer.belongsToMany(db.Event, {
 });
 
 db.Event.belongsToMany(db.Customer, {
-  as: 'Attendants',
+  as: 'AttendingCustomers',
   through: {
     model: db.Participants,
     unique: false,
@@ -235,7 +235,7 @@ db.Lead.belongsToMany(db.Event, {
 });
 
 db.Event.belongsToMany(db.Lead, {
-  as: 'Attendants',
+  as: 'AttendingLeads',
   through: {
     model: db.Participants,
     unique: false,
