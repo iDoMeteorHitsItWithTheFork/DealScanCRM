@@ -190,6 +190,40 @@ angular.module('dealScanCrmApp')
 
     }
 
+      /**
+       *  Retreive Scheduled Leads
+       */
+    function scheduledLeads(){
+       return LeadResource.scheduledLeads().$promise
+         .then(function(leads){
+           console.log(leads);
+           if (leads && !leads.error){
+            /* _scheduledleads.length = 0;
+             for (var i = 0; i < leads.length; i++) {
+               leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
+               leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
+               leads[i].agents = $filter('orderBy')(leads[i].agents, "createdAt", true);
+               if (leads[i].interest && leads[i].interest.trim() != ''){
+                 try {
+                   var js = JSON.parse(leads[i].interest);
+                   var parseInterest = '';
+                   if (js.type) parseInterest += js.type;
+                   if (js.year) parseInterest += ' '+js.year;
+                   if (js.make) parseInterest += ' '+js.make;
+                   if (js.model) parseInterest += ' '+js.model;
+                   if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                   if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                   if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                   leads[i].interest = Util.slimTrim(parseInterest);
+                 } catch(ex){}
+               }
+               // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
+               _leads.push(leads[i]);
+             } return categorizeLeads(_leads);*/
+             return leads;
+           } else return {error: {msg:leads.error.msg}};
+       })
+    }
 
     // Public API here
     return {
@@ -200,6 +234,7 @@ angular.module('dealScanCrmApp')
       appointment: scheduleAppointment,
       note: addNote,
       assign: assignLead,
-      convert: convertLead
+      convert: convertLead,
+      scheduledLeads: scheduledLeads
     };
   });

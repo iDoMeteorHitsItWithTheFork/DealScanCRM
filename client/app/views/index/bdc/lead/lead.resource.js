@@ -27,6 +27,14 @@
             controller:'appointments',
           }
         },
+        scheduledLeads: {
+          method: 'GET',
+          isArray: true,
+          params: {
+            id:'scheduled',
+            controller:'appointments',
+          }
+        },
         keptAppointments :{
           method: 'GET',
           params: {

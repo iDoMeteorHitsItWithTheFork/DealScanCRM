@@ -672,6 +672,9 @@ export function totalAppointments(req, res){
 
 }
 
+
+
+
 export function keptAppointments(req, res){
 
   return User.find({
@@ -922,6 +925,53 @@ export function assignLead(req, res){
   }).then(function(user){
     return res.status(200).json({success: true, agent: user.profile});
   }).catch(handleError(res));
+}
+
+export function scheduledAppointments(req, res){
+  return User.find({
+    where: {
+      userID: req.user.userID
+    },
+    include: [
+      {
+        model: Dealership,
+        as: 'Employer',
+        required: true
+      }
+    ]
+  }).then(function(user){
+    return Lead.findAll({
+      where: {
+        dealershipID: user.Employer[0].token.dealerID
+      },
+      include: [{
+        model: Event,
+        attributes: ['eventID', 'name', 'location', 'time', 'description', 'category'],
+        through: Participants,
+        require: true,
+        where: {
+          status: 'scheduled',
+          category: 'appointment'
+        },
+        include: [
+          {
+            model: User,
+            as: 'Host',
+            attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role']
+          }
+        ]
+      }]
+    }).then(function(leads){
+      if (leads) console.log(leads);
+      return res.status(200).json(leads);
+    })
+  })
+  .catch(handleError(res));
+}
+
+export function assignAgent(req, res){
+
+
 }
 
 // Deletes a Lead from the DB
