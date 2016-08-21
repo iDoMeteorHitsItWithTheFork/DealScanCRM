@@ -10,53 +10,37 @@
     <span class="sr-only">Loading...</span>
   </div>
 
-  <form name="assignLeadForm" role="form" ng-if="!assignLead.loadingLeads">
+  <form name="assignLeadForm" role="form" ng-show="!assignLead.loadingLeads">
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-6">
         <div class="form-group">
           <label>Sales Rep/Manager</label>
-          <ui-select ng-model="assignLead.assignmentDetails.saleRep" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
+          <ui-select ng-model="assignLead.assignmentDetails.saleRep" theme="bootstrap" style="margin-right:5px; margin-left:5px;" ng-required="true">
             <ui-select-match placeholder="Assign Sales Rep...">{{$select.selected.profile.name | cut:true:35}}
             </ui-select-match>
-            <ui-select-choices group-by="assignLead.groupByRole" repeat="rep in assignLead.reps | filter: $select.search">
+            <ui-select-choices group-by="assignLead.groupByRole"
+                               repeat="rep in assignLead.reps | filter: $select.search">
               <div ng-bind-html="rep.profile.name | highlight: $select.search"></div>
               <small>{{rep.profile.email}}</small>
             </ui-select-choices>
           </ui-select>
         </div>
 
-        <div class="form-group">
-          <label>Appointment Details</label>
-          <input type="text" placeholder="Appointment Date" class="form-control"
-                 uib-datepicker-popup="{{newLead.format}}"
-                 ng-model="assignLead.dt"
-                 is-open="assignLead.opened"
-                 datepicker-options="assignLead.dateOptions" close-text="Close"
-                 alt-input-formats="assignLead.altInputFormats" min-date="assignLead.minDate"
-                 ng-click="assignLead.opened = !assignLead.opened"/>
-        </div>
 
       </div>
 
       <div class="col-md-6">
 
         <div class="form-group">
-          <label>Lead</label>
-          <ui-select ng-model="addTask.newTask.customer" theme="bootstrap" style="margin-right:5px; margin-left:5px;">
-            <ui-select-match placeholder="Assign Customer...">{{$select.selected.name | cut:true:35}}
+          <label>Scheduled Lead</label>
+          <ui-select ng-model="assignLead.appointmentDetails.lead" theme="bootstrap" style="margin-right:5px; margin-left:5px;" ng-required="true">
+            <ui-select-match placeholder="Assign Lead...">{{$select.selected.name | cut:true:35}}
             </ui-select-match>
-            <ui-select-choices repeat="customer in addTask.customers | filter: $select.search">
-              <div ng-bind-html="customer.name | highlight: $select.search"></div>
-              <small>{{customer.email}}</small>
+            <ui-select-choices repeat="lead in assignLead.leads | filter: $select.search">
+              <div ng-bind-html="lead.name | highlight: $select.search"></div>
+              <small>Scheduled by: {{lead.appointments[0].host.name}}</small>
             </ui-select-choices>
           </ui-select>
-        </div>
-
-        <div class="form-group">
-          <div class="m-t-38" uib-timepicker ng-model="assignLead.dt"
-               show-spinners="false"
-               show-meridian="true" type="text"
-               placeholder="Appointment Time"></div>
         </div>
 
       </div>
@@ -64,29 +48,40 @@
     </div>
 
     <div class="row margin-negative-left-15 margin-negative-right-15">
+      <div class="col-lg-12">
+        <div class="form-group">
+          <label>Scheduled Time</label>
+          <input ng-disabled="true" type="text" placeholder="Appointment Date" class="form-control"
+                 ng-model="assignLead.appointmentDetails.lead.appointments[0].time"/>
+        </div>
+      </div>
       <div class="col-md-12">
         <div class="form-group">
           <label>Vehicle Interest</label>
-          <input type="text" placeholder="Expressed Interest...." class="form-control"/>
+          <input ng-disabled="true" type="text" placeholder="Expressed Interest...." class="form-control"
+                 ng-model="assignLead.appointmentDetails.lead.interest"/>
         </div>
       </div>
+
     </div>
 
     <div class="row margin-negative-left-15 margin-negative-right-15">
       <div class="col-md-12">
         <div class="form-group">
           <label>Additional Details</label>
-          <textarea class="form-control" rows="5" ng-model="addTask.newTask.details"></textarea>
+          <textarea ng-disabled="true" class="form-control" rows="5"
+                    ng-model="assignLead.appointmentDetails.lead.additionalInfo"></textarea>
         </div>
       </div>
     </div>
   </form>
 
 </div>
-<div class="modal-footer">
+<div class="modal-footer" ng-hide="assignLead.loadingLeads">
   <button class="btn btn-warning btn-o" type="button" ng-click="assignLead.cancel()">Cancel</button>
-  <button ladda="assignLead.assigningLead" class="ladda-btn btn btn-primary btn-o" type="button" ng-click="assignLead.ok()"
-          ng-disabled="assignLeadForm.$pristine || !assignLeadForm.$valid || assignLead.assigningLead || assignLead.loadingLeads">
-    Assign Now
+  <button ladda="assignLead.assigningLead" class="ladda-btn btn btn-primary btn-o" type="button"
+          ng-click="assignLead.ok()"
+          ng-disabled="!assignLeadForm.$valid || assignLead.assigningLead || assignLead.loadingLeads">
+    Assign Task
   </button>
 </div>

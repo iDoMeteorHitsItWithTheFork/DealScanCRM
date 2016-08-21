@@ -19,6 +19,7 @@ import {NoteActivities} from '../../sqldb';
 import {Participants} from '../../sqldb';
 var moment = require('moment');
 var Q = require('q');
+var inspect = require('util').inspect;
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -211,8 +212,15 @@ function formatLead(lead) {
     for (var j = 0; j < lead.Events.length; j++) {
       var appointmentProfile = lead.Events[j].profile;
       appointmentProfile.host = lead.Events[j].Host.profile;
+      appointmentProfile.time = moment(lead.Events[j].time).format('ddd, MMM Do YYYY, h:mm a');
       appointmentProfile.sourceName = lead.sourceName;
       appointmentProfile.sourceType = lead.sourceType;
+      if (lead.Events[j].AttendingUsers && lead.Events[j].AttendingUsers.length > 0){
+        var attendants = [];
+        for(var x = 0; x < lead.Events[j].AttendingUsers.length; x++){
+          attendants.push(lead.Events[j].AttendingUsers[x].profile);
+        }appointmentProfile.attendants = attendants;
+      }
       formattedLead.appointments.push(appointmentProfile);
     }
   }
@@ -369,7 +377,7 @@ export function scheduleAppointment(req, res) {
                     return Participants.find({
                       where: {
                         participantID: req.body.manager.profile.userID,
-                        eventID: appointment.eventID
+                        eventID: event.eventID
                       },
                       transaction: t
                     }).then(function (attendingUser) {
@@ -1024,26 +1032,39 @@ export function scheduledAppointments(req, res) {
       where: {
         dealershipID: user.Employer[0].token.dealerID
       },
-      include: [{
-        model: Event,
-        attributes: ['eventID', 'name', 'location', 'time', 'description', 'category'],
-        through: Participants,
-        require: true,
-        where: {
-          status: 'scheduled',
-          category: 'appointment'
+      include: [
+        {
+          model: Event,
+          attributes: ['eventID', 'name', 'location', 'time', 'description', 'category'],
+          through: Participants,
+          require: true,
+          where: {
+            status: 'scheduled',
+            category: 'appointment'
+          },
+          include: [
+            {
+              model: User,
+              as: 'Host',
+              attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role']
+            },
+            {
+              model: User,
+              as: 'AttendingUsers',
+              attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
+            }
+          ]
         },
-        include: [
-          {
-            model: User,
-            as: 'Host',
-            attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role']
-          }
-        ]
-      }]
+        {
+          model: User,
+          as: 'Agents',
+          attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
+          through: 'AssignedLeads'
+        }]
     }).then(function (leads) {
-      if (leads) console.log(leads);
-      return res.status(200).json(leads);
+      var _leads = [];
+      for(var i=0; i < leads.length; i++) _leads.push(formatLead(leads[i]));
+      return res.status(200).json(_leads);
     })
   })
     .catch(handleError(res));

@@ -18,6 +18,26 @@ angular.module('dealScanCrmApp')
     console.log(_assignLead.dealers);
     console.log('\n\n _________________ \n\n');*/
 
+    _assignLead.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    _assignLead.format = _assignLead.formats[0];
+    _assignLead.altInputFormats = ['M!/d!/yyyy'];
+
+
+    _assignLead.today = function () {
+      _assignLead.dt = new Date();
+    };
+
+    //_newLead.today();
+    _assignLead.minDate = new Date();
+
+    _assignLead.clear = function () {
+      _assignLead.dt = null;
+    };
+
+    _assignLead.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
 
     _assignLead.loadScheduledLeads = function(){
       if (_assignLead.loadingLeads) return;

@@ -198,7 +198,6 @@ angular.module('dealScanCrmApp')
          .then(function(leads){
            console.log(leads);
            if (leads && !leads.error){
-            /* _scheduledleads.length = 0;
              for (var i = 0; i < leads.length; i++) {
                leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
                leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
@@ -218,8 +217,7 @@ angular.module('dealScanCrmApp')
                  } catch(ex){}
                }
                // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
-               _leads.push(leads[i]);
-             } return categorizeLeads(_leads);*/
+             } return leads;
              return leads;
            } else return {error: {msg:leads.error.msg}};
        })
