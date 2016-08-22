@@ -111,7 +111,8 @@ export function index(req, res) {
       'state',
       'country',
       'postalCode',
-      'source'],
+      'source',
+      'lastEmailSync'],
     include: [{
       model: Deal,
       include: [
@@ -139,7 +140,8 @@ export function index(req, res) {
             'state',
             'country',
             'postalCode',
-            'source']
+            'source',
+            'lastEmailSync']
         },
         {
           model: Vehicle,
@@ -191,7 +193,8 @@ export function show(req, res) {
       'state',
       'country',
       'postalCode',
-      'source'],
+      'source',
+      'lastEmailSync'],
     include: [{
       model: Deal,
       include: [
@@ -219,7 +222,8 @@ export function show(req, res) {
             'state',
             'country',
             'postalCode',
-            'source']
+            'source',
+            'lastEmailSync']
         },
         {
           model: Vehicle,
@@ -278,7 +282,8 @@ export function getDocuments(req, res){
       'state',
       'country',
       'postalCode',
-      'source'],
+      'source',
+      'lastEmailSync'],
     include: [{
       model: Deal,
       where: {
@@ -309,7 +314,8 @@ export function getDocuments(req, res){
             'state',
             'country',
             'postalCode',
-            'source']
+            'source',
+            'lastEmailSync']
         },
         {
           model: Vehicle,

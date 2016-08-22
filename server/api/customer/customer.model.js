@@ -60,7 +60,8 @@ export default function (sequelize, DataTypes) {
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      defaultValue: 'USA'
     },
     postalCode: {
       type: DataTypes.STRING(16),
@@ -70,7 +71,8 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true,
       defaultValue: 'Walk In'
-    }
+    },
+    lastEmailSync: DataTypes.DATETIME
   }, {
     /**
      * Virtual Getters
@@ -100,7 +102,8 @@ export default function (sequelize, DataTypes) {
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
           'address': address,
-          'source': this.getDataValue('source')
+          'source': this.getDataValue('source'),
+          'lastEmailSync': this.getDataValue('lastEmailSync')
         };
       },
 
@@ -119,7 +122,8 @@ export default function (sequelize, DataTypes) {
           'city': this.getDataValue('city'),
           'state': this.getDataValue('state'),
           'zipCode': this.getDataValue('postalCode'),
-          'source': this.getDataValue('source')
+          'source': this.getDataValue('source'),
+          'lastEmailSync': this.getDataValue('lastEmailSync')
         };
       }
     },
