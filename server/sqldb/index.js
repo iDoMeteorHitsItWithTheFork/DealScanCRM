@@ -22,6 +22,7 @@ var db = {
 
 
 // Insert models below
+db.Message = db.sequelize.import('../api/message/message.model');
 db.Client = db.sequelize.import('../api/client/client.model');
 db.AccessToken = db.sequelize.import('../api/client/accessToken.model');
 db.RefreshToken = db.sequelize.import('../api/client/refreshToken.model');

@@ -3,7 +3,7 @@
 export default function(sequelize, DataTypes) {
   var Financing =  sequelize.define('Financing', {
     financingID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true

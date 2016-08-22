@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
   .controller('NavigationCtrl', function ($scope, $state, Auth, appConfig) {
-    
+
     var _navigation = this;
     _navigation.user = Auth.getCurrentUser();
     console.log(_navigation.user);
@@ -35,7 +35,7 @@ angular.module('dealScanCrmApp')
         {title: 'Customers', alias: 'C', state: 'index.customer', icon: 'fa fa-users'},
         {title: 'Social Media', alias: 'S', state: 'index.socialMedia', icon: 'fa fa-globe'},
         {title: 'Tasks', alias: 'T', state: 'index.tasks', icon: 'fa fa-tasks'},
-        {title: 'Messages', alias: 'M', state: 'index.messages', icon: 'fa fa-envelope'},
+        // {title: 'Messages', alias: 'M', state: 'index.messages', icon: 'fa fa-envelope'},
       ];
       switch (_navigation.user.role) {
         case appConfig.userRoles[0]:

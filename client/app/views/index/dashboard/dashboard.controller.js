@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
-  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, NgMap, DTOptionsBuilder, $filter, toaster) {
+  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout) {
 
     var _dashboard = this;
 
@@ -978,17 +978,39 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.chatRecipient = {name: '', number: ''};
     _dashboard.composeText = function(deal, event){
        event.stopPropagation();
-       if (!_dashboard.openChat) _dashboard.openChat = true;
       console.log('*** Compose Text ***');
       console.log(deal);
-      _dashboard.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
+      if (deal.customerDetails.phone && deal.customerDetails.phone.toString().trim() != '') {
+         if (!_dashboard.openChat) _dashboard.openChat = true;
+        _dashboard.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
+      } else toaster.error({
+        title: 'Message Error',
+        body: 'There are no phone number detected for this customer. please update the customer details.'
+      })
+
     }
 
     _dashboard.composeMail = function(deal, event){
       event.stopPropagation();
       console.log('*** Compose Mail ****');
       console.log(deal);
-      var modalInstance = $uibModal.open({
+      if (deal.customerDetails.email && deal.customerDetails.email.toString().trim() != '') {
+        var mailTo = 'mailto:' + deal.customerDetails.email
+        var w = $window.open(mailTo);
+        var t = $timeout(function () {
+          w.close();
+        });
+        $scope.on('destroy', function () {
+          $timeout.cancel(t);
+        })
+      } else  toaster.error({
+        title: 'Mail Error',
+        body: 'No Email address detected for customer. Please update the customer info.'
+      })
+
+
+
+      /*var modalInstance = $uibModal.open({
         size: 'lg',
         //windowClass: 'animated slideInRight',
         templateUrl: 'app/views/index/dashboard/modalMailCompose.html',
@@ -1008,7 +1030,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
             $uibModalInstance.dismiss('cancel');
           };
         }
-      });
+      });*/
     }
 
     $scope.addLead = function () {

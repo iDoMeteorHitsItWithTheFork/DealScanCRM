@@ -3,7 +3,7 @@
 export default function(sequelize, DataTypes) {
   var Event = sequelize.define('Event', {
     eventID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true

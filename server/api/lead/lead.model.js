@@ -3,7 +3,7 @@
 export default function(sequelize, DataTypes) {
   var Lead = sequelize.define('Lead', {
     leadID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true

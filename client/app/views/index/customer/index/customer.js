@@ -29,6 +29,9 @@ angular.module('dealScanCrmApp')
                 name: 'datatables.buttons',
                 files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
               },
+              {
+                files: ['.styles/plugins/iCheck/custom.css','.resources/plugins/iCheck/icheck.min.js']
+              },
             ])
           },
         }
@@ -41,7 +44,7 @@ angular.module('dealScanCrmApp')
         controller: 'CustomerCtrl as customer',
         data: {pageTitle: 'Customer Profile'},
         resolve: {
-          selectedCustomer: function ($q, $stateParams, Customer) {
+          selectedCustomer: function (loadPlugin, $q, $stateParams, Customer) {
             var df = $q.defer();
             console.log($stateParams);
             Customer.get($stateParams.customerID).then(function (customer) {
@@ -67,7 +70,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
         controller: 'CustomerCtrl as customer',
         resolve: {
-          thisCustomer: function (selectedCustomer) {
+          thisCustomer: function (loadPlugin, selectedCustomer) {
             return selectedCustomer;
           }
         },
@@ -80,7 +83,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
         controller: 'DocumentsCtrl as documents',
         resolve: {
-          thisCustomer: function (selectedCustomer) {
+          thisCustomer: function (loadPlugin, selectedCustomer) {
             return selectedCustomer;
           }
         },
@@ -93,7 +96,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/documents/pdfViewer/pdfViewer.html',
         controller: 'PdfViewerCtrl as viewer',
         resolve: {
-          thisCustomer: function (selectedCustomer) {
+          thisCustomer: function (loadPlugin, selectedCustomer) {
             return selectedCustomer;
           }
         },
@@ -106,7 +109,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/task/task.html',
         controller: 'TaskCtrl as task',
         resolve: {
-          thisCustomer: function (selectedCustomer) {
+          thisCustomer: function (loadPlugin, selectedCustomer) {
             return selectedCustomer;
           }
         },
@@ -141,9 +144,9 @@ angular.module('dealScanCrmApp')
         title: 'Messages',
         authenticate: true,
         templateUrl: 'app/views/index/customer/profile/tabs/messages/messages.html',
-        controller: 'MessagesCtrl as messages',
+        controller: 'CustomerMessagesCtrl as customerMessages',
         resolve: {
-          thisCustomer: function (selectedCustomer) {
+          thisCustomer: function (loadPlugin, selectedCustomer) {
             return selectedCustomer;
           }
         },
