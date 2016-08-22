@@ -61,7 +61,10 @@ angular.module('dealScanCrmApp')
       if (_customers.processingData) return;
       _customers.processingData = true;
       Customer.getCustomers().then(function (customersInfo) {
-        if (customersInfo)_customers.customersInfo = customersInfo;
+        if (customersInfo){
+          _customers.customersInfo = customersInfo.info;
+          _customers.summary = customersInfo.stats;
+        }
         _customers.processingData = false;
       }).catch(function (err) {
         console.log(err);

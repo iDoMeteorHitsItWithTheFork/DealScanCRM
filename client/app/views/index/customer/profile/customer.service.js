@@ -11,18 +11,37 @@ angular.module('dealScanCrmApp')
     var _searchResultsInfo = [];
     var _pageSize = 1000;
 
+
+    function dealSummary(){
+      var total = 0, lost = 0, won = 0, just_looking = 0;
+      for(var i=0; i < _customers.length; i++){
+         var d = _customers[i];
+         if (d.purchases && d.purchases.length > 0) {
+           total += d.purchases.length;
+           for (var k = 0; k < d.purchases.length; k++){
+             if (d.purchases[k].status == 'working' || d.purchases[k].status == 'pending') lost++;
+             if (d.purchases[k].status == 'sold' || d.purchases[k].status == 'delivered') won++;
+           }
+         } else {
+           just_looking++;
+           total++;
+         }
+      }
+      return {total: total, won: won, lost: lost, just_looking: just_looking};
+    }
+
     /*
      * Returns a list of customers
      * */
     function getCustomers() {
       _customers.length = 0;
-      return CustomerResource.get()
+      return CustomerResource.query()
         .$promise.then(function (customers) {
           _customers = customers || [];
-          _customersInfo = customers ? customers.rows : [];
+          _customersInfo = customers || [];
           _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
           console.log(_customersInfo);
-          return _customersInfo;
+          return {info: _customersInfo, stats: dealSummary()};
         }).catch(function (err) {
           console.log(err);
           return err;
@@ -35,7 +54,7 @@ angular.module('dealScanCrmApp')
      * */
     function getCustomer(customerID) {
       console.log(customerID);
-      return CustomerResource.get({id: customerID})
+      return CustomerResource.query({id: customerID})
         .$promise.then(function (customer) {
           console.log(customer);
           if (customer && customer.purchases.length > 0){
@@ -262,7 +281,8 @@ angular.module('dealScanCrmApp')
       },
       getResultsCount: function () {
         return _searchResults.count;
-      }
+      },
+      summary: dealSummary
     };
 
 

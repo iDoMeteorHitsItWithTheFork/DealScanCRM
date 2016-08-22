@@ -89,19 +89,86 @@ function validationError(res, statusCode) {
 
 // Gets a list of Customers
 export function index(req, res) {
-   if (!req.user) return validationError(res, 400);
-   var customers = (req.query.hasOwnProperty('name') && req.query.name) ?
-        Customer.findAndCountAll({
-          where: Customer.sequelize.where(Customer.sequelize.fn('concat', Customer.sequelize.col('firstName'), ' ', Customer.sequelize.col('lastName')), {
-            like: '%'+ req.query.name + '%'
-          }),
-          limit: config.pagination,
-          order: [['customerID', 'DESC']]
-        }): Customer.findAndCountAll({
-            limit: config.pagination,
-            order: [['customerID', 'DESC']]
-        });
-   return customers.then(respondWithResult(res)).catch(handleError(res));
+  if (!req.user) return validationError(res, 400);
+  var customers = (req.query.hasOwnProperty('name') && req.query.name) ?
+    Customer.findAndCountAll({
+      where: Customer.sequelize.where(Customer.sequelize.fn('concat', Customer.sequelize.col('firstName'), ' ', Customer.sequelize.col('lastName')), {
+        like: '%' + req.query.name + '%'
+      }),
+      limit: config.pagination,
+      order: [['customerID', 'DESC']]
+    }) : Customer.findAll({
+    attributes: [
+      'customerID',
+      'driverLicenseID',
+      'firstName',
+      'middleInitial',
+      'lastName',
+      'phone',
+      'email',
+      'streetAddress',
+      'city',
+      'state',
+      'country',
+      'postalCode',
+      'source'],
+    include: [{
+      model: Deal,
+      include: [
+        {
+          model: Dealership,
+        },
+        {
+          model: User,
+          as: 'SaleRep',
+          attributes: ['userID', 'firstName', 'lastName', 'role'],
+        },
+        {
+          model: Customer,
+          as: 'CoBuyers',
+          attributes: [
+            'customerID',
+            'driverLicenseID',
+            'firstName',
+            'middleInitial',
+            'lastName',
+            'phone',
+            'email',
+            'streetAddress',
+            'city',
+            'state',
+            'country',
+            'postalCode',
+            'source']
+        },
+        {
+          model: Vehicle,
+          as: 'Purchase',
+          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+        },
+        {
+          model: Trade,
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN'],
+        },
+        {
+          model: Financing,
+          attributes: ['financingID', 'installments', 'interestRate', 'monthlyPayment', 'amountFinanced'],
+        },
+        {
+          model: Document,
+          attributes: ['title', 'type', 'description', 'path', 'status']
+        }
+      ]
+    }],
+    limit: config.pagination,
+    order: [['customerID', 'DESC']]
+  });
+
+  return customers.then(function (customers) {
+    var _customers = [];
+    for(var i = 0; i < customers.length; i++) _customers.push(formatCustomer(customers[i]));
+    return res.status(200).json(_customers);
+  }).catch(handleError(res));
 }
 
 
