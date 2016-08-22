@@ -1000,7 +1000,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         var t = $timeout(function () {
           w.close();
         });
-        $scope.on('destroy', function () {
+        $scope.$on('destroy', function () {
           $timeout.cancel(t);
         })
       } else  toaster.error({

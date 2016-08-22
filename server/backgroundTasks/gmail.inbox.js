@@ -75,7 +75,7 @@ server.once('ready', function() {
 
         fetch.on('end', function(){
           console.log('\n\n>> Done fetching all messages!\n\n');
-          generateLeads();
+          disconnect();
         });
 
       }
@@ -96,6 +96,7 @@ server.once('error', function(err) {
 
 server.once('end', function() {
   console.log('Connection ended');
+  generateLeads();
 });
 
 
@@ -385,8 +386,12 @@ function parseLead(mail) {
   return lead;
 }
 
-function generateLeads() {
+
+function disconnect(){
   server.end();
+}
+
+function generateLeads() {
   var keys = Object.keys(emails);
   var leads = [];
   for(var k in emails) if (emails.hasOwnProperty(k)) leads.push(emails[k]);
