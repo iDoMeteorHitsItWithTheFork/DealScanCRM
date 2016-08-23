@@ -8,6 +8,8 @@ angular.module('dealScanCrmApp')
     _customerMessages.loadingInbox = false;
     _customerMessages.viewingMessage = false;
     _customerMessages.displayingMessage = null;
+    _customerMessages.sendingMessage =false;
+    _customerMessages.lastTextMessage = null;
 
     _customerMessages.viewOptions = 'inbox';
     _customerMessages.displayView = function(view){
@@ -43,7 +45,9 @@ angular.module('dealScanCrmApp')
           console.log(inbox);
           if (inbox){
             _customerMessages.inbox = inbox.mails;
+            _customerMessages.mailCount = inbox.mailCount;
             _customerMessages.newMails = inbox.newMails;
+            _customerMessages.lastTextMessage = inbox.lastTextMessage;
           } else toaster.error({title: 'Inbox Error', body: 'An error occured while attempting to load customer inbox.'})
           _customerMessages.loadingInbox = false;
         }).catch(function(err){
@@ -66,8 +70,15 @@ angular.module('dealScanCrmApp')
     _customerMessages.displayMessage = function(mail){
       if (!_customerMessages.viewingMessage) _customerMessages.viewingMessage = true;
       _customerMessages.displayingMessage = mail;
-      mail.status = 'seen';
-     if (_customerMessages.newMails > 0) _customerMessages.newMails--;
+      Messages.seen(mail).then(function(result){
+        if (result.success)
+          if (_customerMessages.newMails > 0) _customerMessages.newMails--;
+        else toaster.error({title: 'Update Error', body: 'An error occured while updating the mail status'});
+      }).catch(function(err){
+         console.log(err);
+        toaster.error({title: 'Update Error', body: 'An error occured while updating the email status.'});
+      })
+
     }
 
     _customerMessages.backToInbox = function(){
@@ -113,6 +124,29 @@ angular.module('dealScanCrmApp')
       }
     }
 
+
+    _customerMessages.sendMessage = function(form){
+      if (_customerMessages.sendingMessage) return;
+      if (!_customerMessages.message || _customerMessages.message.toString().trim() == '') return;
+      _customerMessages.sendingMessage = true;
+      Messages.send({
+        id: _customerMessages.thisCustomer.profile.customerID,
+        message: _customerMessages.message
+      }).then(function (message) {
+        if (message) {
+          _customerMessages.inbox.unshift(message);
+          _customerMessages.lastTextMessage = moment(message.createdAt).format('ddd MMM DD YYYY - HH:mm:ss');
+          form.$setPristine();
+          _customerMessages.message = '';
+        } else toaster.error({title: '', body: 'An error occured while attempting to send your message.'});
+        _customerMessages.sendingMessage = false;
+      }).catch(function (err) {
+        console.log(err);
+        _customerMessages.sendingMessage = false;
+        toaster.error({title: 'Send Error', body: 'An error occured while attempting to send messages'});
+      })
+
+    }
 
 
   });

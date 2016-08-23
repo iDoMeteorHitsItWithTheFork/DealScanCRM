@@ -48,7 +48,7 @@
           </div>
         </form>
         <h2>
-          Inbox ({{customerMessages.inbox.length || 0}})
+          Inbox ({{customerMessages.mailCount || 0}})
         </h2>
 
         <div class="mail-tools tooltip-demo m-t-md">
@@ -101,7 +101,7 @@
       <div class="col-lg-12">
         <div class="ibox float-e-margins">
           <div class="ibox-title " style="border-bottom:1px solid #eeeeff;">
-            <small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>
+            <small class="pull-right text-muted" ng-if="customerMessages.lastTextMessage">Last message: {{customerMessages.lastTextMessage}}</small>
             Messages
           </div>
 
@@ -110,50 +110,37 @@
             <div class="min-height-193">
               <div class="chat-activity-list chat-view-format">
 
-                <div class="chat-element" ng-repeat="text in customerMessages.inbox | filter:customerMessages.textMessages()">
-                  <a href="" class="pull-left">
+                <div class="chat-element" ng-class="{'right': text.status == 'received'}"
+                     ng-repeat="text in customerMessages.inbox | filter:customerMessages.textMessages()">
+                  <a href="" ng-class="{'pull-left': text.status == 'sent', 'pull-right': text.status == 'received'}">
                     <img alt="image" class="img-circle" src="assets/images/profile.jpg">
                   </a>
 
-                  <div class="media-body ">
-                    <small class="pull-right text-navy">{{text.timeAgo}}</small>
-                    <strong>Mike Smith</strong>
+                  <div class="media-body " ng-class="{'text-right': text.status == 'received'}">
+                    <small class="text-navy" ng-class="{'pull-right': text.status == 'sent',
+                                        'pull-left': text.status == 'received'}">{{text.timeAgo}}</small>
+                    <strong>{{text.name}}</strong>
 
                     <p class="m-b-xs">
                       {{text.body}}
                     </p>
-                    <small class="text-muted">{{text.textStamp}</small>
+                    <small class="text-muted">{{text.textStamp}}</small>
                   </div>
                 </div>
-
-
-                <!--<div class="chat-element right">
-                  <a href="" class="pull-right">
-                    <img alt="image" class="img-circle" src="assets/images/profile.jpg">
-                  </a>
-
-                  <div class="media-body text-right ">
-                    <small class="pull-left">5m ago</small>
-                    <strong>John Smith</strong>
-
-                    <p class="m-b-xs">
-                      Lorem Ipsum is simply dummy text of the printing.
-                    </p>
-                    <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
-                  </div>
-                </div>-->
-
-
 
               </div>
             </div>
             <div class="chat-form">
-              <form role="form">
+              <form name="sendMessageForm" role="form">
                 <div class="form-group">
-                  <textarea class="form-control" placeholder="Message"></textarea>
+                  <textarea class="form-control" placeholder="Message" ng-required="true"
+                            ng-model="customerMessages.message"></textarea>
                 </div>
                 <div class="text-right">
-                  <button ladda="customerMessaes.sendingMessage" type="submit" class="ladda-btn btn btn-sm btn-primary m-t-n-xs"><strong>Send message</strong></button>
+                  <button ng-click="customerMessages.sendMessage(sendMessageForm)"
+                    ng-disabled="!sendMessageForm.$valid || sendMessageForm.$pristine || customerMessages.sendingMessage"
+                    ladda="customerMessages.sendingMessage" type="submit"
+                    class="ladda-btn btn btn-sm btn-primary m-t-n-xs"><strong>Send message</strong></button>
                 </div>
               </form>
             </div>

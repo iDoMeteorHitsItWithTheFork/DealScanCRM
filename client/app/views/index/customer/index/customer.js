@@ -32,6 +32,12 @@ angular.module('dealScanCrmApp')
               {
                 files: ['.styles/plugins/iCheck/custom.css','.resources/plugins/iCheck/icheck.min.js']
               },
+              {
+                serie: true,
+                name: 'angular-ladda',
+                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                  '.styles/plugins/ladda/ladda-themeless.min.css', '.resources/plugins/ladda/angular-ladda.min.js']
+              }
             ])
           },
         }
