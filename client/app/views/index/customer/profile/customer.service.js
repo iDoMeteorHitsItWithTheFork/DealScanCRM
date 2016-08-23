@@ -54,7 +54,7 @@ angular.module('dealScanCrmApp')
      * */
     function getCustomer(customerID) {
       console.log(customerID);
-      return CustomerResource.query({id: customerID})
+      return CustomerResource.get({id: customerID})
         .$promise.then(function (customer) {
           console.log(customer);
           if (customer && customer.purchases.length > 0){

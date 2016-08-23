@@ -22,7 +22,6 @@ var db = {
 
 
 // Insert models below
-db.Message = db.sequelize.import('../api/message/message.model');
 db.Client = db.sequelize.import('../api/client/client.model');
 db.AccessToken = db.sequelize.import('../api/client/accessToken.model');
 db.RefreshToken = db.sequelize.import('../api/client/refreshToken.model');
@@ -50,6 +49,7 @@ db.Lead = db.sequelize.import('../api/lead/lead.model');
 db.Event = db.sequelize.import('../api/event/event.model');
 db.Participants = db.sequelize.import('../api/event/event.participants.model');
 db.NoteActivities = db.sequelize.import('../api/note/note.activity.model');
+db.Message = db.sequelize.import('../api/message/message.model');
 
 
 db.AccessToken.belongsTo(db.Client, {foreignKey:'clientId'});
@@ -244,5 +244,8 @@ db.Event.belongsToMany(db.Lead, {
   foreignKey: 'eventID',
   constraints: false
 });
+
+db.Message.belongsTo(db.Customer, {foreignKey:'customerID'});
+db.Customer.hasMany(db.Message, {foreignKey:'customerID'});
 
 export default db;

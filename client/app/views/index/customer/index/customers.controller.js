@@ -100,7 +100,7 @@ angular.module('dealScanCrmApp')
     _customers.goToProfile = function (customer) {
       console.log('>> going to customer page...');
       $state.go('index.customer.profile', {
-        customerID: customer.customerID,
+        customerID: customer.profile.customerID,
         customerName: customer.profile.name.replace(/\ /g, '_')
       });
     }

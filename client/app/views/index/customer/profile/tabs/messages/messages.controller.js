@@ -32,7 +32,7 @@ angular.module('dealScanCrmApp')
       if (_customerMessages.thisCustomer.profile.email && _customerMessages.thisCustomer.profile.email.toString().trim() != ''){
         if (_customerMessages.loadingInbox) return;
         _customerMessages.loadingInbox = true;
-        Messages.inbox(_customerMessages.thisCustomer.profile.email).then(function(inbox){
+        Messages.inbox(_customerMessages.thisCustomer.profile.customerID).then(function(inbox){
           console.log(inbox);
           if (inbox){
 

@@ -12,17 +12,18 @@
 import _ from 'lodash';
 import {Message} from '../../sqldb';
 
-var imap = require ("imap");
-var mailparser = require ("mailparser").MailParser;
+var imap = require("imap");
+var mailparser = require("mailparser").MailParser;
 var inspect = require('util').inspect;
 
 var fs = require("fs");
 var moment = require('moment');
 
 
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
-  return function(entity) {
+  return function (entity) {
     if (entity) {
       res.status(statusCode).json(entity);
     }
@@ -30,7 +31,7 @@ function respondWithResult(res, statusCode) {
 }
 
 function saveUpdates(updates) {
-  return function(entity) {
+  return function (entity) {
     return entity.updateAttributes(updates)
       .then(updated => {
         return updated;
@@ -39,7 +40,7 @@ function saveUpdates(updates) {
 }
 
 function removeEntity(res) {
-  return function(entity) {
+  return function (entity) {
     if (entity) {
       return entity.destroy()
         .then(() => {
@@ -50,7 +51,7 @@ function removeEntity(res) {
 }
 
 function handleEntityNotFound(res) {
-  return function(entity) {
+  return function (entity) {
     if (!entity) {
       res.status(404).end();
       return null;
@@ -61,7 +62,7 @@ function handleEntityNotFound(res) {
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function(err) {
+  return function (err) {
     console.log(err);
     throw err;
     res.status(statusCode).send(err);
@@ -70,7 +71,6 @@ function handleError(res, statusCode) {
 
 // Gets a list of Messages
 export function index(req, res) {
-  syncMails("testdscrm@gmail.com");
   Message.findAll()
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -110,141 +110,6 @@ export function update(req, res) {
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
-
-function syncMails(customerMail){
-   console.log('\n\n Sync Mail \n\n');
-   console.log('\n\n _______________ \n\n');
-  //imap.secureserver.net
-  var config =  {
-    "username": "lagodio@alvsoftwarellc.com",
-    "password": "Baiser12!",
-    "imap": {
-      "host": "imap.secureserver.net",
-      "port": 993,
-      "secure": true
-    }
-  };
-
-  var server = new imap({
-    user: config.username,
-    password: config.password,
-    host: config.imap.host,
-    port: config.imap.port,
-    tls:config.imap.secure,
-    debug: console.log
-  });
-
-  var openInbox = function(cb) {
-    server.openBox('INBOX', true, cb);
-  }
-
-  var timestamp = null;
-
-  var exitOnErr = function(err) {
-    console.error(err);
-    server.end();
-  }
-
-  var init = function(t){
-    timestamp = t;
-    server.connect(timestamp);
-  }
-
-  var emails = {};
-  var processMail = function (mail, msgID){
-    console.log('\n\n\n');
-    console.log(mail);
-    console.log('\n\n\n ___________ \n\n');
-    var m = {
-      from: mail['from'],
-      replyTo: mail['replyTo'],
-      subject: mail['subject'],
-      to: mail['to'],
-      date: mail['date'],
-      receivedDate: mail['receivedDate'],
-      content: {
-        plain: mail['text'],
-        html: mail['html']
-      }
-    }
-    emails[mail.messageId] = m;
-  }
-
-  server.once('ready', function() {
-    openInbox(function(err, box) {
-      if (err) throw err;
-      timestamp = null;
-      var today = moment().startOf('day').format('MMM DD[,] YYYY');
-      var searchOptions = [['OR', ['FROM', customerMail], ['TO', customerMail]], ["SINCE", today]];
-      server.search(searchOptions, function(err, results){
-        if (err) {
-          console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');
-          exitOnErr(err);
-        }
-        if (results && results.length > 0){
-
-          var fetch = server.fetch(results, {
-            bodies: ''
-          });
-
-          fetch.on('message', function(msg, seqno){
-
-            var parser = new mailparser();
-
-
-            msg.on('body', function(stream, info) {
-              stream.pipe(parser);
-            });
-
-            parser.on("end", function(mail_object){
-              processMail(mail_object, seqno);
-            });
-
-            msg.once('end', function() {
-              parser.end();
-            });
-
-          });
-
-          fetch.on('end', function(){
-            console.log('\n\n>> Done fetching all messages!\n\n');
-            disconnect();
-          });
-
-        }
-        else {
-          console.log('\n>> THERE ARE NOT MESSAGE TO READ\n\n');
-          server.end();
-          return;
-        }
-      });
-
-    });
-  });
-
-  server.once('error', function(err) {
-    console.log('\n>> EXITING ON SERVER IMAP SERVER ERROR...\n\n');
-    exitOnErr(err);
-  });
-
-  server.once('end', function() {
-    console.log('Connection ended');
-    archiveEmails();
-  });
-
-  var disconnect = function(){
-    server.end();
-  }
-
-  var archiveEmails = function(){
-    console.log(inspect(emails, false, null));
-  }
-
-  init();
-}
-
-
-
 
 // Deletes a Message from the DB
 export function destroy(req, res) {

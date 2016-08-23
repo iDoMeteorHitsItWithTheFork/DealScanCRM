@@ -72,7 +72,7 @@ export default function (sequelize, DataTypes) {
       allowNull: true,
       defaultValue: 'Walk In'
     },
-    lastEmailSync: DataTypes.DATETIME
+    lastEmailSync: DataTypes.DATE
   }, {
     /**
      * Virtual Getters

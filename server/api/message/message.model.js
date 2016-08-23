@@ -1,7 +1,7 @@
 'use strict';
 
 export default function(sequelize, DataTypes) {
-  return sequelize.define('Message', {
+ var Message = sequelize.define('Message', {
     messageID: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -10,7 +10,8 @@ export default function(sequelize, DataTypes) {
     },
     message_uuid: DataTypes.STRING,
     from: DataTypes.STRING,
-    to: DataTypes.STRING,
+    name: DataTypes.STRING,
+    to: DataTypes.TEXT,
     subject: DataTypes.STRING,
     body: DataTypes.TEXT,
     priority: DataTypes.STRING,
@@ -31,6 +32,7 @@ export default function(sequelize, DataTypes) {
           'messageID': this.getDataValue('messageID'),
           'message_uuid': this.getDataValue('message_uuid'),
           'from': this.getDataValue('from'),
+          'name': this.getDataValue('name'),
           'to': this.getDataValue('to'),
           'subject': this.getDataValue('subject'),
           'body': this.getDataValue('body'),
@@ -47,6 +49,7 @@ export default function(sequelize, DataTypes) {
           'messageID': this.getDataValue('messageID'),
           'message_uuid': this.getDataValue('message_uuid'),
           'from': this.getDataValue('from'),
+          'name': this.getDataValue('name'),
           'to': this.getDataValue('to'),
           'subject': this.getDataValue('subject'),
           'body': this.getDataValue('body'),
@@ -58,7 +61,42 @@ export default function(sequelize, DataTypes) {
       }
     },
 
-    classMethods: {},
+    classMethods: {
+      syncMail: function(mail, customer, t){
+
+        if (!mail.messageId || mail.messageId.toString().trim() == '') throw new Error('MessageIs is required');
+        var searchOptions = {};
+        //Customer Identifiers
+        searchOptions.message_uuid = mail.messageId;
+
+        //customer values to upsert
+        var upsertValues = {
+          message_uuid: mail.messageId,
+          from: mail.from,
+          name: mail.name,
+          to: JSON.stringify(mail.to),
+          subject: mail.subject,
+          body: (mail.content.html && mail.content.html.toString().trim() != '') ? mail.content.html : mail.content.plain,
+          type: 'mail',
+          priority: mail.priority,
+          status: 'unseen',
+          createdAt: mail.date
+        };
+
+        //find existing customer or create
+        return this.findOrCreate({
+          where: searchOptions,
+          defaults: upsertValues,
+          transaction: t
+        }).spread(function (message, created) {
+          return message.setCustomer(customer, {transaction: t}).then(function () {
+            return message;
+          })
+        })
+      }
+    },
     instanceMethods: {}
   });
+
+  return Message;
 }

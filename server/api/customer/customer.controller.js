@@ -18,6 +18,7 @@ import {Trade} from '../../sqldb';
 import {Financing} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Document} from '../../sqldb';
+import {Message} from '../../sqldb';
 import config from '../../config/environment';
 import path from 'path'
 
@@ -30,6 +31,11 @@ var fs  = require('fs');
 var pdfFiller = require('pdffiller');
 var Q = require('q');
 
+var imap = require("imap");
+var mailparser = require("mailparser").MailParser;
+var inspect = require('util').inspect;
+var fs = require("fs");
+var INF = moment().subtract(1, 'month').format('MMM DD[,] YYYY');
 
 
 function respondWithResult(res, statusCode) {
@@ -247,6 +253,16 @@ export function show(req, res) {
   })
     .then(handleEntityNotFound(res))
     .then(function(customer){
+      if (customer.profile.email && customer.profile.email.toString().trim() != ''){
+        var email = customer.profile.email;
+        var lastSync = customer.profile.lastEmailSync;
+        var now = moment();
+        if (lastSync && lastSync.toString().trim() != ''){
+           lastSync = moment(lastSync);
+           var interval = now.diff(lastSync, 'minutes');
+           if (interval > 15) syncMails(customer, lastSync, now);
+        } else syncMails(customer, null, now);
+      }
       return res.status(200).json(formatCustomer(customer));
     })
     .catch(handleError(res));
@@ -439,7 +455,6 @@ function generateDocSet(customer, deal){
       prefill.vehicle_year_lemon_law = deal.Purchase.profile.year || '';
       prefill.vehicle_vin_leman_law = deal.Purchase.profile.VIN || '';
 
-
       /* Finaning Approval */
       if (deal.paymentOption == 'financed') {
         prefill.financing_approval_signature_date = signDate || '';
@@ -484,6 +499,166 @@ function generateDocSet(customer, deal){
   return df.promise;
 }
 
+
+function syncMails(customer, timestamp, now) {
+
+  console.log('\n\n ----------------\n\n');
+  console.log('\n\n Sync Mail \n\n');
+  console.log('\n\n ----------------\n\n');
+  //imap.secureserver.net
+  var config = {
+    "username": "lagodio@alvsoftwarellc.com",
+    "password": "Baiser12!",
+    "imap": {
+      "host": "imap.secureserver.net",
+      "port": 993,
+      "secure": true
+    }
+  };
+
+  var server = new imap({
+    user: config.username,
+    password: config.password,
+    host: config.imap.host,
+    port: config.imap.port,
+    tls: config.imap.secure,
+    debug: console.log
+  });
+
+  var openInbox = function (cb) {
+    server.openBox('INBOX', true, cb);
+  }
+
+  var timestamp = timestamp;
+  var exitOnErr = function (err) {
+    console.error(err);
+    server.end();
+  }
+
+  var init = function () {
+    server.connect();
+  }
+
+  var emails = {};
+  var processMail = function (mail, msgID) {
+    /*console.log('\n\n\n');
+    console.log(mail);
+    console.log('\n\n\n ___________ \n\n');*/
+    var m = {
+      messageId: mail['messageId'],
+      from: mail['from'][0].address,
+      name: mail['from'][0].name,
+      to: mail['to'],
+      subject: mail['subject'],
+      priority: mail['priority'],
+      date: mail['date'],
+      content: {
+        plain: mail['text'],
+        html: mail['html']
+      }
+    }
+    emails[mail.messageId] = m;
+  }
+
+  server.once('ready', function () {
+    openInbox(function (err, box) {
+      if (err) throw err;
+      //timestamp = null;
+      var searchOptions = timestamp ?
+        [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] :
+        [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", INF]];
+      server.search(searchOptions, function (err, results) {
+        if (err) {
+          console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');
+          exitOnErr(err);
+        }
+        if (results && results.length > 0) {
+
+          var fetch = server.fetch(results, {
+            bodies: ''
+          });
+
+          fetch.on('message', function (msg, seqno) {
+
+            var parser = new mailparser();
+
+
+            msg.on('body', function (stream, info) {
+              stream.pipe(parser);
+            });
+
+            parser.on("end", function (mail_object) {
+              processMail(mail_object, seqno);
+            });
+
+            msg.once('end', function () {
+              parser.end();
+            });
+
+          });
+
+          fetch.on('end', function () {
+            console.log('\n\n>> Done fetching all messages!\n\n');
+            disconnect();
+          });
+
+        }
+        else {
+          console.log('\n>> THERE ARE NOT MESSAGE TO READ\n\n');
+          server.end();
+          return;
+        }
+      });
+
+    });
+  });
+
+  server.once('error', function (err) {
+    console.log('\n>> EXITING ON SERVER IMAP SERVER ERROR...\n\n');
+    exitOnErr(err);
+  });
+
+  server.once('end', function () {
+    console.log('Connection ended');
+    archiveEmails();
+  });
+
+  var disconnect = function () {
+    server.end();
+  }
+
+  var archiveEmails = function () {
+    //console.log(inspect(emails, false, null));
+    var keys = Object.keys(emails);
+    var mails = [];
+    for (var k in emails) if (emails.hasOwnProperty(k)) mails.push(emails[k]);
+    console.log(inspect(mails, false, null));
+    return Customer.sequelize.transaction(function (t) {
+      var promises = [];
+      for (var i = 0; i < mails.length; i++) promises.push(Message.syncMail(mails[i], customer, t));
+      return Q.all(promises).then(function (syncedMails) {
+        /*console.log('\n\n\n\n\n\n MAILS \n\n\n\n');
+        console.log(inspect(syncedMails, false, null));
+        console.log('\n\n\n\n +++++++++++++++++++ \n\n\n\n');*/
+        if (syncedMails){
+          return customer.update({
+            lastEmailSync: now
+          }, {transaction: t}).then(function () {
+            return customer
+          })
+        } else return customer;
+      })
+    }).then(function () {
+      return customer;
+    })
+      .catch(function (err) {
+        console.log(err);
+        return err;
+      })
+  }
+
+  init();
+}
 
 // Creates a new Customer in the DB
 export function create(req, res) {
