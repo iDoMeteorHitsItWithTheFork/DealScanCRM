@@ -9,6 +9,11 @@ angular.module('dealScanCrmApp')
     _customerMessages.viewingMessage = false;
     _customerMessages.displayingMessage = null;
 
+    _customerMessages.viewOptions = 'inbox';
+    _customerMessages.displayView = function(view){
+      _customerMessages.viewOptions = view;
+    }
+
 
     _customerMessages.composeMail = function () {
       console.log('I was called...');
