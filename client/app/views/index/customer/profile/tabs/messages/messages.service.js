@@ -6,8 +6,8 @@ angular.module('dealScanCrmApp')
     // ...
 
 
-    function getInbox(email){
-      return MessageResource.query({email: email}).$promise
+    function getInbox(customerID){
+      return MessageResource.query({customerID: customerID}).$promise
         .then(function(inbox){
           console.log(inbox);
           return inbox;

@@ -456,9 +456,9 @@ export default function(sequelize, DataTypes) {
               return Deal.sequelize.transaction(function(t){
                 return deal.getBuyer({transaction: t}).then(function(buyer){
                    var Buyer = sequelize.models.Customer;
-                   return Buyer.isSoldLead(buyer, t).then(function(){
+                   //return Buyer.isSoldLead(buyer, t).then(function(){
                      return deal;
-                   })
+                   //})
                 })
               }).then(function(){
                 return deal;

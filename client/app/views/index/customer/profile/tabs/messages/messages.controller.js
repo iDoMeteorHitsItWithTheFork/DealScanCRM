@@ -7,7 +7,6 @@ angular.module('dealScanCrmApp')
     _customerMessages.thisCustomer = selectedCustomer;
     _customerMessages.loadingInbox = false;
 
-
     _customerMessages.composeMail = function () {
       console.log('I was called...');
       console.log(_customerMessages.thisCustomer);

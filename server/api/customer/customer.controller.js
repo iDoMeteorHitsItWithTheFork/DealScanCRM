@@ -533,6 +533,7 @@ function syncMails(customer, timestamp, now) {
   var exitOnErr = function (err) {
     console.error(err);
     server.end();
+    archiveEmails();
   }
 
   var init = function () {

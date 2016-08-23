@@ -35,6 +35,14 @@ function openInbox(cb) {
 var exitOnErr = function(err) {
   console.error(err);
   server.end();
+  generateLeads();
+}
+
+function disconnect(){
+  server.end();
+  console.log('\n\n ***************** \n\n\n');
+  console.log('\n\n\n DISCONNECTED \n\n');
+  console.log('\n\n ***************** \n\n\n');
 }
 
 server.once('ready', function() {
@@ -386,10 +394,6 @@ function parseLead(mail) {
   return lead;
 }
 
-
-function disconnect(){
-  server.end();
-}
 
 function generateLeads() {
   var keys = Object.keys(emails);

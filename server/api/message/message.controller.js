@@ -71,7 +71,13 @@ function handleError(res, statusCode) {
 
 // Gets a list of Messages
 export function index(req, res) {
-  Message.findAll()
+  if (!req.query.customerID) return res.status(500).send('CustomerID is required!');
+  var customerID = req.query.customerID;
+  Message.findAll({
+    where: {
+      customerID: customerID
+    }
+  })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }

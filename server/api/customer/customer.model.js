@@ -318,12 +318,12 @@ export default function (sequelize, DataTypes) {
                 'postalCode',
               ] }, {transaction: t})
               .then(function(customer){
-                return Customer.isScheduledLead(customer, t);
-                //return customer;
+                //return Customer.isScheduledLead(customer, t);
+                return customer;
               })
           } else {
-            return Customer.isScheduledLead(customer, t);
-            //return customer;
+            //return Customer.isScheduledLead(customer, t);
+            return customer;
           }
         }).catch(function(err){
             console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);
