@@ -43,7 +43,7 @@ angular.module('dealScanCrmApp')
           console.log(inbox);
           if (inbox){
             _customerMessages.inbox = inbox.mails;
-            _customerMessages.newMessages = inbox.newMessages;
+            _customerMessages.newMails = inbox.newMails;
           } else toaster.error({title: 'Inbox Error', body: 'An error occured while attempting to load customer inbox.'})
           _customerMessages.loadingInbox = false;
         }).catch(function(err){
@@ -67,7 +67,7 @@ angular.module('dealScanCrmApp')
       if (!_customerMessages.viewingMessage) _customerMessages.viewingMessage = true;
       _customerMessages.displayingMessage = mail;
       mail.status = 'seen';
-     if (_customerMessages.newMessages > 0) _customerMessages.newMessages--;
+     if (_customerMessages.newMails > 0) _customerMessages.newMails--;
     }
 
     _customerMessages.backToInbox = function(){
@@ -100,6 +100,19 @@ angular.module('dealScanCrmApp')
     _customerMessages.moveToTrash = function(mail){
 
     }
+
+    _customerMessages.inboxMessages = function(){
+      return function(value){
+        return value.type == 'mail' && (value.status == 'unseen' || value.status == 'seen');
+      }
+    }
+
+    _customerMessages.textMessages = function(){
+      return function(value){
+        return value.type == 'text';
+      }
+    }
+
 
 
   });

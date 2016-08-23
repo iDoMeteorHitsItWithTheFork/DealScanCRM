@@ -26,3 +26,13 @@
 .height-490 {
   height: 490px;
 }
+.chat-view-format {
+  max-height: 490px !important;
+  overflow-y: auto;
+}
+.p-l-21 {
+  padding-left: 21px !important;
+}
+.min-height-193 {
+  min-height: 193px !important;
+}
