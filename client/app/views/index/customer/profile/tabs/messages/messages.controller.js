@@ -6,6 +6,8 @@ angular.module('dealScanCrmApp')
     console.log('\n\n\n\n\n\n Message controller loaded!\n\n\n\n');
     _customerMessages.thisCustomer = selectedCustomer;
     _customerMessages.loadingInbox = false;
+    _customerMessages.viewingMessage = false;
+    _customerMessages.displayingMessage = null;
 
 
     _customerMessages.composeMail = function () {
@@ -35,7 +37,8 @@ angular.module('dealScanCrmApp')
         Messages.inbox(_customerMessages.thisCustomer.profile.customerID).then(function(inbox){
           console.log(inbox);
           if (inbox){
-            _customerMessages.inbox = inbox;
+            _customerMessages.inbox = inbox.mails;
+            _customerMessages.newMessages = inbox.newMessages;
           } else toaster.error({title: 'Inbox Error', body: 'An error occured while attempting to load customer inbox.'})
           _customerMessages.loadingInbox = false;
         }).catch(function(err){
@@ -52,5 +55,46 @@ angular.module('dealScanCrmApp')
     _customerMessages.formatLastSync = function(time){
        return moment(time).format('dddd, MMM Do YYYY [at] hh:mm a');
     }
+
+
+
+    _customerMessages.displayMessage = function(mail){
+      if (!_customerMessages.viewingMessage) _customerMessages.viewingMessage = true;
+      _customerMessages.displayingMessage = mail;
+      mail.status = 'seen';
+     if (_customerMessages.newMessages > 0) _customerMessages.newMessages--;
+    }
+
+    _customerMessages.backToInbox = function(){
+      _customerMessages.viewingMessage = false;
+      _customerMessages.displayingMessags = null;
+    }
+
+    _customerMessages.replyToMail = function(mail){
+      var mailTo = 'mailto:' + mail.from+'?subject=Re: '+mail.subject;
+      var composeWindow = $window.open(mailTo, '_blank');
+      var t = $timeout(function () {
+        composeWindow.close();
+      });
+      $scope.$on('destroy', function () {
+        $timeout.cancel(t);
+      });
+    }
+
+    _customerMessages.forwardMail = function(mail){
+      var mailTo = 'mailto:?subject=Fwd: '+mail.subject;
+      var composeWindow = $window.open(mailTo, '_blank');
+      var t = $timeout(function () {
+        composeWindow.close();
+      });
+      $scope.$on('destroy', function () {
+        $timeout.cancel(t);
+      });
+    }
+
+    _customerMessages.moveToTrash = function(mail){
+
+    }
+
 
   });

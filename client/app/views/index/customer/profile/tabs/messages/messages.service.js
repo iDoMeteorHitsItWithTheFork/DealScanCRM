@@ -12,9 +12,12 @@ angular.module('dealScanCrmApp')
           console.log(inbox);
           if (inbox){
             var _inbox = [];
+            var newMessages = 0;
             for(var i=0; i < inbox.length; i++){
               var m = inbox[i].profile;
               m.timestamp = moment(m.createdAt).format('MMM D');
+              m.date = moment(m.createdAt).format('hh:mma DD MMM YYYY');
+              if (m.status == 'unseen') newMessages++;
               if (m.to && m.to.toString().trim() != ''){
                 try {
                   m.to = JSON.parse(m.to);
@@ -22,7 +25,7 @@ angular.module('dealScanCrmApp')
               }
               _inbox.push(m);
             }
-            return _inbox;
+            return {mails:_inbox, newMessages: newMessages};
           } else return {error:{code: '', msg: ''}};
       }).catch(function(err){
         console.log(err);
