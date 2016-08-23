@@ -7,6 +7,7 @@ angular.module('dealScanCrmApp')
     _customerMessages.thisCustomer = selectedCustomer;
     _customerMessages.loadingInbox = false;
 
+
     _customerMessages.composeMail = function () {
       console.log('I was called...');
       console.log(_customerMessages.thisCustomer);
@@ -34,10 +35,8 @@ angular.module('dealScanCrmApp')
         Messages.inbox(_customerMessages.thisCustomer.profile.customerID).then(function(inbox){
           console.log(inbox);
           if (inbox){
-
-          } else {
-
-          }
+            _customerMessages.inbox = inbox;
+          } else toaster.error({title: 'Inbox Error', body: 'An error occured while attempting to load customer inbox.'})
           _customerMessages.loadingInbox = false;
         }).catch(function(err){
           console.log(err);
@@ -49,5 +48,9 @@ angular.module('dealScanCrmApp')
     }
 
     _customerMessages.loadInbox();
+
+    _customerMessages.formatLastSync = function(time){
+       return moment(time).format('dddd, MMM Do YYYY [at] hh:mm a');
+    }
 
   });

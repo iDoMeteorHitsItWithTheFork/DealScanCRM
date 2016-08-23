@@ -505,6 +505,7 @@ function syncMails(customer, timestamp, now) {
   console.log('\n\n ----------------\n\n');
   console.log('\n\n Sync Mail \n\n');
   console.log('\n\n ----------------\n\n');
+
   //imap.secureserver.net
   var config = {
     "username": "lagodio@alvsoftwarellc.com",

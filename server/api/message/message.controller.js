@@ -76,7 +76,8 @@ export function index(req, res) {
   Message.findAll({
     where: {
       customerID: customerID
-    }
+    },
+    order: [['messageID', 'DESC']]
   })
     .then(respondWithResult(res))
     .catch(handleError(res));
