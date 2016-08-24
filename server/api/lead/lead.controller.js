@@ -295,6 +295,7 @@ export function create(req, res) {
                             time: appointment,
                             category: 'appointment',
                             status: 'scheduled',
+                            state: 'unsold',
                           }, {transaction: t}).then(function (appointment) {
                             return appointment.setHost(user, {transaction: t})
                               .then(function () {
@@ -365,6 +366,7 @@ export function scheduleAppointment(req, res) {
           time: req.body.appointment,
           category: 'appointment',
           status: 'scheduled',
+          state: 'unsold',
         };
         return lead.createEvent(details, {transaction: t})
           .then(function (event) {
@@ -933,7 +935,7 @@ export function soldAppointments(req, res) {
           'JOIN Leads ON Participants.participantID = Leads.leadID ' +
           'CROSS JOIN (SELECT COUNT(1) AS cnt FROM Events ' +
           'JOIN Participants ON Events.eventID = Participants.eventID ' +
-          'WHERE category="appointment" AND attendable="lead" AND Events.status="sold") t ' +
+          'WHERE category="appointment" AND attendable="lead" AND Events.status="kept" AND Events.state="sold") t ' +
           'WHERE Events.status="sold" GROUP BY sourceName ORDER BY Percentage DESC',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
@@ -942,7 +944,7 @@ export function soldAppointments(req, res) {
           'COUNT(*) AS Total FROM Events ' +
           'JOIN Participants ON Events.eventID = Participants.eventID ' +
           'JOIN Leads ON Participants.participantID = Leads.leadID' +
-          '  WHERE category="appointment" AND attendable="lead" AND Events.status="sold" GROUP BY sourceType',
+          '  WHERE category="appointment" AND attendable="lead" AND Events.status="sold" AND Events.state="sold" GROUP BY sourceType',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
       /* Get All Appointments */

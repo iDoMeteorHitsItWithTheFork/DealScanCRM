@@ -152,12 +152,17 @@ export default function (sequelize, DataTypes) {
               $lte: moment().endOf('day')
             }
           },
-          include: {
-            model: Lead,
-            required: true,
-            through: Participants,
+          through: {
+            model: Participants,
             where: searchOptions
           },
+          include: [
+            {
+              model: Lead,
+              required: true,
+              as: 'AttendingLeads'
+            },
+          ],
           transaction: t
         }).then(function(appointments){
 
@@ -165,7 +170,7 @@ export default function (sequelize, DataTypes) {
 
               var idx = -1;
               for (var i = 0; i < appointments.length; i++){
-                var lead = appointments[i].Lead;
+                var lead = appointments[i].AttendingLeads;
                 if ((lead.phone && lead.phone.toString().trim() != '') && (customer.phone && customer.phone.toString().trim() != '')){
                    if (lead.phone == customer.phone){
                      idx = i;
@@ -214,17 +219,23 @@ export default function (sequelize, DataTypes) {
           where: {
             category: 'appointment',
             status: 'kept',
+            state: 'unsold',
             time: {
               $gte: moment().subtract(2, 'days').startOf('day'),
               $lte: moment().endOf('day')
             }
           },
-          include: {
-            model: Lead,
-            required: true,
-            through: Participants,
+          through: {
+            model: Participants,
             where: searchOptions
           },
+          include: [
+            {
+              model: Lead,
+              required: true,
+              as: 'AttendingLeads'
+            },
+          ],
           transaction: t
         }).then(function(appointments){
 
@@ -232,7 +243,7 @@ export default function (sequelize, DataTypes) {
 
             var idx = -1;
             for (var i = 0; i < appointments.length; i++){
-              var lead = appointments[i].Lead;
+              var lead = appointments[i].AttendingLeads;
               if ((lead.phone && lead.phone.toString().trim() != '') && (customer.phone && customer.phone.toString().trim() != '')){
                 if (lead.phone == customer.phone){
                   idx = i;
@@ -247,7 +258,7 @@ export default function (sequelize, DataTypes) {
             }
             if (idx != -1) {
               return appointments[idx].update({
-                status: 'sold'
+                state: 'sold'
               }, {transaction: t}).then(function(){
                 return customer;
               })
@@ -255,7 +266,7 @@ export default function (sequelize, DataTypes) {
 
           } else if (appointments.length == 1) {
             return appointments[0].update({
-              status: 'sold'
+              state: 'sold'
             }, {transaction: t}).then(function(){
               return customer;
             });
@@ -322,7 +333,7 @@ export default function (sequelize, DataTypes) {
                 'postalCode',
               ] }, {transaction: t})
               .then(function(customer){
-                //return Customer.isScheduledLead(customer, t);
+
                 if (validatePresenceOf(customer.streetAddress) && validatePresenceOf(customer.city) &&
                   validatePresenceOf(customer.state) && validatePresenceOf(customer.postalCode)) {
                   var NodeGeocoder = require('node-geocoder');
@@ -343,16 +354,16 @@ export default function (sequelize, DataTypes) {
                           longitude: res[0].longitude
                         }, {transaction: t}).then(function(geo){
                            return geo.setCustomer(customer, {transaction: t}).then(function(){
-                             return customer;
+                             return Customer.isScheduledLead(customer, t);
                            })
                         })
                       }
                     })
-                } else return customer;
+                } else return Customer.isScheduledLead(customer, t);
 
               })
           } else {
-            //return Customer.isScheduledLead(customer, t);
+
             if (validatePresenceOf(customer.streetAddress) && validatePresenceOf(customer.city) &&
               validatePresenceOf(customer.state) && validatePresenceOf(customer.postalCode)) {
               var NodeGeocoder = require('node-geocoder');
@@ -373,12 +384,12 @@ export default function (sequelize, DataTypes) {
                       longitude: res[0].longitude
                     }, {transaction: t}).then(function(geo){
                       return geo.setCustomer(customer, {transaction: t}).then(function(){
-                        return customer;
+                        return Customer.isScheduledLead(customer, t);
                       })
                     })
                   }
                 })
-            } else return customer;
+            } else return Customer.isScheduledLead(customer, t);
           }
         }).catch(function(err){
             console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);

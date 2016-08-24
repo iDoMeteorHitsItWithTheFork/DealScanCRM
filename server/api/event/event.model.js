@@ -18,7 +18,8 @@ export default function(sequelize, DataTypes) {
       values: ['low', 'normal', 'medium', 'important'],
       defaultValue:'normal'
     },
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    state: DataTypes.STRING
   }, {
     /**
      * Virtual Getters
@@ -35,6 +36,7 @@ export default function(sequelize, DataTypes) {
           "category": this.getDataValue('category'),
           'priority': this.getDataValue('priority'),
           'status': this.getDataValue('status'),
+          'state': this.getDataValue('state'),
           'createdAt': this.getDataValue('createdAt')
         }
       },
@@ -50,6 +52,7 @@ export default function(sequelize, DataTypes) {
           "category": this.getDataValue('category'),
           'priority': this.getDataValue('priority'),
           'status': this.getDataValue('status'),
+          'state': this.getDataValue('state'),
           'createdAt': this.getDataValue('createdAt')
         }
       },

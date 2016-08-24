@@ -24,6 +24,8 @@ import {Customer} from '../sqldb';
 import {Vehicle} from '../sqldb';
 import {Trade} from '../sqldb';
 import {Lead} from '../sqldb';
+import {Event} from '../sqldb';
+import {Participant} from '../sqldb';
 
 
 var connectionDetails = { redis: new Redis() };
@@ -558,7 +560,7 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/60 * * * *', () => {
+    schedule.scheduleJob('*/1* * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
@@ -576,6 +578,40 @@ var start = function () {
 
   })
 
+}
+
+
+
+function testEvents(){
+  var searchOptions = {firstName: 'Ludovic', lastName:'Agodio'};
+  return Event.findAll({
+    where: {
+      category: 'appointment',
+      status: 'scheduled',
+      time: {
+        $gte: moment().subtract(2, 'days').startOf('day'),
+        $lte: moment().endOf('day')
+      }
+    },
+    through: {
+      model: Participant,
+      where: searchOptions,
+    },
+    include: [
+      {
+        model: Lead,
+        as: 'AttendingLeads'
+      },
+    ]
+  }).then(function(res){
+     console.log('\n\n\n\n EVENTS \n\n\n');
+     console.log(res[0].AttendingLeads);
+     console.log('\n\n\n ----------------- \n\n\n');
+  }).catch(function(err){
+      console.log(err);
+      return err;
+
+  })
 }
 
 //////////////////////
@@ -605,5 +641,6 @@ export {start}
 export {queue}
 export {fetchData}
 export {fetchEmails}
+export {testEvents}
 
 
