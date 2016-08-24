@@ -68,6 +68,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           console.log(leads);
           if (leads && !leads.error){
             _bdc.leads = leads;
+            _bdc.categorizedLeads();
           } else toaster.error({title: 'Leads Load Error', body:'An error occured while attempting to load leads'});
           _bdc.loadingLeads = false;
         }).catch(function(err){
@@ -89,6 +90,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
               if (res === true) toaster.success({title: 'Lead Assignment', body: 'Lead ('+lead.name+') is now assigned to you!'})
               else toaster.error({title: 'Lead Error', body: 'An error occured while attempting to assign lead'});
               console.log(lead);
+              _bdc.categorizedLeads();
           }).catch(function(err){
               _bdc.assigningLead = false;
               console.log(err);
@@ -97,6 +99,18 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         }
       }
 
+      _bdc.categorizedLeads = function(){
+
+        _bdc.new_leads = $filter('filter')(_bdc.leads, function(value, index, arr){
+          return value.status == 'new' && moment(value.createdAt).unix() >= moment().startOf('day').unix() && moment(value.createdAt).unix() <= moment().endOf('day').unix();
+        })
+        _bdc.working_leads = $filter('filter')(_bdc.leads, function(value, index, arr){
+          return value.status == 'working';
+        });
+        _bdc.follow_up_leads = $filter('filter')(_bdc.leads, function(value, index, arr){
+          return value.status == 'new' && ( value.appointments && value.appointments.length == 0) && moment(value.createdAt).unix() <  moment().startOf('day').unix();
+        });
+      }
 
       /**
        * Retreive Graph Data From Service
@@ -434,6 +448,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         modalInstance.result.then(function (lead) {
           console.log(lead);
           _bdc.activeLead = lead;
+          _bdc.categorizedLeads();
         }).catch(function(e){
           console.log(e);
         });
@@ -536,6 +551,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
         modalInstance.result.then(function (leads) {
           _bdc.activeLead = leads;
+          _bdc.categorizedLeads();
         }).catch(function(e){
           console.log(e);
         });

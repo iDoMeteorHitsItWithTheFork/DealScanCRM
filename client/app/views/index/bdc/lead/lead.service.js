@@ -7,9 +7,6 @@ angular.module('dealScanCrmApp')
 
     var user = Auth.getCurrentUser();
     var _leads = [];
-    var _newLeads = [];
-    var _workingLeads = [];
-    var _followUpLeads = [];
 
       /**
        * Create New Lead
@@ -26,7 +23,7 @@ angular.module('dealScanCrmApp')
             if (lead && !lead.error) {
               lead.interest = JSON.parse(JSON.stringify(lead.interest));
               _leads.unshift(lead);
-            } return categorizeLeads(_leads);
+            } return _leads;
           }).catch(function (err) {
             console.log(err);
             return {error: {msg: err.data, code: err.status}};
@@ -68,7 +65,10 @@ angular.module('dealScanCrmApp')
         console.log(appointment);
         if (appointment){
           var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
-          if (idx != -1) _leads[idx].appointments.unshift(appointment);
+          if (idx != -1) {
+            _leads[idx].appointments.unshift(appointment);
+            _leads[idx].status = 'working';
+          }
           return appointment;
         } else return {error: {msg: '', code:''}};
       }).catch(function(err){
@@ -91,7 +91,10 @@ angular.module('dealScanCrmApp')
           console.log(note);
         if (note){
            var idx = Util.indexOfObject(_leads, 'leadID', details.leadID);
-           if (idx != -1) _leads[idx].notes.unshift(note);
+           if (idx != -1) {
+             _leads[idx].notes.unshift(note);
+             _leads[idx].status = 'working';
+           }
            return note;
         } else return {error: {msg: '', code: ''}};
       }).catch(function(err){
@@ -151,7 +154,7 @@ angular.module('dealScanCrmApp')
                  }
                 // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
                 _leads.push(leads[i]);
-              } return categorizeLeads(_leads);
+              } return _leads;
            } else return {error: {msg:leads.error.msg}};
         })
         .catch(function(err){
@@ -173,6 +176,7 @@ angular.module('dealScanCrmApp')
           if (res.success === true) {
             if(!lead.agents) lead.agents = [];
             lead.agents.unshift(res.agent);
+            lead.status = 'working';
             return true;
           } else return {error: {code:'', msg: ''}};
       }).catch(function(err){

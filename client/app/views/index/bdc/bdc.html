@@ -146,7 +146,7 @@
 
 
                   <ul class="nav nav-tabs p-r-15">
-                    <span class="pull-right small text-muted">{{bdc.leads.new_leads.length + bdc.leads.working_leads.length + bdc.leads.follow_up_leads.length   || 0}} Leads</span>
+                    <span class="pull-right small text-muted">{{bdc.leads.length || 0}} Leads</span>
                     <li ng-click="bdc.viewTab(tab)" ng-repeat="tab in bdc.tabs"
                         ng-class="{'active' : tab == bdc.activeTab}">
                       <a><i class="{{tab.icon}}"></i> {{tab.title}}</a></li>
@@ -161,13 +161,13 @@
                     <div id="tab-1" class="tab-pane active" ng-show="bdc.activeTab.id == 'new_leads'">
                       <div class="full-height-scroll" full-scroll>
                         <div class="text-center height-355 p-t-150"
-                             ng-if="bdc.leads.new_leads && bdc.leads.new_leads.length ==  0">
+                             ng-if="bdc.new_leads && bdc.new_leads.length ==  0">
                           <p>Sorry, there are no new leads to display</p>
                         </div>
-                        <div class="table-responsive" ng-if="bdc.leads.new_leads && bdc.leads.new_leads.length > 0">
+                        <div class="table-responsive" ng-if="bdc.new_leads && bdc.new_leads.length > 0">
                           <table class="table table-striped table-hover">
                             <tbody>
-                            <tr ng-repeat="lead in bdc.leads.new_leads" ng-click="bdc.showInDetails(lead)">
+                            <tr ng-repeat="lead in bdc.new_leads" ng-click="bdc.showInDetails(lead)">
                               <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
                               <td><a class="client-link">{{lead.name}}</a></td>
                               <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
@@ -198,14 +198,14 @@
                     <div id="tab-2" class="tab-pane active" ng-show="bdc.activeTab.id == 'working'">
                       <div class="full-height-scroll" full-scroll>
                         <div class="text-center height-355 p-t-150"
-                             ng-if="bdc.leads.working_leads && bdc.leads.working_leads.length ==  0">
+                             ng-if="bdc.working_leads && bdc.working_leads.length ==  0">
                           <p>Sorry, there are no working leads to display</p>
                         </div>
                         <div class="table-responsive"
-                             ng-if="bdc.leads.working_leads && bdc.leads.working_leads.length > 0">
+                             ng-if="bdc.working_leads && bdc.working_leads.length > 0">
                           <table class="table table-striped table-hover">
                             <tbody>
-                            <tr ng-repeat="lead in bdc.leads.working_leads" ng-click="bdc.showInDetails(lead)">
+                            <tr ng-repeat="lead in bdc.working_leads" ng-click="bdc.showInDetails(lead)">
                               <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
                               <td><a class="client-link">{{lead.name}}</a></td>
                               <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
@@ -237,14 +237,14 @@
                     <div id="tab-3" class="tab-pane active" ng-show="bdc.activeTab.id == 'missed'">
                       <div class="full-height-scroll" full-scroll>
                         <div class="text-center height-355 p-t-150"
-                             ng-if="bdc.leads.follow_up_leads && bdc.leads.follow_up_leads.length ==  0">
+                             ng-if="bdc.follow_up_leads && bdc.follow_up_leads.length ==  0">
                           <p>Sorry, there are no leads to follow up on at this moment. Please check back later</p>
                         </div>
                         <div class="table-responsive"
-                             ng-if="bdc.leads.follow_up_leads && bdc.leads.follow_up_leads.length > 0">
+                             ng-if="bdc.follow_up_leads && bdc.follow_up_leads.length > 0">
                           <table class="table table-striped table-hover">
                             <tbody>
-                            <tr ng-repeat="lead in bdc.leads.follow_up_leads" ng-click="bdc.showInDetails(lead)">
+                            <tr ng-repeat="lead in bdc.follow_up_leads" ng-click="bdc.showInDetails(lead)">
                               <td class="client-avatar"><img alt="image" src="assets/images/profile.jpg"></td>
                               <td><a class="client-link">{{lead.name}}</a></td>
                               <td> {{lead.interest || 'Interest was not specified' | limitTo: 50}}{{lead.interest.length
