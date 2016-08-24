@@ -134,6 +134,11 @@
       leadSources(){
         return [
           {
+            id: 'walkIn',
+            name: 'Walk In',
+            type: 'WalkIn'
+          },
+          {
             id: 'phone',
             name: 'Phone',
             type: 'Phone'

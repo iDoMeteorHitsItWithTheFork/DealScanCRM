@@ -695,8 +695,83 @@ export function update(req, res) {
   })
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    .then(function(customer){
+      return Customer.find({
+        where: {
+          customerID: customer.customerID,
+        },
+        attributes: [
+          'customerID',
+          'driverLicenseID',
+          'firstName',
+          'middleInitial',
+          'lastName',
+          'phone',
+          'email',
+          'streetAddress',
+          'city',
+          'state',
+          'country',
+          'postalCode',
+          'source',
+          'lastEmailSync'],
+        include: [{
+          model: Deal,
+          include: [
+            {
+              model: Dealership,
+            },
+            {
+              model: User,
+              as: 'SaleRep',
+              attributes: ['userID', 'firstName', 'lastName', 'phone', 'email', 'role'],
+            },
+            {
+              model: Customer,
+              as: 'CoBuyers',
+              attributes: [
+                'customerID',
+                'driverLicenseID',
+                'firstName',
+                'middleInitial',
+                'lastName',
+                'phone',
+                'email',
+                'streetAddress',
+                'city',
+                'state',
+                'country',
+                'postalCode',
+                'source',
+                'lastEmailSync']
+            },
+            {
+              model: Vehicle,
+              as: 'Purchase',
+              attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+            },
+            {
+              model: Trade,
+              attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
+            },
+            {
+              model: Financing,
+              attributes: ['financingID', 'installments', 'interestRate', 'monthlyPayment', 'amountFinanced'],
+            },
+            {
+              model: Rebate,
+              attributes: ['rebateID', 'amount'],
+            },
+            {
+              model: Document,
+              attributes: ['title', 'type', 'description', 'path', 'status']
+            }
+          ]
+        }]
+      })
+    }).then(function(customer){
+      return res.status(200).json(formatCustomer(customer));
+  }).catch(handleError(res));
 }
 
 // Deletes a Customer from the DB

@@ -19,8 +19,8 @@ angular.module('dealScanCrmApp')
       streetAddress: _customer.thisCustomer.profile.streetAddress,
       city: _customer.thisCustomer.profile.city,
       state: _customer.thisCustomer.profile.state,
-      zipCode: _customer.thisCustomer.profile.postalCode,
-      driverLicense: _customer.thisCustomer.profile.driverLicense
+      zipCode: _customer.thisCustomer.profile.zipCode,
+      driverLicense: _customer.thisCustomer.profile.driverLicenseID
     }
 
     _customer.purchases = _customer.thisCustomer.purchases;
@@ -138,7 +138,17 @@ angular.module('dealScanCrmApp')
       });
 
       modalInstance.result.then(function (updatedCustomer) {
-        //
+        _customer.info = {
+          name: updatedCustomer.profile.name,
+          phone: updatedCustomer.profile.phone,
+          email: updatedCustomer.profile.email,
+          address: updatedCustomer.profile.address,
+          streetAddress: updatedCustomer.profile.streetAddress,
+          city: updatedCustomer.profile.city,
+          state: updatedCustomer.profile.state,
+          zipCode: updatedCustomer.profile.zipCode,
+          driverLicense: updatedCustomer.profile.driverLicenseID
+        }
       })
     }
 

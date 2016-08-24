@@ -110,7 +110,7 @@ angular.module('dealScanCrmApp')
 
 
     function updateCustomers(newCustomer) {
-      var idx = _customers.rows.indexOf(newCustomer);
+      var idx = _customers.indexOf(newCustomer);
       if (idx != -1) return false;
       _customers.rows.unshift(newCustomer);
       _customers.count++;
@@ -140,9 +140,9 @@ angular.module('dealScanCrmApp')
       return CustomerResource.update({id:id}, customer).
         $promise.then(function (updatedCustomer) {
           console.log(updatedCustomer);
-          if (Util.indexOfObject(_customers.rows, 'customerID', id) != -1) {
-            var idx = Util.indexOfObject(_customers.rows, 'customerID', id);
-            _customers.rows.splice(idx, 1, updatedCustomer);
+          if (Util.indexOfObject(_customers, 'customerID', id) != -1) {
+            var idx = Util.indexOfObject(_customers, 'customerID', id);
+            _customers.splice(idx, 1, updatedCustomer);
           }
           return updatedCustomer;
         }).catch(function (err) {

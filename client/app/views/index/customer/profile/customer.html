@@ -59,7 +59,7 @@
                     <span class="fa fa-home fa-lg m-r-sm"></span>
                   </div>
                   <div class="col-xs-10 p-l-10">
-                    <span>{{customer.thisCustomer.profile.address || 'No Address Provided'}}</span>
+                    <span>{{customer.info.address || 'No Address Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -69,7 +69,7 @@
                     <span class="fa fa-phone fa-lg m-r-sm"></span>
                   </div>
                   <div class="col-xs-10 p-l-10">
-                    <span>{{customer.thisCustomer.profile.phone || 'No Phone Number Provided'}}</span>
+                    <span>{{customer.info.phone || 'No Phone Number Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -79,7 +79,7 @@
                     <span class="fa fa-envelope m-r-sm"></span>
                   </div>
                   <div class="col-xs-10 p-l-10">
-                    <span>{{customer.thisCustomer.profile.email || 'No Email Provided'}}</span>
+                    <span>{{customer.info.email || 'No Email Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -89,7 +89,7 @@
                     <span class="fa fa-credit-card-alt m-r-sm"></span>
                   </div>
                   <div class="col-xs-10 p-l-10">
-                    <span>{{customer.thisCustomer.driverLicenseID|| 'No License Provided'}}</span>
+                    <span>DL# {{customer.info.driverLicense || 'No License Provided'}}</span>
                   </div>
                 </div>
               </li>
@@ -251,7 +251,7 @@
                                   <strong>{{::customer.thisCustomer.profile.name}}</strong> is working with <strong>{{::deal.SaleRep.profile.name}}</strong> to acquire this {{::customer.displayClassification(deal.Purchase.profile.classification)}}.
                                   <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} is trading their <strong>{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
                                   <p class="m-t-5" ng-if="deal.Trades.length == 0"> There is no trades involved in this deal.</p>
-                                </div>=
+                                </div>
                                 <div class="">
                                   <small class="text-muted">{{::customer.dealTime(deal.createdAt)}}</small><br>
                                   <div class="actions">

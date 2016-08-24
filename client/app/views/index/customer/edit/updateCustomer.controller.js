@@ -17,39 +17,30 @@ angular.module('dealScanCrmApp')
       email: thisCustomer.profile.email,
       streetAddress: thisCustomer.profile.streetAddress,
       city: thisCustomer.profile.city,
-      state: thisCustomer.profile.state,
-      country: thisCustomer.profile.country,
-      postalCode: thisCustomer.profile.postalCode,
-      source: thisCustomer.profile.source
+      country: 'USA',
+      zipCode: thisCustomer.profile.zipCode,
     };
-
-
-    var st = $scope.$watch(function () {
-      return _updateCustomer.customerInfo.state;
-    }, function (newValue, oldValue) {
-      if (newValue) {
-        for (var i = 0; i < _updateCustomer.states.length; i++) {
-          if (Util.slimTrim(newValue).toLowerCase() == Util.slimTrim(_updateCustomer.states[i].name).toLowerCase()) {
-            _updateCustomer.stateCode = _updateCustomer.states[i].code
-            break;
-          }
-        }
-      }
-    })
 
     /*
      * Destory watch on exit
      *
      * */
-    $scope.$on('destroy', function () {
-      st();
-    });
+
+    _updateCustomer.sources = Util.leadSources();
+    _updateCustomer.states = Util.usStates();
 
     _updateCustomer.updatingCustomer = false;
+    var idx = Util.indexOfObject(_updateCustomer.sources, 'name', thisCustomer.profile.source);
+    if (idx != -1) _updateCustomer.customerInfo.source = _updateCustomer.sources[idx];
+
+    var idx_ = Util.indexOfObject(_updateCustomer.states, 'name', thisCustomer.profile.state);
+    if (idx_ != -1) _updateCustomer.customerInfo.state = _updateCustomer.states[idx_];
 
     _updateCustomer.ok = function () {
       if (_updateCustomer.updatingCustomer) return;
       _updateCustomer.updatingCustomer = true;
+      _updateCustomer.customerInfo.state = _updateCustomer.customerInfo.state.name;
+      _updateCustomer.customerInfo.source = _updateCustomer.customerInfo.source.name;
       Customer.update(thisCustomer.profile.customerID, _updateCustomer.customerInfo).then(function (updatedCustomer) {
         console.log(updatedCustomer);
         $uibModalInstance.close(updatedCustomer);
@@ -65,7 +56,6 @@ angular.module('dealScanCrmApp')
       $uibModalInstance.dismiss('cancel');
     };
 
-    _updateCustomer.sources = Util.leadSources();
-    _updateCustomer.states = Util.usStates();
+
 
   });

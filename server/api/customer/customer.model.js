@@ -93,7 +93,7 @@ export default function (sequelize, DataTypes) {
         if (this.getDataValue('postalCode')) address += ' '+this.getDataValue('postalCode');
         return {
           'customerID': this.getDataValue('customerID'),
-          'driverLicenseID': this.getDataValue('driverLicenceID'),
+          'driverLicenseID': this.getDataValue('driverLicenseID'),
           'firstName': this.getDataValue('firstName'),
           'lastName': this.getDataValue('lastName'),
           'middleInitial': this.getDataValue('middleInitial'),
@@ -115,7 +115,7 @@ export default function (sequelize, DataTypes) {
       token: function () {
         return {
           'customerID': this.getDataValue('customerID'),
-          'driverLicenseID': this.getDataValue('driverLicenceID'),
+          'driverLicenseID': this.getDataValue('driverLicenseID'),
           'firstName': this.getDataValue('firstName'),
           'lastName': this.getDataValue('lastName'),
           'middleInitial': this.getDataValue('middleInitial'),

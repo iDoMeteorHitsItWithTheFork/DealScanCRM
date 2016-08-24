@@ -43,6 +43,6 @@ sqldb.sequelize.sync()
 // Expose app
 var exports = module.exports = app;
 
-require('./backgroundTasks/DbSync').start();
+//require('./backgroundTasks/DbSync').start();
 //require('./backgroundTasks/DbSync').fetchEmails();
 //require('./backgroundTasks/DbSync').testEvents();
