@@ -251,7 +251,7 @@
                                   <strong>{{::customer.thisCustomer.profile.name}}</strong> is working with <strong>{{::deal.SaleRep.profile.name}}</strong> to acquire this {{::customer.displayClassification(deal.Purchase.profile.classification)}}.
                                   <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} is trading their <strong>{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
                                   <p class="m-t-5" ng-if="deal.Trades.length == 0"> There is no trades involved in this deal.</p>
-                                </div>
+                                </div>=
                                 <div class="">
                                   <small class="text-muted">{{::customer.dealTime(deal.createdAt)}}</small><br>
                                   <div class="actions">

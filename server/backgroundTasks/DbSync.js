@@ -166,7 +166,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(today){
-  if (!today) today = moment().startOf('day'); //moment().startOf('month').startOf('day');
+  if (!today) today = moment().subtract(3, 'days').startOf('day'); //moment().startOf('month').startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -515,7 +515,7 @@ var start = function () {
       connection: connectionDetails,
       queues: ['DBSync', 'Leads'],
       minTaskProcessors: 1,
-      maxTaskProcessors: 10,
+      maxTaskProcessors: 50,
       checkTimeout: 500,
       maxEventLoopDelay:5,
       toDisconnectProcessors: true
@@ -558,20 +558,20 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*60 * * * *', () => {
+    schedule.scheduleJob('*/60 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
         console.log('****************************\n\n');
       }
     })
-
-    schedule.scheduleJob('*/5 * * * *', () => {
+/*
+    schedule.scheduleJob('*!/5 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');
       }
-    })
+    })*/
 
 
   })

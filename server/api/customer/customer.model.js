@@ -1,6 +1,10 @@
 'use strict';
 
 
+var validatePresenceOf =  function(value){
+  return value && value.toString().trim() != '';
+}
+
 export default function (sequelize, DataTypes) {
   var Customer = sequelize.define('Customer', {
     customerID: {
@@ -319,11 +323,62 @@ export default function (sequelize, DataTypes) {
               ] }, {transaction: t})
               .then(function(customer){
                 //return Customer.isScheduledLead(customer, t);
-                return customer;
+                if (validatePresenceOf(customer.streetAddress) && validatePresenceOf(customer.city) &&
+                  validatePresenceOf(customer.state) && validatePresenceOf(customer.postalCode)) {
+                  var NodeGeocoder = require('node-geocoder');
+                  var options = {
+                    provider: 'google',
+                    httpAdapter: 'https',
+                    apiKey: 'AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70',
+                    formatter: null
+                  };
+                  var geocoder = NodeGeocoder(options);
+                  return geocoder.geocode(customer.profile.address)
+                    .then(function(res) {
+                      //console.log(res);
+                      if (res[0].latitude && res[0].longitude){
+                        var Geo  = sequelize.models.Geo;
+                        return Geo.create({
+                          latitude: res[0].latitude,
+                          longitude: res[0].longitude
+                        }, {transaction: t}).then(function(geo){
+                           return geo.setCustomer(customer, {transaction: t}).then(function(){
+                             return customer;
+                           })
+                        })
+                      }
+                    })
+                } else return customer;
+
               })
           } else {
             //return Customer.isScheduledLead(customer, t);
-            return customer;
+            if (validatePresenceOf(customer.streetAddress) && validatePresenceOf(customer.city) &&
+              validatePresenceOf(customer.state) && validatePresenceOf(customer.postalCode)) {
+              var NodeGeocoder = require('node-geocoder');
+              var options = {
+                provider: 'google',
+                httpAdapter: 'https',
+                apiKey: 'AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70',
+                formatter: null
+              };
+              var geocoder = NodeGeocoder(options);
+              return geocoder.geocode(customer.profile.address)
+                .then(function(res) {
+                  //console.log(res);
+                  if (res[0].latitude && res[0].longitude){
+                    var Geo  = sequelize.models.Geo;
+                    return Geo.create({
+                      latitude: res[0].latitude,
+                      longitude: res[0].longitude
+                    }, {transaction: t}).then(function(geo){
+                      return geo.setCustomer(customer, {transaction: t}).then(function(){
+                        return customer;
+                      })
+                    })
+                  }
+                })
+            } else return customer;
           }
         }).catch(function(err){
             console.log('*** An error occured while creating '+searchOptions.firstName+' '+searchOptions.lastName);

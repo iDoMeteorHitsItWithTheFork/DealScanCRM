@@ -16,6 +16,7 @@ import {User} from '../../sqldb';
 import {Customer} from '../../sqldb';
 import {Vehicle} from '../../sqldb';
 import {Trade} from '../../sqldb';
+import {Geo} from '../../sqldb';
 
 var Q = require('q');
 var moment = require('moment');
@@ -97,12 +98,18 @@ export function index(req, res) {
       model: Customer,
       as: 'Buyer',
       attributes: ['customerID', 'firstName', 'lastName', 'phone', 'email', 'source'],
-      required: true
+      required: true,
+      include: [
+        {
+          model: Geo,
+          attributes: ['geoID', 'latitude', 'longitude']
+        }
+      ]
     },
     {
       model: Customer,
       as: 'CoBuyers',
-      attributesL: ['customerID', 'firstName', 'lastName', 'phone', 'email', 'source']
+      attributes: ['customerID', 'firstName', 'lastName', 'phone', 'email', 'source']
     },
     {
       model: Vehicle,
@@ -168,7 +175,11 @@ function formatDeals(deals){
       "paymentOption": deal.paymentOption,
       "dealID": deal.dealID,
       "dealershipID": deal.dealershipID,
-      "dscDealID": deal.dscDealID
+      "dscDealID": deal.dscDealID,
+      "geo": {
+        latitude: deal.Geo && deal.Geo.latitude ? deal.Geo.latitude : null,
+        longitude: deal.Geo && deal.Geo.longitude ? deal.Geo.longitude : null
+      }
     });
   }
   return _deals;

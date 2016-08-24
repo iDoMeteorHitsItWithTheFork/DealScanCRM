@@ -32,6 +32,7 @@ db.Dealership = db.sequelize.import('../api/dealership/dealership.model');
 db.Team = db.sequelize.import('../api/team/team.model');
 db.User = db.sequelize.import('../api/user/user.model');
 db.Customer = db.sequelize.import('../api/customer/customer.model');
+db.Geo = db.sequelize.import('../api/customer/customer.geo.model');
 db.Vehicle = db.sequelize.import('../api/vehicle/vehicle.model');
 db.Trade = db.sequelize.import('../api/trade/trade.model');
 db.Document = db.sequelize.import('../api/document/document.model');
@@ -66,6 +67,9 @@ db.Note.belongsTo(db.User, { as:'Creator', foreignKey: 'creatorID'});
 db.User.hasMany(db.Note, {foreignKey: 'creatorID'});
 db.Image.belongsTo(db.User, {as: 'Uploader', foreignKey:'uploaderID'});
 db.Image.belongsTo(db.Customer, {as:'CustomerImages', foreignKey:'customerID'});
+
+db.Geo.belongsTo(db.Customer, {foreignKey: 'customerID'});
+db.Customer.hasOne(db.Geo, {foreignKey: 'customerID'});
 
 db.Customer.belongsToMany(db.Note, {
   through: {
