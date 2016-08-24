@@ -74,7 +74,7 @@ export default function(sequelize, DataTypes) {
           'mileage': this.getDataValue('mileage'),
           'color': this.getDataValue('color'),
           'bodyStyle': this.getDataValue('bodyStyle'),
-          'displayName': this.getDataValue('color')+' '+this.getDataValue('year')+' '+this.getDataValue('make')+' '+this.getDataValue('model')
+          'displayName': this.getDataValue('year')+' '+this.getDataValue('make')+' '+this.getDataValue('model')
         }
       },
 

@@ -102,7 +102,7 @@
                     <button class="btn btn-circle m-r-xs btn-twitter"  tooltip-placement="top" uib-tooltip="@twitter"><i class="fa fa-twitter"></i></button>
                     <button class="btn btn-circle m-r-xs btn-instagram" tooltip-placement="top" uib-tooltip="@instagram"><i class="fa fa-instagram"></i></button>
                   </span>
-                <div class="ibox">
+                <div ng-hide="true" class="ibox">
                   <div class="ibox-content">
                     <div class="chat-activity-list">
                       <div class="chat-element">
@@ -227,7 +227,13 @@
                           {{::deal.Purchase.profile.make | uppercase}}
                           {{::deal.Purchase.profile.model | uppercase}}
                           {{::deal.Purchase.profile.trimLevel | uppercase}}
-                          &nbsp;&nbsp;<span class="badge badge-primary source-badge-align">{{::customer.thisCustomer.profile.source}}</span></h4>
+                        </h4>
+                        <div class="deal-tags">
+                          <span class="label pull-right p-t-5 m-l-10" ng-class="{'label-success': deal.status == 'sold' || deal.status == 'delivered',
+                                                                                 'label-danger' : deal.status == 'working' || deal.status == 'pending'}">
+                            {{::deal.status | uppercase}}</span>
+                          <span class="label label-primary pull-right p-t-5">{{::customer.thisCustomer.profile.source | uppercase}}</span>
+                        </div>
                         <ul class="unstyled p-l-0 p-t-5">
                           <li>
                             <div class="feed-element">
@@ -236,12 +242,28 @@
                               </a>
                               <div class="media-body ">
                                 <small class="pull-right text-navy">{{::customer.timeAgo(deal.createdAt)}}</small>
-                                <strong>{{::deal.SaleRep.profile.name}}</strong> sold this {{::customer.displayClassification(deal.Purchase.profile.classification)}} to <strong>{{::customer.thisCustomer.profile.name}}</strong>.<br>
-                                {{deal.Purchase.tradeVerbiage}}<br ng-if="deal.Purchase.tradeVerbiage">
-                                <small class="text-muted">{{::customer.dealTime(deal.createdAt)}}</small><br>
-                                <div class="actions">
-                                  <a class="btn btn-xs btn-warning" tooltip-placement="top" uib-tooltip="Email John"><i class="fa fa-envelope-o"></i> Email </a>
-                                  <a class="btn btn-xs btn-primary" tooltip-placement="top" uib-tooltip="Text John"><i class="fa fa-comments-o"></i> Chat</a>
+                                <div ng-if="deal.status == 'sold' || deal.status == 'delivered'">
+                                  <strong >{{::deal.SaleRep.profile.name}}</strong> sold this {{::customer.displayClassification(deal.Purchase.profile.classification)}} to <strong>{{::customer.thisCustomer.profile.name}}</strong>.
+                                  <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} traded their <strong>{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
+                                  <p class="m-t-5" ng-if="deal.Trades.length == 0"> There is no trades involved in this deal.</p>
+                                </div>
+                                <div ng-if="deal.status == 'working' || deal.status == 'pending'">
+                                  <strong>{{::customer.thisCustomer.profile.name}}</strong> is working with <strong>{{::deal.SaleRep.profile.name}}</strong> to acquire this {{::customer.displayClassification(deal.Purchase.profile.classification)}}.
+                                  <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} is trading their <strong>{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
+                                  <p class="m-t-5" ng-if="deal.Trades.length == 0"> There is no trades involved in this deal.</p>
+                                </div>
+                                <div class="">
+                                  <small class="text-muted">{{::customer.dealTime(deal.createdAt)}}</small><br>
+                                  <div class="actions">
+                                    <a
+                                      href="mailto:{{deal.SaleRep.profile.email}}?subject=About this {{deal.Purchase.profile.year }} {{deal.Purchase.profile.make}} {{deal.Purchase.profile.model}} {{deal.Purchase.profile.trimLevel}} Deal with {{customer.thisCustomer.profile.name}}"
+                                      class="btn btn-xs btn-warning" tooltip-placement="top"
+                                      uib-tooltip="Email {{deal.SaleRep.profile.name}}"><i class="fa fa-envelope-o"></i>
+                                      Email </a>
+                                    <a class="btn btn-xs btn-primary" tooltip-placement="top"
+                                       uib-tooltip="Text {{deal.SaleRep.profile.name}}"><i class="fa fa-comments-o"></i>
+                                      Chat</a>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -250,10 +272,16 @@
                         <div class="m-b-25">
                           <div>
                             <span>Deal Progress</span>
-                            <small class="pull-right">60% (Documents Required)</small>
+                            <strong ><small ng-if="deal.status == 'pending'" class="pull-right">20% (Just Scanned)</small></strong>
+                            <strong ><small ng-if="deal.status == 'working'" class="pull-right">40% (Negotiating)</small></strong>
+                            <strong ><small ng-if="deal.status == 'sold'" class="pull-right">70% (In/Awaiting Finance)</small></strong>
+                            <strong ><small ng-if="deal.status == 'delivered'" class="pull-right">100% (Completed)</small></strong>
                           </div>
                           <div class="progress progress-mini">
-                            <div style="width: 60%;" class="progress-bar"></div>
+                            <div ng-if="deal.status == 'pending'" style="width: 20%;" class="progress-bar progress-bar-danger"></div>
+                            <div ng-if="deal.status == 'working'" style="width: 40%;" class="progress-bar progress-bar-warning"></div>
+                            <div ng-if="deal.status == 'sold'" style="width: 70%;" class="progress-bar progress-bar-success"></div>
+                            <div ng-if="deal.status == 'delivered'" style="width: 100%;" class="progress-bar"></div>
                           </div>
                         </div>
                         <div class="media">
@@ -273,19 +301,19 @@
                                 <tr>
                                   <td>Rebate</td>
                                   <td class="success text-right">
-                                    <strong>${{::deal.Purchase.rebate || 0}}</strong>
+                                    <strong>${{::deal.Rebates[0].profile.amount || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Trade Allowance</td>
                                   <td class="success text-right">
-                                    <strong>${{::deal.Purchase.tradeAllowance || 0}}</strong>
+                                    <strong>${{::deal.Trades[0].profile.tradeAllowance || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Trade Payoff</td>
                                   <td class="success text-right">
-                                    <strong>${{::deal.Purchase.tradePayOff || 0}}</strong>
+                                    <strong>${{::deal.Trades[0].payoffAmount || 0}}</strong>
                                   </td>
                                 </tr>
                                 <tr>
@@ -325,7 +353,7 @@
 
             </div>
             <div class="feed-activity-list">
-              <div class="feed-element">
+              <!--<div class="feed-element">
                 <a href="" class="pull-left">
                   <img alt="image" class="img-circle" src="assets/images/a1.jpg">
                 </a>
@@ -439,10 +467,9 @@
                   <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
                   <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
                 </div>
-              </div>
+              </div>-->
             </div>
-
-            <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
+            <!--<button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>-->
 
           </div>
 

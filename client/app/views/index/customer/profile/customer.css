@@ -617,3 +617,14 @@ ul.experiences li:last-child:before {
   width:500px;
   height:313px;
 }
+.deal-tags {
+  position: absolute;
+  right: 13px;
+  top: -6px;
+}
+.m-t-ng-22 {
+  margin-top: -22px;
+}
+.m-t-ng-5 {
+  margin-top: -5px !important;
+}

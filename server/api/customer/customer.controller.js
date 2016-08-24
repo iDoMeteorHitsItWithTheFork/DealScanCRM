@@ -19,6 +19,7 @@ import {Financing} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Document} from '../../sqldb';
 import {Message} from '../../sqldb';
+import {Rebate} from '../../sqldb';
 import config from '../../config/environment';
 import path from 'path'
 
@@ -128,7 +129,7 @@ export function index(req, res) {
         {
           model: User,
           as: 'SaleRep',
-          attributes: ['userID', 'firstName', 'lastName', 'role'],
+          attributes: ['userID', 'firstName', 'lastName', 'role', 'email', 'phone'],
         },
         {
           model: Customer,
@@ -156,11 +157,15 @@ export function index(req, res) {
         },
         {
           model: Trade,
-          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN'],
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
         },
         {
           model: Financing,
           attributes: ['financingID', 'installments', 'interestRate', 'monthlyPayment', 'amountFinanced'],
+        },
+        {
+          model: Rebate,
+          attributes: ['rebateID', 'amount'],
         },
         {
           model: Document,
@@ -210,7 +215,7 @@ export function show(req, res) {
         {
           model: User,
           as: 'SaleRep',
-          attributes: ['userID', 'firstName', 'lastName', 'role'],
+          attributes: ['userID', 'firstName', 'lastName', 'phone', 'email', 'role'],
         },
         {
           model: Customer,
@@ -238,11 +243,15 @@ export function show(req, res) {
         },
         {
           model: Trade,
-          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN'],
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
         },
         {
           model: Financing,
           attributes: ['financingID', 'installments', 'interestRate', 'monthlyPayment', 'amountFinanced'],
+        },
+        {
+          model: Rebate,
+          attributes: ['rebateID', 'amount'],
         },
         {
           model: Document,
@@ -312,7 +321,7 @@ export function getDocuments(req, res){
         {
           model: User,
           as: 'SaleRep',
-          attributes: ['userID', 'firstName', 'lastName', 'role'],
+          attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role'],
         },
         {
           model: Customer,
@@ -340,11 +349,15 @@ export function getDocuments(req, res){
         },
         {
           model: Trade,
-          attributes: ['tradeID', 'VIN','make', 'model', 'year','mileage','actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN'],
+          attributes: ['tradeID', 'VIN','make', 'model', 'year','mileage','actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
         },
         {
           model: Financing,
           attributes: ['financingID', 'installments', 'interestRate', 'monthlyPayment', 'amountFinanced'],
+        },
+        {
+          model: Rebate,
+          attributes: ['rebateID', 'amount'],
         },
         {
           model: Document,

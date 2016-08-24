@@ -2,7 +2,7 @@
 
 angular.module('dealScanCrmApp')
 
-  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, toaster) {
+  .controller('CustomerCtrl', function ($scope, $state, Auth, Util, Customer, selectedCustomer, $uibModal, toaster, $compile) {
 
     var _customer = this;
     _customer.user = Auth.getCurrentUser();
@@ -24,25 +24,7 @@ angular.module('dealScanCrmApp')
     }
 
     _customer.purchases = _customer.thisCustomer.purchases;
-    var generateTradeDetails = function(purchases){
-      for(var i=0; i < purchases.length; i++){
-        if (purchases[i].Trades.length > 0){
-          var tradePayOff = 0;
-          var tradeAllowance = 0;
-          var verbiage = _customer.thisCustomer.profile.name.split(' ')[0]+' traded '+purchases[i].Trades.length+' for this deal, ';
-          for(var j =0; j < purchases[i].Trades.length; j++){
-             tradePayOff += parseFloat(purchases[i].Trades[j].payOffAmount).toFixed(2);
-             tradeAllowance += parseFloat(purchases[i].Trades[j].tradeAllowance).toFixed(2);
-             if (j > 0) verbiage += ", ";
-             if (j == purchases[i].Trades.length) verbiage += " and ";
-             verbiage += "a <a>"+purchases[i].Trades[j].profile.year+"  "+purchases[i].Trades[j].profile.make+"  "+purchases[i].Trades[j].profile.model+"</a>";
-          } purchases[i].tradeVerbiage = verbiage;
-          purchases[i].tradePayOff = tradePayOff;
-          purchases[i].tradeAllowance = tradeAllowance;
-        }
-      }
-      //customer.thisCustomer.firstName traded 2 cars in for this deal, a <a>2015 Ford Mustang</a>, and a <a>2011 Honda Civic SE</a>.
-    }
+    _customer.purchase = _customer.purchases[0];
 
     _customer.timeAgo = function(time){
        return moment(time).fromNow();
@@ -82,9 +64,6 @@ angular.module('dealScanCrmApp')
        }
        return cl;
     }
-
-    if (_customer.purchases.length > 0) generateTradeDetails(_customer.purchases);
-    _customer.purchase = _customer.purchases[0];
 
 
     _customer.tabs = [
