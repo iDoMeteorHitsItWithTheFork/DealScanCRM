@@ -38,10 +38,10 @@ angular.module('dealScanCrmApp')
       return CustomerResource.query()
         .$promise.then(function (customers) {
           _customers = customers || [];
-          _customersInfo = customers || [];
-          _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
-          console.log(_customersInfo);
-          return {info: _customersInfo, stats: dealSummary()};
+         // _customersInfo = customers || [];
+         // _customersInfo = (_customersInfo.length > _pageSize) ? _customersInfo.slice(0, _pageSize) : _customersInfo;
+          console.log(_customers);
+          return {info: _customers, stats: dealSummary()};
         }).catch(function (err) {
           console.log(err);
           return err;
@@ -143,6 +143,7 @@ angular.module('dealScanCrmApp')
           if (Util.indexOfObject(_customers, 'customerID', id) != -1) {
             var idx = Util.indexOfObject(_customers, 'customerID', id);
             _customers.splice(idx, 1, updatedCustomer);
+            console.log('**** spliced');
           }
           return updatedCustomer;
         }).catch(function (err) {
@@ -157,13 +158,13 @@ angular.module('dealScanCrmApp')
         $promise.then(function(deletedCustomer){
           if (_customers.rows){
             var idx = Util.indexOfObject(_customers.rows, 'customerID', id);
-            if (idx != -1) _customers.rows.splice(idx,1);
+            if (idx != -1) _customers.splice(idx,1);
           }
           if (_searchResults.rows) {
-            var idx_ = Util.indexOfObject(_searchResults.rows, 'customerID', id);
-            if (idx_ != -1) _searchResults.rows.splice(idx_,1);
+            var idx_ = Util.indexOfObject(_searchResults, 'customerID', id);
+            if (idx_ != -1) _searchResults.splice(idx_,1);
           }
-          return _customersInfo;
+          return _customers;
       }).catch(function(err){
           console.log(err);
           return err;
@@ -268,7 +269,7 @@ angular.module('dealScanCrmApp')
       update: updateCustomer,
       remove: removeCustomer,
       customers: function () {
-        return _customersInfo;
+        return _customers;
       },
       searchResults: function () {
         return _searchResults;

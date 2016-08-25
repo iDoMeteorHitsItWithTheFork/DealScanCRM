@@ -560,7 +560,7 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/1* * * *', () => {
+    schedule.scheduleJob('*/45 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
@@ -568,7 +568,7 @@ var start = function () {
       }
     })
 
-    schedule.scheduleJob('*/15 * * * *', () => {
+    schedule.scheduleJob('*/5 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');

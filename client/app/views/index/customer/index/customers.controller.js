@@ -9,7 +9,7 @@ angular.module('dealScanCrmApp')
      * */
     var _customers = this; //$scope
     var filteredData = [];
-    _customers.sources = ['walkIn', 'Web', 'Phone', 'Happy Tag', 'Other'];
+    _customers.sources = Util.leadSources();
 
     _customers.user = Auth.getCurrentUser();
     _customers.customersInfo = [];
@@ -140,17 +140,28 @@ angular.module('dealScanCrmApp')
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
-        templateUrl: 'app/account/customer/edit/updateCustomer.html',
+        templateUrl: 'app/views/index/customer/edit/updateCustomer.html',
         controller: 'UpdateCustomerCtrl as updateCustomer',
         resolve: {
-          selectedCustomer: function () {
+          thisCustomer: function () {
             return customer;
+          },
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                name: 'ui.select',
+                files: ['.resources/plugins/ui-select/select.min.js',
+                  '.styles/plugins/ui-select/select.min.css']
+              },
+            ])
           }
         }
       });
 
       modalInstance.result.then(function (updatedCustomer) {
-        _customers.customersInfo = Customer.customers();
+        // $scope.$applyAsync(function(){
+          _customers.customersInfo = Customer.customers();
+        // });
       })
 
     };
