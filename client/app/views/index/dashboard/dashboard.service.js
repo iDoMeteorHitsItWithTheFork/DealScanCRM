@@ -77,6 +77,20 @@ angular.module('dealScanCrmApp')
              console.log('\n\n================================\n\n');
              if (deals && deals.length > 0){
                  //process deals.
+               for(var i = 0; i < deals.length; i++){
+                 var dl = deals[i];
+                 if (dl.geo && dl.geo.lat && dl.geo.lng){
+                   var pin = '';
+                   if (dl.status == 'won') pin = '../../assets/images/wonDealMarker.png';
+                   if (dl.status == 'lost') pin  = '../../assets/images/lostDealMarker.png';
+                   dl.geo.marker = {
+                     url: pin,
+                     scaledSize:[40,40],
+                     origin: [0,0],
+                     anchor: [21,45]
+                   };
+                 }
+               }
                salesData = deals;
                filteredData = salesData;
                console.log(salesData);

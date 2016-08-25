@@ -125,7 +125,7 @@
                   <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
                           uib-btn-radio="'chart'"><i class="fa fa-pie-chart">&nbsp;&nbsp;</i>Charts
                   </button>
-                  <button ng-hide="true" class="btn btn-white btn-outline" ng-model="dashboard.chartView"
+                  <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
                           uib-btn-radio="'map'" ng-click="dashboard.refreshMap()"><i
                           class="fa fa-map-marker">&nbsp;&nbsp;</i> Map
                   </button>
@@ -524,7 +524,7 @@
                 <div class="col-lg-12 padding-right-30 pull-left animated fadeInRight "
                      ng-show="dashboard.chartView == 'map'">
                   <!-- Map filters -->
-                  <div class="col-lg-3" ng-hide="true">
+                  <div class="col-lg-3">
 
                     <div class="ibox float-e-margins margin-bottom-0">
                       <div class="ibox-title border-top-w-1 shadow-border">
@@ -738,24 +738,14 @@
 
                   </div>
                   <!-- ./ Map filters -->
-                  <div id="map" class="col-lg-12" style="border:1px solid #d5d5d5; padding: 5px; margin-left:10px;">
-                    <ng-map class="col-sm-7 social-map"  center="{{sm.mapCenter}}" fit-map>
-                      <marker icon="{
-                url:'../../assets/images/twitterMarker.png',
-                scaledSize:[40,40],
-                origin: [0,0],
-                anchor: [21,45]
-                }"
-                              id="{{post.postID}}" on-click="sm.showInfoWindow(event, post, sm.map, null, true)" ng-repeat="post in sm.searchResults.data" position="{{::post.geo[0]}}, {{::post.geo[1]}}"></marker>
-
-                      <custom-control id="clear" position="LEFT_TOP" index="1" on-click="sm.clearResults()" ng-if="sm.searchResults.data.length > 0">
-                        <button class="btn btn-primary" style="margin-right:10px; margin-left:10px;">CLEAR RESULTS</button>
-                      </custom-control>
-                      <div ng-class="sm.currentView.id == 'discover' ? 'jump-to-location-discover' : 'jump-to-location-monitor'">
-                        <input type="text" style="width:245px;" placeholder="Start typing a location..." class="form-control" places-auto-complete size=80 xxx-component-restrictions="{country:'us'}" types="{{types}}" on-place-changed="sm.placeChanged(place)">
+                  <div id="dashboardMap" class="col-lg-9" style="border:1px solid #d5d5d5; padding: 5px;">
+                    <ng-map class="col-sm-7 social-map"  center="{{dashboard.mapCenter}}" fit-map>
+                      <marker ng-if="deal.geo.lat && deal.geo.lng" icon="{{deal.geo.marker}}"
+                              id="{{deal.dealID}}" on-click="sm.showInfoWindow(event, deal, dashboard.map, null, true)" ng-repeat="deal in dashboard.salesData" position="{{::deal.geo.lat}}, {{::deal.geo.lng}}">
+                      </marker>
+                      <div class="jump-to-location-dashboard">
+                        <input type="text" style="width:245px;" placeholder="Start typing a location..." class="form-control" places-auto-complete size=80 xxx-component-restrictions="{country:'us'}" types="{{types}}" on-place-changed="dashboard.placeChanged(place)">
                       </div>
-
-
                     </ng-map>
                   </div>
                 </div>

@@ -22,33 +22,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.noLostDeals = null;
     _dashboard.noTotalDeals = null;
     _dashboard.kpis = [];
-    _dashboard.mapCenter = [39.628, -77.766];
-    NgMap.getMap().then(function (map) {
-      _dashboard.drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControl: true,
-        drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_CENTER,
-          drawingModes: [
-            google.maps.drawing.OverlayType.CIRCLE,
-          ]
-        },
-        circleOptions: {
-          fillColor: '#c6ccd7',
-          strokeColor: '#41577c',
-          strokeWeight: 2,
-          strokeOpacity: 0.8,
-          clickable: false,
-          editable: true,
-          zIndex: 1
-        }
-      });
 
-      _dashboard.drawingManager.setOptions({
-        drawingControl: false
-      });
-      _dashboard.drawingManager.setMap(map);
-      _dashboard.map = map;
-    });
 
     var resetDealFlags = function(){
       _dashboard.noWonDeals = null;
@@ -168,6 +142,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         console.log(sales);
         if (sales && sales.length > 0){
            _dashboard.emptyResults = false;
+          _dashboard.salesData = sales;
           _dashboard.wonDeals = Dashboard.won();
           _dashboard.lostDeals = Dashboard.lost();
           _dashboard.totalDeals = Dashboard.total();
@@ -175,6 +150,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           _dashboard.noWonDeals = _dashboard.wonDeals.tableData && _dashboard.wonDeals.tableData.length == 0;
           _dashboard.noLostDeals = _dashboard.lostDeals.tableData && _dashboard.lostDeals.tableData.length == 0;
           _dashboard.noTotalDeals = _dashboard.totalDeals.tableData && _dashboard.totalDeals.tableData.length == 0;
+          _dashboard.refreshMap(_dashboard.map, function(){
+            _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
+          });
         } else _dashboard.emptyResults = true;
         _dashboard.retreivingDeals = false;
       }).catch(function(err){
@@ -907,72 +885,102 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
      * Stats Display Mode
      * @type {string}
      */
-    _dashboard.chartView = 'chart';
+    _dashboard.chartView = 'map';
 
     /**
      * StatsMap & Options
      * @type {{}}
      */
-    _dashboard.statsMap = {};
-    _dashboard.chartMapOptions = {
-      zoom: 11,
-      center: new google.maps.LatLng(38.9072, -77.0369),
-      // Style for Google Maps
-      styles: [{
-        "featureType": "water",
-        "stylers": [{"saturation": 43}, {"lightness": -11}, {"hue": "#0088ff"}]
-      }, {
-        "featureType": "road",
-        "elementType": "geometry.fill",
-        "stylers": [{"hue": "#ff0000"}, {"saturation": -100}, {"lightness": 99}]
-      }, {
-        "featureType": "road",
-        "elementType": "geometry.stroke",
-        "stylers": [{"color": "#808080"}, {"lightness": 54}]
-      }, {
-        "featureType": "landscape.man_made",
-        "elementType": "geometry.fill",
-        "stylers": [{"color": "#ece2d9"}]
-      }, {
-        "featureType": "poi.park",
-        "elementType": "geometry.fill",
-        "stylers": [{"color": "#ccdca1"}]
-      }, {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [{"color": "#767676"}]
-      }, {
-        "featureType": "road",
-        "elementType": "labels.text.stroke",
-        "stylers": [{"color": "#ffffff"}]
-      }, {"featureType": "poi", "stylers": [{"visibility": "off"}]}, {
-        "featureType": "landscape.natural",
-        "elementType": "geometry.fill",
-        "stylers": [{"visibility": "on"}, {"color": "#b8cb93"}]
-      }, {"featureType": "poi.park", "stylers": [{"visibility": "on"}]}, {
-        "featureType": "poi.sports_complex",
-        "stylers": [{"visibility": "on"}]
-      }, {"featureType": "poi.medical", "stylers": [{"visibility": "on"}]}, {
-        "featureType": "poi.business",
-        "stylers": [{"visibility": "simplified"}]
-      }],
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
+    _dashboard.mapCenter = [39.628, -77.766];
+    NgMap.getMap().then(function (map) {
+      _dashboard.drawingManager = new google.maps.drawing.DrawingManager({
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [
+            google.maps.drawing.OverlayType.CIRCLE,
+          ]
+        },
+        circleOptions: {
+          fillColor: '#c6ccd7',
+          strokeColor: '#41577c',
+          strokeWeight: 2,
+          strokeOpacity: 0.8,
+          clickable: false,
+          editable: true,
+          zIndex: 1
+        }
+      });
+
+      _dashboard.drawingManager.setOptions({
+        drawingControl: false
+      });
+      _dashboard.drawingManager.setMap(map);
+      console.log('+++++++++++++++++++++++++++++++++++++++');
+      console.log('\n\n\n\n\n>> Map Initialized! \n\n\n\n');
+      console.log(map);
+      _dashboard.map = map;
+      console.log(_dashboard.map);
+      console.log('+++++++++++++++++++++++++++++++++++++++')
+      _dashboard.refreshMap(_dashboard.map);
+    });
 
     /**
      * Refresh Map on hide and show
      * @param map
      */
-    _dashboard.refreshMap = function (map) {
-      $scope.$applyAsync(function(map){
-        var m = map || _dashboard.statsMap;
+    _dashboard.refreshMap = function (map, callback) {
+      console.log('+++++++++++++++++++++++++++++++++++++++++');
+      console.log('\n\n\n\n REFRESH MAP OPERATION  \n\n\n\n');
+      console.log(map);
+      $scope.$applyAsync(function(){
+        var m = map ? map : _dashboard.map;
+        console.log(m);
         if (m) google.maps.event.trigger(m, 'resize');
-        console.log('*** Refresh Map ***');
+        console.log('\n\n\n\n>> Refreshing Map....');
+        $timeout(function(){
+          console.log('\n\n+++++++++ callbac +++++++++');
+          console.log(callback);
+          console.log('++++++++++++++++++++++++++++\n\n');
+          if (callback) callback();
+        }, 1000);
+
       })
     }
 
+    _dashboard.adjustZoom = function(data, map){
+      var bounds = new google.maps.LatLngBounds();
+      for (var i=0; i< data.length; i++) {
+        var deal = data[i]
+;        if (deal.geo && deal.geo.lat && deal.geo.lng){
+          var latlng = new google.maps.LatLng(deal.geo.lat , deal.geo.lng);
+          bounds.extend(latlng)
+          console.log(' *** extended ***');
+        };
+      }
+
+      map = map ? map : _dashboard.map;
+      console.log('\n\n BOUNDS \n\n');
+      console.log(bounds.getCenter());
+      console.log(' **************** ');
+      map.setCenter(bounds.getCenter());
+      map.fitBounds(bounds);
+      console.log('**** Zoom adjusted *****');
+    }
 
 
+    _dashboard.placeChanged = function() {
+      var pl = this.getPlace();
+      if (angular.isDefined(pl.geometry)){
+        if (pl.geometry.location) {
+          _dashboard.mapCenter[0] = pl.geometry.location.lat();
+          _dashboard.mapCenter[1] = pl.geometry.location.lng();
+          _dashboard.map.setZoom(12);
+        }
+      } else {
+        console.log("error on location select...");
+      }
+    };
 
 
     _dashboard.chatRecipient = {name: '', number: ''};

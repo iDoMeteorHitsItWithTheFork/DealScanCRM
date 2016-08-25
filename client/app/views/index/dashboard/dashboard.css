@@ -397,3 +397,99 @@ font-size:15px!important;
 #bdc-table table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, #bdc-table table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
   top: 15px!important;
 }
+
+.custom-marker {
+
+}
+
+div.wonDeal {
+  /*background-image: url("/assets/images/wonDealMarker.png");
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;*/
+}
+
+.custom-marker.wonDeal {
+  font-size: 1em;
+  padding: 15px;
+  background-image: url("/assets/images/wonDealMarker.png");
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+  height: 42px;
+}
+
+.custom-marker.wonDeal:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-left: -6px;
+  bottom: -6px;
+  left: 50%;
+}
+.custom-marker.wonDeal:before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-left: -6px;
+  bottom: -6px;
+  left: 50%;
+}
+
+
+.custom-marker.lostDeal {
+  font-size: 1em;
+  padding: 15px;
+  background-image: url("/assets/images/lostDealMarker.png");
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+  height: 42px;
+}
+
+.custom-marker.wonDeal:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-left: -6px;
+  bottom: -6px;
+  left: 50%;
+}
+
+.custom-marker.wonDeal:before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-left: -6px;
+  bottom: -6px;
+  left: 50%;
+}
+
+.jump-to-location-dashboard {
+  padding-left: 500px;
+  z-index: 1;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+

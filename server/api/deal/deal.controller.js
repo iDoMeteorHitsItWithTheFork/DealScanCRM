@@ -149,6 +149,7 @@ function translateStatus(status){
 }
 
 function formatDeals(deals){
+  //console.log(deals);
   var _deals = [];
   for(var i = 0; i < deals.length; i++){
     var deal = deals[i];
@@ -177,8 +178,8 @@ function formatDeals(deals){
       "dealershipID": deal.dealershipID,
       "dscDealID": deal.dscDealID,
       "geo": {
-        latitude: deal.Geo && deal.Geo.latitude ? deal.Geo.latitude : null,
-        longitude: deal.Geo && deal.Geo.longitude ? deal.Geo.longitude : null
+        lat: deal.Buyer.Geo && deal.Buyer.Geo.profile.latitude ? deal.Buyer.Geo.profile.latitude : null,
+        lng: deal.Buyer.Geo && deal.Buyer.Geo.profile.longitude ? deal.Buyer.Geo.profile.longitude : null
       }
     });
   }

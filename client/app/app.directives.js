@@ -563,10 +563,12 @@ function fitMap(){
       element.css("height", $(window).height() - 157 + "px");
       element.css("min-height", $(window).height() - 157 + "px");
       $("#map").css("height", $(window).height() - 157 + "px");
+      $("#dashboardMap").css("height", $(window).height() - 145 + "px");
       addEvent(window, "resize", function(event) {
         element.css("height", $(window).height() - 157 + "px");
         element.css("min-height", $(window).height() - 157 + "px");
         $("#map").css("height", $(window).height() - 157 + "px");
+        $("#dashboardMap").css("height", $(window).height() - 145 + "px");
       });
 
     }
