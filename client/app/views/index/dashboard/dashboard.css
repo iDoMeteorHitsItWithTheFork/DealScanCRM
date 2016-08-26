@@ -147,7 +147,7 @@ button:focus {
 .map-filter-category-list {
    list-style: none !important;
    padding: 0;
-   height: 267px;
+   /*height: 267px;*/
    overflow-y: auto;
 }
 .map-filter-second-level {
@@ -156,7 +156,7 @@ button:focus {
   margin-left: -20px;
   border-top: 1px solid #d5d5d5;
   overflow-y: auto;
-  height: 175px;
+  /*height: 175px;*/
 }
 .map-filter-second-level > li > div > label {
   font-weight: normal !important;

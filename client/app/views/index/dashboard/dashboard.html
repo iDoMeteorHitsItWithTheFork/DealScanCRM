@@ -566,7 +566,7 @@
                     </div>
                     <!-- Category -->
                     <ul side-navigation class="map-filter-category-list metismenu shadow-border">
-                      <li ng-class="{active : dashboard.mapFilters.Cars}">
+                      <li ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars')">
                         <div class="radio radio-success">
                           <input type="radio" name="categories" id="cars"
                                  ng-click="dashboard.displayCategory('Cars')" ng-model="dashboard.mapFilters.Cars"
@@ -622,7 +622,7 @@
                           </li>
                         </ul>
                       </li>
-                      <li ng-class="{active : dashboard.mapFilters.Trucks}">
+                      <li ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks')">
                         <div class="radio radio-success">
                           <input type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
                                  ng-click="dashboard.displayCategory('Trucks')" value="true">
@@ -667,7 +667,7 @@
                           </li>
                         </ul>
                       </li>
-                      <li ng-class="{active : dashboard.mapFilters.Utilities}">
+                      <li ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.displayCategory('Utilities')">
                         <div class="radio radio-success">
                           <input type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
                                  ng-click="dashboard.displayCategory('Utilities')" value="true">
@@ -712,7 +712,7 @@
                           </li>
                         </ul>
                       </li>
-                      <li ng-class="{active : dashboard.mapFilters.Vans}">
+                      <li ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.displayCategory('Vans')">
                         <div class="radio radio-success">
                           <input type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
                                  ng-click="dashboard.displayCategory('Vans')" value="true">
@@ -723,7 +723,7 @@
                             ng-click="dashboard.toggleSection('Vans')"></i></a>
                         </div>
                       </li>
-                      <li ng-class="{active : dashboard.mapFilters.Other}">
+                      <li ng-class="{active : dashboard.mapFilters.Other}" ng-click="dashboard.displayCategory('Others')">
                         <div class="radio radio-success">
                           <input type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
                                  ng-click="dashboard.displayCategory('Others')" value="true">

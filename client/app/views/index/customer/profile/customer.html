@@ -221,7 +221,7 @@
                         </a>
                       </div>
                       <div class="media-body">
-                        <h4 class="media-heading f-s-13 m-t-0">
+                        <h4 class="media-heading f-s-13 m-t-0 cursor-pointer" ng-click="customer.vehicleDetails(deal, 'Purchase')">
                           {{::deal.Purchase.profile.state | uppercase}}
                           {{::deal.Purchase.profile.year | uppercase}}
                           {{::deal.Purchase.profile.make | uppercase}}
@@ -244,12 +244,12 @@
                                 <small class="pull-right text-navy">{{::customer.timeAgo(deal.createdAt)}}</small>
                                 <div ng-if="deal.status == 'sold' || deal.status == 'delivered'">
                                   <strong >{{::deal.SaleRep.profile.name}}</strong> sold this {{::customer.displayClassification(deal.Purchase.profile.classification)}} to <strong>{{::customer.thisCustomer.profile.name}}</strong>.
-                                  <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} traded their <strong>{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
+                                  <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} traded their <strong class="cursor-pointer" ng-click="customer.vehicleDetails(deal, 'Trade');">{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
                                   <p class="m-t-5" ng-if="deal.Trades.length == 0"> There is no trades involved in this deal.</p>
                                 </div>
                                 <div ng-if="deal.status == 'working' || deal.status == 'pending'">
                                   <strong>{{::customer.thisCustomer.profile.name}}</strong> is working with <strong>{{::deal.SaleRep.profile.name}}</strong> to acquire this {{::customer.displayClassification(deal.Purchase.profile.classification)}}.
-                                  <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} is trading their <strong>{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
+                                  <p class="m-t-5" ng-if="deal.Trades.length > 0">{{customer.thisCustomer.profile.firstName}} is trading their <strong class="cursor-pointer" ng-click="customer.vehicleDetails(deal, 'Trade');">{{deal.Trades[0].profile.displayName}}</strong> with <strong>VIN# {{deal.Trades[0].profile.VIN}}</strong> for this deal.</p>
                                   <p class="m-t-5" ng-if="deal.Trades.length == 0"> There is no trades involved in this deal.</p>
                                 </div>
                                 <div class="">

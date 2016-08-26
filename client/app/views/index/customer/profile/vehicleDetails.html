@@ -1,0 +1,84 @@
+<div class="modal-header p-b-15">
+  <button type="button" class="close" ng-click="vehicle.ok()"><i class="fa fa-times fs-14"></i></button>
+  <h3 class="modal-title">{{vehicle.display}} Details</h3>
+</div>
+<div class="modal-body p-b-10">
+  <div class="row">
+    <div class="col-lg-12">
+
+      <div class="ibox product-detail">
+        <div class="ibox-content">
+
+          <div class="row">
+            <div class="col-md-5">
+
+
+              <slick dots="true">
+
+                <div>
+                  <div class="image-imitation">
+                    [IMAGE 1]
+                  </div>
+                </div>
+                <div>
+                  <div class="image-imitation">
+                    [IMAGE 2]
+                  </div>
+                </div>
+                <div>
+                  <div class="image-imitation">
+                    [IMAGE 3]
+                  </div>
+                </div>
+
+
+              </slick>
+
+            </div>
+            <div class="col-md-7">
+
+              <h2 class="font-bold m-b-xs">
+                {{vehicle.displayingInfo.name}}
+              </h2>
+              <small>This {{vehicle.display == 'Purchase' ? 'vehicle' : 'trade'}} was {{vehicle.display == 'Purchase' ? 'sold' : 'scanned in '}}
+                by <strong>{{vehicle.displayingInfo.salePerson.name}}</strong> on {{vehicle.displayingInfo.transactionDate}}</small>
+              <div class="m-t-md">
+                <h2 class="product-main-price">${{vehicle.displayingInfo.price}} <small class="text-muted"></small> </h2>
+              </div>
+              <hr>
+
+              <h4>Vehicle description</h4>
+
+              <div class="small text-muted">
+
+              </div>
+
+              <dl class="small m-t-md">
+                <dt>Description lists</dt>
+                <dd>A description list is perfect for defining terms.</dd>
+                <dt>Euismod</dt>
+                <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+                <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+                <dt>Malesuada porta</dt>
+                <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+              </dl>
+              <hr>
+            </div>
+          </div>
+
+        </div>
+        <div class="ibox-footer">
+                            <span class="pull-right">
+                                Full stock - <i class="fa fa-clock-o"></i> 14.04.2016 10:04 pm
+                            </span>
+          The generated Lorem Ipsum is therefore always free
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success btn-o" type="button" ng-click="vehicle.ok()">Okay</button>
+</div>
+

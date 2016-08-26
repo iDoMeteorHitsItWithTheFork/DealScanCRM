@@ -152,4 +152,37 @@ angular.module('dealScanCrmApp')
       })
     }
 
+
+    _customer.vehicleDetails = function (deal, display) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        size:' lg',
+        templateUrl: 'app/views/index/customer/profile/vehicleDetails.html',
+        controller: 'VehicleDetailCtrl as vehicle',
+        resolve: {
+          vehicle: function () {
+            return {deal: deal, display: display};
+          },
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                files: ['.styles/plugins/slick/slick.css','.styles/plugins/slick/slick-theme.css','.resources/plugins/slick/slick.min.js']
+              },
+              {
+                name: 'slick',
+                files: ['.resources/plugins/slick/angular-slick.min.js']
+              }
+            ])
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+
+      })
+    }
+
+
+
   });

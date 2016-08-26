@@ -97,7 +97,8 @@ export default function(sequelize, DataTypes) {
             'invoice': this.getDataValue('invoice'),
             'bodyStyle': this.getDataValue('bodyStyle'),
             'classification': this.getDataValue('classification'),
-            "trimLevel": this.getDataValue('trimLevel')
+            "trimLevel": this.getDataValue('trimLevel'),
+            'displayName': this.getDataValue('year')+' '+this.getDataValue('make')+' '+this.getDataValue('model')
           }
         },
 

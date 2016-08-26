@@ -153,11 +153,11 @@ export function index(req, res) {
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
         },
         {
           model: Trade,
-          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage', 'color', 'bodyStyle'],
         },
         {
           model: Financing,
@@ -239,11 +239,11 @@ export function show(req, res) {
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
         },
         {
           model: Trade,
-          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage', 'color', 'bodyStyle'],
         },
         {
           model: Financing,
@@ -313,7 +313,14 @@ export function getDocuments(req, res){
     include: [{
       model: Deal,
       where: {
-        status: 'won'
+          $or: [
+            {
+              status: 'delivered'
+            },
+            {
+              status: 'sold'
+            }
+          ]
       },
       include: [
         {
@@ -346,11 +353,11 @@ export function getDocuments(req, res){
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID', 'stockNumber', 'VIN', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'bodyStyle'],
+          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
         },
         {
           model: Trade,
-          attributes: ['tradeID', 'VIN','make', 'model', 'year','mileage','actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
+          attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage', 'color', 'bodyStyle'],
         },
         {
           model: Financing,
@@ -749,11 +756,11 @@ export function update(req, res) {
             {
               model: Vehicle,
               as: 'Purchase',
-              attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification'],
+              attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
             },
             {
               model: Trade,
-              attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage'],
+              attributes: ['tradeID', 'make', 'model', 'year', 'actualCashValue', 'payoffAmount', 'tradeAllowance', 'VIN', 'mileage', 'color', 'bodyStyle'],
             },
             {
               model: Financing,
