@@ -1,6 +1,6 @@
 'use strict';
 angular.module('dealScanCrmApp')
-  .controller('PdfViewerCtrl', function ($scope, $state, $stateParams, thisCustomer, toaster) {
+  .controller('PdfViewerCtrl', function ($scope, $state, $stateParams, $uibModal, thisCustomer, toaster) {
     var _viewer = this;
     console.log('PDFVIewer controller loaded');
     console.log('\n\n\ State Params \n\n\n');
@@ -26,6 +26,21 @@ angular.module('dealScanCrmApp')
 // Basic AcroForms input controls rendering
 //
 
+
+    _viewer.signDocument = function(){
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/views/index/customer/profile/tabs/documents/pdfViewer/signature.pad.html',
+        controller: 'SignatureCtrl as signature',
+        resolve: {
+          pdf: function(){
+            return _viewer.pdf;
+          }
+        }
+      });
+
+    }
 
     var formFields = {};
 

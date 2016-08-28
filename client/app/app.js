@@ -19,7 +19,8 @@ angular.module('dealScanCrmApp', [
   'toaster',                       //Non-blocking Notifications
   'frapontillo.bootstrap-switch',
   'flow',
-   'ngTagsInput'
+   'ngTagsInput',
+  'signature'
 ])
   .config(function ($urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('login');

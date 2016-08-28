@@ -39,8 +39,33 @@ angular.module('dealScanCrmApp')
      * add a note
      *
      * */
-    _note.addNote = function (noteForm) {
-      if (_note.addingNote) return;
+    _note.addNote = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/views/index/customer/profile/tabs/note/addNote.html',
+        controller: 'AddNoteCtrl as newNote',
+        resolve: {
+          customerID: function () {
+            return selectedCustomer.profile.customerID;
+          },
+          creatorID: function(){
+            return _note.user.userID;
+          },
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                serie: true,
+                name: 'angular-ladda',
+                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                  '.styles/plugins/ladda/ladda-themeless.min.css', '.resources/plugins/ladda/angular-ladda.min.js']
+              },
+            ])
+          }
+        }
+      });
+
+     /* if (_note.addingNote) return;
       _note.addingNote = true;
       Note.add(_note.newNote).then(function (newNote) {
         console.log(newNote);
@@ -53,8 +78,7 @@ angular.module('dealScanCrmApp')
       }).catch(function (err) {
         _note.addingNote = false;
         console.log(err);
-
-      });
+      });*/
     }
 
     /**

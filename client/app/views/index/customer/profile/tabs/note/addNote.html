@@ -5,21 +5,21 @@
 <div class="modal-body p-b-10">
   <div class="row">
     <div class="col-md-12">
-
-      <div class="col-md-12">
+      <form name="addNoteForm" role="form">
         <div class="form-group">
-          <textarea class="form-control" rows="8" placeholder="Note..." ng-model="newNote.note.content"></textarea>
+          <textarea class="form-control" rows="8" placeholder="Note..." ng-model="newNote.note.content"
+                    ng-required="true"></textarea>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
 <div class="modal-footer">
   <div class="col-md-12">
     <button class="btn btn-warning btn-o" type="button" ng-click="newNote.cancel()">Cancel</button>
-    <button class="btn btn-primary btn-o" type="button" ng-click="newNote.ok()">
-      <i class="fa fa-spin fa-spinner" ng-if="newNote.addingNote"></i>&nbsp;&nbsp;{{newNote.addingNote
-      ? 'Adding Note...' : 'Add Note'}}
+    <button ladda="newNote.addingNote" ng-disabled="addNoteForm.$pristine || !addNoteForm.$valid || newNote.addingNote"
+            class="ladda-button btn btn-primary btn-o" type="button" ng-click="newNote.ok()">
+      Save Note
     </button>
   </div>
 </div>

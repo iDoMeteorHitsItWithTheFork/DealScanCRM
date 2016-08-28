@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <h3 class="modal-title">Sign Document</h3>
+</div>
+<div class="modal-body">
+  <signature-pad accept="signature.accept" clear="signature.clear"  height="220" width="568"></signature-pad>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default pull-left" ng-click="signature.clear()">Clear signature</button>
+  <button class="btn btn-default" ng-click="signature.cancel()">Cancel</button>
+  <button class="btn btn-warning" ng-click="signature.done()">Apply Signature</button>
+</div>

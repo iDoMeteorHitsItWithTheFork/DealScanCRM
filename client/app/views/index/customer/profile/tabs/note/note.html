@@ -7,9 +7,16 @@
     </div>
 
     <div class="wrapper wrapper-content animated fadeInUp" ng-hide="note.processingNotes" style="padding-top: 20px;">
+
       <div class="row m-b-30" >
+
         <div class="col-xs-12">
-          <form name="addNoteForm" class="add-note-style">
+
+          <button ng-click="note.addNote()" class="pull-right btn btn-lg btn-success btn-circle" uib-tooltip="Add Note" tooltip-placement="bottom">
+            <i class="fa fa-plus"></i>
+          </button>
+
+          <!--<form name="addNoteForm" class="add-note-style">
             <div class="input-group">
               <input type="text" ng-model="note.newNote.content" ng-required="true" class="form-control input-sm"
                      name="search" placeholder="Add a note..." ng-disabled="note.addingNote">
@@ -19,9 +26,13 @@
                 </button>
               </div>
             </div>
-          </form>
+          </form>-->
+
+
         </div>
       </div>
+
+
       <ul class="notes">
         <li ng-repeat="n in note.customerNotes">
           <div>

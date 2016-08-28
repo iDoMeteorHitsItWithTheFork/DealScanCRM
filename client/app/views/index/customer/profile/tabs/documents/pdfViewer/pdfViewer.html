@@ -4,7 +4,7 @@
   </div>
   <div class="col-lg-8 text-center"><h5 class="ps-rl-tp-5">{{viewer.pdf.title | uppercase}}</h5></div>
   <div class="col-lg-2">
-    <button class="btn btn-danger btn-o btn-sm pull-right m-l-10 m-r-10">Sign Document</button>
+    <button class="btn btn-danger btn-o btn-sm pull-right m-l-10 m-r-10" ng-click="viewer.signDocument()">Sign Document</button>
   </div>
 </div>
 <object id="pdf_o" data="{{viewer.pdf.url}}" type="application/pdf" width="100%" height="100%">
