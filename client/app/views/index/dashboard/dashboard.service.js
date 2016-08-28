@@ -135,6 +135,8 @@ angular.module('dealScanCrmApp')
                 case 'total':
                   totalDeals();
             }
+
+
         }
 
         var _metrics = {};
@@ -408,7 +410,7 @@ angular.module('dealScanCrmApp')
         }
 
         function getModels(arr, category, status){
-           var models = [];
+           var models = [], _models = [];
            var sales = [];
            var sources = [];
            for(var i=0; i < arr.length; i++){
@@ -416,18 +418,20 @@ angular.module('dealScanCrmApp')
                if (sources.indexOf(arr[i].source) == -1 && arr[i].status == status) sources.push(arr[i].source);
                if (arr[i].category == category && arr[i].status == status && models.indexOf(arr[i].model) == -1){
                  models.push(arr[i].model);
+                 _models.push({name: arr[i].model, state: true});
                  sales.push(getModelSales(arr, arr[i].model, status));
                }
              } else {
                if (sources.indexOf(arr[i].source) == -1) sources.push(arr[i].source);
                if (arr[i].category == category  && models.indexOf(arr[i].model) == -1){
                  models.push(arr[i].model);
+                 _models.push({name: arr[i].model, state: true});
                  sales.push(getModelSales(arr, arr[i].model));
                }
              }
            }
           var rs = getCategoryCount(arr, category, status);
-          return {models: models, sales: sales, data: rs.count, pvr: rs.pvr, sources: sources};
+          return {models: models, map: _models,  sales: sales, data: rs.count, pvr: rs.pvr, sources: sources};
         }
 
         function getModelSales(arr, model, status){
@@ -696,6 +700,31 @@ angular.module('dealScanCrmApp')
             }
           ];
           _totalDeals.bar = barData;
+
+
+          var map = [
+            {
+              category: 'Cars',
+              models: cars.map
+            },
+            {
+              category: 'Trucks',
+              models: trucks.map
+            },
+            {
+              category: 'Utilities',
+              models: utilities.map
+            },
+            {
+              category: 'Vans',
+              models: vans.map
+            },
+            {
+              category: 'Other',
+              models: other.map
+            },
+          ]
+          _totalDeals.map = map;
           var tableData = [];
           angular.forEach(filteredData, function(value, key){
               tableData.push({
@@ -724,6 +753,50 @@ angular.module('dealScanCrmApp')
           return _totalDeals;
         }
 
+        function filterMap(category, status){
+            var _arr;
+            switch(category.toLowerCase()){
+              case 'cars':
+              case 'car':
+                _arr = _totalDeals.map[0].models;
+                break;
+              case 'trucks':
+              case 'truck':
+                _arr = _totalDeals.map[1].models;
+                break;
+              case 'utilities':
+              case 'utility':
+                _arr = _totalDeals.map[2].models;
+                break;
+              case 'Vans':
+              case 'van':
+                _arr = _totalDeals.map[3].models;
+                break;
+              case 'Other':
+              case 'other':
+                _arr = _totalDeals.map[4].models;
+                break;
+            }
+            var m = $filter('filter')(_arr, function(val, idx, arr){
+              return val.state
+            })
+            console.log('\n\n\n MODELS TO FILTER  \n\n\n');
+            console.log(m);
+            console.log('\n\n\n ======================== \n\n');
+            var filteredMapData = $filter('filter')(filteredData, function(val, idx, arr){
+              return val.category == category.toLowerCase() && Util.indexOfObject(m, 'name', val.model) != -1 && (status ? status == val.status : true);
+            });
+            console.log('\n\n\n MAP DATA FILTERED BY MODEL  \n\n\n');
+            console.log(filteredMapData);
+            console.log('\n\n\n +++++++++++++++++ \n\n\n');
+            return filteredMapData;
+        }
+
+        function getfilteredData(){
+          return filteredData;
+        }
+
+
         // Public API here
         return {
             filters: getFilters,
@@ -733,6 +806,8 @@ angular.module('dealScanCrmApp')
             won: wonDeals,
             lost: lostDeals,
             total: totalDeals,
-            filter: filterData
+            filter: filterData,
+            filterMap: filterMap,
+            sales: getfilteredData
         };
     });

@@ -306,12 +306,17 @@ function icheck($timeout) {
   return {
     restrict: 'A',
     require: 'ngModel',
-    link: function($scope, element, $attrs, ngModel) {
-      return $timeout(function() {
+    scope: {
+      onChecked: '&',
+      onToggle: '&',
+      onClick: '&'
+    },
+    link: function ($scope, element, $attrs, ngModel) {
+      return $timeout(function () {
         var value;
         value = $attrs['value'];
-
-        $scope.$watch($attrs['ngModel'], function(newValue){
+        $scope.$watch($attrs['ngModel'], function (newValue) {
+          console.log(' UPDATED....');
           $(element).iCheck('update');
         })
 
@@ -319,16 +324,34 @@ function icheck($timeout) {
           checkboxClass: 'icheckbox_square-green',
           radioClass: 'iradio_square-green'
 
-        }).on('ifChanged', function(event) {
+        }).on('ifChanged', function (event) {
           if ($(element).attr('type') === 'checkbox' && $attrs['ngModel']) {
-            $scope.$apply(function() {
+            $scope.$apply(function () {
               return ngModel.$setViewValue(event.target.checked);
             });
           }
           if ($(element).attr('type') === 'radio' && $attrs['ngModel']) {
-            return $scope.$apply(function() {
+            return $scope.$apply(function () {
               return ngModel.$setViewValue(value);
             });
+          }
+        }).on('ifChecked', function (event) {
+          if ($scope.onChecked){
+            $scope.$applyAsync(function () {
+              $scope.onChecked();
+            })
+          }
+        }).on('ifToggled', function (event) {
+          if ($scope.onToggle){
+            $scope.$applyAsync(function () {
+              $scope.onToggle();
+            })
+          }
+        }).on('ifClicked', function(event){
+          if ($scope.onClick){
+            $scope.$applyAsync(function () {
+              $scope.onClick();
+            })
           }
         });
       });

@@ -22,7 +22,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.noLostDeals = null;
     _dashboard.noTotalDeals = null;
     _dashboard.kpis = [];
-
+    var unfilteredMapData = [];
 
     var resetDealFlags = function(){
       _dashboard.noWonDeals = null;
@@ -420,38 +420,170 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         Dashboard.filter(status, sources);
         if (_dashboard.showBarChart) updateBarChart(status, _dashboard.displayingCategory);
         if (_dashboard.showTable) updateTableData(status, _dashboard.displayingCategory);
+        if (_dashboard.chartView == 'map') _dashboard.filterMapBy(_dashboard.displayingCategory);
         updateStats(status);
         console.log('*** Deals Filtered ***');
       }
     }
 
-    _dashboard.mapFilters = {Cars: false, Trucks: false, Utilities: false};
+    _dashboard.mapFilters = {Cars: false, Trucks: false, Utilities: false, Vans: false, Others: false};
     _dashboard.expandedSection = '';
 
     _dashboard.resetMapFilters = function(){
-      angular.forEach(_dashboard.mapFilters, function(value, key){
-        _dashboard.mapFilters[key] = false;
-      })
-      _dashboard.resetFiltersBtn = false;
+      $scope.$applyAsync(function(){
+        angular.forEach(_dashboard.mapFilters, function(value, key){
+          _dashboard.mapFilters[key] = false;
+        })
+        $('input[name="categories"]').iCheck('update');
+        _dashboard.salesData = Dashboard.sales();
+        _dashboard.resetFiltersBtn = false;
+        _dashboard.refreshMap(_dashboard.map, function(){
+          _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
+        });
+      });
     }
 
-    _dashboard.displayCategory = function(category){
-      console.log('called');
+    _dashboard.displayCategory = function(category, event){
+      if (event) event.stopPropagation();
+      console.log('****** DISPLAYING CATEGORY *******');
+      console.log(_dashboard.totalDeals);
       _dashboard.displayingCategory = category;
       _dashboard.expandSection = true;
       _dashboard.expandedSection = category;
-      _dashboard.resetFiltersBtn = _dashboard.mapFilters.Cars || _dashboard.mapFilters.Trucks || _dashboard.mapFilters.Utilities;
-      console.log('Cars: '+_dashboard.mapFilters.Cars);
-      console.log('Trucks: '+_dashboard.mapFilters.Trucks);
-      console.log('Utilities: '+_dashboard.mapFilters.Utilities);
-      console.log(_dashboard.resetFiltersBtn);
+      _dashboard.resetMapFilters();
+      _dashboard.mapFilters[category] = true;
+      _dashboard.resetFiltersBtn = true;
+      console.log(_dashboard.mapFilters);
     }
 
-    _dashboard.toggleSection  = function(section) {
+
+    _dashboard.filterMapBy  = function(category, toggle){
+        if (!category){
+          console.log('\n\n\ NO CATEGORY BEFORE  FILTER \n\n\n');
+          _dashboard.salesData = Dashboard.sales();
+          console.log(_dashboard.salesData);
+          _dashboard.refreshMap(_dashboard.map, function(){
+            _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
+          });
+          console.log('\n\n\n +++++++++++++ \n\n\n');
+          return;
+        }
+        switch(category.toLowerCase()){
+          case 'car':
+          case 'cars':
+            _dashboard.mapFilters.Cars = true;
+            _dashboard.resetFiltersBtn = true;
+            if (toggle) {
+              $timeout(function() {
+                console.log('Update View');
+                angular.forEach(_dashboard.mapFilters, function (value, key) {
+                  _dashboard.mapFilters[key] = false;
+                })
+                _dashboard.mapFilters.Cars = true;
+                $('input[name="categories"]').iCheck('update');
+                $('input#cars[name="categories"]').iCheck('check');
+              });
+            }
+            break;
+          case 'truck':
+          case 'trucks':
+            _dashboard.mapFilters.Trucks = true;
+            _dashboard.resetFiltersBtn = true;
+            if (toggle) {
+              $timeout(function () {
+                console.log('Update View');
+                angular.forEach(_dashboard.mapFilters, function (value, key) {
+                  _dashboard.mapFilters[key] = false;
+                })
+                _dashboard.mapFilters.Trucks = true;
+                $('input[name="categories"]').iCheck('update');
+                $('input#trucks[name="categories"]').iCheck('check');
+              });
+            }
+            break;
+          case 'utility':
+          case 'utilities':
+            _dashboard.mapFilters.Utilities = true;
+            _dashboard.resetFiltersBtn = true;
+            if (toggle) {
+              $timeout(function () {
+                console.log('Update View');
+                angular.forEach(_dashboard.mapFilters, function (value, key) {
+                  _dashboard.mapFilters[key] = false;
+                })
+                _dashboard.mapFilters.Utilities = true;
+                $('input[name="categories"]').iCheck('update');
+                $('input#utilities[name="categories"]').iCheck('check');
+              });
+            }
+            break;
+          case 'van':
+          case 'vans':
+            _dashboard.mapFilters.Vans = true;
+            _dashboard.resetFiltersBtn = true;
+            if (toggle) {
+              $timeout(function () {
+                console.log('Update View');
+                angular.forEach(_dashboard.mapFilters, function (value, key) {
+                  _dashboard.mapFilters[key] = false;
+                })
+                _dashboard.mapFilters.Vans = true;
+                $('input[name="categories"]').iCheck('update');
+                $('input#vans[name="categories"]').iCheck('check');
+              });
+            }
+            break;
+          case 'other':
+          case 'others':
+            _dashboard.mapFilters.Others = true;
+            _dashboard.resetFiltersBtn = true;
+            if (toggle) {
+              $timeout(function () {
+                console.log('Update View');
+                angular.forEach(_dashboard.mapFilters, function (value, key) {
+                  _dashboard.mapFilters[key] = false;
+                })
+                _dashboard.mapFilters.Others = true;
+                $('input[name="categories"]').iCheck('update');
+                $('input#others[name="categories"]').iCheck('check');
+              });
+            }
+            break;
+        }
+        console.log(_dashboard.mapFilters);
+      $scope.$applyAsync(function(){
+
+        console.log('\n\n\ BEFORE FILTER \n\n\n');
+        console.log(_dashboard.salesData);
+        console.log('\n\n\n +++++++++++++ \n\n\n');
+        console.log('\n\n\ AFTER FILTER \n\n\n');
+        _dashboard.salesData = Dashboard.filterMap(category);
+        console.log(_dashboard.salesData);
+        _dashboard.refreshMap(_dashboard.map, function(){
+          _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
+        });
+        console.log('\n\n\n +++++++++++++ \n\n\n');
+
+      })
+
+    }
+
+
+
+
+
+
+    _dashboard.toggleSection  = function(section, event) {
+      if(event) event.stopPropagation();
+      console.log('***** TOGGLING SECTION *******');
       if ((section == _dashboard.displayingCategory) && _dashboard.expandSection) {
         _dashboard.expandSection = false;
         _dashboard.expandedSection = '';
-      } else _dashboard.displayCategory(section);
+      } else {
+        _dashboard.displayingCategory = section;
+        _dashboard.expandSection = true;
+        _dashboard.expandedSection = section;
+      };
     }
 
     var updateStats = function(status){
@@ -504,7 +636,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           },
           sources: [
             {
-              id: 'walkIn',
+              id: 'Walk In',
               name: 'Walk In',
               state: true,
             },
@@ -542,7 +674,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           },
           sources: [
             {
-              id: 'walkIn',
+              id: 'Walk In',
               name: 'Walk In',
               state: true,
             },
@@ -581,7 +713,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           },
           sources: [
             {
-              id: 'walkIn',
+              id: 'Walk In',
               name: 'Walk In',
               state: true,
             },

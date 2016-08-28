@@ -197,7 +197,7 @@
                 </div>
                 <div ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length > 0 || dashboard.filtered[0].state">
                   <!-- won stats-->
-                  <div class="ibox float-e-margins no-material m-b-0">
+                  <div ng-if="dashboard.chartView == 'chart'" class="ibox float-e-margins no-material m-b-0">
                     <div class="ibox-title" style="border-top-width:1px;">
                       <div class="row">
                         <div class="col-lg-12 text-center">
@@ -299,7 +299,7 @@
                 </div>
                 <div ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length > 0 || dashboard.filtered[1].state">
                   <!-- lost stats-->
-                  <div class="ibox float-e-margins no-material m-b-0" >
+                  <div ng-if="dashboard.chartView == 'chart'" class="ibox float-e-margins no-material m-b-0" >
                     <div class="ibox-title" style="border-top-width:1px;">
                       <div class="row">
                         <div class="col-lg-12 text-center">
@@ -397,7 +397,7 @@
               <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-xs-12 col-sm-4 col-md-3': 'col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-0'"
                    ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart && dashboard.chartView == 'chart'">
                 <!-- total stats-->
-                <div class="ibox float-e-margins no-material m-b-0">
+                <div ng-if="dashboard.chartView == 'chart'" class="ibox float-e-margins no-material m-b-0">
                   <div class="ibox-title" style="border-top-width:1px;">
                     <div class="row">
                       <div class="col-lg-12 text-center">
@@ -521,225 +521,10 @@
 
               <!-- map view -->
               <div class="row clearfix">
-                <div class="col-lg-12 padding-right-30 pull-left animated fadeInRight "
+                <div class="row dashboard-map-container padding-right-30 pull-left animated fadeInRight "
                      ng-show="dashboard.chartView == 'map'">
-                  <!-- Map filters -->
-                  <div class="col-lg-3">
-
-                    <div class="ibox float-e-margins margin-bottom-0">
-                      <div class="ibox-title border-top-w-1 shadow-border">
-                        <h5>FILTERS</h5>
-                        <span ng-show="dashboard.resetFiltersBtn" class="label label-danger pull-right custom-label"
-                              ng-click="dashboard.resetMapFilters()">
-                        <i class="fa fa-times"></i>
-                        Reset
-                      </span>
-                      </div>
-
-                      <div class="ibox-content shadow-border padding-top-8 no-padding-bottom">
-                        <div class="map-filter-switch">
-                          <span>WON</span>
-                          <div class="switch">
-                            <div class="onoffswitch">
-                              <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="won">
-                              <label class="onoffswitch-label" for="won">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="map-filter-switch">
-                          <span>LOST</span>
-                          <div class="switch">
-                            <div class="onoffswitch">
-                              <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="lost">
-                              <label class="onoffswitch-label" for="lost">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Category -->
-                    <ul side-navigation class="map-filter-category-list metismenu shadow-border">
-                      <li ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars')">
-                        <div class="radio radio-success">
-                          <input type="radio" name="categories" id="cars"
-                                 ng-click="dashboard.displayCategory('Cars')" ng-model="dashboard.mapFilters.Cars"
-                                 value="true">
-                          <label for="cars"> CARS</label>
-                          <a href="#"><i
-                            ng-class="(dashboard.expandedSection == 'Cars') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                            class="pull-right margin-right-20 margin-top-4 light-gray"
-                            ng-click="dashboard.toggleSection('Cars')"></i></a>
-                        </div>
-                        <ul ng-class="{in: (dashboard.displayingCategory == 'Cars' && dashboard.expandSection)}"
-                            class="map-filter-second-level collapse">
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkOne">
-                                &nbsp;&nbsp;&nbsp;Focus
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkTwo">
-                                &nbsp;&nbsp;&nbsp;Fusion
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkThree">
-                                &nbsp;&nbsp;&nbsp;C-Max
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkFour">
-                                &nbsp;&nbsp;&nbsp;Fiesta </label></div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkFive">
-                                &nbsp;&nbsp;&nbsp;Tarus </label></div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkSix">
-                                &nbsp;&nbsp;&nbsp;Police Interceptor Sedan </label></div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkSeven">
-                                &nbsp;&nbsp;&nbsp;Mustang </label></div>
-                          </li>
-                        </ul>
-                      </li>
-                      <li ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks')">
-                        <div class="radio radio-success">
-                          <input type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
-                                 ng-click="dashboard.displayCategory('Trucks')" value="true">
-                          <label for="trucks"> TRUCKS</label>
-                          <a href="#"><i
-                            ng-class="(dashboard.expandedSection == 'Trucks') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                            class="pull-right margin-right-20 margin-top-4 light-gray"
-                            ng-click="dashboard.toggleSection('Trucks')"></i></a>
-                        </div>
-                        <ul ng-class="{in: (dashboard.displayingCategory == 'Trucks' && dashboard.expandSection)}"
-                            class="map-filter-second-level collapse">
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkEight">
-                                &nbsp;&nbsp;&nbsp;F-Series
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkNine">
-                                &nbsp;&nbsp;&nbsp;E-Series
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkTen">
-                                &nbsp;&nbsp;&nbsp;Transit
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkEleven">
-                                &nbsp;&nbsp;&nbsp;Transit Connect</label></div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkTwelve">
-                                &nbsp;&nbsp;&nbsp;Heavy Trucks </label></div>
-                          </li>
-                        </ul>
-                      </li>
-                      <li ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.displayCategory('Utilities')">
-                        <div class="radio radio-success">
-                          <input type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
-                                 ng-click="dashboard.displayCategory('Utilities')" value="true">
-                          <label for="utilities"> UTILITIES</label>
-                          <a href="#"><i
-                            ng-class="(dashboard.expandedSection == 'Utilities') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                            class="pull-right margin-right-20 margin-top-4 light-gray"
-                            ng-click="dashboard.toggleSection('Utilities')"></i></a>
-                        </div>
-                        <ul ng-class="{in: (dashboard.displayingCategory == 'Utilities' && dashboard.expandSection)}"
-                            class="map-filter-second-level collapse">
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkThirteen">
-                                &nbsp;&nbsp;&nbsp;Escape
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkFourteen">
-                                &nbsp;&nbsp;&nbsp;Edge
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label><input icheck type="checkbox" ng-model="main.checkFifteen">
-                                &nbsp;&nbsp;&nbsp;Flex
-                              </label>
-                            </div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkSixteen">
-                                &nbsp;&nbsp;&nbsp;Explorer </label></div>
-                          </li>
-                          <li>
-                            <div>
-                              <label> <input icheck type="checkbox" ng-model="main.checkSeventen">
-                                &nbsp;&nbsp;&nbsp;Expedition </label></div>
-                          </li>
-                        </ul>
-                      </li>
-                      <li ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.displayCategory('Vans')">
-                        <div class="radio radio-success">
-                          <input type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
-                                 ng-click="dashboard.displayCategory('Vans')" value="true">
-                          <label for="utilities"> VANS</label>
-                          <a href="#"><i
-                            ng-class="(dashboard.expandedSection == 'Vans') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                            class="pull-right margin-right-20 margin-top-4 light-gray"
-                            ng-click="dashboard.toggleSection('Vans')"></i></a>
-                        </div>
-                      </li>
-                      <li ng-class="{active : dashboard.mapFilters.Other}" ng-click="dashboard.displayCategory('Others')">
-                        <div class="radio radio-success">
-                          <input type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
-                                 ng-click="dashboard.displayCategory('Others')" value="true">
-                          <label for="utilities"> OTHERS</label>
-                          <a href="#"><i
-                            ng-class="(dashboard.expandedSection == 'Others') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
-                            class="pull-right margin-right-20 margin-top-4 light-gray"
-                            ng-click="dashboard.toggleSection('Others')"></i></a>
-                        </div>
-                      </li>
-                    </ul>
-
-                  </div>
-                  <!-- ./ Map filters -->
-                  <div id="dashboardMap" class="col-lg-9" style="border:1px solid #d5d5d5; padding: 5px;">
-                    <ng-map class="col-sm-7 social-map"  center="{{dashboard.mapCenter}}" fit-map>
+                  <div id="dashboardMap" class="col-lg-12 dashboard-map" style="border:1px solid #d5d5d5; padding: 5px;">
+                    <ng-map class="col-sm-9 deals-map"  center="{{dashboard.mapCenter}}" fit-map>
                       <marker ng-if="deal.geo.lat && deal.geo.lng" icon="{{deal.geo.marker}}"
                               id="{{deal.dealID}}" on-click="sm.showInfoWindow(event, deal, dashboard.map, null, true)" ng-repeat="deal in dashboard.salesData" position="{{::deal.geo.lat}}, {{::deal.geo.lng}}">
                       </marker>
@@ -747,6 +532,154 @@
                         <input type="text" style="width:245px;" placeholder="Start typing a location..." class="form-control" places-auto-complete size=80 xxx-component-restrictions="{country:'us'}" types="{{types}}" on-place-changed="dashboard.placeChanged(place)">
                       </div>
                     </ng-map>
+                    <!-- Map filters -->
+                    <div class="col-lg-2 dashboard-map-filters">
+                      <div class="ibox float-e-margins margin-bottom-0">
+                        <div class="ibox-title border-top-w-1 shadow-border">
+                          <h5>FILTERS</h5>
+                          <span ng-show="dashboard.resetFiltersBtn" class="label label-danger pull-right custom-label"
+                                ng-click="dashboard.resetMapFilters()">
+                        <i class="fa fa-times"></i>
+                        Reset
+                      </span>
+                        </div>
+
+                        <div class="ibox-content shadow-border padding-top-8 no-padding-bottom">
+                          <div class="map-filter-switch">
+                            <span>WON</span>
+                            <div class="switch">
+                              <div class="onoffswitch">
+                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="won">
+                                <label class="onoffswitch-label" for="won">
+                                  <span class="onoffswitch-inner"></span>
+                                  <span class="onoffswitch-switch"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="map-filter-switch">
+                            <span>LOST</span>
+                            <div class="switch">
+                              <div class="onoffswitch">
+                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="lost">
+                                <label class="onoffswitch-label" for="lost">
+                                  <span class="onoffswitch-inner"></span>
+                                  <span class="onoffswitch-switch"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Category -->
+                      <ul side-navigation class="map-filter-category-list metismenu shadow-border">
+                        <li ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars', $event)">
+                          <div class="iradio">
+                            <input icheck type="radio" name="categories" id="cars" ng-model="dashboard.mapFilters.Cars"
+                                   on-click="dashboard.displayCategory('Cars', $event)" on-checked="dashboard.filterMapBy('car')">
+                            <label for="cars"> CARS</label>
+                            <a class="pull-right" ng-click="dashboard.toggleSection('Cars', $event)"><i
+                              ng-class="(dashboard.expandedSection == 'Cars') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                              class="margin-right-20 margin-top-4 light-gray"></i></a>
+                          </div>
+                          <ul ng-class="{in: (dashboard.displayingCategory == 'Cars' && dashboard.expandSection)}"
+                              class="map-filter-second-level collapse">
+                            <li>
+                              <div ng-repeat="model in dashboard.totalDeals.map[0].models">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('car', true)">
+                                  &nbsp;&nbsp;&nbsp;{{model.name}}
+                                </label>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                        <li ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks', $event)">
+                          <div class="iradio">
+                            <input icheck type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
+                                   on-click="dashboard.displayCategory('Trucks', $event)" on-checked="dashboard.filterMapBy('truck')">
+                            <label for="trucks"> TRUCKS</label>
+                            <a class="pull-right" href="" ng-click="dashboard.toggleSection('Trucks', $event)"><i
+                              ng-class="(dashboard.expandedSection == 'Trucks') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                              class="margin-right-20 margin-top-4 light-gray"></i></a>
+                          </div>
+                          <ul ng-class="{in: (dashboard.displayingCategory == 'Trucks' && dashboard.expandSection)}"
+                              class="map-filter-second-level collapse">
+                            <li ng-repeat="model in dashboard.totalDeals.map[2].models">
+                              <div>
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('truck', true)">
+                                  &nbsp;&nbsp;&nbsp;{{model.name}}
+                                </label>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                        <li ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.toggleSection('Utilities', $event)">
+                          <div class="iradio">
+                            <input icheck type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
+                                   on-click="dashboard.displayCategory('Utilities', $event)" on-checked="dashboard.filterMapBy('utility')">
+                            <label for="utilities"> UTILITIES</label>
+                            <a class="pull-right" href="" ng-click="dashboard.toggleSection('Utilities', $event)"><i
+                              ng-class="(dashboard.expandedSection == 'Utilities') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                              class="pull-right margin-right-20 margin-top-4 light-gray"></i></a>
+                          </div>
+                          <ul ng-class="{in: (dashboard.displayingCategory == 'Utilities' && dashboard.expandSection)}"
+                              class="map-filter-second-level collapse">
+                            <li ng-repeat="model in dashboard.totalDeals.map[2].models">
+                              <div>
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('utility', true)">
+                                  &nbsp;&nbsp;&nbsp;{{model.name}}
+                                </label>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                        <li ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.toggleSection('Vans', $event)">
+                          <div class="iradio">
+                            <input icheck type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
+                                   on-click="dashboard.displayCategory('Vans', $event)" on-checked="dashboard.filterMapBy('van')">
+                            <label for="vans"> VANS</label>
+                            <a href="" class="pull-right" ng-click="dashboard.toggleSection('Vans', $event)"><i
+                              ng-class="(dashboard.expandedSection == 'Vans') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                              class="margin-right-20 margin-top-4 light-gray"
+                            ></i></a>
+                          </div>
+                          <ul ng-class="{in: (dashboard.displayingCategory == 'Vans' && dashboard.expandSection)}"
+                              class="map-filter-second-level collapse">
+                            <li>
+                              <div ng-repeat="model in dashboard.totalDeals.map[3].models">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('van', true)">
+                                  &nbsp;&nbsp;&nbsp;{{model.name}}
+                                </label>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                        <li ng-class="{active : dashboard.mapFilters.Others}" ng-click="dashboard.toggleSection('Others', $event)">
+                          <div class="iradio">
+                            <input icheck type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
+                                   on-click="dashboard.displayCategory('Others', $event)" on-checked="dashboard.filterMapBy('other')">
+                            <label for="others"> OTHERS</label>
+                            <a href="" class="pull-right" ng-click="dashboard.toggleSection('Others', $event)"><i
+                              ng-class="(dashboard.expandedSection == 'Others') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
+                              class="margin-right-20 margin-top-4 light-gray"
+                            ></i></a>
+                          </div>
+                          <ul ng-class="{in: (dashboard.displayingCategory == 'Others' && dashboard.expandSection)}"
+                              class="map-filter-second-level collapse">
+                            <li>
+                              <div ng-repeat="model in dashboard.totalDeals.map[4].models">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('other', true)">
+                                  &nbsp;&nbsp;&nbsp;{{model.name}}
+                                </label>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+
+                    </div>
+                    <!-- ./ Map filters -->
                   </div>
                 </div>
               </div>
@@ -831,13 +764,13 @@
       <!-- tasks & active users -->
       <div class="row">
         <!-- active users -->
-        <div class="col-lg-5">
+        <div class="col-lg-4">
           <div class="ibox float-e-margins">
             <div class="ibox-title">
               <h5>Active Users</h5>
               <div ibox-tools></div>
             </div>
-            <div class="ibox-content" style="height:365px !important;">
+            <div class="ibox-content" style="height:458px !important;">
               <div>
                 <div class="feed-activity-list">
                   <div class="feed-element">
@@ -897,10 +830,20 @@
 
             </div>
           </div>
-          <div class="ibox">
+        </div>
+        <!-- ./active users -->
+
+        <!-- Tasks -->
+        <div class="col-lg-8">
+          <div class="ibox float-e-margins">
             <div class="ibox-title">
-              <h5>Tasks</h5>
+              <h5>Recent Activities</h5>
               <div ibox-tools></div>
+            </div>
+            <div class="ibox-content ibox-heading">
+              <h3>You have meeting today!</h3>
+              <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
+              </small>
             </div>
             <div class="ibox-content" style="height:365px !important;">
               <ul class="todo-list m-t small-list">
@@ -940,249 +883,14 @@
             </div>
           </div>
         </div>
-        <!-- ./active users -->
-
-        <!-- Tasks -->
-        <div class="col-lg-7">
-          <div class="ibox float-e-margins">
-            <div class="ibox-title">
-              <h5>Recent Activities</h5>
-              <div ibox-tools></div>
-            </div>
-            <div class="ibox-content ibox-heading">
-              <h3>You have meeting today!</h3>
-              <small><i class="fa fa-map-marker"></i> Meeting is on 6:00am. Check your schedule to see detail.
-              </small>
-            </div>
-            <div class="ibox-content inspinia-timeline"
-                 style="height: 710px; overflow-y:scroll; padding-bottom:20px;">
-
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-briefcase"></i>
-                    6:00 am
-                    <br/>
-                    <small class="text-navy">2 hour ago</small>
-                  </div>
-                  <div class="col-xs-9 content no-top-border">
-                    <p class="m-b-xs"><strong>Meeting</strong></p>
-
-                    <p>Conference on the sales results for the previous year. Monica please examine sales
-                      trends in marketing and products. Below please find the current status of the
-                      sale.</p>
-
-                    <p>
-                      <bar-chart data="main.BarChart2.data" options="main.BarChart2.options"></bar-chart>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-file-text"></i>
-                    7:00 am
-                    <br/>
-                    <small class="text-navy">3 hour ago</small>
-                  </div>
-                  <div class="col-xs-9 content">
-                    <p class="m-b-xs"><strong>Send documents to Mike</strong></p>
-
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                      Ipsum has been the industry's standard dummy text ever since.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-coffee"></i>
-                    8:00 am
-                    <br/>
-                  </div>
-                  <div class="col-xs-9 content">
-                    <p class="m-b-xs"><strong>Coffee Break</strong></p>
-
-                    <p>
-                      Go to shop and find some products.
-                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                      Ipsum has been the industry's.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-phone"></i>
-                    11:00 am
-                    <br/>
-                    <small class="text-navy">21 hour ago</small>
-                  </div>
-                  <div class="col-xs-9 content">
-                    <p class="m-b-xs"><strong>Phone with Jeronimo</strong></p>
-
-                    <p>
-                      Lorem Ipsum has been the industry's standard dummy text ever since.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-user-md"></i>
-                    09:00 pm
-                    <br/>
-                    <small>21 hour ago</small>
-                  </div>
-                  <div class="col-xs-9 content">
-                    <p class="m-b-xs"><strong>Go to the doctor dr Smith</strong></p>
-
-                    <p>
-                      Find some issue and go to doctor.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-user-md"></i>
-                    11:10 pm
-                  </div>
-                  <div class="col-xs-9 content">
-                    <p class="m-b-xs"><strong>Chat with Sandra</strong></p>
-
-                    <p>
-                      Lorem Ipsum has been the industry's standard dummy text ever since.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="row">
-                  <div class="col-xs-3 date">
-                    <i class="fa fa-comments"></i>
-                    12:50 pm
-                    <br/>
-                    <small class="text-navy">48 hour ago</small>
-                  </div>
-                  <div class="col-xs-9 content">
-                    <p class="m-b-xs"><strong>Chat with Monica and Sandra</strong></p>
-
-                    <p>
-                      Web sites still in their infancy. Various versions have evolved over the years,
-                      sometimes by accident, sometimes on purpose (injected humour and the like).
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-
-        </div>
         <!-- ./Tasks -->
 
       </div>
       <!-- ./tasks & active users -->
 
-
-      <!-- social media -->
-      <div class="row" style="display:none;">
-        <div class="col-lg-12">
-
-          <!--<div class="ibox float-e-margins">-->
-            <!--<div class="ibox-title">-->
-              <!--<h5>Social Media</h5>-->
-              <!--<div ibox-tools></div>-->
-            <!--</div>-->
-            <!--<div class="ibox-content" style="height:365px !important;">-->
-
-              <!--<div class="row">-->
-                <!--<div class="col-lg-6">-->
-                  <!--<table class="table table-hover margin bottom">-->
-                    <!--<thead>-->
-                    <!--<tr>-->
-                      <!--<th style="width: 1%" class="text-center">No.</th>-->
-                      <!--<th>Transaction</th>-->
-                      <!--<th class="text-center">Date</th>-->
-                      <!--<th class="text-center">Amount</th>-->
-                    <!--</tr>-->
-                    <!--</thead>-->
-                    <!--<tbody>-->
-                    <!--<tr>-->
-                      <!--<td class="text-center">1</td>-->
-                      <!--<td> Security doors-->
-                        <!--</small></td>-->
-                      <!--<td class="text-center small">16 Jun 2014</td>-->
-                      <!--<td class="text-center"><span class="label label-primary">$483.00</span>-->
-                      <!--</td>-->
-
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td class="text-center">2</td>-->
-                      <!--<td> Wardrobes-->
-                      <!--</td>-->
-                      <!--<td class="text-center small">10 Jun 2014</td>-->
-                      <!--<td class="text-center"><span class="label label-primary">$327.00</span>-->
-                      <!--</td>-->
-
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td class="text-center">3</td>-->
-                      <!--<td> Set of tools-->
-                      <!--</td>-->
-                      <!--<td class="text-center small">12 Jun 2014</td>-->
-                      <!--<td class="text-center"><span class="label label-warning">$125.00</span>-->
-                      <!--</td>-->
-
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td class="text-center">4</td>-->
-                      <!--<td> Panoramic pictures</td>-->
-                      <!--<td class="text-center small">22 Jun 2013</td>-->
-                      <!--<td class="text-center"><span class="label label-primary">$344.00</span>-->
-                      <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td class="text-center">5</td>-->
-                      <!--<td>Phones</td>-->
-                      <!--<td class="text-center small">24 Jun 2013</td>-->
-                      <!--<td class="text-center"><span class="label label-primary">$235.00</span>-->
-                      <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td class="text-center">6</td>-->
-                      <!--<td>Monitors</td>-->
-                      <!--<td class="text-center small">26 Jun 2013</td>-->
-                      <!--<td class="text-center"><span class="label label-primary">$100.00</span>-->
-                      <!--</td>-->
-                    <!--</tr>-->
-                    <!--</tbody>-->
-                  <!--</table>-->
-                <!--</div>-->
-                <!--<div class="col-lg-6" ng-controller="dashboardMap as map">-->
-                  <!--<div vector-map style="height: 300px;" my-map-data="map.data"></div>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-        </div>
-      </div>
-      <!-- ./social media -->
     </div>
     <!-- ./ Left section -->
 
-
-    <!-- Right section -->
-    <div class="col-lg-4">
-
-    </div>
-    <!-- ./Right section -->
 
   </div>
   <!-- ./Bottom section -->
