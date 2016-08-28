@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('VehicleDetailCtrl', function ($scope, $uibModalInstance, vehicle) {
+  .controller('VehicleDetailCtrl', function ($scope, $uibModalInstance, Util, vehicle, customer) {
 
      var _vehicle = this;
      _vehicle.display = vehicle.display;
@@ -18,8 +18,12 @@ angular.module('dealScanCrmApp')
        price: vehicle.display == 'Purchase' ? vehicle.deal.salePrice : vehicle.deal.Trades[0].payoffAmount,
        salePerson: vehicle.deal.SaleRep.profile,
        transactionDate: moment(vehicle.deal.createdAt).format('ddd MM.DD.YYYY'),
-       color: '',
-       vin: '',
+       details: vehicle.display == 'Purchase' ? vehicle.deal.Purchase.profile :  vehicle.deal.Trades[0].profile,
+       buyer: customer,
+       deal: vehicle.deal,
+       date: moment(vehicle.deal.createdAt).format('MM/DD/YYYY'),
+       vehiclePhoto: vehicle.display == 'Purchase' ? vehicle.deal.vehiclePhoto : Util.dummyPhotos(vehicle.deal.Trades[0].model),
+       createdAt: moment(vehicle.deal.createdAt).format('DD.MM.YYYY hh:mm a'),
      }
 
 

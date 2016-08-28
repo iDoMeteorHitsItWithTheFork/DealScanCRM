@@ -11,29 +11,13 @@
 
           <div class="row">
             <div class="col-md-5">
-
-
               <slick dots="true">
-
                 <div>
-                  <div class="image-imitation">
-                    [IMAGE 1]
+                  <div class="ibox-content ">
+                    <img class="vehicle-img" ng-src="{{vehicle.displayingInfo.vehiclePhoto}}">
                   </div>
                 </div>
-                <div>
-                  <div class="image-imitation">
-                    [IMAGE 2]
-                  </div>
-                </div>
-                <div>
-                  <div class="image-imitation">
-                    [IMAGE 3]
-                  </div>
-                </div>
-
-
               </slick>
-
             </div>
             <div class="col-md-7">
 
@@ -47,31 +31,69 @@
               </div>
               <hr>
 
-              <h4>Vehicle description</h4>
-
+              <h4>Vehicle Description</h4>
               <div class="small text-muted">
+
 
               </div>
 
-              <dl class="small m-t-md">
-                <dt>Description lists</dt>
-                <dd>A description list is perfect for defining terms.</dd>
-                <dt>Euismod</dt>
-                <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
-                <dd>Donec id elit non mi porta gravida at eget metus.</dd>
-                <dt>Malesuada porta</dt>
-                <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+              <dl class="dl-horizontal m-t-md small">
+                <dt>VIN #</dt>
+                <dd>{{vehicle.displayingInfo.details.VIN}}</dd>
+                <dt>Stock Number</dt>
+                <dd>{{vehicle.displayingInfo.details.stockNumber}}</dd>
+                <dt>Body Style</dt>
+                <dd>{{vehicle.displayingInfo.details.bodyStyle}}</dd>
+                <dt>Classification</dt>
+                <dd>{{vehicle.displayingInfo.details.classification}}</dd>
+                <dt>Color</dt>
+                <dd>{{vehicle.displayingInfo.details.color}}</dd>
+                <dt ng-if="vehicle.display == 'Purchase'">Invoice</dt>
+                <dd ng-if="vehicle.display == 'Purchase'">{{vehicle.displayingInfo.details.invoice}}</dd>
+                <dt ng-if="vehicle.display == 'Trade'">Trade Allowance</dt>
+                <dd ng-if="vehicle.display == 'Trade'">{{vehicle.displayingInfo.details.tradeAllowance}}</dd>
+                <dt ng-if="vehicle.display == 'Trade'">ACV</dt>
+                <dd ng-if="vehicle.display == 'Trade'">{{vehicle.displayingInfo.details.actualCashValue}}</dd>
+                <dt>State</dt>
+                <dd>{{vehicle.displayingInfo.details.state}}</dd>
+                <dt>Year</dt>
+                <dd>{{vehicle.displayingInfo.details.year}}</dd>
+                <dt>Make</dt>
+                <dd>{{vehicle.displayingInfo.details.make}}</dd>
+                <dt>Model</dt>
+                <dd>{{vehicle.displayingInfo.details.model}}</dd>
+                <dt>Trim Level</dt>
+                <dd>{{vehicle.displayingInfo.details.trimLevel}}</dd>
+                <dt>Mileage</dt>
+                <dd>{{vehicle.displayingInfo.details.mileage}}</dd>
               </dl>
+
+              <dl class="dl-horizontal m-t-md small">
+                <dt>Sales Person</dt>
+                <dd>{{vehicle.displayingInfo.salePerson.name}}</dd>
+                <dt>Customer</dt>
+                <dd>{{vehicle.displayingInfo.buyer.profile.name}}</dd>
+                <dt>Date</dt>
+                <dd>{{vehicle.displayingInfo.date}}</dd>
+              </dl>
+
+
+              <div class="text-right">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-sm"><i class="fa fa-comments-o">&nbsp;</i> Chat with Customer </button>
+                  <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Email Customer </button>
+                </div>
+              </div>
               <hr>
             </div>
           </div>
 
         </div>
         <div class="ibox-footer">
-                            <span class="pull-right">
-                                Full stock - <i class="fa fa-clock-o"></i> 14.04.2016 10:04 pm
-                            </span>
-          The generated Lorem Ipsum is therefore always free
+           <span class="pull-right">
+                Scanned on - <i class="fa fa-clock-o"></i> {{vehicle.displayingInfo.createdAt}}
+          </span>
+          This information was retrieved from DealScan &trade; Desking Suite
         </div>
       </div>
 
@@ -79,6 +101,6 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-success btn-o" type="button" ng-click="vehicle.ok()">Okay</button>
+  <button class="btn btn-warning btn-o" type="button" ng-click="vehicle.ok()">Close Details</button>
 </div>
 

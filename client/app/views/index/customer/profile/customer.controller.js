@@ -164,6 +164,9 @@ angular.module('dealScanCrmApp')
           vehicle: function () {
             return {deal: deal, display: display};
           },
+          customer: function(){
+            return _customer.thisCustomer;
+          },
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
               {

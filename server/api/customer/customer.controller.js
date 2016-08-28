@@ -153,7 +153,7 @@ export function index(req, res) {
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
+          attributes: ['vehicleID', 'VIN', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
         },
         {
           model: Trade,
@@ -239,7 +239,7 @@ export function show(req, res) {
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
+          attributes: ['vehicleID','VIN', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
         },
         {
           model: Trade,
@@ -353,7 +353,7 @@ export function getDocuments(req, res){
         {
           model: Vehicle,
           as: 'Purchase',
-          attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
+          attributes: ['vehicleID', 'VIN','make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
         },
         {
           model: Trade,
@@ -756,7 +756,7 @@ export function update(req, res) {
             {
               model: Vehicle,
               as: 'Purchase',
-              attributes: ['vehicleID', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
+              attributes: ['vehicleID', 'VIN', 'make', 'model', 'year', 'invoice', 'trimLevel', 'state', 'classification', 'mileage', 'stockNumber', 'retailValue', 'color', 'bodyStyle', 'trimLevel'],
             },
             {
               model: Trade,

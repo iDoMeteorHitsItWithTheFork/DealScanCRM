@@ -628,3 +628,9 @@ ul.experiences li:last-child:before {
 .m-t-ng-5 {
   margin-top: -5px !important;
 }
+
+.vehicle-img {
+  margin-left: -133px;
+  width: 515px;
+  height: 341px;
+}
