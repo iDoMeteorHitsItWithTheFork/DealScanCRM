@@ -128,7 +128,8 @@ angular.module('dealScanCrmApp')
     }
 
     _documents.openPDFViewer = function (doc) {
-      $state.go('index.customer.profile.documents.pdfViewer', {id: doc.id, url: doc.url});
+      console.log(doc);
+      $state.go('index.customer.profile.documents.pdfViewer', {id: doc.id, url: doc.url, name: doc.name});
     }
 
   });

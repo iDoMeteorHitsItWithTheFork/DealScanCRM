@@ -96,7 +96,7 @@ angular.module('dealScanCrmApp')
         data: {pageTitle: 'Customer Documents'},
       })
       .state('index.customer.profile.documents.pdfViewer', {
-        url: '/:id/:url',
+        url: '/:id/:name/:url',
         title: 'PDF Viewer',
         authenticate: true,
         templateUrl: 'app/views/index/customer/profile/tabs/documents/pdfViewer/pdfViewer.html',

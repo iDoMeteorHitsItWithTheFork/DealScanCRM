@@ -9,7 +9,8 @@ angular.module('dealScanCrmApp')
 
     _viewer.pdf = {
       id: $stateParams.id,
-      url: $stateParams.url
+      url: $stateParams.url,
+      title: $stateParams.name
     }
 
     PDFJS.workerSrc = 'client/bower_components/pdf.js.forms/build/pdf.combined.js';

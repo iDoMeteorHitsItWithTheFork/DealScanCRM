@@ -7,9 +7,27 @@
       <li ui-sref="index.customer" class="cursor-pointer">
         <a>Customers</a>
       </li>
-      <li class="active">
-        <strong>Profile</strong>
+      <li ui-sref="index.customer.profile"  ng-class="{'active': $state.is('index.customer.profile')}">
+        <strong ng-if="$state.is('index.customer.profile')">Profile</strong>
+        <a ng-if="!$state.is('index.customer.profile')">Profile</a>
       </li>
+      <li ui-sref="index.customer.profile.documents" ng-if="$state.includes('index.customer.profile.documents')" ng-class="{'active': $state.is('index.customer.profile.documents')}">
+        <strong ng-if="$state.is('index.customer.profile.documents')">Documents</strong>
+        <a ng-if="$state.is('index.customer.profile.documents.pdfViewer')">Documents</a>
+      </li>
+      <li ng-if="$state.is('index.customer.profile.documents.pdfViewer')" ng-class="{'active': $state.is('index.customer.profile.documents.pdfViewer')}">
+        <strong>Digital Docs</strong>
+      </li>
+      <li ng-if="$state.is('index.customer.profile.messages')" ng-class="{'active': $state.is('index.customer.profile.messages')}">
+        <strong>Messages</strong>
+      </li>
+      <li ng-if="$state.is('index.customer.profile.notes')" ng-class="{'active': $state.is('index.customer.profile.notes')}">
+        <strong>Notes</strong>
+      </li>
+      <li ng-if="$state.is('index.customer.profile.tasks')" ng-class="{'active': $state.is('index.customer.profile.tasks')}">
+        <strong>Tasks</strong>
+      </li>
+
     </ol>
   </div>
   <!-- ./ breadcrumbs -->

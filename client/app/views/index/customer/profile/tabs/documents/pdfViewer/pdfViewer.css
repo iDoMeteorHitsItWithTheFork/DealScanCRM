@@ -4,3 +4,25 @@
 .inputControl { background: transparent; border: 0px none; position: absolute; margin: auto; }
 .inputControl[type='checkbox'] { margin: 0px; }
 .inputHint { opacity: 0.2; background: #ccc; position: absolute; }
+
+.p-t-15 {
+ padding-top:15px !important;
+}
+.p-r-15 {
+  padding-right: 15px !important;
+}
+.p-l-15 {
+ padding-left: 15px !important;
+}
+
+.m-b-20 {
+  margin-bottom: 20px !important;
+}
+.m-r-10 {
+  margin-right: 10px !important;
+}
+.ps-rl-tp-5 {
+  position: relative;
+  top: 4px;
+  font-size: 15px !important;
+}

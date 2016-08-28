@@ -10,18 +10,24 @@
       <div class="ibox float-e-margins">
         <div class="ibox-content">
           <div class="file-manager">
-            <!--<div class="hr-line-dashed"></div>-->
+            <h5>SHOW:</h5>
+            <a href="#" class="file-control active">All</a>
+            <a href="#" class="file-control">Documents</a>
+            <a href="#" class="file-control">Images</a>
+            <div class="hr-line-dashed"></div>
             <button class="btn btn-primary btn-block" flow-btn flow-init="documents.uploadOptions"
                     flow-files-submitted="$flow.upload()"
                     flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1,doc:1,docx:1,pdf:1,xls:1,xlsx:1,ppt:1,pptx:1,txt:1}[$file.getExtension()]"
                     flow-file-success="documents.updateDocLibrary($file)">Upload Files
             </button>
             <div class="hr-line-dashed"></div>
-            <h5>Document Checklist</h5>
+            <h5>PURCHASE FOLDERS</h5>
             <ul class="folder-list" style="padding: 0">
-              <li ng-repeat="doc in documents.docs" ng-hide="!doc.requested"><a href=""><i class="fa"
-                                                                                           ng-class="doc.status ? 'fa-check text-crm-green' : 'fa-close text-crm-red'"></i>
-                {{doc.name}}</a></li>
+              <li ng-repeat="doc in documents.docs" ng-hide="!doc.requested">
+                <a><i class="fa fa-folder">&nbsp;</i>{{doc.name}}
+                  <i class="pull-right fa" ng-class="doc.status ? 'fa-check text-crm-green' : 'fa-close text-crm-red'"></i>
+                </a>
+              </li>
             </ul>
             <div class="clearfix"></div>
           </div>

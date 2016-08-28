@@ -1,4 +1,12 @@
-<button class="btn btn-block btn-danger" ng-click="viewer.getPDFContent()">Get Contents</button>
+<div class="row m-b-20 p-l-15 p-r-15 p-t-15">
+  <div class="col-lg-2">
+    <a ui-sref="index.customer.profile.documents" class="btn btn-white btn-o btn-sm pull-left m-l-10 m-r-10"><i class="fa fa-reply">&nbsp;</i>Back</a>
+  </div>
+  <div class="col-lg-8 text-center"><h5 class="ps-rl-tp-5">{{viewer.pdf.title | uppercase}}</h5></div>
+  <div class="col-lg-2">
+    <button class="btn btn-danger btn-o btn-sm pull-right m-l-10 m-r-10">Sign Document</button>
+  </div>
+</div>
 <object id="pdf_o" data="{{viewer.pdf.url}}" type="application/pdf" width="100%" height="100%">
   <iframe id="pdf_i" src="{{viewer.pdf.url}}" width="100%" height="100%" style="border: none;">
     This browser does not support PDFs. Please download the PDF to view it: <a href="{{viewer.pdf.url}}">Download PDF</a>
