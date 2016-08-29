@@ -22,7 +22,7 @@
             <div class="col-md-7">
 
               <h2 class="font-bold m-b-xs">
-                {{vehicle.displayingInfo.name}}
+                {{vehicle.displayingInfo.name | uppercase}}
               </h2>
               <small>This {{vehicle.display == 'Purchase' ? 'vehicle' : 'trade'}} was {{vehicle.display == 'Purchase' ? 'sold' : 'scanned in '}}
                 by <strong>{{vehicle.displayingInfo.salePerson.name}}</strong> on {{vehicle.displayingInfo.transactionDate}}</small>
@@ -80,8 +80,8 @@
 
               <div class="text-right">
                 <div class="btn-group">
-                  <button class="btn btn-white btn-sm"><i class="fa fa-comments-o">&nbsp;</i> Chat with Customer </button>
-                  <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Email Customer </button>
+                  <button class="btn btn-white btn-sm" ng-click="vehicle.textCustomer();"><i class="fa fa-comments-o">&nbsp;</i> Chat with Customer </button>
+                  <button class="btn btn-white btn-sm" ng-click="vehicle.emailCustomer();"><i class="fa fa-envelope"></i> Email Customer </button>
                 </div>
               </div>
               <hr>

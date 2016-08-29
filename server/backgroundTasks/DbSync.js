@@ -168,7 +168,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(today){
-  if (!today) today = moment().startOf('day'); //moment().startOf('month').startOf('day');
+  if (!today) today = moment().subtract(7, 'days').startOf('day'); //moment().startOf('month').startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -568,7 +568,7 @@ var start = function () {
       }
     })
 
-    schedule.scheduleJob('*/5 * * * *', () => {
+    schedule.scheduleJob('*/10 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');

@@ -26,6 +26,13 @@ angular.module('dealScanCrmApp')
        createdAt: moment(vehicle.deal.createdAt).format('DD.MM.YYYY hh:mm a'),
      }
 
+     _vehicle.emailCustomer  = function(){
+
+     }
+
+     _vehicle.textCustomer  = function(){
+
+     }
 
     _vehicle.ok = function () {
       $uibModalInstance.dismiss('cancel');

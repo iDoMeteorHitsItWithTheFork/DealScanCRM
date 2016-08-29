@@ -22,7 +22,22 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.noLostDeals = null;
     _dashboard.noTotalDeals = null;
     _dashboard.kpis = [];
+    _dashboard.mapStats = {
+      cars: {
+         units: 0,
+         pvr: 0
+      },
+      trucks:{
+        units: 0,
+        pvr: 0
+      },
+      total:{
+        units: 0,
+        pvr: 0
+      }
+    };
     var unfilteredMapData = [];
+
 
     var resetDealFlags = function(){
       _dashboard.noWonDeals = null;
@@ -114,8 +129,13 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
       'opens': 'left',
        eventHandlers: {'apply.daterangepicker': function(ev, picker) {
+          console.log('\n\n\n\n DATE PICKER \n\n\n\n');
+          console.log('>> Event')
           console.log(ev);
+          console.log('>> Picker');
           console.log(picker);
+          _dashboard.dateRange = {startDate: picker.startDate, endDate: picker.endDate};
+          console.log('\n\n ++++++++++++++++++++++++++++++ \n\n');
          _dashboard.getSales();
        }}
     };
@@ -147,6 +167,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           _dashboard.lostDeals = Dashboard.lost();
           _dashboard.totalDeals = Dashboard.total();
           _dashboard.stats = getStats();
+           setMapStats();
           _dashboard.noWonDeals = _dashboard.wonDeals.tableData && _dashboard.wonDeals.tableData.length == 0;
           _dashboard.noLostDeals = _dashboard.lostDeals.tableData && _dashboard.lostDeals.tableData.length == 0;
           _dashboard.noTotalDeals = _dashboard.totalDeals.tableData && _dashboard.totalDeals.tableData.length == 0;
@@ -427,6 +448,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     }
 
     _dashboard.mapFilters = {Cars: false, Trucks: false, Utilities: false, Vans: false, Others: false};
+    _dashboard.mapFiltersStatus = {won: false, lost: false};
     _dashboard.expandedSection = '';
 
     _dashboard.resetMapFilters = function(){
@@ -456,6 +478,42 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       console.log(_dashboard.mapFilters);
     }
 
+
+    function setMapStats(){
+      console.log('\n\n\n CALLED *************\n\n\n');
+      if (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == false) {
+        _dashboard.mapStats.cars = {units: _dashboard.stats[0].cars.units, pvr: _dashboard.stats[0].cars.pvr};
+        _dashboard.mapStats.trucks = {units: _dashboard.stats[0].trucks.units, pvr: _dashboard.stats[0].trucks.pvr};
+        _dashboard.mapStats.total = {units: _dashboard.stats[0].cars.units + _dashboard.stats[0].trucks.units, pvr: _dashboard.stats[0].cars.pvr +_dashboard.stats[0].trucks.pvr };
+      }
+      else if (_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == true) {
+        _dashboard.mapStats.cars = {units: _dashboard.stats[1].cars.units, pvr: _dashboard.stats[1].cars.pvr};
+        _dashboard.mapStats.trucks = {units: _dashboard.stats[1].trucks.units, pvr: _dashboard.stats[1].trucks.pvr};
+        _dashboard.mapStats.total = {units: _dashboard.stats[1].cars.units + _dashboard.stats[1].trucks.units, pvr: _dashboard.stats[1].cars.pvr +_dashboard.stats[1].trucks.pvr };
+      }
+      else if ((_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == false) || (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == true)){
+        _dashboard.mapStats.cars = {units: _dashboard.stats[2].cars.units, pvr: _dashboard.stats[2].cars.pvr};
+        _dashboard.mapStats.trucks = {units: _dashboard.stats[2].trucks.units, pvr: _dashboard.stats[2].trucks.pvr};
+        _dashboard.mapStats.total = {units: _dashboard.stats[2].cars.units + _dashboard.stats[2].trucks.units, pvr: _dashboard.stats[2].cars.pvr +_dashboard.stats[2].trucks.pvr };
+      }
+      console.log(_dashboard.mapStats);
+    }
+
+    _dashboard.filterMapByStatus = function(){
+       console.log('\n\n\n\n WON \n\n\n\n');
+       console.log(_dashboard.mapFiltersStatus.won);
+       console.log('\n\n ++++++++++++++++++++++++ \n\n');
+       console.log('\n\n\n\n LOST \n\n\n\n');
+       console.log(_dashboard.mapFiltersStatus.lost);
+       console.log('\n\n ++++++++++++++++++++++++ \n\n');
+      var status = null;
+       if (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == false) status = 'won';
+       else if (_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == true) status = 'lost';
+       else if ((_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == false)
+         || (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == true)) status = null;
+       _dashboard.filterMapBy();
+       setMapStats();
+    }
 
     _dashboard.filterMapBy  = function(category, toggle){
         if (!category){
@@ -557,7 +615,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         console.log(_dashboard.salesData);
         console.log('\n\n\n +++++++++++++ \n\n\n');
         console.log('\n\n\ AFTER FILTER \n\n\n');
-        _dashboard.salesData = Dashboard.filterMap(category);
+        _dashboard.salesData = Dashboard.filterMap(category, status);
         console.log(_dashboard.salesData);
         _dashboard.refreshMap(_dashboard.map, function(){
           _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
@@ -585,6 +643,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         _dashboard.expandedSection = section;
       };
     }
+
+
+
 
     var updateStats = function(status){
       switch(status){
@@ -628,11 +689,12 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         { id:'won',
           cars: {
             units: _dashboard.wonDeals.pie[0].data,
-            pvr: _dashboard.wonDeals.pie[0].pvr
+            pvr: !isNaN(parseFloat(_dashboard.wonDeals.pie[0].pvr)) ? parseFloat(parseFloat(_dashboard.wonDeals.pie[0].pvr).toFixed(2)) : 0
           },
           trucks: {
             units: (_dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data),
-            pvr: (_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr)
+            pvr: !isNaN(parseFloat((_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr))) ?
+              parseFloat(parseFloat((_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr)).toFixed(2)) : 0
           },
           sources: [
             {
@@ -666,11 +728,13 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         { id:'lost',
           cars: {
             units: _dashboard.lostDeals.pie[0].data,
-            pvr: _dashboard.lostDeals.pie[0].pvr
+            pvr: !isNaN(parseFloat(_dashboard.lostDeals.pie[0].pvr)) ? parseFloat(parseFloat(_dashboard.lostDeals.pie[0].pvr).toFixed(2)) : 0
           },
           trucks: {
             units: (_dashboard.lostDeals.pie[1].data + _dashboard.lostDeals.pie[2].data + _dashboard.lostDeals.pie[3].data),
-            pvr: (_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr)
+            pvr: !isNaN(parseFloat((_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr))) ?
+              parseFloat(parseFloat((_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr)).toFixed(2)) : 0
+
           },
           sources: [
             {
@@ -689,7 +753,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
               state: true,
             },
             {
-              id: 'HappyTag',
+              id: 'Happy Tag',
               name: 'Happy Tag',
               state: true,
             },
@@ -705,11 +769,12 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           id: 'total',
           cars: {
             units: _dashboard.totalDeals.pie[0].data,
-            pvr: _dashboard.totalDeals.pie[0].pvr
+            pvr: !isNaN(parseFloat(_dashboard.totalDeals.pie[0].pvr)) ? parseFloat(parseFloat(_dashboard.totalDeals.pie[0].pvr).toFixed(2)) : 0
           },
           trucks: {
             units: (_dashboard.totalDeals.pie[1].data + _dashboard.totalDeals.pie[2].data + _dashboard.totalDeals.pie[3].data),
-            pvr: (_dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr)
+            pvr: !isNaN(parseFloat((_dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr))) ?
+              parseFloat(parseFloat((_dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr)).toFixed(2)) : 0
           },
           sources: [
             {
@@ -1078,6 +1143,15 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         }, 1000);
 
       })
+    }
+
+    _dashboard.toggleRefresh = function(){
+      if (_dashboard.map) {
+        $timeout(function(){
+          console.log('*** Refreshing Map on Toggle ***');
+          google.maps.event.trigger(_dashboard.map, 'resize');
+        }, 500)
+      }
     }
 
     _dashboard.adjustZoom = function(data, map){

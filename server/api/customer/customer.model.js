@@ -282,9 +282,7 @@ export default function (sequelize, DataTypes) {
         var searchOptions = {};
         //Customer Identifiers
         if (data.CustomerId && data.CustomerId.toString().trim() != '') searchOptions.dscCustomerID = data.CustomerId;
-        if (data.FirstName && data.FirstName.toString().trim() != '') searchOptions.firstName = data.FirstName;
-        if (data.LastName && data.LastName.toString().trim() != '') searchOptions.lastName = data.LastName;
-        if (data.MiddleInitial && data.MiddleInitial.toString().trim() != '') searchOptions.middleInitial = data.MiddleInitial.substr(0,1);
+
 
         /*console.log('\n\n\n CUSTOMER SEARCH OPTIONS \n\n\n');
         console.log(searchOptions);

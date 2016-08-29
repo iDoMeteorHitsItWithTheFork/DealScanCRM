@@ -126,7 +126,7 @@
                           uib-btn-radio="'chart'"><i class="fa fa-pie-chart">&nbsp;&nbsp;</i>Charts
                   </button>
                   <button class="btn btn-white btn-outline" ng-model="dashboard.chartView"
-                          uib-btn-radio="'map'" ng-click="dashboard.refreshMap()"><i
+                          uib-btn-radio="'map'" ng-click="dashboard.toggleRefresh()"><i
                           class="fa fa-map-marker">&nbsp;&nbsp;</i> Map
                   </button>
                 </div>
@@ -535,13 +535,10 @@
                     <!-- Map filters -->
                     <div class="col-lg-2 dashboard-map-filters">
                       <div class="ibox float-e-margins margin-bottom-0">
-                        <div class="ibox-title border-top-w-1 shadow-border">
+                        <div class="ibox-title border-top-w-1 shadow-border shadow-background">
                           <h5>FILTERS</h5>
                           <span ng-show="dashboard.resetFiltersBtn" class="label label-danger pull-right custom-label"
-                                ng-click="dashboard.resetMapFilters()">
-                        <i class="fa fa-times"></i>
-                        Reset
-                      </span>
+                                ng-click="dashboard.resetMapFilters()"><i class="fa fa-times"></i>Reset</span>
                         </div>
 
                         <div class="ibox-content shadow-border padding-top-8 no-padding-bottom">
@@ -549,7 +546,7 @@
                             <span>WON</span>
                             <div class="switch">
                               <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="won">
+                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="won" ng-model="dashboard.mapFiltersStatus.won" ng-click="dashboard.filterMapByStatus()">
                                 <label class="onoffswitch-label" for="won">
                                   <span class="onoffswitch-inner"></span>
                                   <span class="onoffswitch-switch"></span>
@@ -562,7 +559,7 @@
                             <span>LOST</span>
                             <div class="switch">
                               <div class="onoffswitch">
-                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="lost">
+                                <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="lost" ng-model="dashboard.mapFiltersStatus.lost" ng-click="dashboard.filterMapByStatus()">
                                 <label class="onoffswitch-label" for="lost">
                                   <span class="onoffswitch-inner"></span>
                                   <span class="onoffswitch-switch"></span>
@@ -573,8 +570,66 @@
                         </div>
                       </div>
                       <!-- Category -->
+
+                      <div class="ibox-title border-top-w-1 shadow-border shadow-background">
+                        <h5>SUMMARY</h5>
+                      </div>
+                      <ul class="map-filter-category-list">
+                        <li class="filter-li p-l-15 p-r-15">
+                          <ui-select multiple ng-model="dashboard.filteredSources" theme="bootstrap" sortable="true" close-on-select="false" style="">
+                            <ui-select-match placeholder="Select sources...">{{$item.name}}</ui-select-match>
+                            <ui-select-choices repeat="s in dashboard.stats[2].sources | filter: $select.search">
+                              <div ng-bind-html="s.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                          </ui-select>
+                        </li>
+                        <li class="filter-li p-b-0 b-b-0">
+                          <div>
+                            <table class="table m-b-0">
+                              <tbody>
+                              <tr>
+                                <td class="text-center width-20 b-t-0">
+                                  <button type="button" class="btn btn-warning btn-outline m-r-sm center-block">
+                                    {{dashboard.mapStats.cars.units}}
+                                  </button>
+                                  <strong>Cars</strong>
+                                </td>
+                                <td class="b-t-0 v-a-m ps-rl-tp-ng-10">
+                                  <strong>${{dashboard.mapStats.cars.pvr}}</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="text-center b-t-0">
+                                  <button type="button" class="btn btn-info btn-outline m-r-sm center-block">
+                                    {{dashboard.mapStats.trucks.units}}
+                                  </button>
+                                  <strong>Trucks</strong>
+                                </td>
+                                <td class="b-t-0 v-a-m ps-rl-tp-ng-10">
+                                  <strong>${{dashboard.mapStats.trucks.pvr}}</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="text-center b-t-0">
+                                  <button type="button" class="btn btn-danger btn-outline m-r-sm center-block">
+                                    {{dashboard.mapStats.total.units}}
+                                  </button>
+                                  <strong>Total</strong>
+                                </td>
+                                <td class="b-t-0 v-a-m ps-rl-tp-ng-10">
+                                  <strong>${{dashboard.mapStats.total.pvr}}</strong>
+                                </td>
+                              </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </li>
+                      </ul>
+
+
+
                       <ul side-navigation class="map-filter-category-list metismenu shadow-border">
-                        <li ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars', $event)">
+                        <li ng-if="dashboard.totalDeals.map[0].models.length > 0" ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="cars" ng-model="dashboard.mapFilters.Cars"
                                    on-click="dashboard.displayCategory('Cars', $event)" on-checked="dashboard.filterMapBy('car')">
@@ -594,7 +649,7 @@
                             </li>
                           </ul>
                         </li>
-                        <li ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks', $event)">
+                        <li ng-if="dashboard.totalDeals.map[1].models.length > 0" ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
                                    on-click="dashboard.displayCategory('Trucks', $event)" on-checked="dashboard.filterMapBy('truck')">
@@ -605,7 +660,7 @@
                           </div>
                           <ul ng-class="{in: (dashboard.displayingCategory == 'Trucks' && dashboard.expandSection)}"
                               class="map-filter-second-level collapse">
-                            <li ng-repeat="model in dashboard.totalDeals.map[2].models">
+                            <li ng-repeat="model in dashboard.totalDeals.map[1].models">
                               <div>
                                 <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('truck', true)">
                                   &nbsp;&nbsp;&nbsp;{{model.name}}
@@ -614,7 +669,7 @@
                             </li>
                           </ul>
                         </li>
-                        <li ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.toggleSection('Utilities', $event)">
+                        <li ng-if="dashboard.totalDeals.map[2].models.length > 0" ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.toggleSection('Utilities', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
                                    on-click="dashboard.displayCategory('Utilities', $event)" on-checked="dashboard.filterMapBy('utility')">
@@ -634,7 +689,7 @@
                             </li>
                           </ul>
                         </li>
-                        <li ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.toggleSection('Vans', $event)">
+                        <li ng-if="dashboard.totalDeals.map[3].models.length > 0" ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.toggleSection('Vans', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
                                    on-click="dashboard.displayCategory('Vans', $event)" on-checked="dashboard.filterMapBy('van')">
@@ -655,7 +710,7 @@
                             </li>
                           </ul>
                         </li>
-                        <li ng-class="{active : dashboard.mapFilters.Others}" ng-click="dashboard.toggleSection('Others', $event)">
+                        <li ng-if="dashboard.totalDeals.map[4].models.length > 0" ng-class="{active : dashboard.mapFilters.Others}" ng-click="dashboard.toggleSection('Others', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
                                    on-click="dashboard.displayCategory('Others', $event)" on-checked="dashboard.filterMapBy('other')">

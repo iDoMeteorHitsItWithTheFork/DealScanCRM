@@ -49,7 +49,7 @@ server.once('ready', function() {
   openInbox(function(err, box) {
     if (err) throw err;
     timestamp = null;
-    var today = moment().startOf('day').format('MMM DD[,] YYYY');
+    var today = moment().subtract(7, 'days').startOf('day').format('MMM DD[,] YYYY');
     var searchOptions = timestamp ? ["UNSEEN", ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] : ["ALL", ["SINCE", today]];
     server.search(searchOptions, function(err, results){
       if (err) {

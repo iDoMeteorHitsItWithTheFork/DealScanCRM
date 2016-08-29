@@ -41,27 +41,10 @@ angular.module('dealScanCrmApp')
                 files: ['.resources/plugins/chartJs/angles.js']
               },
               {
-                name: 'ui.event',
-                files: ['.resources/plugins/uievents/event.js']
-              },
-              {
                 files: ['.resources/plugins/moment/moment.min.js']
               },
               {
                 files: ['.resources/plugins/jasny/jasny-bootstrap.min.js']
-              },
-              {
-                name: 'ui.map',
-                files: ['.resources/plugins/uimaps/ui-map.js']
-              },
-              {
-                serie: true,
-                files: ['.resources/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js',
-                        '.resources/plugins/jvectormap/jquery-jvectormap-2.0.2.css']
-              },
-              {
-                serie: true,
-                files: ['.resources/plugins/jvectormap/jquery-jvectormap-world-mill-en.js']
               },
               {
                 name: 'ui.checkbox',
@@ -96,25 +79,6 @@ angular.module('dealScanCrmApp')
                 serie: true,
                 name: 'datatables.buttons',
                 files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
-              },
-              // {
-              //   serie: true,
-              //   name: 'datatables.responsive',
-              //   files: ['.resources/plugins/dataTables/responsive-table.js',
-              //     '.resources/plugins/dataTables/responsive-table.css']
-              // },
-              {
-                files: ['.styles/plugins/summernote/summernote.css','.styles/plugins/summernote/summernote-bs3.css',
-                        '.resources/plugins/summernote/summernote.min.js']
-              },
-              {
-                name: 'summernote',
-                files: ['.styles/plugins/summernote/summernote.css','.styles/plugins/summernote/summernote-bs3.css',
-                        '.resources/plugins/summernote/summernote.min.js','.resources/plugins/summernote/angular-summernote.min.js']
-              },
-              {
-                name: 'datePicker',
-                files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
               },
               {
                 serie: true,
