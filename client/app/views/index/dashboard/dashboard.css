@@ -561,3 +561,6 @@ div.wonDeal {
 .shadow-background {
   background-color: rgba(238,238,238, 0.5) !important;
 }
+.p-t-10 {
+ padding-top: 10px !important;
+}

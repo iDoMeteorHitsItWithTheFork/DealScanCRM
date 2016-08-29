@@ -572,6 +572,7 @@
                       <div class="ibox-title border-top-w-1 shadow-border shadow-background">
                         <h5>SUMMARY</h5>
                       </div>
+
                       <ul class="map-filter-category-list">
                         <li class="filter-li p-l-15 p-r-15">
                           <ui-select multiple ng-model="dashboard.filteredSources" theme="bootstrap" sortable="true" close-on-select="false" style="">
@@ -581,7 +582,7 @@
                             </ui-select-choices>
                           </ui-select>
                         </li>
-                        <li class="filter-li p-b-0 b-b-0">
+                        <li class="filter-li p-t-10 p-b-0 b-b-0">
                           <div>
                             <table class="table m-b-0">
                               <tbody>
@@ -623,8 +624,6 @@
                           </div>
                         </li>
                       </ul>
-
-
 
                       <ul side-navigation class="map-filter-category-list metismenu shadow-border">
                         <li ng-if="dashboard.totalDeals.map[0].models.length > 0" ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars', $event)">
@@ -943,7 +942,6 @@
 
     </div>
     <!-- ./ Left section -->
-
 
   </div>
   <!-- ./Bottom section -->
