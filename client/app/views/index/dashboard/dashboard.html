@@ -258,15 +258,14 @@
                         <tr>
                           <td style="border-right:1px solid #eee !important; border-top:none !important;"
                               class="text-center">
-                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr}}</h5>
+                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr | number:2}}</h5>
                           </td>
                           <td style="border-right:1px solid #eee !important; border-top:none !important;"
                               class="text-center">
-                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr}}</h5>
+                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].trucks.pvr | number:2}}</h5>
                           </td>
                           <td style="border-top:none !important;" class="text-center">
-                            <h5 style="margin-top:-12px !important;">${{dashboard.stats[0].cars.pvr +
-                              dashboard.stats[0].trucks.pvr}}</h5>
+                            <h5 style="margin-top:-12px !important;">${{(dashboard.stats[0].cars.pvr + dashboard.stats[0].trucks.pvr) | number:2}}</h5>
                           </td>
                         </tr>
                         </tbody>
@@ -361,15 +360,14 @@
                         <tr>
                           <td style="border-right:1px solid #eee !important; border-top:none !important;"
                               class="text-center">
-                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr}}</h5>
+                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr | number:2}}</h5>
                           </td>
                           <td style="border-right:1px solid #eee !important; border-top:none !important;"
                               class="text-center">
-                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].trucks.pvr}}</h5>
+                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].trucks.pvr | number:2}}</h5>
                           </td>
                           <td class="text-center" style="border-top:none !important;">
-                            <h5 style="margin-top: -12px !important;">${{dashboard.stats[1].cars.pvr +
-                              dashboard.stats[1].trucks.pvr}}</h5>
+                            <h5 style="margin-top: -12px !important;">${{(dashboard.stats[1].cars.pvr + dashboard.stats[1].trucks.pvr) | number:2}}</h5>
                           </td>
                         </tr>
                         </tbody>
@@ -462,15 +460,15 @@
                       <tr>
                         <td style="border-right:1px solid #eee !important; border-top:none !important;"
                             class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[2].cars.pvr}}</h5>
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[2].cars.pvr | number:2}}</h5>
                         </td>
                         <td style="border-right:1px solid #eee !important; border-top:none !important;"
                             class="text-center">
-                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[2].trucks.pvr}}</h5>
+                          <h5 style="margin-top:-12px !important;">${{dashboard.stats[2].trucks.pvr | number:2}}</h5>
                         </td>
                         <td class="text-center" style="border-top:none !important;">
                           <h5 style="margin-top:-12px !important;">
-                            ${{dashboard.stats[2].cars.pvr + dashboard.stats[2].trucks.pvr}}</h5>
+                            ${{(dashboard.stats[2].cars.pvr + dashboard.stats[2].trucks.pvr) | number:2}}</h5>
                         </td>
                       </tr>
                       </tbody>
@@ -588,36 +586,36 @@
                             <table class="table m-b-0">
                               <tbody>
                               <tr>
-                                <td class="text-center width-20 b-t-0">
-                                  <button type="button" class="btn btn-warning btn-outline m-r-sm center-block">
+                                <td class="b-t-0 width-20">
+                                  <button type="button" class="btn btn-warning btn-outline ">
                                     {{dashboard.mapStats.cars.units}}
                                   </button>
-                                  <strong>Cars</strong>
                                 </td>
-                                <td class="b-t-0 v-a-m ps-rl-tp-ng-10">
-                                  <strong>${{dashboard.mapStats.cars.pvr}}</strong>
+                                <td class="b-t-0">
+                                  <strong>Cars</strong><br/>
+                                  <strong>${{dashboard.mapStats.cars.pvr | number:2}}</strong>
                                 </td>
                               </tr>
                               <tr>
-                                <td class="text-center b-t-0">
-                                  <button type="button" class="btn btn-info btn-outline m-r-sm center-block">
+                                <td class="b-t-0 width-20">
+                                  <button type="button" class="btn btn-info btn-outline">
                                     {{dashboard.mapStats.trucks.units}}
                                   </button>
-                                  <strong>Trucks</strong>
                                 </td>
-                                <td class="b-t-0 v-a-m ps-rl-tp-ng-10">
-                                  <strong>${{dashboard.mapStats.trucks.pvr}}</strong>
+                                <td class="b-t-0">
+                                  <strong>Trucks</strong><br/>
+                                  <strong>${{dashboard.mapStats.trucks.pvr | number:2}}</strong>
                                 </td>
                               </tr>
                               <tr>
-                                <td class="text-center b-t-0">
-                                  <button type="button" class="btn btn-danger btn-outline m-r-sm center-block">
+                                <td class="b-t-0 width-20">
+                                  <button type="button" class="btn btn-danger btn-outline">
                                     {{dashboard.mapStats.total.units}}
                                   </button>
-                                  <strong>Total</strong>
                                 </td>
-                                <td class="b-t-0 v-a-m ps-rl-tp-ng-10">
-                                  <strong>${{dashboard.mapStats.total.pvr}}</strong>
+                                <td class="b-t-0">
+                                  <strong>Total</strong><br/>
+                                  <strong>${{dashboard.mapStats.total.pvr | number:2}}</strong>
                                 </td>
                               </tr>
                               </tbody>

@@ -168,6 +168,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           _dashboard.totalDeals = Dashboard.total();
           _dashboard.stats = getStats();
            setMapStats();
+           console.log('\n\n\n STATS \n\n\n');
+           console.log(_dashboard.stats);
+           console.log('\n\n +++++++++++++++++ \n\n');
           _dashboard.noWonDeals = _dashboard.wonDeals.tableData && _dashboard.wonDeals.tableData.length == 0;
           _dashboard.noLostDeals = _dashboard.lostDeals.tableData && _dashboard.lostDeals.tableData.length == 0;
           _dashboard.noTotalDeals = _dashboard.totalDeals.tableData && _dashboard.totalDeals.tableData.length == 0;
@@ -689,12 +692,11 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         { id:'won',
           cars: {
             units: _dashboard.wonDeals.pie[0].data,
-            pvr: !isNaN(parseFloat(_dashboard.wonDeals.pie[0].pvr)) ? parseFloat(parseFloat(_dashboard.wonDeals.pie[0].pvr).toFixed(2)) : 0
+            pvr: _dashboard.wonDeals.pie[0].pvr
           },
           trucks: {
-            units: (_dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data),
-            pvr: !isNaN(parseFloat((_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr))) ?
-              parseFloat(parseFloat((_dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr)).toFixed(2)) : 0
+            units: _dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data,
+            pvr: _dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr
           },
           sources: [
             {
@@ -728,12 +730,11 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         { id:'lost',
           cars: {
             units: _dashboard.lostDeals.pie[0].data,
-            pvr: !isNaN(parseFloat(_dashboard.lostDeals.pie[0].pvr)) ? parseFloat(parseFloat(_dashboard.lostDeals.pie[0].pvr).toFixed(2)) : 0
+            pvr: _dashboard.lostDeals.pie[0].pvr
           },
           trucks: {
-            units: (_dashboard.lostDeals.pie[1].data + _dashboard.lostDeals.pie[2].data + _dashboard.lostDeals.pie[3].data),
-            pvr: !isNaN(parseFloat((_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr))) ?
-              parseFloat(parseFloat((_dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr)).toFixed(2)) : 0
+            units: _dashboard.lostDeals.pie[1].data + _dashboard.lostDeals.pie[2].data + _dashboard.lostDeals.pie[3].data,
+            pvr: _dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr
 
           },
           sources: [
@@ -769,14 +770,13 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           id: 'total',
           cars: {
             units: _dashboard.totalDeals.pie[0].data,
-            pvr: !isNaN(parseFloat(_dashboard.totalDeals.pie[0].pvr)) ? parseFloat(parseFloat(_dashboard.totalDeals.pie[0].pvr).toFixed(2)) : 0
+            pvr: _dashboard.totalDeals.pie[0].pvr
           },
           trucks: {
-            units: (_dashboard.totalDeals.pie[1].data + _dashboard.totalDeals.pie[2].data + _dashboard.totalDeals.pie[3].data),
-            pvr: !isNaN(parseFloat((_dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr))) ?
-              parseFloat(parseFloat((_dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr)).toFixed(2)) : 0
+            units: _dashboard.totalDeals.pie[1].data + _dashboard.totalDeals.pie[2].data + _dashboard.totalDeals.pie[3].data,
+            pvr: _dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr
           },
-          sources: [
+          sources:[
             {
               id: 'Walk In',
               name: 'Walk In',
