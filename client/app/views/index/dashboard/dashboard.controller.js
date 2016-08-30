@@ -1181,6 +1181,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       var date = deal.date;
       var salesman = deal.salesman;
       var avatar = '/assets/images/profile.jpg';
+      var status = deal.status;
       _dashboard._dl = deal;
 
 

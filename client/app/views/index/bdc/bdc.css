@@ -36,7 +36,15 @@
   margin-top: 125px !important;
 }
 
-
+.leads-table {
+  position: relative;
+  left: 347px !important;
+  top: -372px;
+  margin-bottom: -320px !important;
+}
+.m-t-30 {
+  margin-top: 30px;
+}
 .modal-xl {
   margin-left: auto;
   margin-right: auto;

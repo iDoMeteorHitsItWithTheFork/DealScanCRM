@@ -133,7 +133,7 @@
         <div ng-show="bdc.viewOptions == 'list';" class="row">
 
           <!-- leads list -->
-          <div class="col-sm-12" ng-class="{'col-sm-8': bdc.activeLead}">
+          <div class="col-sm-12 m-t-30" ng-class="{'col-sm-8': bdc.activeLead}">
             <div class="ibox">
               <div class="ibox-content no-padding">
                 <div class="p-r-15 p-l-15" style="padding-top:15px;">
@@ -281,7 +281,7 @@
           <!-- ./ leads list -->
 
           <!-- active lead -->
-          <div ng-if="bdc.activeLead && bdc.viewOptions === 'list'" ng-hide="bdc.viewOptions === 'charts'" class="col-sm-4 animated fadeInDown">
+          <div ng-if="bdc.activeLead && bdc.viewOptions === 'list'" ng-hide="bdc.viewOptions === 'charts'" class="col-sm-4 animated fadeInDown m-t-30">
             <div class="ibox ">
               <div ibox-tools on-close="bdc.activeLead = null" class="ps-rl-tp-10-rt-10"></div>
               <div class="ibox-content">
@@ -472,6 +472,61 @@
             <span class="sr-only">Loading...</span>
           </div>
 
+          <div class="row p-l-15 p-r-15 animated fadeInRight hideSansDelay" ng-if="bdc.showTable">
+            <div class="col-lg-3">
+              <div class="widget style1 red-bg">
+                <div class="row">
+                  <div class="col-xs-4">
+                    <i class="fa fa-user-times fa-2x"></i>
+                  </div>
+                  <div class="col-xs-8 text-right">
+                    <span> Unassigned Leads </span>
+                    <h3 class="font-bold">26</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="widget style1 blue-bg">
+                <div class="row">
+                  <div class="col-xs-4">
+                    <i class="fa fa-phone fa-2x"></i>
+                  </div>
+                  <div class="col-xs-8 text-right">
+                    <span> Call Completed </span>
+                    <h3 class="font-bold">23</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="widget style1 navy-bg">
+                <div class="row">
+                  <div class="col-xs-4">
+                    <i class="fa fa-comments-o fa-2x"></i>
+                  </div>
+                  <div class="col-xs-8 text-right">
+                    <span> Messages Sent </span>
+                    <h3 class="font-bold">26</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="widget style1 yellow-bg">
+                <div class="row">
+                  <div class="col-xs-4">
+                    <i class="fa fa-envelope fa-2x"></i>
+                  </div>
+                  <div class="col-xs-8 text-right">
+                    <span> Email Sent </span>
+                    <h3 class="font-bold">26</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div ng-hide="bdc.retreivingGraphData" id='bdc-charts'>
 
 
@@ -533,7 +588,7 @@
                   <p class="m-t-50">No leads to display.</p>
                 </div>
 
-                <div ng-if="bdc.totalLeads.pie" class="flot-chart animated fadeInRight large-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions == 'charts') ? 'small-pie-chart': 'large-pie-chart'">
+                <div ng-if="bdc.totalLeads.pie" class="flot-chart animated fadeInRight large-pie-chart">
                   <div flot class="flot-chart-content"
                        dataset="bdc.totalLeads.pie"
                        options="bdc.totalLeads.pieOptions"
@@ -542,47 +597,61 @@
               </div>
               <!-- ./totalLeads Pie & Charts -->
 
-
-              <div class="col-lg-4 p-t-100 animated bounceIn">
+              <!-- Stats -->
+              <div class="col-lg-4 p-t-100 animated bounceIn hideSansDelay" ng-if="!bdc.showTable">
                 <div class="col-lg-10 m-l-40">
-                <div class="widget style1 blue-bg">
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <i class="fa fa-phone fa-2x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                      <span> Call Completed </span>
-                      <h3 class="font-bold">23</h3>
+
+                  <div class="widget style1 red-bg">
+                    <div class="row">
+                      <div class="col-xs-4">
+                        <i class="fa fa-user-times fa-2x"></i>
+                      </div>
+                      <div class="col-xs-8 text-right">
+                        <span> Unassigned Leads </span>
+                        <h3 class="font-bold">26</h3>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="widget style1 navy-bg">
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <i class="fa fa-comments-o fa-2x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                      <span> Messages Sent </span>
-                      <h3 class="font-bold">26</h3>
+                  <div class="widget style1 blue-bg">
+                    <div class="row">
+                      <div class="col-xs-4">
+                        <i class="fa fa-phone fa-2x"></i>
+                      </div>
+                      <div class="col-xs-8 text-right">
+                        <span> Call Completed </span>
+                        <h3 class="font-bold">23</h3>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="widget style1 yellow-bg">
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <i class="fa fa-envelope fa-2x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                      <span> Email Sent </span>
-                      <h3 class="font-bold">26</h3>
+                  <div class="widget style1 navy-bg">
+                    <div class="row">
+                      <div class="col-xs-4">
+                        <i class="fa fa-comments-o fa-2x"></i>
+                      </div>
+                      <div class="col-xs-8 text-right">
+                        <span> Messages Sent </span>
+                        <h3 class="font-bold">26</h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-                </div>
 
+                  <div class="widget style1 yellow-bg">
+                    <div class="row">
+                      <div class="col-xs-4">
+                        <i class="fa fa-envelope fa-2x"></i>
+                      </div>
+                      <div class="col-xs-8 text-right">
+                        <span> Email Sent </span>
+                        <h3 class="font-bold">26</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
+              <!-- Stats -->
 
               <!-- Appointments Pie & Stats -->
               <div ng-hide="bdc.retreivingGraphData || (bdc.selectedPie != 'appointments' && bdc.showTable) || bdc.showTableDetails" class="animated fadeInRight" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'col-sm-4 col-md-3': 'col-sm-4 col-md-4'">
@@ -710,7 +779,7 @@
                   <p class="m-t-50">No kept appointments to display.</p>
                 </div>
 
-                <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
+                <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'large-pie-chart': 'small-pie-chart'">
                   <div flot class="flot-chart-content"
                        dataset="bdc.keptAppointments.pie"
                        options="bdc.keptAppointments.pieOptions"
@@ -776,7 +845,7 @@
                   <p class="m-t-50">No missed appointments to display.</p>
                 </div>
 
-                <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" >
+                <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'large-pie-chart': 'small-pie-chart'">
                   <div flot class="flot-chart-content"
                        dataset="bdc.missedAppointments.pie"
                        options="bdc.missedAppointments.pieOptions"
@@ -843,7 +912,7 @@
                 </div>
 
 
-                <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart">
+                <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'large-pie-chart': 'small-pie-chart'">
                   <div flot class="flot-chart-content"
                        dataset="bdc.soldAppointments.pie"
                        options="bdc.soldAppointments.pieOptions"
@@ -857,15 +926,16 @@
 
 
 
-            <div id="bdc-table" class="pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'" ng-class="bdc.showTableDetails ? 'col-sm-8 col-md-8' : 'col-sm-7 col-md-9'" style="">
+            <div id="bdc-table" class="col-sm-7 col-md-9 pull-left animated fadeInRight" ng-if="bdc.showTable && bdc.viewOptions == 'charts'"
+                 ng-class="{'col-sm-8 col-md-8 m-t-30' : bdc.showTableDetails,'leads-table': bdc.showTable && !bdc.showTableDetails }" style="">
               <div class="ibox float-e-margins no-material">
                 <!-- data tables -->
                 <div class="row animated fadeInRight">
                   <div class="col-lg-12">
-                    <div class="ibox float-e-margins no-material">
+                    <div class="ibox float-e-margins">
                       <div class="ibox-title">
                         <h5>{{bdc.sectionTitle.category | uppercase}} - <strong> {{bdc.sectionTitle.status | uppercase}}</strong></h5>
-                        <div ibox-tools on-close="bdc.showTable = false; bdc.showTableDetails = false;"></div>
+                        <div ibox-tools on-close="bdc.showTable = false; bdc.showTableDetails = false; bdc.activeLead = false;"></div>
                       </div>
                       <div class="ibox-content">
                         <table datatable="ng" dt-options="bdc.dtOptions" width="100%"
@@ -910,7 +980,7 @@
               </div>
             </div>
 
-            <div ng-if="bdc.activeLead && bdc.viewOptions != 'list' && bdc.showTable" ng-hide="bdc.viewOptions === 'list'" class="col-sm-4 animated fadeInDown">
+            <div ng-if="bdc.activeLead && bdc.viewOptions != 'list' && bdc.showTable" ng-hide="bdc.viewOptions === 'list'" class="col-sm-4 animated fadeInDown hideSansDelay m-t-30">
               <div class="ibox ">
                 <div ibox-tools on-close="bdc.activeLead = null; bdc.showTableDetails = false;" class="ps-rl-tp-10-rt-10"></div>
                 <div class="ibox-content">
@@ -1087,8 +1157,6 @@
 
               <!-- /. content View -->
             </div>
-
-
 
 
           </div>
