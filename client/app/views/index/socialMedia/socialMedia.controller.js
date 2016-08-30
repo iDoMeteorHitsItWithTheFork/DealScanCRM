@@ -280,6 +280,7 @@ angular.module('dealScanCrmApp')
       google.maps.event.addListener(infoWindow,'closeclick',function(){});
 
     }
+
     $timeout(function(){
       //_sm.map.setCenter(new google.maps.LatLng(_location.lat, _location.lng));
       google.maps.event.trigger(_sm.map,'resize');

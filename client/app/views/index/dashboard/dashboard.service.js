@@ -415,14 +415,24 @@ angular.module('dealScanCrmApp')
            var sources = [];
            for(var i=0; i < arr.length; i++){
              if (status){
-               if (sources.indexOf(arr[i].source) == -1 && arr[i].status == status) sources.push(arr[i].source);
+               /*console.log('\n\n\n DEBUG W STATUS \n\n\n');
+               console.log(sources);
+               console.log('source: '+arr[i].source)
+               console.log(Util.indexOfObject(sources, 'name', arr[i].source));
+               console.log('\n\n\n +++++++++++++++++++++++++++++++++++++++ \n\n');*/
+               if (Util.indexOfObject(sources, 'name', arr[i].source) == -1 && arr[i].status == status) sources.push({name: arr[i].source, state:true});
                if (arr[i].category == category && arr[i].status == status && models.indexOf(arr[i].model) == -1){
                  models.push(arr[i].model);
                  _models.push({name: arr[i].model, state: true});
                  sales.push(getModelSales(arr, arr[i].model, status));
                }
              } else {
-               if (sources.indexOf(arr[i].source) == -1) sources.push(arr[i].source);
+               /*console.log('\n\n\n DEBUG W/O STATUS \n\n\n');
+               console.log(sources);
+               console.log('source: '+arr[i].source)
+               console.log(Util.indexOfObject(sources, 'name', arr[i].source));
+               console.log('\n\n\n +++++++++++++++++++++++++++++++++++++++ \n\n');*/
+               if (Util.indexOfObject(sources, 'name', arr[i].source) == -1) sources.push({name: arr[i].source, state: true});
                if (arr[i].category == category  && models.indexOf(arr[i].model) == -1){
                  models.push(arr[i].model);
                  _models.push({name: arr[i].model, state: true});
@@ -541,6 +551,36 @@ angular.module('dealScanCrmApp')
                }
             });
            _wonDeals.tableData = tableData;
+          var map = [
+            {
+              category: 'Cars',
+              models: cars.map
+            },
+            {
+              category: 'Trucks',
+              models: trucks.map
+            },
+            {
+              category: 'Utilities',
+              models: utilities.map
+            },
+            {
+              category: 'Vans',
+              models: vans.map
+            },
+            {
+              category: 'Other',
+              models: other.map
+            },
+          ]
+          _wonDeals.map = map;
+            var sources = [];
+            for(var i=0; i < cars.sources.length; i++) if (Util.indexOfObject(sources, 'name', cars.sources[i].name) == -1) sources.push(cars.sources[i]);
+            for(var i=0; i < trucks.sources.length; i++) if (Util.indexOfObject(sources, 'name', trucks.sources[i].name) == -1) sources.push(trucks.sources[i]);
+            for(var i=0; i < utilities.sources.length; i++) if (Util.indexOfObject(sources, 'name', utilities.sources[i].name) == -1) sources.push(utilities.sources[i]);
+            for(var i=0; i < vans.sources.length; i++) if (Util.indexOfObject(sources, 'name', vans.sources[i].name) == -1) sources.push(vans.sources[i]);
+            for(var i=0; i < other.sources.length; i++) if (Util.indexOfObject(sources, 'name', other.sources[i].name) == -1) sources.push(other.sources[i]);
+            _wonDeals.sources = sources;
             return _wonDeals;
         }
 
@@ -606,6 +646,31 @@ angular.module('dealScanCrmApp')
             }
           ];
           _lostDeals.bar = barData;
+
+          var map = [
+            {
+              category: 'Cars',
+              models: cars.map
+            },
+            {
+              category: 'Trucks',
+              models: trucks.map
+            },
+            {
+              category: 'Utilities',
+              models: utilities.map
+            },
+            {
+              category: 'Vans',
+              models: vans.map
+            },
+            {
+              category: 'Other',
+              models: other.map
+            },
+          ]
+          _lostDeals.map = map;
+
           var tableData = [];
           angular.forEach(filteredData, function(value, key){
             if(value.status == 'lost'){
@@ -633,6 +698,13 @@ angular.module('dealScanCrmApp')
             }
           });
           _lostDeals.tableData = tableData;
+          var sources = [];
+          for(var i=0; i < cars.sources.length; i++) if (Util.indexOfObject(sources, 'name', cars.sources[i].name) == -1) sources.push(cars.sources[i]);
+          for(var i=0; i < trucks.sources.length; i++) if (Util.indexOfObject(sources, 'name', trucks.sources[i].name) == -1) sources.push(trucks.sources[i]);
+          for(var i=0; i < utilities.sources.length; i++) if (Util.indexOfObject(sources, 'name', utilities.sources[i].name) == -1) sources.push(utilities.sources[i]);
+          for(var i=0; i < vans.sources.length; i++) if (Util.indexOfObject(sources, 'name', vans.sources[i].name) == -1) sources.push(vans.sources[i]);
+          for(var i=0; i < other.sources.length; i++) if (Util.indexOfObject(sources, 'name', other.sources[i].name) == -1) sources.push(other.sources[i]);
+          _lostDeals.sources = sources;
           return _lostDeals;
         }
 
@@ -701,7 +773,6 @@ angular.module('dealScanCrmApp')
           ];
           _totalDeals.bar = barData;
 
-
           var map = [
             {
               category: 'Cars',
@@ -750,41 +821,33 @@ angular.module('dealScanCrmApp')
               });
           });
           _totalDeals.tableData = tableData;
+          var sources = [];
+          for(var i=0; i < cars.sources.length; i++) if (Util.indexOfObject(sources, 'name', cars.sources[i].name) == -1) sources.push(cars.sources[i]);
+          for(var i=0; i < trucks.sources.length; i++) if (Util.indexOfObject(sources, 'name', trucks.sources[i].name) == -1) sources.push(trucks.sources[i]);
+          for(var i=0; i < utilities.sources.length; i++) if (Util.indexOfObject(sources, 'name', utilities.sources[i].name) == -1) sources.push(utilities.sources[i]);
+          for(var i=0; i < vans.sources.length; i++) if (Util.indexOfObject(sources, 'name', vans.sources[i].name) == -1) sources.push(vans.sources[i]);
+          for(var i=0; i < other.sources.length; i++) if (Util.indexOfObject(sources, 'name', other.sources[i].name) == -1) sources.push(other.sources[i]);
+          _totalDeals.sources = sources;
           return _totalDeals;
         }
 
-        function filterMap(category, status){
-            var _arr;
-            switch(category.toLowerCase()){
-              case 'cars':
-              case 'car':
-                _arr = _totalDeals.map[0].models;
-                break;
-              case 'trucks':
-              case 'truck':
-                _arr = _totalDeals.map[1].models;
-                break;
-              case 'utilities':
-              case 'utility':
-                _arr = _totalDeals.map[2].models;
-                break;
-              case 'Vans':
-              case 'van':
-                _arr = _totalDeals.map[3].models;
-                break;
-              case 'Other':
-              case 'other':
-                _arr = _totalDeals.map[4].models;
-                break;
+
+
+        function filterMap(category, models, status, sources){
+            var m = null;
+            if (models && models.length > 0) {
+               m = $filter('filter')(models, function(val, idx, arr){
+                return val.state
+              })
             }
-            var m = $filter('filter')(_arr, function(val, idx, arr){
-              return val.state
-            })
             console.log('\n\n\n MODELS TO FILTER  \n\n\n');
             console.log(m);
             console.log('\n\n\n ======================== \n\n');
             var filteredMapData = $filter('filter')(filteredData, function(val, idx, arr){
-              return val.category == category.toLowerCase() && Util.indexOfObject(m, 'name', val.model) != -1 && (status ? status == val.status : true);
+              return (Util.objectExists(category) ? val.category == category.toLowerCase() : true) &&
+                (Util.objectExists(models) ? Util.indexOfObject(m, 'name', val.model) != -1 : true) &&
+                (Util.objectExists(status) ? status == val.status : true) &&
+                (Util.objectExists(sources) ? Util.indexOfObject(sources, 'name', val.source) : true);
             });
             console.log('\n\n\n MAP DATA FILTERED BY MODEL  \n\n\n');
             console.log(filteredMapData);

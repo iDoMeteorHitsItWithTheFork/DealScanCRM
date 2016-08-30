@@ -524,7 +524,7 @@
                   <div id="dashboardMap" class="col-lg-12 dashboard-map" style="border:1px solid #d5d5d5; padding: 5px;">
                     <ng-map class="col-sm-9 deals-map"  center="{{dashboard.mapCenter}}" fit-map>
                       <marker ng-if="deal.geo.lat && deal.geo.lng" icon="{{deal.geo.marker}}"
-                              id="{{deal.dealID}}" on-click="sm.showInfoWindow(event, deal, dashboard.map, null, true)" ng-repeat="deal in dashboard.salesData" position="{{::deal.geo.lat}}, {{::deal.geo.lng}}">
+                              id="{{deal.dealID}}" on-click="dashboard.showInfoWindow(event, deal, dashboard.map, null)" ng-repeat="deal in dashboard.salesData" position="{{::deal.geo.lat}}, {{::deal.geo.lng}}">
                       </marker>
                       <div class="jump-to-location-dashboard">
                         <input type="text" style="width:245px;" placeholder="Start typing a location..." class="form-control" places-auto-complete size=80 xxx-component-restrictions="{country:'us'}" types="{{types}}" on-place-changed="dashboard.placeChanged(place)">
@@ -577,7 +577,7 @@
                         <li class="filter-li p-l-15 p-r-15">
                           <ui-select multiple ng-model="dashboard.filteredSources" theme="bootstrap" sortable="true" close-on-select="false" style="">
                             <ui-select-match placeholder="Select sources...">{{$item.name}}</ui-select-match>
-                            <ui-select-choices repeat="s in dashboard.stats[2].sources | filter: $select.search">
+                            <ui-select-choices repeat="s in dashboard.mapStats.sources | filter: $select.search">
                               <div ng-bind-html="s.name | highlight: $select.search"></div>
                             </ui-select-choices>
                           </ui-select>
@@ -626,10 +626,10 @@
                       </ul>
 
                       <ul side-navigation class="map-filter-category-list metismenu shadow-border">
-                        <li ng-if="dashboard.totalDeals.map[0].models.length > 0" ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars', $event)">
+                        <li ng-if="dashboard.mapStats.categories[0].models.length > 0" ng-class="{active : dashboard.mapFilters.Cars}" ng-click="dashboard.toggleSection('Cars', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="cars" ng-model="dashboard.mapFilters.Cars"
-                                   on-click="dashboard.displayCategory('Cars', $event)" on-checked="dashboard.filterMapBy('car')">
+                                   on-click="dashboard.displayCategory('Cars', $event)" on-checked="dashboard.filterMapBy('car', dashboard.mapStats.categories[0].models)">
                             <label for="cars"> CARS</label>
                             <a class="pull-right" ng-click="dashboard.toggleSection('Cars', $event)"><i
                               ng-class="(dashboard.expandedSection == 'Cars') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
@@ -638,18 +638,18 @@
                           <ul ng-class="{in: (dashboard.displayingCategory == 'Cars' && dashboard.expandSection)}"
                               class="map-filter-second-level collapse">
                             <li>
-                              <div ng-repeat="model in dashboard.totalDeals.map[0].models">
-                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('car', true)">
+                              <div ng-repeat="model in dashboard.mapStats.categories[0].models">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('car', dashboard.mapStats.categories[0].models, null, null, true)">
                                   &nbsp;&nbsp;&nbsp;{{model.name}}
                                 </label>
                               </div>
                             </li>
                           </ul>
                         </li>
-                        <li ng-if="dashboard.totalDeals.map[1].models.length > 0" ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks', $event)">
+                        <li ng-if="dashboard.mapStats.categories[1].models.length > 0" ng-class="{active : dashboard.mapFilters.Trucks}"  ng-click="dashboard.toggleSection('Trucks', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="trucks" ng-model="dashboard.mapFilters.Trucks"
-                                   on-click="dashboard.displayCategory('Trucks', $event)" on-checked="dashboard.filterMapBy('truck')">
+                                   on-click="dashboard.displayCategory('Trucks', $event)" on-checked="dashboard.filterMapBy('truck', dashboard.mapStats.categories[1].models)">
                             <label for="trucks"> TRUCKS</label>
                             <a class="pull-right" href="" ng-click="dashboard.toggleSection('Trucks', $event)"><i
                               ng-class="(dashboard.expandedSection == 'Trucks') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
@@ -657,19 +657,19 @@
                           </div>
                           <ul ng-class="{in: (dashboard.displayingCategory == 'Trucks' && dashboard.expandSection)}"
                               class="map-filter-second-level collapse">
-                            <li ng-repeat="model in dashboard.totalDeals.map[1].models">
+                            <li ng-repeat="model in dashboard.mapStats.categories[1].models">
                               <div>
-                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('truck', true)">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('truck', dashboard.mapStats.categories[1].models, null,null, true)">
                                   &nbsp;&nbsp;&nbsp;{{model.name}}
                                 </label>
                               </div>
                             </li>
                           </ul>
                         </li>
-                        <li ng-if="dashboard.totalDeals.map[2].models.length > 0" ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.toggleSection('Utilities', $event)">
+                        <li ng-if="dashboard.mapStats.categories[2].models.length > 0" ng-class="{active : dashboard.mapFilters.Utilities}" ng-click="dashboard.toggleSection('Utilities', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="utilities" ng-model="dashboard.mapFilters.Utilities"
-                                   on-click="dashboard.displayCategory('Utilities', $event)" on-checked="dashboard.filterMapBy('utility')">
+                                   on-click="dashboard.displayCategory('Utilities', $event)" on-checked="dashboard.filterMapBy('utility', dashboard.mapStats.categories[2].models)">
                             <label for="utilities"> UTILITIES</label>
                             <a class="pull-right" href="" ng-click="dashboard.toggleSection('Utilities', $event)"><i
                               ng-class="(dashboard.expandedSection == 'Utilities') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
@@ -677,19 +677,19 @@
                           </div>
                           <ul ng-class="{in: (dashboard.displayingCategory == 'Utilities' && dashboard.expandSection)}"
                               class="map-filter-second-level collapse">
-                            <li ng-repeat="model in dashboard.totalDeals.map[2].models">
+                            <li ng-repeat="model in dashboard.mapStats.categories[2].models">
                               <div>
-                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('utility', true)">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('utility', dashboard.mapStats.categories[2].models, null, null, true)">
                                   &nbsp;&nbsp;&nbsp;{{model.name}}
                                 </label>
                               </div>
                             </li>
                           </ul>
                         </li>
-                        <li ng-if="dashboard.totalDeals.map[3].models.length > 0" ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.toggleSection('Vans', $event)">
+                        <li ng-if="dashboard.mapStats.categories[3].models.length > 0" ng-class="{active : dashboard.mapFilters.Vans}" ng-click="dashboard.toggleSection('Vans', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="vans" ng-model="dashboard.mapFilters.Vans"
-                                   on-click="dashboard.displayCategory('Vans', $event)" on-checked="dashboard.filterMapBy('van')">
+                                   on-click="dashboard.displayCategory('Vans', $event)" on-checked="dashboard.filterMapBy('van', dashboard.mapStats.categories[3].models)">
                             <label for="vans"> VANS</label>
                             <a href="" class="pull-right" ng-click="dashboard.toggleSection('Vans', $event)"><i
                               ng-class="(dashboard.expandedSection == 'Vans') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
@@ -699,18 +699,18 @@
                           <ul ng-class="{in: (dashboard.displayingCategory == 'Vans' && dashboard.expandSection)}"
                               class="map-filter-second-level collapse">
                             <li>
-                              <div ng-repeat="model in dashboard.totalDeals.map[3].models">
-                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('van', true)">
+                              <div ng-repeat="model in dashboard.mapStats.categories[3].models">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('van', dashboard.mapStats.categories[3].models, null, null, true)">
                                   &nbsp;&nbsp;&nbsp;{{model.name}}
                                 </label>
                               </div>
                             </li>
                           </ul>
                         </li>
-                        <li ng-if="dashboard.totalDeals.map[4].models.length > 0" ng-class="{active : dashboard.mapFilters.Others}" ng-click="dashboard.toggleSection('Others', $event)">
+                        <li ng-if="dashboard.mapStats.categories[4].models.length > 0" ng-class="{active : dashboard.mapFilters.Others}" ng-click="dashboard.toggleSection('Others', $event)">
                           <div class="iradio">
                             <input icheck type="radio" name="categories" id="others" ng-model="dashboard.mapFilters.Others"
-                                   on-click="dashboard.displayCategory('Others', $event)" on-checked="dashboard.filterMapBy('other')">
+                                   on-click="dashboard.displayCategory('Others', $event)" on-checked="dashboard.filterMapBy('other', dashboard.mapStats.categories[4].models)">
                             <label for="others"> OTHERS</label>
                             <a href="" class="pull-right" ng-click="dashboard.toggleSection('Others', $event)"><i
                               ng-class="(dashboard.expandedSection == 'Others') ? 'fa fa-chevron-up': 'fa fa-chevron-down'"
@@ -720,8 +720,8 @@
                           <ul ng-class="{in: (dashboard.displayingCategory == 'Others' && dashboard.expandSection)}"
                               class="map-filter-second-level collapse">
                             <li>
-                              <div ng-repeat="model in dashboard.totalDeals.map[4].models">
-                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('other', true)">
+                              <div ng-repeat="model in dashboard.mapStats.categories[4].models">
+                                <label><input icheck type="checkbox" ng-model="model.state" on-toggle="dashboard.filterMapBy('other', dashboard.mapStats.categories[4].models, null, null, true)">
                                   &nbsp;&nbsp;&nbsp;{{model.name}}
                                 </label>
                               </div>

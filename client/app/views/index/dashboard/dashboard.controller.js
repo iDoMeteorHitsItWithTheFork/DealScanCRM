@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
-  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout) {
+  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout, $compile) {
 
     var _dashboard = this;
 
@@ -149,6 +149,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.retreivingDeals = true;
       _dashboard.emptyResults = null;
       resetFilterFlags();
+      _dashboard.resetMapFilters();
       console.log('**** GETTING DEALS DATA *****');
       var searchOptions = {};
       searchOptions.type = _dashboard.selectedType;
@@ -186,14 +187,22 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       });
     }
 
-    _dashboard.goToProfile = function(deal){
-      console.log(deal);
-      console.log(Util.slimTrim(deal.customerDetails.name));
-      console.log('>> going to customer page...');
-      $state.go('index.customer.profile', {
-        customerID: deal.customerDetails.customerID,
-        customerName: Util.slimTrim(deal.customerDetails.name).replace(/\ /g, '_')
-      });
+    _dashboard.goToProfile = function(deal, map){
+        if (map){
+          $state.go('index.customer.profile', {
+            customerID: deal.customerID,
+            customerName: Util.slimTrim(deal.name).replace(/\ /g, '_')
+          });
+          return;
+        }
+        console.log(deal);
+        console.log(Util.slimTrim(deal.customerDetails.name));
+        console.log('>> going to customer page...');
+        $state.go('index.customer.profile', {
+          customerID: deal.customerDetails.customerID,
+          customerName: Util.slimTrim(deal.customerDetails.name).replace(/\ /g, '_')
+        });
+
     }
 
     _dashboard.summaryStats = [
@@ -451,20 +460,24 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     }
 
     _dashboard.mapFilters = {Cars: false, Trucks: false, Utilities: false, Vans: false, Others: false};
-    _dashboard.mapFiltersStatus = {won: false, lost: false};
+    _dashboard.mapFiltersStatus = {won: true, lost: true};
     _dashboard.expandedSection = '';
 
-    _dashboard.resetMapFilters = function(){
+    _dashboard.resetMapFilters = function(adjust){
       $scope.$applyAsync(function(){
         angular.forEach(_dashboard.mapFilters, function(value, key){
           _dashboard.mapFilters[key] = false;
         })
         $('input[name="categories"]').iCheck('update');
-        _dashboard.salesData = Dashboard.sales();
-        _dashboard.resetFiltersBtn = false;
-        _dashboard.refreshMap(_dashboard.map, function(){
-          _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
-        });
+        _dashboard.mapFiltersStatus.won = true;
+        _dashboard.mapFiltersStatus.lost = true;
+        if (adjust){
+          _dashboard.salesData = Dashboard.sales();
+          _dashboard.resetFiltersBtn = false;
+          _dashboard.refreshMap(_dashboard.map, function(){
+            _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
+          });
+        }
       });
     }
 
@@ -475,7 +488,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.displayingCategory = category;
       _dashboard.expandSection = true;
       _dashboard.expandedSection = category;
-      _dashboard.resetMapFilters();
+      _dashboard.resetMapFilters(true);
       _dashboard.mapFilters[category] = true;
       _dashboard.resetFiltersBtn = true;
       console.log(_dashboard.mapFilters);
@@ -488,16 +501,22 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         _dashboard.mapStats.cars = {units: _dashboard.stats[0].cars.units, pvr: _dashboard.stats[0].cars.pvr};
         _dashboard.mapStats.trucks = {units: _dashboard.stats[0].trucks.units, pvr: _dashboard.stats[0].trucks.pvr};
         _dashboard.mapStats.total = {units: _dashboard.stats[0].cars.units + _dashboard.stats[0].trucks.units, pvr: _dashboard.stats[0].cars.pvr +_dashboard.stats[0].trucks.pvr };
+        _dashboard.mapStats.sources = _dashboard.stats[0].sources;
+        _dashboard.mapStats.categories = _dashboard.wonDeals.map;
       }
       else if (_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == true) {
         _dashboard.mapStats.cars = {units: _dashboard.stats[1].cars.units, pvr: _dashboard.stats[1].cars.pvr};
         _dashboard.mapStats.trucks = {units: _dashboard.stats[1].trucks.units, pvr: _dashboard.stats[1].trucks.pvr};
         _dashboard.mapStats.total = {units: _dashboard.stats[1].cars.units + _dashboard.stats[1].trucks.units, pvr: _dashboard.stats[1].cars.pvr +_dashboard.stats[1].trucks.pvr };
+        _dashboard.mapStats.sources = _dashboard.stats[1].sources;
+        _dashboard.mapStats.categories = _dashboard.lostDeals.map;
       }
       else if ((_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == false) || (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == true)){
         _dashboard.mapStats.cars = {units: _dashboard.stats[2].cars.units, pvr: _dashboard.stats[2].cars.pvr};
         _dashboard.mapStats.trucks = {units: _dashboard.stats[2].trucks.units, pvr: _dashboard.stats[2].trucks.pvr};
         _dashboard.mapStats.total = {units: _dashboard.stats[2].cars.units + _dashboard.stats[2].trucks.units, pvr: _dashboard.stats[2].cars.pvr +_dashboard.stats[2].trucks.pvr };
+        _dashboard.mapStats.sources = _dashboard.stats[2].sources;
+        _dashboard.mapStats.categories = _dashboard.totalDeals.map;
       }
       console.log(_dashboard.mapStats);
     }
@@ -509,33 +528,72 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
        console.log('\n\n\n\n LOST \n\n\n\n');
        console.log(_dashboard.mapFiltersStatus.lost);
        console.log('\n\n ++++++++++++++++++++++++ \n\n');
-      var status = null;
-       if (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == false) status = 'won';
-       else if (_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == true) status = 'lost';
-       else if ((_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == false)
-         || (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == true)) status = null;
        _dashboard.filterMapBy();
        setMapStats();
     }
 
-    _dashboard.filterMapBy  = function(category, toggle){
-        if (!category){
-          console.log('\n\n\ NO CATEGORY BEFORE  FILTER \n\n\n');
-          _dashboard.salesData = Dashboard.sales();
-          console.log(_dashboard.salesData);
-          _dashboard.refreshMap(_dashboard.map, function(){
-            _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
-          });
-          console.log('\n\n\n +++++++++++++ \n\n\n');
-          return;
+    _dashboard.filterMapBy  = function(category, models, sources, status, toggle) {
+      if (!category){
+        category = null;
+        switch(_dashboard.displayingCategory){
+          case 'Cars':
+            category = 'car';
+            break;
+          case 'Trucks':
+            category = 'truck';
+            break;
+          case 'Utilities':
+            category = 'utility';
+            break;
+          case 'Vans':
+            category = 'van';
+            break;
+          case 'Others':
+            category = 'other';
+            break;
         }
-        switch(category.toLowerCase()){
+      }
+      if (!status) {
+        status = null;
+        if (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == false) status = 'won';
+        else if (_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == true) status = 'lost';
+        else if ((_dashboard.mapFiltersStatus.won == false && _dashboard.mapFiltersStatus.lost == false)
+          || (_dashboard.mapFiltersStatus.won == true && _dashboard.mapFiltersStatus.lost == true)) status = null;
+      }
+      if (!sources) {
+        sources = _dashboard.filteredSources;
+      }
+      if (!models) {
+        models = null;
+        if (Util.objectExists(_dashboard.displayingCategory)) {
+          switch (_dashboard.displayingCategory) {
+            case 'Cars':
+              models = _dashboard.mapStats.categories[0].models;
+              break;
+            case 'Trucks':
+              models = _dashboard.mapStats.categories[1].models;
+              break;
+            case 'Utilities':
+              models = _dashboard.mapStats.categories[2].models;
+              break;
+            case 'Vans':
+              models = _dashboard.mapStats.categories[3].models;
+              break;
+            case 'Others':
+              models = _dashboard.mapStats.categories[4].models;
+              break;
+          }
+        }
+      }
+
+      if (category) {
+        switch (category.toLowerCase()) {
           case 'car':
           case 'cars':
             _dashboard.mapFilters.Cars = true;
             _dashboard.resetFiltersBtn = true;
             if (toggle) {
-              $timeout(function() {
+              $timeout(function () {
                 console.log('Update View');
                 angular.forEach(_dashboard.mapFilters, function (value, key) {
                   _dashboard.mapFilters[key] = false;
@@ -611,14 +669,15 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
             }
             break;
         }
-        console.log(_dashboard.mapFilters);
+      }
+      console.log(_dashboard.mapFilters);
       $scope.$applyAsync(function(){
 
         console.log('\n\n\ BEFORE FILTER \n\n\n');
         console.log(_dashboard.salesData);
         console.log('\n\n\n +++++++++++++ \n\n\n');
         console.log('\n\n\ AFTER FILTER \n\n\n');
-        _dashboard.salesData = Dashboard.filterMap(category, status);
+        _dashboard.salesData = Dashboard.filterMap(category, models, status, sources);
         console.log(_dashboard.salesData);
         _dashboard.refreshMap(_dashboard.map, function(){
           _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
@@ -698,33 +757,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
             units: _dashboard.wonDeals.pie[1].data + _dashboard.wonDeals.pie[2].data + _dashboard.wonDeals.pie[3].data,
             pvr: _dashboard.wonDeals.pie[1].pvr + _dashboard.wonDeals.pie[2].pvr + _dashboard.wonDeals.pie[3].pvr
           },
-          sources: [
-            {
-              id: 'Walk In',
-              name: 'Walk In',
-              state: true,
-            },
-            {
-              id: 'Internet',
-              name: 'Internet',
-              state: true,
-            },
-            {
-              id: 'Phone',
-              name: 'Phone',
-              state: true,
-            },
-            {
-              id: 'HappyTag',
-              name: 'Happy Tag',
-              state: true,
-            },
-            {
-              id: 'Other',
-              name: 'Other',
-              state: true,
-            }
-          ]
+          sources: _dashboard.wonDeals.sources
         },
 
         { id:'lost',
@@ -737,33 +770,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
             pvr: _dashboard.lostDeals.pie[1].pvr + _dashboard.lostDeals.pie[2].pvr + _dashboard.lostDeals.pie[3].pvr
 
           },
-          sources: [
-            {
-              id: 'Walk In',
-              name: 'Walk In',
-              state: true,
-            },
-            {
-              id: 'Internet',
-              name: 'Internet',
-              state: true,
-            },
-            {
-              id: 'Phone',
-              name: 'Phone',
-              state: true,
-            },
-            {
-              id: 'Happy Tag',
-              name: 'Happy Tag',
-              state: true,
-            },
-            {
-              id: 'Other',
-              name: 'Other',
-              state: true,
-            }
-          ]
+          sources: _dashboard.lostDeals.sources
         },
 
         {
@@ -776,33 +783,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
             units: _dashboard.totalDeals.pie[1].data + _dashboard.totalDeals.pie[2].data + _dashboard.totalDeals.pie[3].data,
             pvr: _dashboard.totalDeals.pie[1].pvr + _dashboard.totalDeals.pie[2].pvr + _dashboard.totalDeals.pie[3].pvr
           },
-          sources:[
-            {
-              id: 'Walk In',
-              name: 'Walk In',
-              state: true,
-            },
-            {
-              id: 'Internet',
-              name: 'Web',
-              state: true,
-            },
-            {
-              id: 'Phone',
-              name: 'Phone',
-              state: true,
-            },
-            {
-              id: 'HappyTag',
-              name: 'Happy Tag',
-              state: true,
-            },
-            {
-              id: 'Other',
-              name: 'Other',
-              state: true,
-            }
-          ]
+          sources: _dashboard.totalDeals.sources
         }
       ];
     }
@@ -1188,6 +1169,59 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       }
     };
 
+    var infoWindow = null;
+    _dashboard.showInfoWindow = function(event, deal, map, center){
+
+      var name = deal.name;
+      var phone = deal.phone && deal.phone.toString().trim() != '' ? deal.phone : 'unavailable';
+      var email = deal.email && deal.email.toString().trim() != '' ? deal.email : 'unavailable';
+      var vehicle = deal.year + ' '+deal.make+' '+deal.model;
+      var price = deal.price;
+      var source = deal.source;
+      var date = deal.date;
+      var salesman = deal.salesman;
+      var avatar = '/assets/images/profile.jpg';
+      _dashboard._dl = deal;
+
+
+      if (center) map.setCenter(new google.maps.LatLng(deal.geo.lat, deal.geo.lng));
+      var content = "<div class='info-window'>" +
+          "<a href='http://google.com' target='_blank'></a>" +
+          "<ul class='info-list'>" +
+          "<li>" +
+          "<div class='row'>" +
+          "<div class='col-lg-3'><img class='avatar img-circle' src='"+avatar+"' alt=''/></div>" +
+          "<div class='col-lg-9'>" +
+          "<ul class='info-list'>" +
+          "<li><a ng-click='dashboard.goToProfile(dashboard._dl, true)' class='user_name'>"+name+"</a></li>" +
+          "<li><i class='fa fa-phone'>&nbsp;&nbsp;</i>"+phone+"</li>" +
+          "<li><i class='fa fa-envelope'>&nbsp;&nbsp;</i>"+email+"</i></li>" +
+          "<li><span class='label label-warning p-10 text-uppercase'>"+source+"</span></li>" +
+          "</ul>" +
+          "</div>" +
+          "</div>" +
+          "</li>" +
+          "<li><strong>Vehicle:</strong> "+vehicle+"</li>" +
+          "<li><strong>Price:</strong> $"+price+"</li>" +
+          "<li> Assisted by <strong>"+salesman+"</strong> on <strong>"+date+"</strong></li>" +
+          "</ul></div>";
+      var contentNode = $compile(content)($scope);
+
+      if (infoWindow === null){
+        infoWindow = new google.maps.InfoWindow({
+          content: contentNode[0],
+          position: new google.maps.LatLng(deal.geo.lat, deal.geo.lng),
+          pixelOffset: new google.maps.Size(-2, -37),
+        });
+      } else {
+        infoWindow.setContent(content);
+        infoWindow.setPosition(new google.maps.LatLng(deal.geo.lat, deal.geo.lng));
+      }
+
+      infoWindow.open(map);
+      google.maps.event.addListener(infoWindow,'closeclick',function(){});
+
+    }
 
     _dashboard.chatRecipient = {name: '', number: ''};
     _dashboard.composeText = function(deal, event){

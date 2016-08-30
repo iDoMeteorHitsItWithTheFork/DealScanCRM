@@ -183,6 +183,9 @@
         ];
       },
 
+      objectExists(obj){
+        return obj && obj.toString().trim() != '';
+    },
       /**
        *  Return the index of the object with proterty value within the array
        *  */
