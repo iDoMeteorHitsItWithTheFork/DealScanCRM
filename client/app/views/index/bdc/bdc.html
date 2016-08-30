@@ -779,7 +779,7 @@
                   <p class="m-t-50">No kept appointments to display.</p>
                 </div>
 
-                <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'large-pie-chart': 'small-pie-chart'">
+                <div ng-if="bdc.keptAppointments.pie" class="flot-chart animated fadeInRight large-pie-chart">
                   <div flot class="flot-chart-content"
                        dataset="bdc.keptAppointments.pie"
                        options="bdc.keptAppointments.pieOptions"
@@ -845,7 +845,7 @@
                   <p class="m-t-50">No missed appointments to display.</p>
                 </div>
 
-                <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'large-pie-chart': 'small-pie-chart'">
+                <div ng-if="bdc.missedAppointments.pie" class="flot-chart animated fadeInRight large-pie-chart">
                   <div flot class="flot-chart-content"
                        dataset="bdc.missedAppointments.pie"
                        options="bdc.missedAppointments.pieOptions"
@@ -912,7 +912,7 @@
                 </div>
 
 
-                <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight small-pie-chart" ng-class="(bdc.showTable && bdc.viewOptions === 'charts') ? 'large-pie-chart': 'small-pie-chart'">
+                <div ng-if="bdc.soldAppointments.pie" class="flot-chart animated fadeInRight large-pie-chart">
                   <div flot class="flot-chart-content"
                        dataset="bdc.soldAppointments.pie"
                        options="bdc.soldAppointments.pieOptions"
