@@ -15,6 +15,8 @@ export default function(sequelize, DataTypes) {
     subject: DataTypes.STRING,
     body: DataTypes.TEXT,
     priority: DataTypes.STRING,
+    recipient: DataTypes.STRING,
+    recipientID: DataTypes.BIGINT,
     type: {
       type: DataTypes.ENUM,
       values: ['mail', 'text'],

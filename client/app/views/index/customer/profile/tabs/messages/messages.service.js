@@ -7,7 +7,7 @@ angular.module('dealScanCrmApp')
 
 
     function getInbox(customerID){
-      return MessageResource.query({customerID: customerID}).$promise
+      return MessageResource.query({recipientID: customerID, recipient: 'customer'}).$promise
         .then(function(inbox){
           console.log(inbox);
           if (inbox){
@@ -48,22 +48,22 @@ angular.module('dealScanCrmApp')
 
 
     function getMessages(customerID){
-      return MessageResource.query({customerID: customerID, type: 'text'}).$promise
-        .then(function(messages){
+      return MessageResource.query({recipientID: customerID, recipient: 'customer', type: 'text'}).$promise
+        .then(function (messages) {
           console.log(messages);
-          if (messages){
+          if (messages) {
             var _messages = [];
-            for(var i=0; i < messages.length; i++){
+            for (var i = 0; i < messages.length; i++) {
               var m = messages[i].profile;
               m.timestamp = moment(m.createdAt).format('MMM D');
               m.date = moment(m.createdAt).format('hh:mma DD MMM YYYY');
-              m.timeAgo  = moment(m.createdAt).fromNow();
+              m.timeAgo = moment(m.createdAt).fromNow();
               m.textStamp = moment(m.createdAt).format('dddd h:mm a - MM.DD.YYYY');
               _messages.push(m);
             }
             return _messages;
-          } else return {error:{code: '', msg: ''}};
-        }).catch(function(err){
+          } else return {error: {code: '', msg: ''}};
+        }).catch(function (err) {
           console.log(err);
           return err;
         })
@@ -72,6 +72,7 @@ angular.module('dealScanCrmApp')
     function sendMessage(details){
       if (!details) throw new Error('Message details are missing!');
       if (!details.id) throw new Error('CustomerID is required');
+      if (!details.recipient) throw new Error('Recipient is required!');
       if (!details.message) throw new Error('Message is required!');
       return MessageResource.save(details).$promise.then(function(message){
         if (message){

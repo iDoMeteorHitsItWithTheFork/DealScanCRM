@@ -249,7 +249,35 @@ db.Event.belongsToMany(db.Lead, {
   constraints: false
 });
 
-db.Message.belongsTo(db.Customer, {foreignKey:'customerID'});
-db.Customer.hasMany(db.Message, {foreignKey:'customerID'});
+
+db.Customer.hasMany(db.Message, {
+  foreignKey: 'recipientID',
+  constraints: false,
+  scope: {
+    recipient: 'customer'
+  }
+});
+
+db.Message.belongsTo(db.Customer, {
+  foreignKey: 'recipientID',
+  constraints: false,
+  as: 'customer'
+});
+
+db.Lead.hasMany(db.Message, {
+  foreignKey: 'recipientID',
+  constraints: false,
+  scope: {
+    recipient: 'lead'
+  }
+});
+
+db.Message.belongsTo(db.Lead, {
+  foreignKey: 'recipientID',
+  constraints: false,
+  as: 'lead'
+});
+
+
 
 export default db;

@@ -41,16 +41,19 @@ angular.module('dealScanCrmApp')
       if (_customerMessages.thisCustomer.profile.email && _customerMessages.thisCustomer.profile.email.toString().trim() != ''){
         if (_customerMessages.loadingInbox) return;
         _customerMessages.loadingInbox = true;
-        Messages.inbox(_customerMessages.thisCustomer.profile.customerID).then(function(inbox){
+        Messages.inbox(_customerMessages.thisCustomer.profile.customerID).then(function (inbox) {
           console.log(inbox);
-          if (inbox){
+          if (inbox) {
             _customerMessages.inbox = inbox.mails;
             _customerMessages.mailCount = inbox.mailCount;
             _customerMessages.newMails = inbox.newMails;
             _customerMessages.lastTextMessage = inbox.lastTextMessage;
-          } else toaster.error({title: 'Inbox Error', body: 'An error occured while attempting to load customer inbox.'})
+          } else toaster.error({
+            title: 'Inbox Error',
+            body: 'An error occured while attempting to load customer inbox.'
+          })
           _customerMessages.loadingInbox = false;
-        }).catch(function(err){
+        }).catch(function (err) {
           console.log(err);
           _customerMessages.loadingInbox = false;
           toaster.error({title: 'Inbox Error', body: 'An error occured while retreiving the customer inbox'});
@@ -131,6 +134,7 @@ angular.module('dealScanCrmApp')
       _customerMessages.sendingMessage = true;
       Messages.send({
         id: _customerMessages.thisCustomer.profile.customerID,
+        recipient: 'customer',
         message: _customerMessages.message
       }).then(function (message) {
         if (message) {

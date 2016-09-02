@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {Message} from '../../sqldb';
 import {User} from '../../sqldb';
 import {Customer} from '../../sqldb';
+import {Lead} from '../../sqldb';
 
 var imap = require("imap");
 var mailparser = require("mailparser").MailParser;
@@ -73,11 +74,13 @@ function handleError(res, statusCode) {
 
 // Gets a list of Messages
 export function index(req, res) {
-  if (!req.query.customerID) return res.status(500).send('CustomerID is required!');
+  if (!req.query.recipientID) return res.status(500).send('RecipientID is required!');
+  if (!req.query.recipient) return res.status(500).send('Recipient is required!');
   var searchOptions = {};
-  searchOptions.customerID = req.query.customerID;
+  searchOptions.recipientID = req.query.recipientID;
+  searchOptions.recipient = req.query.sender;
   if (req.query.type && req.query.type.toString().trim() != '') searchOptions.type = req.query.type;
-  Message.findAll({
+  return Message.findAll({
     where: searchOptions,
     order: [['messageID', 'DESC']]
   })
@@ -99,59 +102,63 @@ export function show(req, res) {
 
 // Creates a new Message in the DB
 export function create(req, res) {
+
   if (!req.body) return res.status(500).send('Message Details are missing');
-  if (!req.body.id || req.body.id.toString().trim() == '' ) return res.status(500).send('CustomerID is required!');
+  if (!req.body.id || req.body.id.toString().trim() == '' ) return res.status(500).send('RecipientID is required!');
+  if (!req.body.recipient || req.body.recipient.toString().trim() == '' ) return res.status(500).send('Recipient is required!');
   if (!req.body.message || req.body.message.toString().trim() == '') return res.status(500).send('Message is required');
-  var sender = req.user.userID;
-  var customerID = req.body.id;
+
+  var userID = req.user.userID;
+  var recipientID = req.body.id;
+  var recipientType = req.body.recipient;
   var message = req.body.message;
+
   return Message.sequelize.transaction(function(t){
+
     return User.find({
       where: {
-       userID: sender
+       userID: userID
       },
       attributes: ['userID', 'firstName', 'lastName', 'email', 'phone', 'role'],
       transaction: t
     }).then(function(user){
-      return Customer.find({
-        where: {
-          customerID: customerID
-        },
-        attributes: [
-          'customerID',
-          'driverLicenseID',
-          'firstName',
-          'middleInitial',
-          'lastName',
-          'phone',
-          'email',
-          'streetAddress',
-          'city',
-          'state',
-          'country',
-          'postalCode',
-          'source',
-          'lastEmailSync'],
-        transaction: t
-      }).then(function(customer){
+
+      var recipient = null;
+      if (recipientType == 'customer') {
+        recipient = Customer.find({
+          where: {
+            customerID: recipientID
+          },
+          transaction: t
+        });
+
+      } else if (recipientType == 'lead') {
+        recipient = Lead.find({
+          where: {
+            leadID: recipientID
+          },
+          transaction: t
+        })
+      }
+
+      return recipient.then(function(recipient){
+
         var config = require('./twilio.config.json');
         var smsClient = require('twilio')(config.sid, config.token);
-        if (customer.phone && customer.phone.toString().trim() !=''){
+
+        if (recipient.phone && recipient.phone.toString().trim() !=''){
           //sanatize phone number [remove dashes, space, etc]
           return smsClient.sendMessage({
             messagingServiceSid: config.serviceId,
-            to: '+1'+customer.phone,
+            to: '+1'+recipient.phone,
             body: message
           }).then(function(result){
             if (result){
-              console.log('\n\n\n RESULT \n\n\n');
-              console.log(inspect(result, false, null));
-              console.log('\n\n\n ----------------- \n\n\n');
-              return Message.create({
+              return recipient.createMessage({
                 message_uuid: result.sid,
                 from: user.profile.email,
                 name: user.profile.name,
-                to: '+1' + customer.phone,
+                to: '+1' + recipient.phone,
                 subject: null,
                 priority: 'normal',
                 date: result.date_created,
@@ -159,9 +166,7 @@ export function create(req, res) {
                 type: 'text',
                 status: 'sent'
               }, {transaction: t}).then(function (message) {
-                return message.setCustomer(customer, {transaction: t}).then(function () {
-                  return message;
-                })
+                return message;
               })
             } else return res.status(500).send('Unable to send text message');
           }).fail(function(err){
