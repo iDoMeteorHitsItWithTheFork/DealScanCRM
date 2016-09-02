@@ -234,4 +234,9 @@
   padding-right: 210px;
 }
 
-
+.p-t-50 {
+  padding-top: 50px !important;
+}
+.p-t-75 {
+  padding-top: 75px !important;
+}

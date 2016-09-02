@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
-  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout, $compile) {
+  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, Messages,appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout, $compile) {
 
     var _dashboard = this;
 
@@ -18,6 +18,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.viewIsReady = false;
     _dashboard.loadingKPI = false;
     _dashboard.filtered = [{id: 'won', state: false}, {id: 'lost', state: false}, {id: 'total', state: false}];
+    _dashboard.loadingMessages = false;
+    _dashboard.sendingMessage = false;
+    _dashboard.messages = [];
     _dashboard.noWonDeals = null;
     _dashboard.noLostDeals = null;
     _dashboard.noTotalDeals = null;
@@ -1229,20 +1232,64 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     }
 
     _dashboard.chatRecipient = {name: '', number: ''};
-    _dashboard.composeText = function(deal, event){
-       event.stopPropagation();
+    _dashboard.composeText = function (deal, event) {
+      event.stopPropagation();
       console.log('*** Compose Text ***');
       console.log(deal);
-
+      if (_dashboard.loadingMessages) return;
       if (deal.customerDetails.phone && deal.customerDetails.phone.toString().trim() != '') {
-         if (!_dashboard.openChat) _dashboard.openChat = true;
-        _dashboard.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
+        if (!_dashboard.openChat) _dashboard.openChat = true;
+        _dashboard.chatRecipient = {
+          recipientID: deal.customerDetails.customerID,
+          name: deal.customerDetails.name,
+          number: deal.customerDetails.phone
+        };
+        _dashboard.loadingMessages = true;
+        _dashboard.messages.length = 0;
+        Messages.messages(deal.customerDetails.customerID).then(function (messages) {
+          if (messages)_dashboard.messages = messages;
+          else _dashboard.messages = [];
+          _dashboard.loadingMessages = false;
+        }).catch(function (err) {
+          console.log(err);
+          _dashboard.loadingMessages = false;
+          toaster.error({title: 'Messages Error', body: 'An error occurred while loading messages'});
+        })
       } else toaster.error({
         title: 'Message Error',
         body: 'There are no phone number detected for this customer. please update the customer details.'
       })
 
     }
+
+
+    _dashboard.sendMessage = function(form){
+      if (_dashboard.sendingMessage) return;
+      if (!_dashboard.message || _dashboard.message.toString().trim() == '') return;
+      _dashboard.sendingMessage = true;
+      Messages.send({
+        id: _dashboard.chatRecipient.recipientID,
+        recipient: 'customer',
+        message: _dashboard.message
+      }).then(function (message) {
+        console.log(message);
+        if (message) {
+          _dashboard.messages.unshift(message);
+          _dashboard.message = '';
+          form.$setPristine();
+        } else toaster.error({title: '', body: 'An error occured while attempting to send your message.'});
+        _dashboard.sendingMessage = false;
+      }).catch(function (err) {
+        console.log(err);
+        _dashboard.sendingMessage = false;
+        toaster.error({title: 'Send Error', body: 'An error occured while attempting to send messages'});
+      })
+
+    }
+
+
+
+
 
     _dashboard.composeMail = function(deal, event){
       event.stopPropagation();

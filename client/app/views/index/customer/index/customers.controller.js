@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, appConfig, DTOptionsBuilder, $window, toaster, $timeout) {
+  .controller('CustomersCtrl',
+    function ($scope, $state, $sce, Auth, Util, Customer, Messages, $uibModal, appConfig, DTOptionsBuilder, $window, toaster, $timeout) {
 
     /*
      * Controllers Variables
@@ -20,6 +21,9 @@ angular.module('dealScanCrmApp')
     _customers.findCustomer = {name: null};
     _customers.filterOptions = ['Recent', 'Old', 'Name (A-z)', 'Name (z-A)'];
     _customers.filterByOption = _customers.filterOptions[0];
+    _customers.loadingMessages = false;
+    _customers.sendingMessages = false;
+    _customers.messages = [];
 
 
 
@@ -213,15 +217,55 @@ angular.module('dealScanCrmApp')
      *
      */
     _customers.composeText = function (customer) {
-      if (customer.profile.phone && customer.profile.phone.toString().trim() != '') {
+      console.log(customer);
+      if (_customers.loadingMessages) return;
+       if (customer.profile.phone && customer.profile.phone.toString().trim() != '') {
         if (!_customers.openChat) _customers.openChat = true;
-        _customers.chatRecipient = {name:customer.profile.name, number: customer.profile.phone};
+        _customers.chatRecipient = {recipientID: customer.profile.customerID, name:customer.profile.name, number: customer.profile.phone};
+        _customers.loadingMessages = true;
+         _customers.messages.length = 0;
+         Messages.messages(customer.profile.customerID).then(function(messages){
+           if (messages)_customers.messages = messages;
+           else _customers.messages = [];
+           _customers.loadingMessages = false;
+         }).catch(function(err){
+            console.log(err);
+            _customers.loadingMessages = false;
+            toaster.error({title: 'Messages Error', body: 'An error occurred while loading messages'});
+         })
       } else toaster.error({
         title: 'Message Error',
         body: 'There are no phone number detected for this customer. please update the customer details.'
       })
 
     }
+
+
+    _customers.sendMessage = function(form){
+      if (_customers.sendingMessage) return;
+      if (!_customers.message || _customers.message.toString().trim() == '') return;
+      _customers.sendingMessage = true;
+      Messages.send({
+        id: _customers.chatRecipient.recipientID,
+        recipient: 'customer',
+        message: _customers.message
+      }).then(function (message) {
+        console.log(message);
+        if (message) {
+          _customers.messages.unshift(message);
+          _customers.message = '';
+          form.$setPristine();
+        } else toaster.error({title: '', body: 'An error occured while attempting to send your message.'});
+        _customers.sendingMessage = false;
+      }).catch(function (err) {
+        console.log(err);
+        _customers.sendingMessage = false;
+        toaster.error({title: 'Send Error', body: 'An error occured while attempting to send messages'});
+      })
+
+    }
+
+
 
     /*
      * Default Actions

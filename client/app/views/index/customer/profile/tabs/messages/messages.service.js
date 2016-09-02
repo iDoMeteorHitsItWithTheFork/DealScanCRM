@@ -59,6 +59,7 @@ angular.module('dealScanCrmApp')
               m.date = moment(m.createdAt).format('hh:mma DD MMM YYYY');
               m.timeAgo = moment(m.createdAt).fromNow();
               m.textStamp = moment(m.createdAt).format('dddd h:mm a - MM.DD.YYYY');
+              m.time = moment(m.createdAt).format('h:mm a');
               _messages.push(m);
             }
             return _messages;

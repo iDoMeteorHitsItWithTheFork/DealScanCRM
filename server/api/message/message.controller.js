@@ -78,7 +78,7 @@ export function index(req, res) {
   if (!req.query.recipient) return res.status(500).send('Recipient is required!');
   var searchOptions = {};
   searchOptions.recipientID = req.query.recipientID;
-  searchOptions.recipient = req.query.sender;
+  searchOptions.recipient = req.query.recipient;
   if (req.query.type && req.query.type.toString().trim() != '') searchOptions.type = req.query.type;
   return Message.findAll({
     where: searchOptions,
