@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, appConfig, DTOptionsBuilder) {
+  .controller('CustomersCtrl', function ($scope, $state, $sce, Auth, Util, Customer, $uibModal, appConfig, DTOptionsBuilder, $window, toaster, $timeout) {
 
     /*
      * Controllers Variables
@@ -189,19 +189,21 @@ angular.module('dealScanCrmApp')
      * Email a customer
      *
      * */
-    _customers.emailCustomer = function (customer) {
-      var emailCustomer = $aside.open({
-        templateUrl: 'app/account/customer/sideviews/email/email.html',
-        controller: 'EmailCtrl as email',
-        placement: 'right',
-        windowClass: 'slide-up',
-        size: 'md',
-        resolve: {
-          selectedCustomer: function(){
-            return customer;
-          }
-        }
-      });
+    _customers.composeMail = function (customer) {
+      if (customer.profile.email && customer.profile.email.toString().trim() != '') {
+        var mailTo = 'mailto:' + customer.profile.email
+        var w = $window.open(mailTo);
+        var t = $timeout(function () {
+          w.close();
+        });
+        $scope.$on('destroy', function () {
+          $timeout.cancel(t);
+        })
+      } else  toaster.error({
+        title: 'Mail Error',
+        body: 'No Email address detected for customer. Please update the customer info.'
+      })
+
     }
 
     /**
@@ -210,19 +212,15 @@ angular.module('dealScanCrmApp')
      *
      *
      */
-    _customers.textCustomer = function (customer) {
-      var textCustomer = $aside.open({
-        templateUrl: 'app/account/customer/sideviews/text/text.html',
-        controller: 'TextCtrl as text',
-        placement: 'right',
-        windowClass: 'slide-up',
-        size: 'sm',
-        resolve: {
-          selectedCustomer: function(){
-            return customer;
-          }
-        }
-      });
+    _customers.composeText = function (customer) {
+      if (customer.profile.phone && customer.profile.phone.toString().trim() != '') {
+        if (!_customers.openChat) _customers.openChat = true;
+        _customers.chatRecipient = {name:customer.profile.name, number: customer.profile.phone};
+      } else toaster.error({
+        title: 'Message Error',
+        body: 'There are no phone number detected for this customer. please update the customer details.'
+      })
+
     }
 
     /*

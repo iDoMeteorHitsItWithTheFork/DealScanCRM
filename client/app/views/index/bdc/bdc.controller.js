@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('BDCCtrl',
 
-    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, BDC, appConfig, DTOptionsBuilder, $filter, Lead, toaster) {
+    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, BDC, appConfig, DTOptionsBuilder, $filter, Lead, toaster, $timeout, $window) {
       $("#page-wrapper").css("overflow-x", "scroll");
 
       console.log("dashboard controller loaded");
@@ -371,39 +371,70 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         _bdc.showStatsSummary(categoryId, filter);
       }
 
-      _bdc.chatRecipient = {name: '', number: ''};
 
-      _bdc.composeText = function(lead){
-        if (!_bdc.openChat) _bdc.openChat = true;
-        console.log('*** Compose Text ***');
-        console.log(deal);
-        _bdc.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
+      _bdc.contactLead = function(lead, event){
+        if (event) event.stopPropagation();
+         if (!lead.email && !lead.phone){
+           toaster.error({
+             title: 'Contact Error',
+             body: 'No contact information was detected for customer. Please update the customer info.'
+           });
+         } else if (lead.phone && lead.phone.toString().trim() != ''){
+
+           if (!_bdc.openChat) _bdc.openChat = true;
+           _bdc.chatRecipient = {name:lead.name, number: lead.phone};
+
+         } else if (lead.email && lead.email.toString().trim() != ''){
+           var mailTo = 'mailto:' + lead.email
+           var w = $window.open(mailTo);
+           var t = $timeout(function () {
+             w.close();
+           });
+           $scope.$on('destroy', function () {
+             $timeout.cancel(t);
+           })
+         }
+
       }
 
-      _bdc.composeMail = function(lead){
-        console.log('*** Compose Mail ****');
-        console.log(deal);
-        var modalInstance = $uibModal.open({
-          size: 'lg',
-          //windowClass: 'animated slideInRight',
-          templateUrl: 'app/views/index/dashboard/modalMailCompose.html',
-          resolve: {
-            deal: function(){
-              return deal;
-            }
-          },
-          controller: function($scope, $uibModalInstance, deal){
-            console.log(deal);
-            $scope.recipient = deal.customerDetails;
-            $scope.ok = function () {
-              $uibModalInstance.close();
-            };
+      _bdc.chatRecipient = {name: '', number: ''};
 
-            $scope.cancel = function () {
-              $uibModalInstance.dismiss('cancel');
-            };
-          }
-        });
+      /*
+       * Email a customer
+       *
+       * */
+      _bdc.composeMail = function (lead) {
+        if (lead.email && lead.email.toString().trim() != '') {
+          var mailTo = 'mailto:' + lead.email
+          var w = $window.open(mailTo);
+          var t = $timeout(function () {
+            w.close();
+          });
+          $scope.$on('destroy', function () {
+            $timeout.cancel(t);
+          })
+        } else  toaster.error({
+          title: 'Mail Error',
+          body: 'No Email address detected for customer. Please update the customer info.'
+        })
+
+      }
+
+      /**
+       *
+       * text Customer
+       *
+       *
+       */
+      _bdc.composeText = function (lead) {
+        if (lead.phone && lead.phone.toString().trim() != '') {
+          if (!_bdc.openChat) _bdc.openChat = true;
+          _bdc.chatRecipient = {name:lead.name, number: lead.phone};
+        } else toaster.error({
+          title: 'Message Error',
+          body: 'There are no phone number detected for this customer. please update the customer details.'
+        })
+
       }
 
       _bdc.addAppointment = function (lead) {

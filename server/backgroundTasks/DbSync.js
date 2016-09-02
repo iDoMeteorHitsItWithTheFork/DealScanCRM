@@ -178,7 +178,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(today){
-  if (!today) today = moment().subtract(3,'days').startOf('day'); //moment().startOf('month').startOf('day');
+  if (!today) today = moment().startOf('day'); //moment().startOf('month').startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -598,13 +598,13 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    /*schedule.scheduleJob('*!/60 * * * *', () => {
+    schedule.scheduleJob('*/45 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
         console.log('****************************\n\n');
       }
-    })*/
+    })
 
     schedule.scheduleJob('*/10 * * * *', () => {
       if (scheduler.master) {
@@ -613,7 +613,7 @@ var start = function () {
       }
     })
 
-    schedule.scheduleJob('*/1 * * * *', () => {
+    schedule.scheduleJob('*/15 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'MissedLeads', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued MissedLeads...');

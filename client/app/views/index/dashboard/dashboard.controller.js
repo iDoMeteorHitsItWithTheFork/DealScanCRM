@@ -463,14 +463,16 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     _dashboard.mapFiltersStatus = {won: true, lost: true};
     _dashboard.expandedSection = '';
 
-    _dashboard.resetMapFilters = function(adjust){
+    _dashboard.resetMapFilters = function(adjust, status){
       $scope.$applyAsync(function(){
         angular.forEach(_dashboard.mapFilters, function(value, key){
           _dashboard.mapFilters[key] = false;
         })
         $('input[name="categories"]').iCheck('update');
-        _dashboard.mapFiltersStatus.won = true;
-        _dashboard.mapFiltersStatus.lost = true;
+        if (status){
+          _dashboard.mapFiltersStatus.won = true;
+          _dashboard.mapFiltersStatus.lost = true;
+        }
         if (adjust){
           _dashboard.salesData = Dashboard.sales();
           _dashboard.resetFiltersBtn = false;
@@ -1063,7 +1065,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
      * Stats Display Mode
      * @type {string}
      */
-    _dashboard.chartView = 'map';
+    _dashboard.chartView = 'chart';
 
     /**
      * StatsMap & Options
@@ -1128,10 +1130,12 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
     _dashboard.toggleRefresh = function(){
       if (_dashboard.map) {
-        $timeout(function(){
-          console.log('*** Refreshing Map on Toggle ***');
-          google.maps.event.trigger(_dashboard.map, 'resize');
-        }, 500)
+         console.log('*** Refreshing Map on Toggle ***');
+         $timeout(function(){
+           _dashboard.refreshMap(_dashboard.map, function(){
+             _dashboard.adjustZoom(_dashboard.salesData, _dashboard.map);
+           });
+         }, 200);
       }
     }
 
@@ -1229,6 +1233,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
        event.stopPropagation();
       console.log('*** Compose Text ***');
       console.log(deal);
+
       if (deal.customerDetails.phone && deal.customerDetails.phone.toString().trim() != '') {
          if (!_dashboard.openChat) _dashboard.openChat = true;
         _dashboard.chatRecipient = {name:deal.customerDetails.name, number: deal.customerDetails.phone};
@@ -1282,22 +1287,11 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       });*/
     }
 
-    $scope.addLead = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/dashboard/addLead.html',
-        controller: 'AddLeadCtrl',
-      });
-    }
-    $scope.addTask = function () {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        windowClass: 'slide-up',
-        templateUrl: 'app/account/task/assignLead.html',
-        controller: 'AddTaskCtrl',
-      });
-    }
+
+    $scope.$on('destroy', function(){
+      infoWindow.close();
+      infoWindow = null;
+    });
   });
 
 

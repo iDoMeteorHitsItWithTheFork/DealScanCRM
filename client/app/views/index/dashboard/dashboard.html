@@ -190,7 +190,7 @@
 
               <!-- Won Pie & Stats -->
               <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart')? 'col-xs-12 col-sm-4 col-sm-4 col-md-3': 'col-sm-6 col-md-4'"
-                   ng-hide="dashboard.selectedPie != 'won' && dashboard.showBarChart && dashboard.chartView == 'chart'">
+                   ng-hide="(dashboard.selectedPie != 'won' && dashboard.showBarChart) || dashboard.chartView != 'chart'">
                 <div class="text-center animated bounceIn hideSansDelay"
                      ng-if="dashboard.wonDeals.tableData && dashboard.wonDeals.tableData.length == 0 && dashboard.noWonDeals">
                   <p class="m-t-235">No Won deals to display.</p>
@@ -291,7 +291,7 @@
 
               <!-- Lost Pie & Stats -->
               <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-xs-12 col-sm-4 col-sm-4 col-md-3': 'col-sm-6 col-md-4'"
-                   ng-hide="dashboard.selectedPie != 'lost' && dashboard.showBarChart && dashboard.chartView == 'chart'">
+                   ng-hide="(dashboard.selectedPie != 'lost' && dashboard.showBarChart) || dashboard.chartView != 'chart'">
                 <div class="text-center animated bounceIn hideSansDelay"
                      ng-if="dashboard.lostDeals.tableData && dashboard.lostDeals.tableData.length == 0 && dashboard.noLostDeals">
                   <p class="m-t-235">No Lost deals to display.</p>
@@ -393,7 +393,7 @@
 
               <!-- Total Pie & Stats -->
               <div style="margin-bottom:20px;" ng-class="(dashboard.showBarChart && dashboard.chartView == 'chart') ? 'col-xs-12 col-sm-4 col-md-3': 'col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-0'"
-                   ng-hide="dashboard.selectedPie != 'total' && dashboard.showBarChart && dashboard.chartView == 'chart'">
+                   ng-hide="(dashboard.selectedPie != 'total' && dashboard.showBarChart) || dashboard.chartView != 'chart'">
                 <!-- total stats-->
                 <div ng-if="dashboard.chartView == 'chart'" class="ibox float-e-margins no-material m-b-0">
                   <div class="ibox-title" style="border-top-width:1px;">
@@ -536,7 +536,7 @@
                         <div class="ibox-title border-top-w-1 shadow-border shadow-background">
                           <h5>FILTERS</h5>
                           <span ng-show="dashboard.resetFiltersBtn" class="label label-danger pull-right custom-label"
-                                ng-click="dashboard.resetMapFilters()"><i class="fa fa-times"></i>Reset</span>
+                                ng-click="dashboard.resetMapFilters(true, true)"><i class="fa fa-times"></i>Reset</span>
                         </div>
 
                         <div class="ibox-content shadow-border padding-top-8 no-padding-bottom">
@@ -950,16 +950,14 @@
 </div>
 
 <!-- small chat -->
-<div ng-hide="true" class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="dashboard.openChat">
+<div class="small-chat-box height-355 ng-small-chat fadeInRight animated" ng-show="dashboard.openChat">
 
   <!-- Chat header -->
-  <div class="heading padding-top-15" draggable="true">
+  <div class="heading padding-top-15">
+    <span ng-click="dashboard.openChat = !dashboard.openChat" class="fa fa-times pull-right cursor-pointer ps-rl-tp-ng-5-r-ng-10">&nbsp;&nbsp;</span>
     <span class="small-chat-avatar pull-left">
       <img alt="image" src="assets/images/profile.jpg">
     </span>
-    <!--<small class="chat-date pull-right">-->
-      <!--02.19.2015-->
-    <!--</small>-->
     {{dashboard.chatRecipient.name}}
     <p>{{dashboard.chatRecipient.number}}</p>
   </div>
@@ -1034,12 +1032,6 @@
         </button> </span></div>
   </div>
 
-</div>
-<div ng-hide="true" id="small-chat" ng-click="dashboard.openChat = !dashboard.openChat">
-  <!--<span class="badge badge-warning pull-right">5</span>-->
-  <a class="open-small-chat">
-    <i ng-class="dashboard.openChat ? 'fa fa-times' : 'fa fa-comments'"></i>
-  </a>
 </div>
 <!-- ./small chat -->
 

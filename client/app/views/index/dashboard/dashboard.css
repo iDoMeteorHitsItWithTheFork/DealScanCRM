@@ -567,3 +567,10 @@ div.wonDeal {
 .p-10 {
  padding: 10px !important;
 }
+
+
+.ps-rl-tp-ng-5-r-ng-10 {
+  position: relative;
+  right: -10px;
+  top: -5px;
+}
