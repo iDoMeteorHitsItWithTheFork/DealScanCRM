@@ -48,6 +48,16 @@ var jobs = {
       callback(null, 'IMAP -> fetch mails in : '+(new Date().getTime() - start)+' (ms)');
     },
   },
+  "MissedLeads": {
+    plugins: [],
+    pluginOptions: {},
+    perform: function(time, callback){
+      var start = time;
+      setTimeout(function(){
+        setMissedLeads(start, callback);
+      }, 1000);
+    },
+  },
   "ProcessData": {
     plugins: [],
     pluginOptions: {
@@ -168,7 +178,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(today){
-  if (!today) today = moment().subtract(7, 'days').startOf('day'); //moment().startOf('month').startOf('day');
+  if (!today) today = moment().subtract(3,'days').startOf('day'); //moment().startOf('month').startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -495,6 +505,34 @@ var fetchData = function (time) {
 
 
 
+var setMissedLeads = function(time, callback){
+
+  if (!time) time = moment();
+  console.log('\n\n>> Updating Leads & Appointments...');
+  var missedAppointmentThreshold = moment(time).subtract(1, 'days');
+  var missedLeadThreshold = moment(time).subtract(15, 'minutes');
+  var promises = [];
+
+  /* Missed Appointments */
+  promises.push(Event.sequelize
+    .query('UPDATE Events SET status="missed" WHERE category="appointment" AND status="scheduled" AND time >= "'+missedAppointmentThreshold+'"',
+      {type: Event.sequelize.QueryTypes.UPDATE}));
+
+  /* Missed Opportunities */
+  promises.push(Lead.sequelize
+    .query('UPDATE Leads SET status="missed" WHERE status="new" AND createdAt >= "'+missedLeadThreshold+'"',
+      {type: Lead.sequelize.QueryTypes.UPDATE}));
+
+  return Q.all(promises).then(function(results){
+    callback(null, results);
+  }).catch(function(err){
+     console.error(err);
+     callback(err);
+  })
+}
+
+
+
 
 
 
@@ -517,7 +555,7 @@ var start = function () {
       connection: connectionDetails,
       queues: ['DBSync', 'Leads'],
       minTaskProcessors: 1,
-      maxTaskProcessors: 20,
+      maxTaskProcessors: 100,
       checkTimeout: 500,
       maxEventLoopDelay:5,
       toDisconnectProcessors: true
@@ -560,18 +598,25 @@ var start = function () {
       if (Object.keys(data).length > 0) console.log('cleaned old workers')
     })
 
-    schedule.scheduleJob('*/45 * * * *', () => {
+    /*schedule.scheduleJob('*!/60 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('DBSync', 'SyncDB', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued SyncDB...\n\n\n\n');
         console.log('****************************\n\n');
       }
-    })
+    })*/
 
     schedule.scheduleJob('*/10 * * * *', () => {
       if (scheduler.master) {
         queue.enqueue('Leads', 'FetchEmails', (new Date()).getTime());
         console.log('\n\n\n>> Enqueued FetchEmails...');
+      }
+    })
+
+    schedule.scheduleJob('*/1 * * * *', () => {
+      if (scheduler.master) {
+        queue.enqueue('Leads', 'MissedLeads', (new Date()).getTime());
+        console.log('\n\n\n>> Enqueued MissedLeads...');
       }
     })
 
@@ -642,5 +687,6 @@ export {queue}
 export {fetchData}
 export {fetchEmails}
 export {testEvents}
+export {setMissedLeads}
 
 

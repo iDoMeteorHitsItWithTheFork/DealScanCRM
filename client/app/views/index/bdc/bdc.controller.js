@@ -108,7 +108,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           return value.status == 'working';
         });
         _bdc.follow_up_leads = $filter('filter')(_bdc.leads, function(value, index, arr){
-          return value.status == 'new' && ( value.appointments && value.appointments.length == 0) && moment(value.createdAt).unix() <  moment().startOf('day').unix();
+          return value.status == 'missed' || (value.status == 'new'  && ( value.appointments && value.appointments.length == 0) && moment(value.createdAt).unix() <  moment().startOf('day').unix());
         });
       }
 

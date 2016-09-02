@@ -812,6 +812,12 @@ export function keptAppointments(req, res) {
           },
           {
             model: Event,
+            through: Participants,
+            required: true,
+            where: {
+              category: 'appointment',
+              status: 'kept'
+            },
             include: [
               {
                 model: User,
@@ -819,8 +825,6 @@ export function keptAppointments(req, res) {
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
-            through: Participants,
-            required: true
           }
         ]
       }));
@@ -885,6 +889,12 @@ export function missedAppointments(req, res) {
           },
           {
             model: Event,
+            through: Participants,
+            required: true,
+            where : {
+              category: 'appointment',
+              status: 'missed'
+            },
             include: [
               {
                 model: User,
@@ -892,8 +902,7 @@ export function missedAppointments(req, res) {
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
-            through: Participants,
-            required: true
+
           }
         ]
       }));
@@ -936,7 +945,7 @@ export function soldAppointments(req, res) {
           'CROSS JOIN (SELECT COUNT(1) AS cnt FROM Events ' +
           'JOIN Participants ON Events.eventID = Participants.eventID ' +
           'WHERE category="appointment" AND attendable="lead" AND Events.status="kept" AND Events.state="sold") t ' +
-          'WHERE Events.status="sold" GROUP BY sourceName ORDER BY Percentage DESC',
+          'WHERE Events.state="sold" GROUP BY sourceName ORDER BY Percentage DESC',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
       promises.push(Lead.sequelize
@@ -944,7 +953,7 @@ export function soldAppointments(req, res) {
           'COUNT(*) AS Total FROM Events ' +
           'JOIN Participants ON Events.eventID = Participants.eventID ' +
           'JOIN Leads ON Participants.participantID = Leads.leadID' +
-          '  WHERE category="appointment" AND attendable="lead" AND Events.status="sold" AND Events.state="sold" GROUP BY sourceType',
+          '  WHERE category="appointment" AND attendable="lead" AND Events.status="kept" AND Events.state="sold" GROUP BY sourceType',
           {type: Lead.sequelize.QueryTypes.SELECT}));
 
       /* Get All Appointments */
@@ -958,6 +967,13 @@ export function soldAppointments(req, res) {
           },
           {
             model: Event,
+            through: Participants,
+            required: true,
+            where : {
+              category: 'appointment',
+              state: 'sold',
+              status: 'kept'
+            },
             include: [
               {
                 model: User,
@@ -965,8 +981,7 @@ export function soldAppointments(req, res) {
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
-            through: Participants,
-            required: true
+
           }
         ]
       }));
