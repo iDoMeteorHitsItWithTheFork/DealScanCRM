@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerMessagesCtrl', function ($scope, selectedCustomer, $uibModal, $filter, toaster, $window, $timeout, Messages) {
+  .controller('CustomerMessagesCtrl', function ($scope, selectedCustomer, $uibModal, $filter, toaster, $window, $timeout, Messages, Util) {
     var _customerMessages = this;
     console.log('\n\n\n\n\n\n Message controller loaded!\n\n\n\n');
     _customerMessages.thisCustomer = selectedCustomer;
@@ -10,6 +10,7 @@ angular.module('dealScanCrmApp')
     _customerMessages.displayingMessage = null;
     _customerMessages.sendingMessage =false;
     _customerMessages.lastTextMessage = null;
+    _customerMessages.search = { mail:'', text: ''};
 
     _customerMessages.viewOptions = 'inbox';
     _customerMessages.displayView = function(view){
@@ -204,5 +205,15 @@ angular.module('dealScanCrmApp')
       });
     }
 
+
+    _customerMessages.searchInbox = function(){
+      return function(value){
+        if (_customerMessages.search.mail &&  _customerMessages.search.mail.toString().trim() != ''){
+          return (value.name && Util.slimTrim(value.name).toLowerCase().indexOf(_customerMessages.search.mail) != -1) ||
+            (value.subject  && Util.slimTrim(value.subject).toLowerCase().indexOf(_customerMessages.search.mail) != -1) ||
+            (value.from  && Util.slimTrim(value.from).toLowerCase().indexOf(_customerMessages.search.mail) != -1)
+        } else return true;
+      }
+    }
 
   });

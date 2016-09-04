@@ -38,8 +38,7 @@
 
         <form method="get" action="index.html" class="pull-right mail-search">
           <div class="input-group">
-            <input type="text" class="form-control input-sm" name="search" placeholder="Search email">
-
+            <input type="text" class="form-control input-sm" name="search" placeholder="Search email" ng-model="customerMessages.search.mail">
             <div class="input-group-btn">
               <button type="submit" class="btn btn-sm btn-primary">
                 Search
@@ -86,7 +85,7 @@
         <table class="table table-hover table-mail" ng-hide="customerMessages.loadingInbox">
           <tbody>
           <tr ng-click="customerMessages.displayMessage(email)" ng-class="{'unread': email.status == 'unseen', 'read': email.status == 'seen'}"
-              ng-repeat="email in customerMessages.inbox | filter:customerMessages.inboxMessages()">
+              ng-repeat="email in customerMessages.inbox | filter:customerMessages.inboxMessages() | filter:customerMessages.searchInbox()">
             <td class="check-mail">
               <input icheck type="checkbox" ng-model="email.selected">
             </td>
