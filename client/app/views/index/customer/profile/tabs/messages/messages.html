@@ -57,10 +57,10 @@
             <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
 
           </div>
-          <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i
-            class="fa fa-refresh"></i> Refresh
+          <button ng-click="customerMessages.refreshInbox()" ladda="customerMessages.loadingInbox" ng-disabled="customerMessages.loadingInbox" class="ladda-btn btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i
+            class="fa fa-refresh">&nbsp;&nbsp;</i> Refresh
           </button>
-          <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as important"><i
+          <button ng-hide="true" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as important"><i
             class="fa fa-exclamation"></i></button>
 
         </div>
@@ -72,9 +72,14 @@
           <span class="sr-only">Loading...</span>
         </div>
 
-        <div class="height-337 p-t-150 text-center" ng-if="!customerMessages.loadingInbox && customerMessages.inbox && customerMessages.inbox.length == 0">
+        <div class="height-337 p-t-150 text-center" ng-if="!customerMessages.loadingInbox && customerMessages.inbox && customerMessages.mailCount == 0">
           <p>There are no exchanged emails with this customer as of <strong>{{customerMessages.formatLastSync(customerMessages.thisCustomer.profile.lastEmailSync)}}</strong></p>
-          <p><button class="btn btn-primary bth-xs"><i class="fa fa-refresh">&nbsp;&nbsp;</i> Sync Mails</button></p>
+          <p><button ladda="customerMessages.loadingInbox" class="ladda-btn btn btn-primary bth-xs" ng-click="customerMessages.refreshInbox()" ng-disabled="customerMessages.loadingInbox"><i class="fa fa-refresh">&nbsp;&nbsp;</i> Sync Mails</button></p>
+        </div>
+
+        <div class="height-337 p-t-150 text-center" ng-if="!customerMessages.thisCustomer.profile.email">
+          <p>There is no email on file for this customer, please update the customer information</p>
+          <p><button class="btn btn-primary bth-xs" ng-click="customerMessages.editCustomer()"><i class="fa fa-pencil">&nbsp;&nbsp;</i> Update Customer </button></p>
         </div>
 
 

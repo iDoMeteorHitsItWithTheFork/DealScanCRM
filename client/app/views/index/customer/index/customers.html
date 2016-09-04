@@ -1,4 +1,13 @@
-<div>
+<div class="text-center m-t-20-pct" ng-if="customers.loadingCustomers">
+  <div class="sk-spinner sk-spinner-wandering-cubes">
+    <div class="sk-cube1"></div>
+    <div class="sk-cube2"></div>
+  </div>
+  <p class="m-t-50">LOADING CUSTOMERS...</p>
+</div>
+
+<div ng-if="!customers.loadingCustomers">
+
   <!-- Breadcrumbs -->
   <div class="row wrapper border-bottom white-bg page-heading" ng-if="$state.is('index.customer')">
     <div class="col-lg-10">
@@ -104,11 +113,11 @@
               </tr>
               </thead>
               <tbody>
-              <tr ng-repeat="c in customers.customersInfo" class="dashboard-table-w-avatar">
+              <tr ng-repeat="c in customers.customersInfo" class="dashboard-table-w-avatar" ng-click="customers.goToProfile(c)">
                 <td style="cursor:pointer;">
-                  <img alt="image" src="assets/images/profile.jpg"class="dashboard-table-avatar"><a href ng-click="customers.goToProfile(c)"> {{::c.profile.name | uppercase}}</a></td>
-                <td ng-click="customers.composeText(c)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::c.profile.phone || 'UNAVAILABLE' | uppercase}}</td>
-                <td ng-click="customers.composeMail(c)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::c.profile.email || 'UNAVAILABLE' | uppercase}}</td>
+                  <img alt="image" src="assets/images/profile.jpg"class="dashboard-table-avatar"><a href> {{::c.profile.name | uppercase}}</a></td>
+                <td ng-click="customers.composeText(c, $event)" style="cursor:pointer;"><i class="fa fa-comments-o text-muted">&nbsp;&nbsp;</i>{{::c.profile.phone || 'UNAVAILABLE' | uppercase}}</td>
+                <td ng-click="customers.composeMail(c, $event)" style="cursor:pointer;"><i class="fa fa-envelope text-muted">&nbsp;&nbsp;</i>{{::c.profile.email || 'UNAVAILABLE' | uppercase}}</td>
                 <td style="cursor:pointer; width:25% !important;">{{::c.profile.address | uppercase}}</td>
                 <td>{{c.purchases[0] ? (c.purchases[0].Purchase.year + ' ' +c.purchases[0].Purchase.make+' '+c.purchases[0].Purchase.model) : 'NO PURCHASE' | uppercase}}</td>
                 <td><span class="label"
@@ -121,7 +130,7 @@
                 </td>
                 <td >
                   <div>
-                    <a ng-click="customers.editCustomer(c)" href class="btn btn-transparent btn-xs text-muted" tooltip-placement="top" uib-tooltip="Edit">
+                    <a ng-click="customers.editCustomer(c, $event)" href class="btn btn-transparent btn-xs text-muted" tooltip-placement="top" uib-tooltip="Edit">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a href  ng-click="" class="btn btn-transparent btn-xs text-muted" tooltip-placement="top" uib-tooltip="Add Note">

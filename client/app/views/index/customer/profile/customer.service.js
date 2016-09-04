@@ -256,6 +256,7 @@ angular.module('dealScanCrmApp')
         });
     }
 
+
     // Public API here
     return {
       get: getCustomer,

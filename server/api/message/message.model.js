@@ -64,7 +64,7 @@ export default function(sequelize, DataTypes) {
     },
 
     classMethods: {
-      syncMail: function(mail, customer, t){
+      syncMail: function(mail, recipient, t){
 
         if (!mail.messageId || mail.messageId.toString().trim() == '') throw new Error('MessageIs is required');
         var searchOptions = {};
@@ -91,7 +91,7 @@ export default function(sequelize, DataTypes) {
           defaults: upsertValues,
           transaction: t
         }).spread(function (message, created) {
-          return message.setCustomer(customer, {transaction: t}).then(function () {
+          return recipient.addMessage(message, {transaction: t}).then(function () {
             return message;
           })
         })

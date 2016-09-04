@@ -21,13 +21,13 @@ angular.module('dealScanCrmApp')
   .run(function ($rootScope, $state, ezfb) {
     $rootScope.$state = $state;
 
-
     $rootScope.$on('$stateChangeStart', function (event, next, nextParams, current) {
       console.log(' ** going to state --> ['+next.name+'] From state -> ['+current.name+']');
       if (next.name === 'logout' && current && current.name && !current.authenticate) {
         next.referrer = current.name;
       }
     });
+
 
 
     $rootScope.$on('$stateChangeSuccess', function (event, next, nextParams, prev, prevParams) {

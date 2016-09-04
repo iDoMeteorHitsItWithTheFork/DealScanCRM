@@ -6,12 +6,20 @@
 (function () {
   function MessageResource($resource) {
     return $resource('/api/messages/:id/:controller', {
-        id: '@dmessageID'
+        id: '@messageID'
       },
       {
         update: {
           method:'PUT',
         },
+        reloadInbox: {
+          method: 'GET',
+          isArray: true,
+          params: {
+            id: 'reload',
+            controller: 'inbox'
+          }
+        }
       });
   }
 

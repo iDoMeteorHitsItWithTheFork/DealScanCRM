@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('CustomerMessagesCtrl', function ($scope, selectedCustomer, $filter, toaster, $window, $timeout, Messages) {
+  .controller('CustomerMessagesCtrl', function ($scope, selectedCustomer, $uibModal, $filter, toaster, $window, $timeout, Messages) {
     var _customerMessages = this;
     console.log('\n\n\n\n\n\n Message controller loaded!\n\n\n\n');
     _customerMessages.thisCustomer = selectedCustomer;
@@ -58,7 +58,7 @@ angular.module('dealScanCrmApp')
           _customerMessages.loadingInbox = false;
           toaster.error({title: 'Inbox Error', body: 'An error occured while retreiving the customer inbox'});
         })
-      } else toaster.error({title: 'Inbox Error',  body: 'There is no email associated with this customer. Please update the customer info'});
+      }
 
     }
 
@@ -150,6 +150,58 @@ angular.module('dealScanCrmApp')
         toaster.error({title: 'Send Error', body: 'An error occured while attempting to send messages'});
       })
 
+    }
+
+    _customerMessages.editCustomer = function () {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        windowClass: 'slide-up',
+        templateUrl: 'app/views/index/customer/edit/updateCustomer.html',
+        controller: 'UpdateCustomerCtrl as updateCustomer',
+        resolve: {
+          thisCustomer: function () {
+            return selectedCustomer;
+          },
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                name: 'ui.select',
+                files: ['.resources/plugins/ui-select/select.min.js',
+                  '.styles/plugins/ui-select/select.min.css']
+              },
+            ])
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedCustomer) {
+        _customerMessages.thisCustomer = updatedCustomer;
+      })
+    }
+
+
+
+    _customerMessages.refreshInbox = function(){
+      if (_customerMessages.loadingInbox) return;
+      _customerMessages.loadingInbox = true;
+      _customerMessages.thisCustomer.profile.lastEmailSync = moment().format();
+      Messages.refreshInbox(_customerMessages.thisCustomer.profile.customerID)
+        .then(function(inbox){
+          if (inbox) {
+            _customerMessages.inbox = inbox.mails;
+            _customerMessages.mailCount = inbox.mailCount;
+            _customerMessages.newMails = inbox.newMails;
+            _customerMessages.lastTextMessage = inbox.lastTextMessage;
+          } else toaster.error({
+            title: 'Inbox Error',
+            body: 'An error occured while attempting to load customer inbox.'
+          })
+          _customerMessages.loadingInbox = false;
+      }).catch(function(err){
+         console.log(err);
+        _customerMessages.loadingInbox = false;
+         toaster.error({title: 'Email load Error', body: 'An error occured while attempting to load emails'});
+      });
     }
 
 

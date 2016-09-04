@@ -18,6 +18,7 @@ angular.module('dealScanCrmApp')
     _customers.customersOnDisplay = [];
     _customers.customersContainer = [];
     _customers.processingData = _customers.searchingArchives = _customers.deletingCustomer = false;
+    _customers.loadingCustomers = false;
     _customers.findCustomer = {name: null};
     _customers.filterOptions = ['Recent', 'Old', 'Name (A-z)', 'Name (z-A)'];
     _customers.filterByOption = _customers.filterOptions[0];
@@ -62,17 +63,17 @@ angular.module('dealScanCrmApp')
      * load Customers
      * */
     var loadCustomers = function () {
-      if (_customers.processingData) return;
-      _customers.processingData = true;
+      if (_customers.loadingCustomers) return;
+      _customers.loadingCustomers = true;
       Customer.getCustomers().then(function (customersInfo) {
         if (customersInfo){
           _customers.customersInfo = customersInfo.info;
           _customers.summary = customersInfo.stats;
         }
-        _customers.processingData = false;
+        _customers.loadingCustomers = false;
       }).catch(function (err) {
         console.log(err);
-        _customers.processingData = false;
+        _customers.loadingCustomers = false;
       });
     }
 
@@ -140,7 +141,8 @@ angular.module('dealScanCrmApp')
      *
      *
      */
-    _customers.editCustomer = function (customer) {
+    _customers.editCustomer = function (customer, event) {
+      if (event) event.stopPropagation();
       var modalInstance = $uibModal.open({
         animation: true,
         windowClass: 'slide-up',
@@ -193,7 +195,8 @@ angular.module('dealScanCrmApp')
      * Email a customer
      *
      * */
-    _customers.composeMail = function (customer) {
+    _customers.composeMail = function (customer, event) {
+      if (event) event.stopPropagation();
       if (customer.profile.email && customer.profile.email.toString().trim() != '') {
         var mailTo = 'mailto:' + customer.profile.email
         var w = $window.open(mailTo);
@@ -216,7 +219,8 @@ angular.module('dealScanCrmApp')
      *
      *
      */
-    _customers.composeText = function (customer) {
+    _customers.composeText = function (customer, event) {
+      if (event) event.stopPropagation();
       console.log(customer);
       if (_customers.loadingMessages) return;
        if (customer.profile.phone && customer.profile.phone.toString().trim() != '') {
@@ -224,7 +228,7 @@ angular.module('dealScanCrmApp')
         _customers.chatRecipient = {recipientID: customer.profile.customerID, name:customer.profile.name, number: customer.profile.phone};
         _customers.loadingMessages = true;
          _customers.messages.length = 0;
-         Messages.messages(customer.profile.customerID).then(function(messages){
+         Messages.messages({id:customer.profile.customerID, type: 'customer'}).then(function(messages){
            if (messages)_customers.messages = messages;
            else _customers.messages = [];
            _customers.loadingMessages = false;

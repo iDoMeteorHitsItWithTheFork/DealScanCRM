@@ -240,3 +240,10 @@
 .p-t-75 {
   padding-top: 75px !important;
 }
+
+.m-t-20-pct {
+  margin-top: 20%;
+}
+.m-t-50 {
+  margin-top: 50px;
+}

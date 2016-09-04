@@ -107,6 +107,12 @@ textarea {
   background-color: #fff;
   color: #414141;
 }
+.b-r-50-pct {
+  border-radius: 50%;
+}
+.p-4 {
+ padding:4px !important;
+}
 /*.md-skin .navbar-static-side {*/
 /*height:100%*/
 /*}*/

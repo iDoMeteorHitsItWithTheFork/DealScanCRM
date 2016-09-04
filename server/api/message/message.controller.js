@@ -15,12 +15,17 @@ import {User} from '../../sqldb';
 import {Customer} from '../../sqldb';
 import {Lead} from '../../sqldb';
 
+
+
+
+
 var imap = require("imap");
 var mailparser = require("mailparser").MailParser;
 var inspect = require('util').inspect;
 
 var fs = require("fs");
 var moment = require('moment');
+var Q = require('q');
 
 
 
@@ -215,4 +220,200 @@ export function destroy(req, res) {
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
+}
+
+
+export function reloadInbox(req, res){
+    console.log('\n\n RELOAD INBOX \n\n');
+    console.log(req.query);
+    console.log('\n\n +++++++++++++++ \n\n');
+    if (!req.query.recipientID || req.query.recipientID.toString().trim() == '') res.status(500).send('RecipientID is required!');
+    if (!req.query.recipient || req.query.recipient.toString().trim() == '') res.status(500).send('Recipient is required!');
+    return Customer.find({
+      where: {
+        customerID: req.query.recipientID
+      }
+    }).then(function(customer){
+      if (customer.profile.email && customer.profile.email.toString().trim() != ''){
+        var email = customer.profile.email;
+        var lastSync = customer.profile.lastEmailSync;
+        var now = moment();
+        var mails;
+        if (lastSync && lastSync.toString().trim() != '' ){
+          lastSync = moment(lastSync);
+          mails = syncMails(customer, lastSync, now);
+        } else mails = syncMails(customer, moment().startOf('day'), now);
+        return mails.then(function(){
+          return Message.findAll({
+            where: {
+              recipientID: req.query.recipientID,
+              recipient: req.query.recipient
+            },
+            order: [['messageID', 'DESC']]
+          })
+            .then(respondWithResult(res))
+            .catch(handleError(res));
+        })
+      } else res.status(500).send('There is no emails on file for this customer. Please update customer emails');
+    })
+}
+
+
+
+function syncMails(customer, timestamp, now) {
+
+  var df = Q.defer();
+
+  console.log('\n\n ----------------\n\n');
+  console.log('\n\n Sync Mail \n\n');
+  console.log('\n\n ----------------\n\n');
+
+  //imap.secureserver.net
+  var config = {
+    "username": "lagodio@alvsoftwarellc.com",
+    "password": "Baiser12!",
+    "imap": {
+      "host": "imap.secureserver.net",
+      "port": 993,
+      "secure": true
+    }
+  };
+
+  var server = new imap({
+    user: config.username,
+    password: config.password,
+    host: config.imap.host,
+    port: config.imap.port,
+    tls: config.imap.secure,
+    debug: console.log
+  });
+
+  var openInbox = function (cb) {
+    server.openBox('INBOX', true, cb);
+  }
+  var timestamp = timestamp;
+  var exitOnErr = function (err) {
+    console.error(err);
+    server.end();
+    archiveEmails();
+  }
+
+  var init = function () {
+    server.connect();
+  }
+
+  var emails = {};
+  var processMail = function (mail, msgID) {
+    var m = {
+      messageId: mail['messageId'],
+      from: mail['from'][0].address,
+      name: mail['from'][0].name,
+      to: mail['to'],
+      subject: mail['subject'],
+      priority: mail['priority'],
+      date: mail['date'],
+      content: {
+        plain: mail['text'],
+        html: mail['html']
+      }
+    }
+    emails[mail.messageId] = m;
+  }
+
+  server.once('ready', function () {
+    openInbox(function (err, box) {
+      if (err) throw err;
+      //timestamp = null;
+      var searchOptions = timestamp ?
+        [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] :
+        [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", moment().startOf('day').format('MMM DD[,] YYYY')]];
+      server.search(searchOptions, function (err, results) {
+        if (err) {
+          console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');
+          exitOnErr(err);
+        }
+        if (results && results.length > 0) {
+
+          var fetch = server.fetch(results, {
+            bodies: ''
+          });
+
+          fetch.on('message', function (msg, seqno) {
+
+            var parser = new mailparser();
+
+
+            msg.on('body', function (stream, info) {
+              stream.pipe(parser);
+            });
+
+            parser.on("end", function (mail_object) {
+              processMail(mail_object, seqno);
+            });
+
+            msg.once('end', function () {
+              parser.end();
+            });
+
+          });
+
+          fetch.on('end', function () {
+            console.log('\n\n>> Done fetching all messages!\n\n');
+            disconnect();
+          });
+
+        }
+        else {
+          console.log('\n>> THERE ARE NOT MESSAGE TO READ\n\n');
+          server.end();
+          return;
+        }
+      });
+
+    });
+  });
+
+  server.once('error', function (err) {
+    console.log('\n>> EXITING ON SERVER IMAP SERVER ERROR...\n\n');
+    exitOnErr(err);
+  });
+
+  server.once('end', function () {
+    console.log('Connection ended');
+    archiveEmails();
+  });
+
+  var disconnect = function () {
+    server.end();
+  }
+
+  var archiveEmails = function () {
+    var keys = Object.keys(emails);
+    var mails = [];
+    for (var k in emails) if (emails.hasOwnProperty(k)) mails.push(emails[k]);
+    console.log(inspect(mails, false, null));
+    return Customer.sequelize.transaction(function (t) {
+      var promises = [];
+      for (var i = 0; i < mails.length; i++) promises.push(Message.syncMail(mails[i], customer, t));
+      return Q.all(promises).then(function (syncedMails) {
+        if (syncedMails){
+          return customer.update({
+            lastEmailSync: now
+          }, {transaction: t}).then(function () {
+            return customer
+          })
+        } else return customer;
+      })
+    }).then(function () {
+      return df.resolve(customer);
+    })
+      .catch(function (err) {
+        console.log(err);
+        return df.reject(err);
+      })
+  }
+
+  init();
+
+  return df.promise;
 }

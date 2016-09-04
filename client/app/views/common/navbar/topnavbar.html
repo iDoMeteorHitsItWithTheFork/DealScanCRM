@@ -1,22 +1,79 @@
 <div class="row border-bottom no-margin">
-    <nav class="navbar navbar-static-top {{$state.current.data.navbarColor}}" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <span minimaliza-sidebar></span>
-            <form role="search" class="navbar-form-custom" method="post">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                </div>
-            </form>
+  <nav class="navbar navbar-static-top {{$state.current.data.navbarColor}}" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+      <span minimaliza-sidebar></span>
+      <form role="search" class="navbar-form-custom" method="post">
+        <div class="form-group">
+          <input type="text" placeholder="Search for something..." class="form-control" name="top-search"
+                 id="top-search">
         </div>
-        <ul class="nav navbar-top-links navbar-right">
-            <li>
-                <span class="m-r-sm text-muted welcome-message" style="display:block!important;">{{days}} Days Remaining</span>
-            </li>
-            <li>
-                <a href ng-click="logout()">
-                    <i class="fa fa-sign-out"></i> Log out
-                </a>
-            </li>
+      </form>
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+      <li>
+        <span class="m-r-sm text-muted welcome-message" style="display:block!important;">{{days}} Days Remaining</span>
+      </li>
+      <li uib-dropdown>
+        <a class="count-info" href uib-dropdown-toggle>
+          <i class="fa fa-user-times"></i> <span class="label label-danger pull-right b-r-50-pct p-4">16</span>
+        </a>
+        <ul class="dropdown-messages" uib-dropdown-menu>
+          <li>
+            <div class="dropdown-messages-box">
+              <a ui-sref="profile" class="pull-left">
+                <img alt="image" class="img-circle" src="img/a7.jpg">
+              </a>
+
+              <div>
+                <small class="pull-right">46h ago</small>
+                <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+              </div>
+            </div>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <div class="dropdown-messages-box">
+              <a ui-sref="profile" class="pull-left">
+                <img alt="image" class="img-circle" src="img/a4.jpg">
+              </a>
+
+              <div>
+                <small class="pull-right text-navy">5h ago</small>
+                <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+              </div>
+            </div>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <div class="dropdown-messages-box">
+              <a ui-sref="profile" class="pull-left">
+                <img alt="image" class="img-circle" src="img/profile.jpg">
+              </a>
+
+              <div>
+                <small class="pull-right">23h ago</small>
+                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+              </div>
+            </div>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <div class="text-center link-block">
+              <a ui-sref="mailbox.inbox">
+                <i class="fa fa-user-times text-danger">&nbsp;&nbsp;</i> <strong> view all unassigned leads</strong>
+              </a>
+            </div>
+          </li>
         </ul>
-    </nav>
+      </li>
+      <li>
+        <a href ng-click="logout()">
+          <i class="fa fa-sign-out"></i> Log out
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>

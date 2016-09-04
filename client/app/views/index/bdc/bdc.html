@@ -311,12 +311,12 @@
                         <div class="table-responsive">
                           <table class="table lead-details-table" style="margin-bottom:0">
                             <tbody id="lead-info">
-                            <tr>
+                            <tr ng-click="bdc.composeText(bdc.activeLead)" class="cursor-pointer">
                               <td class="contact-type">
                                 <i class="fa fa-phone"></i></td>
                               <td> {{bdc.activeLead.phone || 'Phone Unavailable'}}</td>
                             </tr>
-                            <tr>
+                            <tr ng-click="bdc.composeMail(bdc.activeLead)" class="cursor-pointer">
                               <td class="contact-type">
                                 <i class="fa fa-envelope"></i></td>
                               <td> {{bdc.activeLead.email || 'Email Unavailable'}}</td>
@@ -1350,71 +1350,39 @@
   <!-- Chat Content -->
   <div class="content" chat-slim-scroll>
 
-    <div class="left">
-      <div class="author-name">
-        Monica Jackson
-        <small class="chat-date">
-          10:02 am
-        </small>
-      </div>
-      <div class="chat-message active">
-        Lorem Ipsum is simply dummy text input.
-      </div>
-
-    </div>
-    <div class="right">
-      <div class="author-name">
-        Mick Smith
-        <small class="chat-date">
-          11:24 am
-        </small>
-      </div>
-      <div class="chat-message">
-        Lorem Ipsum is simpl.
-      </div>
-    </div>
-    <div class="left">
-      <div class="author-name">
-        Alice Novak
-        <small class="chat-date">
-          08:45 pm
-        </small>
-      </div>
-      <div class="chat-message active">
-        Check this stock char.
-      </div>
-    </div>
-    <div class="right">
-      <div class="author-name">
-        Anna Lamson
-        <small class="chat-date">
-          11:24 am
-        </small>
-      </div>
-      <div class="chat-message">
-        The standard chunk of Lorem Ipsum
-      </div>
-    </div>
-    <div class="left">
-      <div class="author-name">
-        Mick Lane
-        <small class="chat-date">
-          08:45 pm
-        </small>
-      </div>
-      <div class="chat-message active">
-        I belive that. Lorem Ipsum is simply dummy text.
-      </div>
+    <div class="height-337 p-t-50" ng-if="bdc.loadingMessages">
+      <i class="fa fa-spinner fa-pulse fa-3x fa-fw center-block" style="margin-top:50px;"></i>
+      <span class="sr-only">Loading...</span>
     </div>
 
+    <div class="height-337 p-t-75" ng-if="!bdc.loadingMessages && bdc.messages && bdc.messages.length == 0">
+      <p class="text-center"> No messages to display</p>
+    </div>
 
+    <div ng-class="{'left': m.status == 'received', 'right': m.status == 'sent'}" ng-repeat="m in bdc.messages | orderBy:null:true">
+      <div class="author-name">
+        {{m.name}}
+        <small class="chat-date">
+          {{m.time}}
+        </small>
+      </div>
+      <div class="chat-message" ng-class="{'active': m.status == 'received'}">
+        {{m.body}}
+      </div>
+    </div>
   </div>
 
   <!-- Chat Compose -->
   <div class="form-chat">
-    <div class="input-group input-group-sm"><input type="text" class="form-control"> <span class="input-group-btn"> <button
-      class="btn btn-primary" type="button">Send
-        </button> </span></div>
+    <form name="sendMessageForm" role="form">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" ng-model="bdc.message" ng-required="true">
+        <span class="input-group-btn">
+      <button ladda="bdc.sendingMessage" class="btn btn-primary ladda-btn" type="submit"
+              ng-disabled="!sendMessageForm.$valid || sendMessageForm.$pristine || bdc.sendingMessage"
+              ng-click="bdc.sendMessage(sendMessageForm);">Send</button> </span>
+      </div>
+    </form>
   </div>
 
 </div>

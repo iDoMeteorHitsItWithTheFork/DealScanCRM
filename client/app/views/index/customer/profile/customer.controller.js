@@ -123,7 +123,7 @@ angular.module('dealScanCrmApp')
         controller: 'UpdateCustomerCtrl as updateCustomer',
         resolve: {
           thisCustomer: function () {
-            return selectedCustomer;
+            return _customer.thisCustomer;
           },
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
@@ -149,6 +149,7 @@ angular.module('dealScanCrmApp')
           zipCode: updatedCustomer.profile.zipCode,
           driverLicense: updatedCustomer.profile.driverLicenseID
         }
+        _customer.thisCustomer = updatedCustomer;
       })
     }
 

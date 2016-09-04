@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('BDCCtrl',
 
-    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, BDC, appConfig, DTOptionsBuilder, $filter, Lead, toaster, $timeout, $window) {
+    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, BDC, Messages,appConfig, DTOptionsBuilder, $filter, Lead, toaster, $timeout, $window) {
       $("#page-wrapper").css("overflow-x", "scroll");
 
       console.log("dashboard controller loaded");
@@ -20,7 +20,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.assigningLead = false;
       _bdc.note = {content: ''};
       _bdc.dealers = Auth.getDealerships();
-
+      _bdc.loadingMessages = false;
+      _bdc.sendingMessage = false;
+      _bdc.messages = [];
       _bdc.leads = [];
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
         _bdc.isManager = ans;
@@ -427,15 +429,57 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
        *
        */
       _bdc.composeText = function (lead) {
+        if (_bdc.loadingMessages) return;
         if (lead.phone && lead.phone.toString().trim() != '') {
           if (!_bdc.openChat) _bdc.openChat = true;
-          _bdc.chatRecipient = {name:lead.name, number: lead.phone};
+          _bdc.chatRecipient = {
+            recipientID: lead.leadID,
+            name: lead.name,
+            number: lead.phone
+          };
+          _bdc.loadingMessages = true;
+          _bdc.messages.length = 0;
+          Messages.messages({id:lead.leadID, type: 'lead'}).then(function (messages) {
+            if (messages)_bdc.messages = messages;
+            else _bdc.messages = [];
+            _bdc.loadingMessages = false;
+          }).catch(function (err) {
+            console.log(err);
+            _bdc.loadingMessages = false;
+            toaster.error({title: 'Messages Error', body: 'An error occurred while loading messages'});
+          })
+
         } else toaster.error({
           title: 'Message Error',
           body: 'There are no phone number detected for this customer. please update the customer details.'
         })
 
       }
+
+      _bdc.sendMessage = function(form){
+        if (_bdc.sendingMessage) return;
+        if (!_bdc.message || _bdc.message.toString().trim() == '') return;
+        _bdc.sendingMessage = true;
+        Messages.send({
+          id: _bdc.chatRecipient.recipientID,
+          recipient: 'lead',
+          message: _bdc.message
+        }).then(function (message) {
+          console.log(message);
+          if (message) {
+            _bdc.messages.unshift(message);
+            _bdc.message = '';
+            form.$setPristine();
+          } else toaster.error({title: '', body: 'An error occured while attempting to send your message.'});
+          _bdc.sendingMessage = false;
+        }).catch(function (err) {
+          console.log(err);
+          _bdc.sendingMessage = false;
+          toaster.error({title: 'Send Error', body: 'An error occured while attempting to send messages'});
+        })
+
+      }
+
 
       _bdc.addAppointment = function (lead) {
         var modalInstance = $uibModal.open({

@@ -36,7 +36,7 @@ var imap = require("imap");
 var mailparser = require("mailparser").MailParser;
 var inspect = require('util').inspect;
 var fs = require("fs");
-var INF = moment().startOf('day').format('MMM DD[,] YYYY');
+var INF = moment().subtract(1, 'month').startOf('day').format('MMM DD[,] YYYY');
 
 
 function respondWithResult(res, statusCode) {
@@ -266,12 +266,11 @@ export function show(req, res) {
         var email = customer.profile.email;
         var lastSync = customer.profile.lastEmailSync;
         var now = moment();
-       /* if (lastSync && lastSync.toString().trim() != '' ){
+        if (lastSync && lastSync.toString().trim() != '' ){
            lastSync = moment(lastSync);
            var interval = now.diff(lastSync, 'minutes');
            if (interval > 15) syncMails(customer, lastSync, now);
-        } else syncMails(customer, null, now);*/
-        syncMails(customer, null, now);
+        } else syncMails(customer, null, now);
       }
       return res.status(200).json(formatCustomer(customer));
     })
@@ -520,7 +519,6 @@ function generateDocSet(customer, deal){
   return df.promise;
 }
 
-
 function syncMails(customer, timestamp, now) {
 
   console.log('\n\n ----------------\n\n');
@@ -589,7 +587,7 @@ function syncMails(customer, timestamp, now) {
       //timestamp = null;
       var searchOptions = timestamp ?
         [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", moment(timestamp).format('MMM DD[,] YYYY')]] :
-        [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", moment().subtract(2, 'days').format('MMM DD[,] YYYY')]];
+        [['OR', ['FROM', customer.profile.email], ['TO', customer.profile.email]], ["SINCE", INF]];
       server.search(searchOptions, function (err, results) {
         if (err) {
           console.log('\n>> EXITING ON INBOX SEARCH ERROR...\n\n');

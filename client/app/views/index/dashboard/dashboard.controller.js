@@ -1246,7 +1246,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         };
         _dashboard.loadingMessages = true;
         _dashboard.messages.length = 0;
-        Messages.messages(deal.customerDetails.customerID).then(function (messages) {
+        Messages.messages({id: deal.customerDetails.customerID, type: 'customer'}).then(function (messages) {
           if (messages)_dashboard.messages = messages;
           else _dashboard.messages = [];
           _dashboard.loadingMessages = false;
