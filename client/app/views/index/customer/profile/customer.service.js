@@ -140,8 +140,8 @@ angular.module('dealScanCrmApp')
       return CustomerResource.update({id:id}, customer).
         $promise.then(function (updatedCustomer) {
           console.log(updatedCustomer);
-          if (Util.indexOfObject(_customers, 'customerID', id) != -1) {
-            var idx = Util.indexOfObject(_customers, 'customerID', id);
+          if (Util.indexOfObject(_customers, 'id', id) != -1) {
+            var idx = Util.indexOfObject(_customers, 'id', id);
             _customers.splice(idx, 1, updatedCustomer);
             console.log('**** spliced');
           }

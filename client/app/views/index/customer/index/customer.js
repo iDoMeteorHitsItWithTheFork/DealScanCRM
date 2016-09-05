@@ -50,7 +50,7 @@ angular.module('dealScanCrmApp')
         controller: 'CustomerCtrl as customer',
         data: {pageTitle: 'Customer Profile'},
         resolve: {
-          selectedCustomer: function (loadPlugin, $q, $stateParams, Customer) {
+          selectedCustomer: function ($q, $stateParams, Customer) {
             var df = $q.defer();
             console.log($stateParams);
             Customer.get($stateParams.customerID).then(function (customer) {
@@ -69,19 +69,6 @@ angular.module('dealScanCrmApp')
           }
         },
       })
-      .state('index.customer.profile.overview', {
-        url: '/overview',
-        title: 'Overview',
-        authenticate: true,
-        templateUrl: 'app/views/index/customer/profile/tabs/overview/overview.html',
-        controller: 'CustomerCtrl as customer',
-        resolve: {
-          thisCustomer: function (loadPlugin, selectedCustomer) {
-            return selectedCustomer;
-          }
-        },
-        data: {pageTitle: 'Customer Overview'},
-      })
       .state('index.customer.profile.documents', {
         url: '/documents',
         title: 'Documents',
@@ -89,9 +76,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/documents/documents.html',
         controller: 'DocumentsCtrl as documents',
         resolve: {
-          thisCustomer: function (loadPlugin, selectedCustomer) {
-            return selectedCustomer;
-          }
+
         },
         data: {pageTitle: 'Customer Documents'},
       })
@@ -102,9 +87,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/documents/pdfViewer/pdfViewer.html',
         controller: 'PdfViewerCtrl as viewer',
         resolve: {
-          thisCustomer: function (loadPlugin, selectedCustomer) {
-            return selectedCustomer;
-          }
+
         },
         data: {pageTitle: 'PDF Viewer'},
       })
@@ -115,9 +98,7 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/task/task.html',
         controller: 'TaskCtrl as task',
         resolve: {
-          thisCustomer: function (loadPlugin, selectedCustomer) {
-            return selectedCustomer;
-          }
+
         },
         data: {pageTitle: 'Customer Tasks'},
       })
@@ -128,19 +109,6 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/note/note.html',
         controller: 'NoteCtrl as note',
         resolve: {
-          loadPlugin: function ($ocLazyLoad) {
-            return $ocLazyLoad.load([
-              {
-                serie: true,
-                name: 'angular-ladda',
-                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                  '.styles/plugins/ladda/ladda-themeless.min.css', '.resources/plugins/ladda/angular-ladda.min.js']
-              }
-            ])
-          },
-          thisCustomer: function (selectedCustomer) {
-            return selectedCustomer;
-          },
 
         },
         data: {pageTitle: 'Customer Notes'},
@@ -152,8 +120,24 @@ angular.module('dealScanCrmApp')
         templateUrl: 'app/views/index/customer/profile/tabs/messages/messages.html',
         controller: 'CustomerMessagesCtrl as customerMessages',
         resolve: {
-          thisCustomer: function (loadPlugin, selectedCustomer) {
-            return selectedCustomer;
+          selectedCustomer: function($q, $stateParams, Customer){
+            var df = $q.defer();
+            console.log($stateParams);
+            Customer.get($stateParams.customerID).then(function (customer) {
+              if (customer) {
+                console.log('RESOLVED IN MESSAGES...');
+                console.log(customer);
+                console.log('\n\n ++++++++++++++++ \n\n');
+                df.resolve(customer);
+              } else {
+                console.log('REJECTED IN MESSAGES..');
+                console.log('\n\n ++++++++++++++++ \n\n');
+                df.reject('User Not Found');
+              }
+            }).catch(function (err) {
+              df.reject(err);
+            })
+            return df.promise;
           }
         },
         data: {pageTitle: 'Customer Messages'},

@@ -279,6 +279,7 @@ export function show(req, res) {
 
 function formatCustomer(customer){
   var _customer = {};
+  _customer.id = customer.profile.customerID;
   _customer.profile = customer.profile;
   _customer.purchases = [];
   for(var i = 0; i < customer.Deals.length; i++){

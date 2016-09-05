@@ -12,6 +12,8 @@ angular.module('dealScanCrmApp')
     _customerMessages.lastTextMessage = null;
     _customerMessages.search = { mail:'', text: ''};
 
+    var parent = $scope.$parent.customer;
+
     _customerMessages.viewOptions = 'inbox';
     _customerMessages.displayView = function(view){
       _customerMessages.viewOptions = view;
@@ -66,6 +68,7 @@ angular.module('dealScanCrmApp')
     _customerMessages.loadInbox();
 
     _customerMessages.formatLastSync = function(time){
+       if (!time) time = moment();
        return moment(time).format('dddd, MMM Do YYYY [at] hh:mm a');
     }
 
@@ -177,6 +180,17 @@ angular.module('dealScanCrmApp')
 
       modalInstance.result.then(function (updatedCustomer) {
         _customerMessages.thisCustomer = updatedCustomer;
+        parent.updateCustomerInfo({
+          name: updatedCustomer.profile.name,
+          phone: updatedCustomer.profile.phone,
+          email: updatedCustomer.profile.email,
+          address: updatedCustomer.profile.address,
+          streetAddress: updatedCustomer.profile.streetAddress,
+          city: updatedCustomer.profile.city,
+          state: updatedCustomer.profile.state,
+          zipCode: updatedCustomer.profile.zipCode,
+          driverLicense: updatedCustomer.profile.driverLicenseID
+        }, updatedCustomer);
       })
     }
 
@@ -201,7 +215,7 @@ angular.module('dealScanCrmApp')
       }).catch(function(err){
          console.log(err);
         _customerMessages.loadingInbox = false;
-         toaster.error({title: 'Email load Error', body: 'An error occured while attempting to load emails'});
+         toaster.error({title: 'Email load Error', body: 'An error occurred while attempting to load emails'});
       });
     }
 

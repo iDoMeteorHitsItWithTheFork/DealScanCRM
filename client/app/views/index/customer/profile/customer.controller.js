@@ -23,6 +23,11 @@ angular.module('dealScanCrmApp')
       driverLicense: _customer.thisCustomer.profile.driverLicenseID
     }
 
+    _customer.updateCustomerInfo = function(info, updatedCustomer){
+      _customer.info = info;
+      selectedCustomer = updatedCustomer;
+    }
+
     _customer.purchases = _customer.thisCustomer.purchases;
     _customer.purchase = _customer.purchases[0];
 
@@ -123,7 +128,7 @@ angular.module('dealScanCrmApp')
         controller: 'UpdateCustomerCtrl as updateCustomer',
         resolve: {
           thisCustomer: function () {
-            return _customer.thisCustomer;
+            return selectedCustomer;
           },
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
@@ -149,7 +154,7 @@ angular.module('dealScanCrmApp')
           zipCode: updatedCustomer.profile.zipCode,
           driverLicense: updatedCustomer.profile.driverLicenseID
         }
-        _customer.thisCustomer = updatedCustomer;
+        selectedCustomer = updatedCustomer;
       })
     }
 
@@ -166,7 +171,7 @@ angular.module('dealScanCrmApp')
             return {deal: deal, display: display};
           },
           customer: function(){
-            return _customer.thisCustomer;
+            return selectedCustomer;
           },
           loadPlugin: function ($ocLazyLoad) {
             return $ocLazyLoad.load([
