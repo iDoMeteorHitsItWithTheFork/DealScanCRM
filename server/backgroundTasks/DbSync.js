@@ -178,7 +178,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(today){
-  if (!today) today = moment().startOf('day'); //moment().startOf('month').startOf('day');
+  if (!today) today = moment(); //moment().startOf('month').startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +
@@ -283,7 +283,8 @@ var sqlStatement = function(today){
     "LEFT OUTER JOIN [KelCar.DeskingSuite].Deal.Trade DLTRD ON DL.TradeId = DLTRD.TradeId " +
     "LEFT OUTER JOIN [KelCar.DeskingSuite].Vehicle.VehicleView TRDVHL ON TRDVHL.VehicleId = DLTRD.VehicleId " +
     "WHERE CST.FullName IS NOT NULL AND CST.FullName != '' AND " +
-    "(DL.DateCreated >= '"+today.format("MM/DD/YYYY HH:mm:ss a")+"' OR DL.DateStatusChanged >= '"+today.format("MM/DD/YYYY HH:mm:ss a")+"') " +
+    "(DL.DateCreated >= '"+today.startOf('day').format("MM/DD/YYYY HH:mm:ss a")+"' OR DL.DateStatusChanged >= '"+today.startOf('day').format("MM/DD/YYYY HH:mm:ss a")+"') AND " +
+    "(DL.DateCreated <= '"+today.endOf('day').format("MM/DD/YYYY HH:mm:ss a")+"' OR DL.DateStatusChanged <= '"+today.endOf('day').format("MM/DD/YYYY HH:mm:ss a")+"') " +
     "AND PMT.Selected = 1 " +
     "ORDER BY DL.DealId DESC, PMT.PaymentOptionId DESC ";
 }
@@ -367,7 +368,7 @@ var formatResults = function (results) {
       FullName: deal.FullName,
       AddressLine1: deal.AddressLine1,
       AddressLine2: deal.AddressLine2,
-      PhoneNumbver: deal.PhoneNumber,
+      PhoneNumber: deal.PhoneNumber,
       EmailAddress: deal.EmailAddress,
       City: deal.City,
       StateName: deal.StateName,

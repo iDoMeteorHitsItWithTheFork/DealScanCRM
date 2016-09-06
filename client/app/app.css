@@ -116,3 +116,17 @@ textarea {
 /*.md-skin .navbar-static-side {*/
 /*height:100%*/
 /*}*/
+
+.b-li-divider {
+  border-bottom:1px solid  #e5e5e5;
+  margin: 9px 0;
+  padding-bottom: 9px;
+}
+
+.m-l-77 {
+  margin-left: 77px;
+}
+
+.p-l-20 {
+  padding-left: 20px;
+}

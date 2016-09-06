@@ -1,13 +1,115 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .config(function ($stateProvider) {
+  .config(function ($stateProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
+
+    // Configure Idle settings
+    IdleProvider.idle(5); // in seconds
+    IdleProvider.timeout(120); // in seconds
+    $ocLazyLoadProvider.config({
+      // Set to true if you want to see what and when is dynamically loaded
+      debug: true
+    });
+
     $stateProvider
       .state('index', {
         abstract: true,
         url: "/index",
         templateUrl: "app/views/common/content.html",
         authenticate: true,
+        resolve: {
+          loadDealers: function($q, Auth){
+            var df = $q.defer();
+            Auth.loadDealerships().then(function(dealers){
+              if (dealers) df.resolve(dealers);
+              else df.reject();
+            }).catch(function(err){
+              console.log(err);
+              df.reject(err);
+            });
+            return df.promise;
+          },
+          loadKPI: function(Dashboard, $q){
+            var df = $q.defer();
+            Dashboard.kpi().then(function(kpi){
+              if (kpi) df.resolve(kpi);
+              else df.reject();
+            }).catch(function(err){
+              console.log(err);
+              df.reject(err);
+            });
+            return df.promise;
+          },
+          loadUnassignedLeads: function(Lead, $q){
+            var df = $q.defer();
+            Lead.scheduledLeads().then(function(leads){
+              (leads) ? df.resolve(leads) : df.reject();
+
+            }).catch(function(err){
+              df.reject(err);
+              console.log(err);
+            })
+            return df.promise;
+          },
+          loadPlugin: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+              {
+                serie: true,
+                name: 'angular-ladda',
+                files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
+                  '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+              },
+              {
+                files: ['.resources/plugins/moment/moment.min.js']
+              },
+              {
+                files: ['.resources/plugins/jasny/jasny-bootstrap.min.js']
+              },
+              {
+                name: 'ui.checkbox',
+                files: ['.resources/bootstrap/angular-bootstrap-checkbox.js']
+              },
+              {
+                files: ['.styles/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css']
+              },
+              {
+                files: ['.styles/plugins/iCheck/custom.css','.resources/plugins/iCheck/icheck.min.js']
+              },
+              {
+                name: 'ui.sortable',
+                files: ['.resources/plugins/ui-sortable/sortable.js']
+              },
+              {
+                name: 'ui.select',
+                files: ['.resources/plugins/ui-select/select.min.js',
+                  '.styles/plugins/ui-select/select.min.css']
+              },
+              {
+                serie: true,
+                files: ['.resources/plugins/dataTables/datatables.min.js',
+                  '.styles/plugins/dataTables/datatables.min.css']
+              },
+              {
+                serie: true,
+                name: 'datatables',
+                files: ['.resources/plugins/dataTables/angular-datatables.min.js']
+              },
+              {
+                serie: true,
+                name: 'datatables.buttons',
+                files: ['.resources/plugins/dataTables/angular-datatables.buttons.min.js']
+              },
+              {
+                serie: true,
+                files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+              },
+              {
+                name: 'daterangepicker',
+                files: ['.resources/plugins/daterangepicker/angular-daterangepicker.js']
+              }
+            ])
+          }
+        }
       })
       .state('logout', {
         url: '/logout?referrer',

@@ -33,7 +33,7 @@
 
         <div class="form-group">
           <label>Scheduled Lead</label>
-          <ui-select ng-model="assignLead.appointmentDetails.lead" theme="bootstrap" style="margin-right:5px; margin-left:5px;" ng-required="true">
+          <ui-select ng-model="assignLead.assignmentDetails.lead" theme="bootstrap" style="margin-right:5px; margin-left:5px;" ng-required="true">
             <ui-select-match placeholder="Assign Lead...">{{$select.selected.name | cut:true:35}}
             </ui-select-match>
             <ui-select-choices repeat="lead in assignLead.leads | filter: $select.search">
@@ -52,14 +52,14 @@
         <div class="form-group">
           <label>Scheduled Time</label>
           <input ng-disabled="true" type="text" placeholder="Appointment Date" class="form-control"
-                 ng-model="assignLead.appointmentDetails.lead.appointments[0].time"/>
+                 ng-model="assignLead.assignmentDetails.lead.appointments[0].time"/>
         </div>
       </div>
       <div class="col-md-12">
         <div class="form-group">
           <label>Vehicle Interest</label>
           <input ng-disabled="true" type="text" placeholder="Expressed Interest...." class="form-control"
-                 ng-model="assignLead.appointmentDetails.lead.interest"/>
+                 ng-model="assignLead.assignmentDetails.lead.interest"/>
         </div>
       </div>
 
@@ -70,7 +70,7 @@
         <div class="form-group">
           <label>Additional Details</label>
           <textarea ng-disabled="true" class="form-control" rows="5"
-                    ng-model="assignLead.appointmentDetails.lead.additionalInfo"></textarea>
+                    ng-model="assignLead.assignmentDetails.lead.additionalInfo"></textarea>
         </div>
       </div>
     </div>

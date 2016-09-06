@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dealScanCrmApp')
-  .controller('AssignLeadCtrl', function ($scope, $uibModalInstance, $filter, Dealers, Util, Lead, toaster) {
+  .controller('AssignLeadCtrl', function ($scope, $uibModalInstance, $filter, Dealers, selectedLead, Util, Lead, toaster) {
 
     var _assignLead = this;
     _assignLead.dealers = Dealers;
@@ -45,6 +45,7 @@ angular.module('dealScanCrmApp')
       Lead.scheduledLeads().then(function(leads){
         if (leads){
           _assignLead.leads = leads;
+          if (selectedLead) _assignLead.assignmentDetails.lead = selectedLead;
         } else {
           toaster.error({title: '', body: ''});
         }
@@ -54,7 +55,6 @@ angular.module('dealScanCrmApp')
          console.log(err);
          toaster.error({title: 'Lead Load Error', body: 'An error occurred while attempting to retreive leads.'})
       })
-
     }
 
     _assignLead.loadScheduledLeads();
@@ -63,6 +63,7 @@ angular.module('dealScanCrmApp')
       return value.role != 'admin' && value.role != 'gen_mgr'
         && value.role != 'owner' && value.firstName != 'DealScan' && value.firstName != 'EMAIL';
     });
+
 
     _assignLead.groupByRole = function (employee){
       return employee.profile.role;

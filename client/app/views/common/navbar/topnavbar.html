@@ -14,56 +14,28 @@
         <span class="m-r-sm text-muted welcome-message" style="display:block!important;">{{days}} Days Remaining</span>
       </li>
       <li uib-dropdown ng-if="leads.length > 0">
-        <a class="count-info" href uib-dropdown-toggle>
+        <a class="count-info p-l-20" href uib-dropdown-toggle>
           <i class="fa fa-user-times"></i> <span class="label label-danger pull-right b-r-50-pct">{{leads.length || 0}}</span>
         </a>
         <ul class="dropdown-messages" uib-dropdown-menu>
-          <li>
+          <li ng-repeat="l in leads | limitTo:3" class="b-li-divider cursor-pointer" ng-click="assignLead(l)">
             <div class="dropdown-messages-box">
               <a ui-sref="profile" class="pull-left">
-                <img alt="image" class="img-circle" src="img/a7.jpg">
+                <img alt="image" class="img-circle" src="assets/images/profile.jpg">
               </a>
-
               <div>
-                <small class="pull-right">46h ago</small>
-                <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
-                <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                <small class="pull-right">{{l.appointments[0].timeAgo}}</small>
+                <strong>{{l.appointments[0].name}}</strong><br>
+                <strong>{{l.appointments[0].time}}</strong><br/>
+                <small class="text-muted">Scheduled by {{l.appointments[0].host.name}}</small><br/>
+                <small class="m-l-77">Assigned Manager {{l.appointments[0].attendants[0].name}}</small>
               </div>
             </div>
           </li>
-          <li class="divider"></li>
-          <li>
-            <div class="dropdown-messages-box">
-              <a ui-sref="profile" class="pull-left">
-                <img alt="image" class="img-circle" src="img/a4.jpg">
-              </a>
-
-              <div>
-                <small class="pull-right text-navy">5h ago</small>
-                <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
-                <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
-              </div>
-            </div>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <div class="dropdown-messages-box">
-              <a ui-sref="profile" class="pull-left">
-                <img alt="image" class="img-circle" src="img/profile.jpg">
-              </a>
-
-              <div>
-                <small class="pull-right">23h ago</small>
-                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
-                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
-              </div>
-            </div>
-          </li>
-          <li class="divider"></li>
           <li>
             <div class="text-center link-block">
-              <a ui-sref="mailbox.inbox">
-                <i class="fa fa-user-times text-danger">&nbsp;&nbsp;</i> <strong> view all unassigned leads</strong>
+              <a ng-click="assignLead()">
+                <i class="fa fa-user-plus text-navy">&nbsp;&nbsp;</i> <strong> Assign Leads To Sales Personnel</strong>
               </a>
             </div>
           </li>

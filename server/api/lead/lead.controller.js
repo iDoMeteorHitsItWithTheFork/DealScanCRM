@@ -204,7 +204,7 @@ function formatLead(lead) {
     formattedLead.agents = [];
     for (var i = 0; i < lead.Agents.length; i++) {
       var agentProfile = lead.Agents[i].profile;
-      agentProfile.timeAgo = moment(lead.Agents[i].profile.createdAt).fromNow();
+      agentProfile.timeAgo = moment(lead.Agents[i].createdAt).fromNow();
       formattedLead.agents.push(agentProfile);
     }
   }
@@ -212,9 +212,11 @@ function formatLead(lead) {
   if (lead.Events) {
     formattedLead.appointments = [];
     for (var j = 0; j < lead.Events.length; j++) {
+      //console.log(lead.Events[j]);
       var appointmentProfile = lead.Events[j].profile;
       appointmentProfile.host = lead.Events[j].Host.profile;
       appointmentProfile.time = moment(lead.Events[j].time).format('ddd, MMM Do YYYY, h:mm a');
+      appointmentProfile.timeAgo = moment(lead.Events[j].createdAt).fromNow();
       appointmentProfile.sourceName = lead.sourceName;
       appointmentProfile.sourceType = lead.sourceType;
       if (lead.Events[j].AttendingUsers && lead.Events[j].AttendingUsers.length > 0){
@@ -330,7 +332,47 @@ export function create(req, res) {
         })
     })
   }).then(function (lead) {
-    return res.status(200).json(formatLead(lead));
+
+     return Lead.find({
+       where: {
+         leadID: lead.leadID
+       },
+       include: [
+         {
+           model: Note,
+           include: [
+             {
+               model: User,
+               as: 'Creator',
+               attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+             }
+           ],
+           through: NoteActivities,
+           order: [['noteID', 'DESC']]
+         },
+         {
+           model: User,
+           as: 'Agents',
+           attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
+           through: 'AssignedLeads'
+         },
+         {
+           model: Event,
+           include: [
+             {
+               model: User,
+               as: 'Host',
+               attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+             }
+           ],
+           through: Participants,
+           order: [['eventID', 'DESC']]
+         }
+       ]
+     }).then(function(l){
+       return res.status(200).json(formatLead(l));
+     })
+
   }).catch(handleError(res));
 }
 
@@ -1054,7 +1096,6 @@ export function scheduledAppointments(req, res) {
       include: [
         {
           model: Event,
-          attributes: ['eventID', 'name', 'location', 'time', 'description', 'category'],
           through: Participants,
           require: true,
           where: {
@@ -1078,7 +1119,6 @@ export function scheduledAppointments(req, res) {
         {
           model: User,
           as: 'Agents',
-          attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
           through: 'AssignedLeads'
         }]
     }).then(function (leads) {

@@ -25,9 +25,10 @@ angular.module('dealScanCrmApp')
         if (!details.source) throw new Error('Lead Source is required');
         return LeadResource.save(details)
           .$promise.then(function (lead) {
+            console.log(lead);
             if (lead && !lead.error) {
               lead.interest = JSON.parse(JSON.stringify(lead.interest));
-               if (lead.appointments.length > 0) _scheduledLeads.unshift(lead);
+               if (lead.appointments && lead.appointments.length > 0) _scheduledLeads.unshift(lead);
               _leads.unshift(lead);
             } return _leads;
           }).catch(function (err) {

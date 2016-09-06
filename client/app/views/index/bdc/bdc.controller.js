@@ -724,7 +724,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-      _bdc.assignLead = function () {
+      _bdc.assignLead = function (lead) {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
@@ -733,6 +733,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           resolve: {
             Dealers: function(){
               return _bdc.dealers;
+            },
+            selectedLead: function(){
+              return lead;
             },
             loadPlugin: function ($ocLazyLoad) {
               return $ocLazyLoad.load([
