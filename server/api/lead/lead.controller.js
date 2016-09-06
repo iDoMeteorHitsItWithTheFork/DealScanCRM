@@ -17,6 +17,8 @@ import {Event} from '../../sqldb';
 import {Note} from '../../sqldb';
 import {NoteActivities} from '../../sqldb';
 import {Participants} from '../../sqldb';
+import {Message} from '../../sqldb';
+
 var moment = require('moment');
 var Q = require('q');
 var inspect = require('util').inspect;
@@ -295,7 +297,7 @@ export function create(req, res) {
                             time: appointment,
                             category: 'appointment',
                             status: 'scheduled',
-                            state: 'unsold',
+                            state: 'unassigned',
                           }, {transaction: t}).then(function (appointment) {
                             return appointment.setHost(user, {transaction: t})
                               .then(function () {
@@ -366,7 +368,7 @@ export function scheduleAppointment(req, res) {
           time: req.body.appointment,
           category: 'appointment',
           status: 'scheduled',
-          state: 'unsold',
+          state: 'unassigned',
         };
         return lead.createEvent(details, {transaction: t})
           .then(function (event) {
@@ -1057,6 +1059,7 @@ export function scheduledAppointments(req, res) {
           require: true,
           where: {
             status: 'scheduled',
+            state: 'unassigned',
             category: 'appointment'
           },
           include: [
@@ -1089,6 +1092,73 @@ export function scheduledAppointments(req, res) {
 
 export function assignAgent(req, res) {
 
+
+}
+
+
+export function getSentMessages(req, res){
+
+  return Message.findAndCountAll({
+    where : {
+      recipient: 'lead',
+      type: 'text'
+    },
+    include:[
+      {
+        model: Lead,
+        as: 'lead',
+        required: true,
+        include: [
+          {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
+            model: User,
+            as: 'Agents',
+            attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
+            through: 'AssignedLeads'
+          },
+          {
+            model: Event,
+            include: [
+              {
+                model: User,
+                as: 'Host',
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: Participants,
+            order: [['eventID', 'DESC']]
+          }
+        ]
+      }
+    ],
+    limit: 100,
+    order: [['messageID', 'DESC']]
+  })
+    .then(function(messages){
+      if (messages) {
+        var count = messages.count;
+        var _messages = [];
+        for(var i = 0; i< messages.rows.length; i++){
+          var l = formatLead(messages.rows[i].lead);
+          var msg = messages.rows[i].profile;
+          msg.lead = l;
+          _messages.push(msg);
+        }
+        return res.status(200).json({count: count, messages: _messages});
+      }
+    })
+    .catch(handleError(res));
 
 }
 

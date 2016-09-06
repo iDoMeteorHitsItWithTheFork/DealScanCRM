@@ -24,22 +24,64 @@ angular.module('dealScanCrmApp')
       promises.push(keptAppointments());
       promises.push(missedAppointments());
       promises.push(soldAppointments());
+      promises.push(sentMessages());
+
       return $q.all(promises).then(function (results) {
         var totalLeads = results[0];
         var totalAppointments = results[1];
         var keptAppointments = results[2];
         var missedAppointments = results[3];
         var soldAppointments = results[4];
+        var sentMessages = results[5];
         return {totalLeads: totalLeads,
                 totalAppointments: totalAppointments,
                 keptAppointments: keptAppointments,
                 missedAppointments: missedAppointments,
-                soldAppointments: soldAppointments};
+                soldAppointments: soldAppointments,
+                sentMessages: sentMessages};
       }).catch(function (err) {
         console.log(err);
         return err;
       });
     }
+
+
+    function sentMessages(){
+      return LeadResource.sentMessages().$promise
+        .then(function(messages){
+        console.log(messages);
+        if (messages){
+          for(var i = 0; i < messages.messages.length; i++){
+            var msg = messages.messages[i];
+            msg.lead.notes = $filter('orderBy')(msg.lead.notes, "createdAt", true);
+            msg.lead.appointments = $filter('orderBy')(msg.lead.appointments, "createdAt", true);
+            msg.lead.agents = $filter('orderBy')(msg.lead.agents, "createdAt", true);
+            msg.lead.name = Util.slimTrim(msg.lead.name);
+            msg.timeAgo = moment(msg.createdAt).fromNow();
+            if (msg.lead.interest && msg.lead.interest.trim() != ''){
+              try {
+                var js = JSON.parse(msg.lead.interest);
+                var parseInterest = '';
+                if (js.type) parseInterest += js.type;
+                if (js.year) parseInterest += ' '+js.year;
+                if (js.make) parseInterest += ' '+js.make;
+                if (js.model) parseInterest += ' '+js.model;
+                if (js.hasOwnProperty('trim') || js.trimlevel || js.trimLevel) parseInterest += ' '+ (js['trim'] || js.trimlevel || js.trimLevel);
+                if (js.vin || js.VIN || js.vinnumber || js.vinNumber) parseInterest += ' '+(js.vin || js.VIN || js.vinnumber || js.vinNumber);
+                if (js.stocknumber || js.stockNumber) parseInterest += ' '+(js.stocknumber || js.stockNumber);
+                msg.lead.interest = Util.slimTrim(parseInterest);
+              } catch(ex){}
+            }
+          }
+          return {messages: messages.messages, count: messages.count};
+        }
+        else return {error: {code: '', msg:''}};
+      }).catch(function(err){
+         console.log(err);
+         return err;
+      })
+    }
+
 
 
     function extractAppointments(){
@@ -532,7 +574,7 @@ angular.module('dealScanCrmApp')
       totalAppointments: totalAppointments,
       keptAppointments: keptAppointments,
       missedAppointments: missedAppointments,
-      soldAppointments: soldAppointments
+      soldAppointments: soldAppointments,
     }
   })
 

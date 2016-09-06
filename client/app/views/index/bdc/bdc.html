@@ -474,53 +474,53 @@
 
           <div class="row p-l-15 p-r-15 animated fadeInRight hideSansDelay" ng-if="bdc.showTable">
             <div class="col-lg-3">
-              <div class="widget style1 red-bg">
+              <div class="widget style1 red-bg cursor-pointer" ng-click="bdc.viewNewLeads()">
                 <div class="row">
                   <div class="col-xs-4">
-                    <i class="fa fa-user-times fa-2x"></i>
+                    <i class="fa fa-bolt fa-2x"></i>
                   </div>
                   <div class="col-xs-8 text-right">
-                    <span> Unassigned Leads </span>
-                    <h3 class="font-bold">26</h3>
+                    <span> New Leads </span>
+                    <h3 class="font-bold">{{bdc.new_leads.length || 0}}</h3>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-lg-3">
-              <div class="widget style1 blue-bg">
+              <div class="widget style1 blue-bg cursor-pointer" ng-click="bdc.displayStatsDetails('calls')">
                 <div class="row">
                   <div class="col-xs-4">
                     <i class="fa fa-phone fa-2x"></i>
                   </div>
                   <div class="col-xs-8 text-right">
                     <span> Call Completed </span>
-                    <h3 class="font-bold">23</h3>
+                    <h3 class="font-bold">--</h3>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-lg-3">
-              <div class="widget style1 navy-bg">
+              <div class="widget style1 navy-bg cursor-pointer" ng-click="bdc.displayStatsDetails('text')">
                 <div class="row">
                   <div class="col-xs-4">
                     <i class="fa fa-comments-o fa-2x"></i>
                   </div>
                   <div class="col-xs-8 text-right">
                     <span> Messages Sent </span>
-                    <h3 class="font-bold">26</h3>
+                    <h3 class="font-bold">{{bdc.sentMessages.count || 0}}</h3>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-lg-3">
-              <div class="widget style1 yellow-bg">
+              <div class="widget style1 yellow-bg cursor-pointer" ng-click="bdc.displayStatsDetails('mail')">
                 <div class="row">
                   <div class="col-xs-4">
                     <i class="fa fa-envelope fa-2x"></i>
                   </div>
                   <div class="col-xs-8 text-right">
                     <span> Email Sent </span>
-                    <h3 class="font-bold">26</h3>
+                    <h3 class="font-bold">--</h3>
                   </div>
                 </div>
               </div>
@@ -601,50 +601,50 @@
               <div class="col-lg-4 p-t-100 animated bounceIn hideSansDelay" ng-if="!bdc.showTable">
                 <div class="col-lg-10 m-l-40">
 
-                  <div class="widget style1 red-bg">
+                  <div class="widget style1 red-bg cursor-pointer" ng-click="bdc.viewNewLeads()">
                     <div class="row">
                       <div class="col-xs-4">
-                        <i class="fa fa-user-times fa-2x"></i>
+                        <i class="fa fa-bolt fa-2x"></i>
                       </div>
                       <div class="col-xs-8 text-right">
-                        <span> Unassigned Leads </span>
-                        <h3 class="font-bold">26</h3>
+                        <span> New Leads </span>
+                        <h3 class="font-bold">{{bdc.new_leads.length || 0}}</h3>
                       </div>
                     </div>
                   </div>
 
-                  <div class="widget style1 blue-bg">
+                  <div class="widget style1 blue-bg cursor-pointer" ng-click="bdc.displayStatsDetails('calls')">
                     <div class="row">
                       <div class="col-xs-4">
                         <i class="fa fa-phone fa-2x"></i>
                       </div>
                       <div class="col-xs-8 text-right">
                         <span> Call Completed </span>
-                        <h3 class="font-bold">23</h3>
+                        <h3 class="font-bold">--</h3>
                       </div>
                     </div>
                   </div>
 
-                  <div class="widget style1 navy-bg">
+                  <div class="widget style1 navy-bg cursor-pointer" ng-click="bdc.displayStatsDetails('text')">
                     <div class="row">
                       <div class="col-xs-4">
                         <i class="fa fa-comments-o fa-2x"></i>
                       </div>
                       <div class="col-xs-8 text-right">
                         <span> Messages Sent </span>
-                        <h3 class="font-bold">26</h3>
+                        <h3 class="font-bold">{{bdc.sentMessages.count || 0}}</h3>
                       </div>
                     </div>
                   </div>
 
-                  <div class="widget style1 yellow-bg">
+                  <div class="widget style1 yellow-bg cursor-pointer" ng-click="bdc.displayStatsDetails('mail')">
                     <div class="row">
                       <div class="col-xs-4">
                         <i class="fa fa-envelope fa-2x"></i>
                       </div>
                       <div class="col-xs-8 text-right">
                         <span> Email Sent </span>
-                        <h3 class="font-bold">26</h3>
+                        <h3 class="font-bold">--</h3>
                       </div>
                     </div>
                   </div>
@@ -1392,19 +1392,27 @@
 <div id="right-sidebar" ng-show="bdc.sidebar" class="sidebar-open">
   <div class="sidebar-container" full-scroll-page>
 
-    <uib-tabset class="navs-3" active="0">
-      <uib-tab index="$index" ng-repeat="tab in bdc.metricSummaryTabs" active="tab.active">
+    <uib-tabset class="navs-2" active="bdc.sidebarActiveTab">
+      <uib-tab index="$index" ng-repeat="tab in bdc.metricSummaryTabs" style="width:50%">
         <uib-tab-heading><i class="{{tab.title}}"></i></uib-tab-heading>
+
         <div class="tab-content">
-          <div class="tab-pane" ng-class="{active: tab.id == 'Phone'}">
+          <div class="tab-pane" ng-class="{active: tab.id == 'Phone'}" ng-if="tab.id == 'Phone'">
             <div class="sidebar-title">
               <button class="btn btn-xs btn-danger pull-right upper-right-corner"
                       ng-click="bdc.dismissSidebar('calls');"><i class="fa fa-times"></i></button>
               <h3>Call Summary</h3>
-              <small><i class="fa fa-tim"></i> You have made 217 calls.</small>
+              <small><i class="fa fa-tim"></i> There are no calls to report</small>
             </div>
             <div>
-              <div class="sidebar-message m-h-75" ng-repeat="cl in tab.contentData">
+              <div class="sidebar-message m-h-75">
+                <a href="#">
+                  <div class="media-body">
+                    <strong>Calls are currently not tracked.</strong>
+                  </div>
+                </a>
+              </div>
+              <!--<div class="sidebar-message m-h-75" ng-repeat="cl in tab.contentData">
                 <a href="#">
                   <div class="pull-left text-center">
                     <img alt="image" class="img-circle message-avatar" ng-src="{{cl.cavatar}}">
@@ -1423,74 +1431,39 @@
                     <small class="text-muted">Today 4:21 pm</small>
                   </div>
                 </a>
-              </div>
+              </div>-->
             </div>
           </div>
 
-          <div class="tab-pane" ng-class="{active: tab.id == 'Correspondence'}">
+          <div class="tab-pane" ng-class="{active: tab.id == 'Correspondence'}" ng-if="tab.id == 'Correspondence'">
             <div class="sidebar-title">
               <button class="btn btn-xs btn-danger pull-right upper-right-corner"
                       ng-click="bdc.dismissSidebar('correspondence');"><i class="fa fa-times"></i></button>
               <h3>Latest Correspondence</h3>
-              <small><i class="fa fa-tim"></i> You have 400 Emails and 10 Texts.</small>
-              <button class="btn btn-xs btn-warning margin-top-10"><i class="fa fa-sliders">&nbsp;&nbsp;</i>Clear
+              <small><i class="fa fa-tim"></i> There are {{bdc.sentMessages.count}} sent messages.</small>
+              <!--<button class="btn btn-xs btn-warning margin-top-10"><i class="fa fa-sliders">&nbsp;&nbsp;</i>Clear
                 {{tab.contentFilter}} Filter
-              </button>
+              </button>-->
             </div>
             <ul class="sidebar-list">
               <li ng-repeat="cr in tab.contentData">
-                <a href="#">
-                  <div class="small pull-right m-t-xs">9
-                  hours ago</div>
-                  <h4><i ng-class="{'fa fa-envelope': cr.crtype == 'Mail', 'fa fa-comments': cr.crtype == 'Text'}">
+                <a href="#" ng-click="bdc.viewLead(cr.lead)">
+                  <div class="small pull-right m-t-xs">{{cr.timeAgo}}</div>
+                  <h4><i ng-class="{'fa fa-envelope': cr.type == 'mail', 'fa fa-comments': cr.type == 'text'}">
                     &nbsp;&nbsp;</i>
-                    {{cr.crname}}</h4>
-                  <div ng-show="cr.crsubject" class="small subject-blue">Subject: {
-
-                  {
-                    cr . crsubject
-                  }
-                  }</div>
-                  {{cr.crcontent}}
+                    {{cr.name}}</h4>
+                  <div class="small text-navy">To: {{cr.lead.name}}</div>
+                  <div ng-if="cr.subject" class="small subject-blue">Subject: {{cr.subject}}</div>
+                  {{cr.body}}
                 </a>
               </li>
             </ul>
           </div>
 
-
-          <div class="tab-pane" ng-class="{active: tab.id == 'Appointments'}">
-
-            <div class="sidebar-title">
-              <button class="btn btn-xs btn-danger pull-right upper-right-corner"
-                      ng-click="bdc.dismissSidebar('appts');"><i class="fa fa-times"></i></button>
-              <h3>Appointments</h3>
-              <small><i class="fa fa-tim"></i>Your appointments summary</small>
-            </div>
-            <ul ui-sortable="sortableOptions" class="sortable-list connectList agile-list margin-left-5"
-                ng-model="tab.contentData">
-              <li class="{{apt.statusClass}}-element" ng-repeat="apt in tab.contentData">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="col-lg-2 text-left text-{{apt.statusClass}} padding-left-0">
-                      <i ng-class="{'fa fa-calendar-o fa-2x': apt.appointmentStatusClass == 'made',
-                                    'fa fa-calendar-check-o fa-2x': apt.appointmentStatusClass == 'sold',
-                                    'fa fa-calendar-times-o fa-2x' : apt.appointmentStatusClass == 'missed'}"></i>
-                    </div>
-                    <div class="col-lg-10 padding-right-0 padding-left-0">
-                      <small>{{apt.date}}</small>
-                      <br/>
-                      <strong>{{apt.cname}}</strong><br/>
-                      {{apt.comments}}
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-
-          </div>
-
         </div>
       </uib-tab>
+
+
     </uib-tabset>
 
   </div>

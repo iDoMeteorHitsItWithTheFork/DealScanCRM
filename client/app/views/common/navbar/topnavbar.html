@@ -13,9 +13,9 @@
       <li>
         <span class="m-r-sm text-muted welcome-message" style="display:block!important;">{{days}} Days Remaining</span>
       </li>
-      <li uib-dropdown>
+      <li uib-dropdown ng-if="leads.length > 0">
         <a class="count-info" href uib-dropdown-toggle>
-          <i class="fa fa-user-times"></i> <span class="label label-danger pull-right b-r-50-pct p-4">16</span>
+          <i class="fa fa-user-times"></i> <span class="label label-danger pull-right b-r-50-pct">{{leads.length || 0}}</span>
         </a>
         <ul class="dropdown-messages" uib-dropdown-menu>
           <li>

@@ -171,7 +171,13 @@ export function create(req, res) {
                 type: 'text',
                 status: 'sent'
               }, {transaction: t}).then(function (message) {
-                return message;
+                if (recipientType == 'lead'){
+                  return recipient.update({
+                    status: 'working'
+                  }, {transaction: t}).then(function(){
+                    return message;
+                  })
+                } else return message;
               })
             } else return res.status(500).send('Unable to send text message');
           }).fail(function(err){

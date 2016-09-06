@@ -7,6 +7,11 @@ angular.module('dealScanCrmApp')
 
     var user = Auth.getCurrentUser();
     var _leads = [];
+    var _scheduledLeads = [];
+
+    function getScheduledLeads(){
+      return _scheduledLeads;
+    }
 
       /**
        * Create New Lead
@@ -22,6 +27,7 @@ angular.module('dealScanCrmApp')
           .$promise.then(function (lead) {
             if (lead && !lead.error) {
               lead.interest = JSON.parse(JSON.stringify(lead.interest));
+               if (lead.appointments.length > 0) _scheduledLeads.unshift(lead);
               _leads.unshift(lead);
             } return _leads;
           }).catch(function (err) {
@@ -68,6 +74,7 @@ angular.module('dealScanCrmApp')
           if (idx != -1) {
             _leads[idx].appointments.unshift(appointment);
             _leads[idx].status = 'working';
+            _scheduledLeads.unshift(_leads[idx]);
           }
           return appointment;
         } else return {error: {msg: '', code:''}};
@@ -220,9 +227,9 @@ angular.module('dealScanCrmApp')
                    leads[i].interest = Util.slimTrim(parseInterest);
                  } catch(ex){}
                }
-               // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
-             } return leads;
-             return leads;
+             }
+             _scheduledLeads = leads;
+             return _scheduledLeads;
            } else return {error: {msg:leads.error.msg}};
        })
     }
@@ -237,6 +244,7 @@ angular.module('dealScanCrmApp')
       note: addNote,
       assign: assignLead,
       convert: convertLead,
-      scheduledLeads: scheduledLeads
+      scheduledLeads: scheduledLeads,
+      unassignedLeads: getScheduledLeads,
     };
   });

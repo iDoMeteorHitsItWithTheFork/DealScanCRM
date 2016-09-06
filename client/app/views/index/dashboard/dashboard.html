@@ -1016,10 +1016,17 @@
             <div class="sidebar-title">
               <button class="btn btn-xs btn-danger pull-right upper-right-corner" ng-click="dashboard.dismissSidebar('calls');"><i class="fa fa-times"></i></button>
               <h3>Call Summary</h3>
-              <small><i class="fa fa-tim"></i> You have made 217 calls.</small>
+              <small><i class="fa fa-tim"></i> There are no calls to report.</small>
             </div>
             <div>
-              <div class="sidebar-message m-h-75" ng-repeat="cl in tab.contentData">
+              <div class="sidebar-message m-h-75">
+                <a href="#">
+                  <div class="media-body">
+                    <strong>Calls are currently not tracked.</strong>
+                  </div>
+                </a>
+              </div>
+              <!--<div class="sidebar-message m-h-75" ng-repeat="cl in tab.contentData">
                 <a href="#">
                   <div class="pull-left text-center">
                     <img alt="image" class="img-circle message-avatar" ng-src="{{cl.cavatar}}">
@@ -1038,7 +1045,7 @@
                     <small class="text-muted">Today 4:21 pm</small>
                   </div>
                 </a>
-              </div>
+              </div>-->
             </div>
           </div>
 

@@ -59,6 +59,14 @@
             status: 'sold'
           }
         },
+        sentMessages: {
+          method: 'GET',
+          params: {
+            id: 'stats',
+            controller: 'messages',
+            status:'sent'
+          }
+        },
         scheduleLead :{
           method: 'PUT',
           params: {

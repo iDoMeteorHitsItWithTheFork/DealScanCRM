@@ -212,7 +212,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       {
         bgStyle: 'navy-bg',
         category: 'calls',
-        value: 217
+        value: '--'
       },
       {
         bgStyle: 'navy-bg',

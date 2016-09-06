@@ -14,6 +14,7 @@ router.get('/stats/appointments', auth.isAuthenticated(), controller.totalAppoin
 router.get('/stats/appointments/kept', auth.isAuthenticated(), controller.keptAppointments);
 router.get('/stats/appointments/missed', auth.isAuthenticated(), controller.missedAppointments);
 router.get('/stats/appointments/sold', auth.isAuthenticated(), controller.soldAppointments);
+router.get('/stats/messages/sent', auth.isAuthenticated(), controller.getSentMessages);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.put('/schedule/appointment', auth.isAuthenticated(), controller.scheduleAppointment);

@@ -23,6 +23,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.loadingMessages = false;
       _bdc.sendingMessage = false;
       _bdc.messages = [];
+      _bdc.sentMessages = {};
       _bdc.leads = [];
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
         _bdc.isManager = ans;
@@ -38,6 +39,33 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.selectedPie = null;
       _bdc.showTable = false;
       _bdc.showTableDetails = false;
+
+      _bdc.metricSummaryTabs = [
+        {
+          id: 'Phone', title: 'fa fa-phone', contentFilter: '',
+          contentData: []
+        },
+        {
+          id: 'Correspondence', title: 'fa fa-exchange', contentFilter: '',
+          contentData: []
+        },
+      ]
+
+      _bdc.timeAgo = function(time){
+          if (!time) time = moment();
+          return moment(time).fromNow();
+      }
+
+      var setMetricsData = function(id, data){
+          switch(id){
+            case 'Phone':
+              _bdc.metricSummaryTabs[0].contentData = data;
+              break;
+            case 'Correspondence':
+              _bdc.metricSummaryTabs[1].contentData = data;
+              break;
+          }
+      }
 
       _bdc.tabs = [
         {
@@ -62,6 +90,31 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         _bdc.activeTab = tab;
       }
 
+
+      _bdc.viewNewLeads = function(){
+        _bdc.viewOptions = 'list';
+        _bdc.viewTab(_bdc.tabs[0]);
+      }
+
+      _bdc.viewLead = function(lead, tab){
+        _bdc.viewOptions = 'list';
+        switch(tab){
+          case 'new':
+            _bdc.viewTab(_bdc.tabs[0]);
+            break;
+          case 'working':
+            _bdc.viewTab(_bdc.tabs[1]);
+            break;
+          case 'missed':
+            _bdc.viewTab(_bdc.tabs[2]);
+            break;
+          default:
+            _bdc.viewTab(_bdc.tabs[0]);
+            break;
+        }
+        _bdc.activeLead = lead;
+        _bdc.dismissSidebar();
+      }
 
       _bdc.loadLeads = function(){
         if (_bdc.loadingLeads) return;
@@ -138,6 +191,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             _bdc.keptAppointments = leads.keptAppointments;
             _bdc.missedAppointments = leads.missedAppointments;
             _bdc.soldAppointments = leads.soldAppointments;
+            _bdc.sentMessages = leads.sentMessages;
+            setMetricsData('Phone', []);
+            setMetricsData('Correspondence', _bdc.sentMessages.messages);
           }
           _bdc.retreivingGraphData = false;
         }).catch(function(err){
@@ -327,24 +383,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
        * @type {*[]}
        */
 
-      _bdc.dismissSidebar = function(from){
-        console.log('*** called From: '+from+' **');
-        _bdc.sidebar = false;
-      }
-
-      _bdc.showStatsSummary = function(stats, filter){
-        var idx = Util.indexOfObject(_bdc.metricSummaryTabs, 'id', stats);
-        if (idx != -1) {
-          _bdc.metricSummaryTabs[idx].active = true;
-          if (filter) _bdc.metricSummaryTabs[idx].contentFilter = filter;
-        }
-      }
-
       _bdc.displayStatsDetails = function(stat){
         if (!_bdc.sidebar) _bdc.sidebar = true;
         console.log(stat);
         var categoryId, filter;
-        switch(stat.category){
+        switch(stat){
           case 'calls':
             categoryId = 'Phone';
             break
@@ -356,22 +399,30 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             categoryId = 'Correspondence';
             filter = 'Mail';
             break;
-          case 'appointment_made':
-            categoryId = 'Appointments';
-            filter = 'Made';
-            break;
-          case 'appointment_sold':
-            categoryId = 'Appointments';
-            filter = 'Sold';
-            break;
-          case 'appointment_missed':
-            categoryId = 'Appointments';
-            filter = 'Missed';
-            break;
-
         }
         _bdc.showStatsSummary(categoryId, filter);
       }
+
+      /**
+       * sales metrics
+       * @type {*[]}
+       */
+
+      _bdc.dismissSidebar = function(from){
+        if (from) console.log('*** called From: '+from+' **');
+        _bdc.sidebar = false;
+      }
+      _bdc.sidebarActiveTab = 0;
+      _bdc.showStatsSummary = function(stats, filter){
+        if (stats == 'Correspondence') console.log(_bdc.sentMessages);
+        var idx = Util.indexOfObject(_bdc.metricSummaryTabs, 'id', stats);
+        if (idx != -1) {
+          _bdc.sidebarActiveTab = idx;
+          if (filter) _bdc.metricSummaryTabs[idx].contentFilter = filter;
+        }
+      }
+
+
 
 
       _bdc.contactLead = function(lead, event){
