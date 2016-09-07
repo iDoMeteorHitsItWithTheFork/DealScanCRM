@@ -25,6 +25,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.messages = [];
       _bdc.sentMessages = {};
       _bdc.leads = [];
+
       Auth.hasRole(appConfig.userRoles[2], function (ans) {
         _bdc.isManager = ans;
       });
@@ -124,7 +125,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           if (leads && !leads.error){
             _bdc.leads = leads;
             _bdc.categorizedLeads();
-          } else toaster.error({title: 'Leads Load Error', body:'An error occured while attempting to load leads'});
+          } else toaster.error({title: 'Leads Load Error', body:'An error occurred while attempting to load leads'});
           _bdc.loadingLeads = false;
         }).catch(function(err){
           console.log(err);
@@ -136,6 +137,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
       _bdc.loadLeads();
       _bdc.activeLead = null;
       _bdc.showInDetails = function(lead){
+         console.log(lead);
         _bdc.activeLead = lead;
         if (lead.agents && lead.agents.length == 0){
           if (_bdc.assigningLead) return;
@@ -143,7 +145,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
           Lead.assign(lead).then(function(res){
               _bdc.assigningLead = false;
               if (res === true) toaster.success({title: 'Lead Assignment', body: 'Lead ('+lead.name+') is now assigned to you!'})
-              else toaster.error({title: 'Lead Error', body: 'An error occured while attempting to assign lead'});
+              else toaster.error({title: 'Lead Error', body: 'An error occurred while attempting to assign lead'});
               console.log(lead);
               _bdc.categorizedLeads();
           }).catch(function(err){
@@ -383,7 +385,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
        * @type {*[]}
        */
 
-      _bdc.displayStatsDetails = function(stat){
+      _bdc.displayStatsDetails = function(stat) {
         if (!_bdc.sidebar) _bdc.sidebar = true;
         console.log(stat);
         var categoryId, filter;
@@ -413,7 +415,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         _bdc.sidebar = false;
       }
       _bdc.sidebarActiveTab = 0;
-      _bdc.showStatsSummary = function(stats, filter){
+      _bdc.showStatsSummary = function(stats, filter) {
         if (stats == 'Correspondence') console.log(_bdc.sentMessages);
         var idx = Util.indexOfObject(_bdc.metricSummaryTabs, 'id', stats);
         if (idx != -1) {
@@ -425,7 +427,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
 
 
 
-      _bdc.contactLead = function(lead, event){
+      _bdc.contactLead = function(lead, event) {
         if (event) event.stopPropagation();
          if (!lead.email && !lead.phone){
            toaster.error({
@@ -521,6 +523,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             _bdc.messages.unshift(message);
             _bdc.message = '';
             form.$setPristine();
+            _bdc.categorizedLeads();
           } else toaster.error({title: '', body: 'An error occured while attempting to send your message.'});
           _bdc.sendingMessage = false;
         }).catch(function (err) {
@@ -551,16 +554,23 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   serie: true,
                   name: 'angular-ladda',
-                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                  files: ['.resources/plugins/ladda/spin.min.js',
+                    '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css',
+                    '.resources/plugins/ladda/angular-ladda.min.js'
+                  ]
                 },
                 {
                   name: 'datePicker',
-                  files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+                  files: ['.styles/plugins/datapicker/angular-datapicker.css',
+                    '.resources/plugins/datapicker/angular-datepicker.js'
+                  ]
                 },
                 {
                   serie: true,
-                  files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+                  files: ['.resources/plugins/daterangepicker/daterangepicker.js',
+                    '.styles/plugins/daterangepicker/daterangepicker-bs3.css'
+                  ]
                 },
                 {
                   name: 'daterangepicker',
@@ -598,16 +608,20 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   serie: true,
                   name: 'angular-ladda',
-                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                  files: ['.resources/plugins/ladda/spin.min.js',
+                    '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css',
+                    '.resources/plugins/ladda/angular-ladda.min.js'
+                  ]
                 }
               ]);
             }
           }
         });
 
-        modalInstance.result.then(function (leads) {
-            _bdc.activeLead = leads;
+        modalInstance.result.then(function (lead) {
+          _bdc.activeLead = lead;
+          _bdc.categorizedLeads();
         }).catch(function(e){
           console.log(e);
         });
@@ -649,6 +663,12 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             }
           }
         });
+
+        modalInstance.result.then(function (leads) {
+          _bdc.categorizedLeads();
+        }).catch(function(e){
+          console.log(e);
+        });
       }
 
       _bdc.addNote= function (lead) {
@@ -664,8 +684,11 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   serie: true,
                   name: 'angular-ladda',
-                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                  files: ['.resources/plugins/ladda/spin.min.js',
+                    '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css',
+                    '.resources/plugins/ladda/angular-ladda.min.js'
+                  ]
                 }
               ]);
             },
@@ -698,16 +721,23 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   serie: true,
                   name: 'angular-ladda',
-                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                  files: ['.resources/plugins/ladda/spin.min.js',
+                    '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css',
+                    '.resources/plugins/ladda/angular-ladda.min.js'
+                  ]
                 },
                 {
                   name: 'datePicker',
-                  files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+                  files: ['.styles/plugins/datapicker/angular-datapicker.css',
+                    '.resources/plugins/datapicker/angular-datepicker.js'
+                  ]
                 },
                 {
                   serie: true,
-                  files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+                  files: ['.resources/plugins/daterangepicker/daterangepicker.js',
+                    '.styles/plugins/daterangepicker/daterangepicker-bs3.css'
+                  ]
                 },
                 {
                   name: 'daterangepicker',
@@ -716,7 +746,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   name: 'ui.select',
                   files: ['.resources/plugins/ui-select/select.min.js',
-                    '.styles/plugins/ui-select/select.min.css']
+                    '.styles/plugins/ui-select/select.min.css'
+                  ]
                 }
               ]);
             }
@@ -742,16 +773,23 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   serie: true,
                   name: 'angular-ladda',
-                  files: ['.resources/plugins/ladda/spin.min.js', '.resources/plugins/ladda/ladda.min.js',
-                    '.styles/plugins/ladda/ladda-themeless.min.css','.resources/plugins/ladda/angular-ladda.min.js']
+                  files: ['.resources/plugins/ladda/spin.min.js',
+                    '.resources/plugins/ladda/ladda.min.js',
+                    '.styles/plugins/ladda/ladda-themeless.min.css',
+                    '.resources/plugins/ladda/angular-ladda.min.js'
+                  ]
                 },
                 {
                   name: 'datePicker',
-                  files: ['.styles/plugins/datapicker/angular-datapicker.css','.resources/plugins/datapicker/angular-datepicker.js']
+                  files: ['.styles/plugins/datapicker/angular-datapicker.css',
+                    '.resources/plugins/datapicker/angular-datepicker.js'
+                  ]
                 },
                 {
                   serie: true,
-                  files: ['.resources/plugins/daterangepicker/daterangepicker.js', '.styles/plugins/daterangepicker/daterangepicker-bs3.css']
+                  files: ['.resources/plugins/daterangepicker/daterangepicker.js',
+                    '.styles/plugins/daterangepicker/daterangepicker-bs3.css'
+                  ]
                 },
                 {
                   name: 'daterangepicker',
@@ -760,7 +798,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   name: 'ui.select',
                   files: ['.resources/plugins/ui-select/select.min.js',
-                    '.styles/plugins/ui-select/select.min.css']
+                    '.styles/plugins/ui-select/select.min.css'
+                  ]
                 }
               ]);
             }
@@ -768,7 +807,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-      _bdc.openAppointment = function(appointments){
+      _bdc.openAppointment = function(appointments) {
         var modalInstance = $uibModal.open({
           animation: true,
           windowClass: 'slide-up',
@@ -784,7 +823,8 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 {
                   serie: true,
                   files: ['.resources/plugins/dataTables/datatables.min.js',
-                    '.styles/plugins/dataTables/datatables.min.css']
+                    '.styles/plugins/dataTables/datatables.min.css'
+                  ]
                 },
                 {
                   serie: true,
@@ -798,7 +838,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
                 }
               ]);
             }
-
           }
         });
       }

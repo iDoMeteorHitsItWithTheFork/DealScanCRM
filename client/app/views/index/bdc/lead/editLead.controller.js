@@ -18,34 +18,7 @@ angular.module('dealScanCrmApp')
         additionalInfo: lead.additionalInfo,
       };
 
-
-      _editLead.sources = [
-        {
-          id: 'phone',
-          name: 'Phone',
-          type: 'Phone'
-        },
-        {
-          id: 'social',
-          name: 'Social Media',
-          type: 'Internet'
-        },
-        {
-          id: 'website',
-          name: 'Website',
-          type: 'Internet'
-        },
-        {
-          id: 'thirdParty',
-          name: 'Third Party',
-          type: 'Internet'
-        },
-        {
-          id: 'Other',
-          name: 'Other',
-          type: 'Other'
-        }
-      ];
+      _editLead.sources = Util.leadSources();
 
       var idx = Util.indexOfObject(_editLead.sources, 'name', lead.sourceName);
       if (idx != -1) _editLead.prospect.source = _editLead.sources[idx];

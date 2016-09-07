@@ -178,7 +178,7 @@ var insertLead = function(lead, callback){
 }
 
 var sqlStatement = function(today){
-  if (!today) today = moment(); //moment().startOf('month').startOf('day');
+  if (!today) today = moment().subtract(1, 'day'); //moment().startOf('month').startOf('day');
   return "SELECT " +
     "[DL].[DealId]," +
     "[DL].[DealershipId]," +

@@ -38,7 +38,7 @@ angular.module('dealScanCrmApp')
     }
 
       /**
-       * Update Exisiting Lead
+       * Update Existing Lead
        */
     function editLead(leadID, details){
         if (!leadID) throw new Error('LeadID is required');
@@ -51,6 +51,7 @@ angular.module('dealScanCrmApp')
           .$promise.then(function(lead){
             if (lead){
               var idx = Util.indexOfObject(_leads, 'leadID', leadID);
+              console.log(idx);
               if (idx != -1) _leads.splice(idx, 1, lead);
               return lead;
             }
@@ -162,7 +163,9 @@ angular.module('dealScanCrmApp')
                  }
                 // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
                 _leads.push(leads[i]);
-              } return _leads;
+              }
+              console.log(_leads);
+              return _leads;
            } else return {error: {msg:leads.error.msg}};
         })
         .catch(function(err){

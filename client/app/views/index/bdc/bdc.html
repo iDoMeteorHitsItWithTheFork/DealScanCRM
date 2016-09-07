@@ -142,6 +142,7 @@
                     All leads need to be verified before you can send email and set a project.
                   </p>
                 </div>
+
                 <div class="clients-list">
 
 
@@ -151,6 +152,7 @@
                         ng-class="{'active' : tab == bdc.activeTab}">
                       <a><i class="{{tab.icon}}"></i> {{tab.title}}</a></li>
                   </ul>
+
                   <div class="tab-content">
 
                     <div class="height-337 p-t-150" ng-hide="!bdc.loadingLeads">
@@ -275,6 +277,7 @@
                   </div>
 
                 </div>
+
               </div>
             </div>
           </div>
@@ -355,8 +358,8 @@
                         <div class="client-detail">
                           <div class="full-height-scroll" full-scroll style="padding-right:15px;">
                             <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
-                            <p ng-if="bdc.activeLead.additionalInfo">
-                              {{bdc.activeLead.additionalInfo}}
+                            <p ng-if="bdc.activeLead.additionalInfo"
+                                        ng-bind-html=bdc.activeLead.additionalInfo>
                             </p>
                             <hr style="margin-top:7px; margin-bottom:7px;"/>
                             <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent
@@ -461,6 +464,7 @@
 
             <!-- /. content View -->
           </div>
+
         </div>
         <!-- ./list -->
 
@@ -1051,8 +1055,7 @@
                           <div class="client-detail">
                             <div class="full-height-scroll" full-scroll style="padding-right:15px;">
                               <strong ng-if="bdc.activeLead.additionalInfo">Additional Info</strong>
-                              <p ng-if="bdc.activeLead.additionalInfo">
-                                {{bdc.activeLead.additionalInfo}}
+                              <p ng-if="bdc.activeLead.additionalInfo" ng-bind-html=bdc.activeLead.additionalInfo>
                               </p>
                               <hr style="margin-top:7px; margin-bottom:7px;"/>
                               <strong ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">Recent
@@ -1061,8 +1064,7 @@
                                   ng-if="bdc.activeLead.notes && bdc.activeLead.notes.length > 0">
                                 <li ng-repeat="note in bdc.activeLead.notes | limitTo: 5" class="list-group-item"
                                     ng-class="{'fist-item': $index == 0}">
-                            <span class="pull-right"> {{note.timeAgo}}
-                            </span>
+                                  <span class="pull-right"> {{note.timeAgo}}</span>
                                   {{note.content}}
                                   <br/>
                                   <small>{{note.creator.name}}</small>

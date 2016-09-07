@@ -549,9 +549,8 @@ angular.module('dealScanCrmApp')
                 } catch(ex){}
               }
             }
+
             appointments.data = $filter('orderBy')(appointments.data, 'createdAt', true);
-
-
 
             _soldAppointments.pie = soldAppointments;
             _soldAppointments.pieOptions = pieOptions;

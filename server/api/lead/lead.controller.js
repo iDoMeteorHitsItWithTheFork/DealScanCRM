@@ -113,7 +113,7 @@ export function index(req, res) {
           model: User,
           as: 'Agents',
           attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
-          through: 'AssignedLeads'
+          through: 'AssignedLeads',
         },
         {
           model: Event,
@@ -126,6 +126,9 @@ export function index(req, res) {
           ],
           through: Participants,
           order: [['eventID', 'DESC']]
+        },
+        {
+          model: Message
         }
       ],
       order: [['leadID', 'DESC']]
@@ -176,6 +179,9 @@ export function show(req, res) {
         ],
         through: Participants,
         order: [['eventID', 'DESC']]
+      },
+      {
+        model: Message
       }
     ]
   })
@@ -186,6 +192,7 @@ export function show(req, res) {
 
 
 function formatLead(lead) {
+
   if (!lead) return;
   var formattedLead = {};
   formattedLead = lead.profile;
@@ -205,6 +212,7 @@ function formatLead(lead) {
     for (var i = 0; i < lead.Agents.length; i++) {
       var agentProfile = lead.Agents[i].profile;
       agentProfile.timeAgo = moment(lead.Agents[i].createdAt).fromNow();
+      agentProfile.timelineStamp = moment(lead.Agents[i].createdAt).format('h:mm a [-] MM.DD.YYYY');
       formattedLead.agents.push(agentProfile);
     }
   }
@@ -219,6 +227,7 @@ function formatLead(lead) {
       appointmentProfile.timeAgo = moment(lead.Events[j].createdAt).fromNow();
       appointmentProfile.sourceName = lead.sourceName;
       appointmentProfile.sourceType = lead.sourceType;
+      appointmentProfile.timelineStamp = moment(lead.Events[j].createdAt).format('h:mm a [-] MM.DD.YYYY');
       if (lead.Events[j].AttendingUsers && lead.Events[j].AttendingUsers.length > 0){
         var attendants = [];
         for(var x = 0; x < lead.Events[j].AttendingUsers.length; x++){
@@ -226,6 +235,16 @@ function formatLead(lead) {
         }appointmentProfile.attendants = attendants;
       }
       formattedLead.appointments.push(appointmentProfile);
+    }
+  }
+
+  if (lead.Messages){
+    formattedLead.messages = [];
+    for(var i = 0; i < lead.Messages.length; i++) {
+      var msgProfile = lead.Messages[i].profile;
+      msgProfile.timeAgo = moment(lead.Messages[i].createdAt).fromNow();
+      msgProfile.timelineStamp = moment(lead.Messages[i].createdAt).format('h:mm a [-] MM.DD.YYYY');
+      formattedLead.messages.push(msgProfile);
     }
   }
   return formattedLead;
@@ -699,7 +718,7 @@ export function totalLeads(req, res) {
             model: User,
             as: 'Agents',
             attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
-            through: 'AssignedLeads'
+            through: 'AssignedLeads',
           },
           {
             model: Event,
@@ -773,10 +792,22 @@ export function totalAppointments(req, res) {
       promises.push(Lead.findAll({
         include: [
           {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
             model: User,
             as: 'Agents',
             attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
-            through: 'AssignedLeads'
+            through: 'AssignedLeads',
           },
           {
             model: Event,
@@ -788,9 +819,9 @@ export function totalAppointments(req, res) {
               }
             ],
             through: Participants,
-            required: true
+            order: [['eventID', 'DESC']]
           }
-        ]
+        ],
       }));
 
       return Q.all(promises).then(function (appointments) {
@@ -849,15 +880,25 @@ export function keptAppointments(req, res) {
       promises.push(Lead.findAll({
         include: [
           {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
             model: User,
             as: 'Agents',
             attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
-            through: 'AssignedLeads'
+            through: 'AssignedLeads',
           },
           {
             model: Event,
-            through: Participants,
-            required: true,
             where: {
               category: 'appointment',
               status: 'kept'
@@ -869,8 +910,10 @@ export function keptAppointments(req, res) {
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
+            through: Participants,
+            order: [['eventID', 'DESC']]
           }
-        ]
+        ],
       }));
 
       return Q.all(promises).then(function (appointments) {
@@ -926,18 +969,28 @@ export function missedAppointments(req, res) {
       promises.push(Lead.findAll({
         include: [
           {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
             model: User,
             as: 'Agents',
             attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
-            through: 'AssignedLeads'
+            through: 'AssignedLeads',
           },
           {
             model: Event,
-            through: Participants,
-            required: true,
-            where : {
+            where: {
               category: 'appointment',
-              status: 'missed'
+              status: 'missed',
             },
             include: [
               {
@@ -946,9 +999,10 @@ export function missedAppointments(req, res) {
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
-
+            through: Participants,
+            order: [['eventID', 'DESC']]
           }
-        ]
+        ],
       }));
 
       return Q.all(promises).then(function (appointments) {
@@ -1004,19 +1058,29 @@ export function soldAppointments(req, res) {
       promises.push(Lead.findAll({
         include: [
           {
+            model: Note,
+            include: [
+              {
+                model: User,
+                as: 'Creator',
+                attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              }
+            ],
+            through: NoteActivities,
+            order: [['noteID', 'DESC']]
+          },
+          {
             model: User,
             as: 'Agents',
             attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role'],
-            through: 'AssignedLeads'
+            through: 'AssignedLeads',
           },
           {
             model: Event,
-            through: Participants,
-            required: true,
-            where : {
+            where: {
               category: 'appointment',
-              state: 'sold',
-              status: 'kept'
+              status: 'kept',
+              state: 'sold'
             },
             include: [
               {
@@ -1025,9 +1089,10 @@ export function soldAppointments(req, res) {
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
               }
             ],
-
+            through: Participants,
+            order: [['eventID', 'DESC']]
           }
-        ]
+        ],
       }));
 
       return Q.all(promises).then(function (appointments) {

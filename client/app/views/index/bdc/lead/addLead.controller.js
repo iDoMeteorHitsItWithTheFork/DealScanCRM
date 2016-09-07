@@ -22,50 +22,7 @@ angular.module('dealScanCrmApp')
         assignedManager: ''
       };
 
-      _newLead.sources = [
-        {
-          id: 'phone',
-          name: 'Phone',
-          type: 'Phone'
-        },
-        {
-          id: 'true_car',
-          name: 'TrueCar',
-          type: 'Internet'
-        },
-        {
-          id: 'car_dot_com',
-          name: 'Cars.com',
-          type: 'Internet'
-        },
-        {
-          id: 'autoTrader',
-          name: 'AutoTrader',
-          type: 'Internet'
-        },
-        {
-          id: 'edmunds',
-          name: 'Edmunds',
-          type: 'Internet'
-        }, {
-          id: 'carCode',
-          name: 'Edmunds CarCode',
-          type: 'Internet'
-        }, {
-          id: 'website',
-          name: 'hagerstownford.com',
-          type: 'Internet'
-        },
-        {
-          id: 'carfax',
-          name: 'Carfax',
-          type: 'Internet'
-        }, {
-          id: 'fatwin',
-          name: 'FATWIN',
-          type: 'Internet'
-        }
-      ];
+      _newLead.sources = Util.leadSources();
 
       _newLead.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
       _newLead.format = _newLead.formats[0];
@@ -110,7 +67,7 @@ angular.module('dealScanCrmApp')
           console.log(lead);
           if (lead && !lead.error) {
             toaster.success({
-              title: 'New Lead', body: 'Lead (' + details.name + ') was successfully created' +
+              title: 'New Lead', body: 'Lead (' + _newLead.prospect.name + ') was successfully created' +
               (details.appointment && details.appointment.toString().trim() != '' ?
               ' and appointment was scheduled for ' + details.appointment + '!': '!')
             });
