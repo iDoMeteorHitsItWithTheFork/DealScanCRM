@@ -380,66 +380,25 @@
                             <!-- timeline actitivity -->
                             <strong>Timeline Activity</strong>
                             <div id="vertical-timeline" class="vertical-container dark-timeline">
-                              <div class="vertical-timeline-block">
-                                <div class="vertical-timeline-icon gray-bg">
-                                  <i class="fa fa-coffee"></i>
+
+                              <div class="vertical-timeline-block" ng-repeat="item in bdc.activeLead.timeline">
+                                <div class="vertical-timeline-icon" ng-class="{'red-bg': item.type == 'lead',
+                                                                                 'blue-bg' : item.type == 'appointment',
+                                                                                 'navy-bg' : item.type == 'agent',
+                                                                                 'yellow-bg' : item.type == 'message' }">
+                                  <i ng-class="{'fa fa-bolt': item.type == 'lead',
+                                                  'fa fa-calendar': item.type == 'appointment',
+                                                  'fa fa-comments-o' : item.type == 'message',
+                                                  'fa fa-user-plus': item.type == 'agent'}"></i>
                                 </div>
                                 <div class="vertical-timeline-content">
-                                  <p>Conference on the sales results for the previous year.
-                                  </p>
-                                  <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                  <p ng-bind-html="item.info"></p>
+                                  <span class="vertical-date small text-muted"> {{item.createdTimestamp}} </span>
                                 </div>
                               </div>
-                              <div class="vertical-timeline-block">
-                                <div class="vertical-timeline-icon gray-bg">
-                                  <i class="fa fa-briefcase"></i>
-                                </div>
-                                <div class="vertical-timeline-content">
-                                  <p>Many desktop publishing packages and web page editors now use Lorem.
-                                  </p>
-                                  <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-                                </div>
-                              </div>
-                              <div class="vertical-timeline-block">
-                                <div class="vertical-timeline-icon gray-bg">
-                                  <i class="fa fa-bolt"></i>
-                                </div>
-                                <div class="vertical-timeline-content">
-                                  <p>There are many variations of passages of Lorem Ipsum available.
-                                  </p>
-                                  <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
-                                </div>
-                              </div>
-                              <div class="vertical-timeline-block">
-                                <div class="vertical-timeline-icon navy-bg">
-                                  <i class="fa fa-warning"></i>
-                                </div>
-                                <div class="vertical-timeline-content">
-                                  <p>The generated Lorem Ipsum is therefore.
-                                  </p>
-                                  <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
-                                </div>
-                              </div>
-                              <div class="vertical-timeline-block">
-                                <div class="vertical-timeline-icon gray-bg">
-                                  <i class="fa fa-coffee"></i>
-                                </div>
-                                <div class="vertical-timeline-content">
-                                  <p>Conference on the sales results for the previous year.
-                                  </p>
-                                  <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
-                                </div>
-                              </div>
-                              <div class="vertical-timeline-block">
-                                <div class="vertical-timeline-icon gray-bg">
-                                  <i class="fa fa-briefcase"></i>
-                                </div>
-                                <div class="vertical-timeline-content">
-                                  <p>Many desktop publishing packages and web page editors now use Lorem.
-                                  </p>
-                                  <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-                                </div>
-                              </div>
+
+                              <!-- ./ timeline activity -->
+
                             </div>
                             <!-- ./ timeline activity -->
 
@@ -1075,69 +1034,24 @@
                               <!-- timeline actitivity -->
                               <strong>Timeline Activity</strong>
                               <div id="vertical-timeline" class="vertical-container dark-timeline">
-                                <div class="vertical-timeline-block">
-                                  <div class="vertical-timeline-icon gray-bg">
-                                    <i class="fa fa-coffee"></i>
-                                  </div>
-                                  <div class="vertical-timeline-content">
-                                    <p>Conference on the sales results for the previous year.
-                                    </p>
-                                    <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
-                                  </div>
-                                </div>
-                                <div class="vertical-timeline-block">
-                                  <div class="vertical-timeline-icon gray-bg">
-                                    <i class="fa fa-briefcase"></i>
-                                  </div>
-                                  <div class="vertical-timeline-content">
-                                    <p>Many desktop publishing packages and web page editors now use Lorem.
-                                    </p>
-                                    <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-                                  </div>
-                                </div>
-                                <div class="vertical-timeline-block">
-                                  <div class="vertical-timeline-icon gray-bg">
-                                    <i class="fa fa-bolt"></i>
-                                  </div>
-                                  <div class="vertical-timeline-content">
-                                    <p>There are many variations of passages of Lorem Ipsum available.
-                                    </p>
-                                    <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
-                                  </div>
-                                </div>
-                                <div class="vertical-timeline-block">
-                                  <div class="vertical-timeline-icon navy-bg">
-                                    <i class="fa fa-warning"></i>
-                                  </div>
-                                  <div class="vertical-timeline-content">
-                                    <p>The generated Lorem Ipsum is therefore.
-                                    </p>
-                                    <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
-                                  </div>
-                                </div>
-                                <div class="vertical-timeline-block">
-                                  <div class="vertical-timeline-icon gray-bg">
-                                    <i class="fa fa-coffee"></i>
-                                  </div>
-                                  <div class="vertical-timeline-content">
-                                    <p>Conference on the sales results for the previous year.
-                                    </p>
-                                    <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
-                                  </div>
-                                </div>
-                                <div class="vertical-timeline-block">
-                                  <div class="vertical-timeline-icon gray-bg">
-                                    <i class="fa fa-briefcase"></i>
-                                  </div>
-                                  <div class="vertical-timeline-content">
-                                    <p>Many desktop publishing packages and web page editors now use Lorem.
-                                    </p>
-                                    <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- ./ timeline activity -->
 
+                                <div class="vertical-timeline-block" ng-repeat="item in bdc.activeLead.timeline">
+                                  <div class="vertical-timeline-icon" ng-class="{'red-bg': item.type == 'lead',
+                                                                                 'blue-bg' : item.type == 'appointment',
+                                                                                 'navy-bg' : item.type == 'agent',
+                                                                                 'yellow-bg' : item.type == 'message' }">
+                                    <i ng-class="{'fa fa-bolt': item.type == 'lead',
+                                                  'fa fa-calendar': item.type == 'appointment',
+                                                  'fa fa-comments-o' : item.type == 'message',
+                                                  'fa fa-user-plus': item.type == 'agent'}"></i>
+                                  </div>
+                                  <div class="vertical-timeline-content">
+                                    <p ng-bind-html="item.info"></p>
+                                    <span class="vertical-date small text-muted"> {{item.createdTimestamp}} </span>
+                                  </div>
+                                </div>
+
+                              <!-- ./ timeline activity -->
 
                             </div>
 

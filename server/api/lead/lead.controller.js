@@ -122,6 +122,11 @@ export function index(req, res) {
               model: User,
               as: 'Host',
               attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+            },
+            {
+              model: User,
+              as: 'AttendingUsers',
+              attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
             }
           ],
           through: Participants,
@@ -175,6 +180,11 @@ export function show(req, res) {
             model: User,
             as: 'Host',
             attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+          },
+          {
+            model: User,
+            as: 'AttendingUsers',
+            attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
           }
         ],
         through: Participants,
@@ -210,9 +220,11 @@ function formatLead(lead) {
   if (lead.Agents) {
     formattedLead.agents = [];
     for (var i = 0; i < lead.Agents.length; i++) {
+      //console.log(lead.Agents[i]);
       var agentProfile = lead.Agents[i].profile;
-      agentProfile.timeAgo = moment(lead.Agents[i].createdAt).fromNow();
-      agentProfile.timelineStamp = moment(lead.Agents[i].createdAt).format('h:mm a [-] MM.DD.YYYY');
+      agentProfile.timeAgo = moment(lead.Agents[i].AssignedLeads.createdAt).fromNow();
+      agentProfile.timelineStamp = moment(lead.Agents[i].AssignedLeads.createdAt).format('h:mm a [-] MM.DD.YYYY');
+      agentProfile.createdAt = lead.Agents[i].AssignedLeads.createdAt;
       formattedLead.agents.push(agentProfile);
     }
   }
@@ -232,15 +244,15 @@ function formatLead(lead) {
         var attendants = [];
         for(var x = 0; x < lead.Events[j].AttendingUsers.length; x++){
           attendants.push(lead.Events[j].AttendingUsers[x].profile);
-        }appointmentProfile.attendants = attendants;
+        } appointmentProfile.attendants = attendants;
       }
       formattedLead.appointments.push(appointmentProfile);
     }
   }
 
-  if (lead.Messages){
+  if (lead.Messages) {
     formattedLead.messages = [];
-    for(var i = 0; i < lead.Messages.length; i++) {
+    for (var i = 0; i < lead.Messages.length; i++) {
       var msgProfile = lead.Messages[i].profile;
       msgProfile.timeAgo = moment(lead.Messages[i].createdAt).fromNow();
       msgProfile.timelineStamp = moment(lead.Messages[i].createdAt).format('h:mm a [-] MM.DD.YYYY');
@@ -722,15 +734,26 @@ export function totalLeads(req, res) {
           },
           {
             model: Event,
+            where: {
+              category: 'appointment'
+            },
             include: [
               {
                 model: User,
                 as: 'Host',
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              },
+              {
+                model: User,
+                as: 'AttendingUsers',
+                attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
               }
             ],
             through: Participants,
             order: [['eventID', 'DESC']]
+          },
+          {
+            model: Message
           }
         ],
         order: [['leadID', 'DESC']]
@@ -811,15 +834,27 @@ export function totalAppointments(req, res) {
           },
           {
             model: Event,
+            required: true,
+            where: {
+              category: 'appointment'
+            },
             include: [
               {
                 model: User,
                 as: 'Host',
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              },
+              {
+                model: User,
+                as: 'AttendingUsers',
+                attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
               }
             ],
             through: Participants,
             order: [['eventID', 'DESC']]
+          },
+          {
+            model: Message
           }
         ],
       }));
@@ -899,6 +934,7 @@ export function keptAppointments(req, res) {
           },
           {
             model: Event,
+            required: true,
             where: {
               category: 'appointment',
               status: 'kept'
@@ -908,10 +944,18 @@ export function keptAppointments(req, res) {
                 model: User,
                 as: 'Host',
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              },
+              {
+                model: User,
+                as: 'AttendingUsers',
+                attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
               }
             ],
             through: Participants,
             order: [['eventID', 'DESC']]
+          },
+          {
+            model: Message
           }
         ],
       }));
@@ -988,6 +1032,7 @@ export function missedAppointments(req, res) {
           },
           {
             model: Event,
+            required: true,
             where: {
               category: 'appointment',
               status: 'missed',
@@ -997,10 +1042,18 @@ export function missedAppointments(req, res) {
                 model: User,
                 as: 'Host',
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              },
+              {
+                model: User,
+                as: 'AttendingUsers',
+                attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
               }
             ],
             through: Participants,
             order: [['eventID', 'DESC']]
+          },
+          {
+            model: Message
           }
         ],
       }));
@@ -1077,6 +1130,7 @@ export function soldAppointments(req, res) {
           },
           {
             model: Event,
+            required: true,
             where: {
               category: 'appointment',
               status: 'kept',
@@ -1087,10 +1141,18 @@ export function soldAppointments(req, res) {
                 model: User,
                 as: 'Host',
                 attributes: ['userID', 'firstName', 'lastName', 'userID', 'email', 'role']
+              },
+              {
+                model: User,
+                as: 'AttendingUsers',
+                attributes: ['userID', 'firstName', 'lastName', 'email', 'phone','role']
               }
             ],
             through: Participants,
             order: [['eventID', 'DESC']]
+          },
+          {
+            model: Message
           }
         ],
       }));
@@ -1243,6 +1305,9 @@ export function getSentMessages(req, res){
             ],
             through: Participants,
             order: [['eventID', 'DESC']]
+          },
+          {
+            model: Message
           }
         ]
       }

@@ -114,6 +114,7 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             break;
         }
         _bdc.activeLead = lead;
+        console.log(lead);
         _bdc.dismissSidebar();
       }
 

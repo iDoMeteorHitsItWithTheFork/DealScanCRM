@@ -1,6 +1,6 @@
 'use strict';
 angular.module('dealScanCrmApp')
-  .factory('BDC', function (Auth, User, Util, $q, $filter, $resource, LeadResource) {
+  .factory('BDC', function (Auth, User, Util, $q, $filter, $resource, LeadResource, Lead) {
 
 
     var _leads = [];
@@ -11,6 +11,13 @@ angular.module('dealScanCrmApp')
     var _missedAppointments = {};
     var _soldAppointments = {};
 
+
+
+
+    function updateLeads(data){
+
+
+    }
 
     var TOP_LIMIT  = 5;
 
@@ -27,18 +34,12 @@ angular.module('dealScanCrmApp')
       promises.push(sentMessages());
 
       return $q.all(promises).then(function (results) {
-        var totalLeads = results[0];
-        var totalAppointments = results[1];
-        var keptAppointments = results[2];
-        var missedAppointments = results[3];
-        var soldAppointments = results[4];
-        var sentMessages = results[5];
-        return {totalLeads: totalLeads,
-                totalAppointments: totalAppointments,
-                keptAppointments: keptAppointments,
-                missedAppointments: missedAppointments,
-                soldAppointments: soldAppointments,
-                sentMessages: sentMessages};
+        return {totalLeads: results[0],
+                totalAppointments: results[1],
+                keptAppointments: results[2],
+                missedAppointments: results[3],
+                soldAppointments: results[4],
+                sentMessages: results[5]};
       }).catch(function (err) {
         console.log(err);
         return err;
@@ -53,6 +54,7 @@ angular.module('dealScanCrmApp')
         if (messages){
           for(var i = 0; i < messages.messages.length; i++){
             var msg = messages.messages[i];
+            msg.lead.timeline = Lead.timeline(msg.lead);
             msg.lead.notes = $filter('orderBy')(msg.lead.notes, "createdAt", true);
             msg.lead.appointments = $filter('orderBy')(msg.lead.appointments, "createdAt", true);
             msg.lead.agents = $filter('orderBy')(msg.lead.agents, "createdAt", true);
@@ -196,6 +198,7 @@ angular.module('dealScanCrmApp')
             _totalLeads.pieOptions = pieOptions;
 
             for(var i = 0; i < leads.data.length; i++){
+              leads.data[i].timeline = Lead.timeline(leads.data[i]);
               leads.data[i].agents = $filter('orderBy')(leads.data[i].agents, "createdAt", true);
               if (leads.data[i].interest && leads.data[i].interest.trim() != ''){
                 try {
@@ -277,6 +280,7 @@ angular.module('dealScanCrmApp')
               }
 
               for(var i = 0; i < appointments.data.length; i++){
+                appointments.data[i].timeline = Lead.timeline(appointments.data[i]);
                 appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
                 if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
                   try {
@@ -363,6 +367,7 @@ angular.module('dealScanCrmApp')
             }
 
             for(var i = 0; i < appointments.data.length; i++){
+              appointments.data[i].timeline = Lead.timeline(appointments.data[i]);
               appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
               if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
                 try {
@@ -449,6 +454,7 @@ angular.module('dealScanCrmApp')
             }
 
             for(var i = 0; i < appointments.data.length; i++){
+              appointments.data[i].timeline = Lead.timeline(appointments.data[i]);
               appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
               if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
                 try {
@@ -533,6 +539,7 @@ angular.module('dealScanCrmApp')
             }
 
             for(var i = 0; i < appointments.data.length; i++){
+              appointments.data[i].timeline = Lead.timeline(appointments.data[i]);
               appointments.data[i].agents = $filter('orderBy')(appointments.data[i].agents, "createdAt", true);
               if (appointments.data[i].interest && appointments.data[i].interest.trim() != ''){
                 try {
@@ -567,6 +574,7 @@ angular.module('dealScanCrmApp')
         });
     }
 
+
     return {
       graphData: getLeads,
       totalLeads: totalLeads,
@@ -574,6 +582,7 @@ angular.module('dealScanCrmApp')
       keptAppointments: keptAppointments,
       missedAppointments: missedAppointments,
       soldAppointments: soldAppointments,
+      update: updateLeads
     }
   })
 

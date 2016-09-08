@@ -29,6 +29,7 @@ angular.module('dealScanCrmApp')
             if (lead && !lead.error) {
               lead.interest = JSON.parse(JSON.stringify(lead.interest));
                if (lead.appointments && lead.appointments.length > 0) _scheduledLeads.unshift(lead);
+               //lead.timeline = buildTimeline(lead);
               _leads.unshift(lead);
             } return _leads;
           }).catch(function (err) {
@@ -77,6 +78,7 @@ angular.module('dealScanCrmApp')
             _leads[idx].appointments.unshift(appointment);
             _leads[idx].status = 'working';
             _scheduledLeads.unshift(_leads[idx]);
+            //_leads[idx].timeline = buildTimeline(_leads[idx]);
           }
           return appointment;
         } else return {error: {msg: '', code:''}};
@@ -162,6 +164,7 @@ angular.module('dealScanCrmApp')
                    } catch(ex){}
                  }
                 // leads[i].interest = JSON.parse(JSON.stringify(_leads[i].interest));
+                 leads[i].timeline = buildTimeline(leads[i]);
                 _leads.push(leads[i]);
               }
               console.log(_leads);
@@ -188,6 +191,7 @@ angular.module('dealScanCrmApp')
             if(!lead.agents) lead.agents = [];
             lead.agents.unshift(res.agent);
             lead.status = 'working';
+            //lead.timeline = buildTimeline(lead);
             return true;
           } else return {error: {code:'', msg: ''}};
       }).catch(function(err){
@@ -214,6 +218,7 @@ angular.module('dealScanCrmApp')
            console.log(leads);
            if (leads && !leads.error){
              for (var i = 0; i < leads.length; i++) {
+               //leads[i].timeline = buildTimeline(leads[i]);
                leads[i].notes = $filter('orderBy')(leads[i].notes, "createdAt", true);
                leads[i].appointments = $filter('orderBy')(leads[i].appointments, "createdAt", true);
                leads[i].agents = $filter('orderBy')(leads[i].agents, "createdAt", true);
@@ -238,6 +243,52 @@ angular.module('dealScanCrmApp')
        })
     }
 
+
+
+    function buildTimeline(lead){
+      var timeline = [];
+      if (lead.appointments && lead.appointments.length > 0)
+        for (var i = 0; i < lead.appointments.length; i++)
+          timeline.push({
+            type: 'appointment',
+            info: 'Appointment was scheduled for <strong>'+lead.appointments[i].time+'</strong> by <strong>'+lead.appointments[i].host.name+'</strong> ' +
+            'and was assigned to Manager <strong>'+(lead.appointments[i].attendants ? lead.appointments[i].attendants[0].name : '')+
+            '</strong>.<br>Appointment Status: <strong>'+lead.appointments[i].status+'</strong>',
+            value: lead.appointments[i],
+            timestamp: lead.appointments[i].createdAt,
+            createdTimestamp: lead.appointments[i].timelineStamp
+          });
+      if (lead.messages && lead.messages.length > 0)
+        for (var i = 0; i < lead.messages.length; i++)
+          timeline.push({
+            type: 'message',
+            info: 'Message <strong>"'+lead.messages[i].body+'"</strong> was sent to lead by Agent <strong>'+lead.messages[i].name+'</strong>.',
+            value: lead.messages[i],
+            timestamp: lead.messages[i].createdAt,
+            createdTimestamp: lead.messages[i].timelineStamp
+          });
+      if (lead.agents && lead.agents.length > 0)
+        for (var i = 0; i < lead.agents.length; i++)
+          timeline.push({
+            type: 'agent',
+            info: 'Agent <strong>'+lead.agents[i].name+'</strong> is assigned to lead. Lead is in now in working status.',
+            value: lead.agents[i],
+            timestamp: lead.agents[i].createdAt,
+            createdTimestamp: lead.agents[i].timelineStamp
+          });
+      if (lead.createdAt) timeline.push({
+        type: 'lead',
+        info: 'New lead pulled from <strong>'+lead.sourceName+'</strong>',
+        value: [],
+        timestamp: lead.createdAt,
+        createdTimestamp: moment(lead.createdAt).format('h:mm a [-] MM.DD.YYYY')
+      });
+
+      timeline = $filter('orderBy')(timeline, 'timestamp', true);
+      return timeline;
+    }
+
+
     // Public API here
     return {
       create: createLead,
@@ -250,5 +301,6 @@ angular.module('dealScanCrmApp')
       convert: convertLead,
       scheduledLeads: scheduledLeads,
       unassignedLeads: getScheduledLeads,
+      timeline: buildTimeline
     };
   });
