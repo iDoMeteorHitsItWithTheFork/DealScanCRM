@@ -749,7 +749,7 @@
   <!-- ./ graph section -->
 
   <!-- data tables-->
-  <div class="row animated fadeInRight" ng-if="dashboard.showTable">
+  <div class="row animated fadeInRight hideSansDelay" ng-if="dashboard.showTable">
     <div class="col-lg-12" >
       <div class="ibox float-e-margins">
         <div class="ibox-title">
@@ -793,7 +793,7 @@
               <td >{{::deal.dealDetails.date}}</td>
               <td >{{::deal.dealDetails.salesman}}</td>
               <td > {{::deal.dealDetails.source}}</td>
-              <td >{{::deal.dealDetails.price}}</td>
+              <td >{{::deal.dealDetails.price | number : 2}}</td>
             </tr>
             </tbody>
           </table>

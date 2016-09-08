@@ -106,6 +106,7 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
     _dashboard.getSales = function(){
       if (_dashboard.retreivingDeals) return;
+      _dashboard.showTable = null;
       _dashboard.retreivingDeals = true;
       _dashboard.emptyResults = null;
       resetFilterFlags();
