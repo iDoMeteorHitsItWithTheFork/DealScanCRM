@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('BDCCtrl',
 
-    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, BDC, Messages,appConfig, DTOptionsBuilder, $filter, Lead, toaster, $timeout, $window) {
+    function ($scope, $state, $uibModal,$anchorScroll, Auth, Util, DataFilters, Dealers, BDC, Messages,appConfig, DTOptionsBuilder, $filter, Lead, toaster, $timeout, $window) {
       $("#page-wrapper").css("overflow-x", "scroll");
 
       console.log("dashboard controller loaded");
@@ -170,6 +170,56 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
+      _bdc.selectedDealership = {};
+      _bdc.selectedTeam = {};
+
+      _bdc.initFilters = function(){
+        if (DataFilters){
+          console.log(DataFilters);
+          _bdc.dataFilters = DataFilters;
+          _bdc.selectedDealership = _bdc.dataFilters[0];
+          _bdc.selectedTeam = _bdc.selectedDealership.Teams[0];
+          _bdc.selectedTeam.TeamMembers[0] = {
+            profile: {
+              name: 'BDC Personnel',
+                role: 'BDC Agent',
+                email: ''
+            }
+          };
+          _bdc.selectedEmployee  = (_bdc.user.role == 'sale_rep') ?
+          {MemberID: _bdc.user.userID, profile: _bdc.user.profile} :
+            _bdc.selectedEmployee = _bdc.selectedTeam.TeamMembers[0];
+          _bdc.viewIsReady = true;
+          _bdc.getGraphData();
+        } else toaster.error({title: 'Dashboard Error', body: 'An error occurred while loading data filters'})
+      }
+
+      _bdc.groupByRole = function (employee){
+        return employee.profile.role;
+      };
+
+
+      _bdc.datePickerOptions = {
+        'ranges': {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        'opens': 'left',
+        eventHandlers: {'apply.daterangepicker': function(ev, picker) {
+          _bdc.dateRange = {startDate: picker.startDate, endDate: picker.endDate};
+          console.log('\n\n ++++++++++++++++++++++++++++++ \n\n');
+          _bdc.getGraphData();
+        }}
+      }
+
+      _bdc.dateRange = {startDate: _bdc.datePickerOptions.ranges['This Month'][0],
+        endDate: _bdc.datePickerOptions.ranges.Today[1]};
+
+
       /**
        * Retreive Graph Data From Service
        */
@@ -177,15 +227,14 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         if (_bdc.retreivingGraphData) return;
         _bdc.retreivingGraphData = true;
         console.log('**** GETTING GRAPH DATA *****');
-    /*    var searchOptions = {};
-        searchOptions.type = _dashboard.selectedType;
-        searchOptions.dealershipID = _dashboard.selectedDealership.DealershipID;
-        searchOptions.teamID = _dashboard.selectedTeam.TeamID;
-        searchOptions.employee = _dashboard.selectedEmployee;
-        searchOptions.from = _dashboard.dateRange.startDate.format('YYYY/MM/DD');
-        searchOptions.to = _dashboard.dateRange.endDate.format('YYYY/MM/DD');*/
+        var searchOptions = {};
+        searchOptions.dealershipID = _bdc.selectedDealership.DealershipID;
+        searchOptions.teamID = _bdc.selectedTeam.TeamID;
+        searchOptions.employee = _bdc.selectedEmployee;
+        searchOptions.from = _bdc.dateRange.startDate.format('YYYY/MM/DD');
+        searchOptions.to = _bdc.dateRange.endDate.format('YYYY/MM/DD');
         //console.log(searchOptions);
-        BDC.graphData().then(function(leads){
+        BDC.graphData(searchOptions).then(function(leads){
           console.log('\n\n\n\ GRAPH DATA \n\n\n');
           console.log(leads);
           if (leads){
@@ -206,7 +255,9 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
         });
       }
 
-      _bdc.getGraphData();
+
+      _bdc.initFilters();
+
 
       /**
        * Pie Chart Data
@@ -334,31 +385,6 @@ angular.module('dealScanCrmApp').controller('BDCCtrl',
             }
           ]);
 
-
-      // _bdc.selectedDealership = _bdc.dealerships[0];
-      // _bdc.selectedTeam = _bdc.selectedDealership.teams[0];
-      // _bdc.selectedEmployee = _bdc.selectedTeam.members[0];
-
-      _bdc.datePickerOptions = {
-        'ranges': {
-          'Today': [moment(), moment()],
-          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month': [moment().startOf('month'), moment().endOf('month')],
-          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        "alwaysShowCalendars": true,
-        'opens': 'left',
-        eventHandlers: {'apply.daterangepicker': function(ev, picker) {
-           console.log(ev);
-           console.log(picker);
-          _bdc.loadLeads();
-        }}
-      };
-
-      _bdc.dateRange = {startDate: moment().subtract(6, 'days'),
-        endDate: _bdc.datePickerOptions.ranges.Today[1]};
 
         /**
          * Update Table Data based on selection

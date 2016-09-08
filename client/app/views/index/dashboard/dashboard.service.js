@@ -40,7 +40,6 @@ angular.module('dealScanCrmApp')
         //console.log(salesData);
 
       function getFilters(id) {
-        console.log('\n\n\n\n UserID: '+id+' \n\n\n\n');
         return User.getFilters({id: id})
           .$promise.then(function (filters) {
             console.log(filters);

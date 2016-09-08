@@ -66,24 +66,33 @@
           <div class="col-md-5">
             <div class="row">
               <!-- Data Filters -->
-              <div class="col-md-6">
-                <ui-select on-select="bdc.getLeads()" ng-model="bdc.selectedDealership" theme="bootstrap">
-                  <ui-select-match placeholder="Dealerships">{{$select.selected.name}}
+              <div class="col-xs-5 col-sm-5 col-md-5 pull-left" ng-if="bdc.dataFilters.length > 1">
+                <ui-select ng-model="bdc.selectedDealership" theme="bootstrap" ng-disabled="bdc.retreivingGraphData">
+                  <ui-select-match placeholder="Dealerships">{{$select.selected.DealershipName}}
                   </ui-select-match>
                   <ui-select-choices
-                    repeat="dealership in bdc.dealerships | filter: $select.search">
-                    <div ng-bind-html="dealership.name | highlight: $select.search"></div>
+                    repeat="dealership in bdc.dataFilters | filter: $select.search">
+                    <div ng-bind-html="dealership.DealershipName | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
               </div>
-
-              <div class="col-md-6">
-                <ui-select on-select="bdc.getLeads()" ng-model="bdc.selectedEmployee" theme="bootstrap">
-                  <ui-select-match placeholder="Employees">{{$select.selected.name}}
+              <div class="col-xs-5 col-sm-5 col-md-3 pull-left" ng-if="bdc.selectedDealership.Teams.length > 1">
+                <ui-select ng-model="bdc.selectedTeam" theme="bootstrap" ng-disabled="bdc.retreivingGraphData">
+                  <ui-select-match placeholder="Teams">{{$select.selected.TeamName}}
                   </ui-select-match>
                   <ui-select-choices
-                    repeat="employee in bdc.selectedTeam.members | filter: $select.search">
-                    <div ng-bind-html="employee.name | highlight: $select.search"></div>
+                    repeat="team in bdc.selectedDealership.Teams | filter: $select.search">
+                    <div ng-bind-html="team.TeamName | highlight: $select.search"></div>
+                  </ui-select-choices>
+                </ui-select>
+              </div>
+              <div class="col-md-5 pull-left">
+                <ui-select on-select="bdc.getGraphData()"  ng-model="bdc.selectedEmployee" theme="bootstrap" ng-disabled="bdc.retreivingGraphData">
+                  <ui-select-match placeholder="Employees">{{$select.selected.profile.name}}
+                  </ui-select-match>
+                  <ui-select-choices group-by="bdc.groupByRole"
+                                     repeat="employee in bdc.selectedTeam.TeamMembers | filter: $select.search">
+                    <div ng-bind-html="employee.profile.name | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
               </div>
@@ -93,7 +102,7 @@
           <!-- /.Resources Filters -->
 
           <!-- Date Filters -->
-          <div class="col-md-7">
+          <div class="col-md-7 pull-left">
             <div class="col-md-7 no-margins">
               <input class="form-control date-picker" style="margin-right:10px" date-range-picker
                      options="bdc.datePickerOptions"
@@ -102,6 +111,8 @@
 
             </div>
             <!-- ./Date Filters -->
+
+
             <!-- View Selectors -->
             <div class="col-lg-5">
               <div class="btn-group pull-right margin-right-10">
@@ -114,6 +125,9 @@
               </div>
             </div>
             <!-- /.View selectors -->
+
+
+
           </div>
 
 
