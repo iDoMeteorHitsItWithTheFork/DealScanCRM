@@ -35,7 +35,7 @@
             </div>
             <div class="margin-top-10">
               <span>Gross[$]</span>
-              <small class="pull-right">{{m.gross}}/<strong>{{m.gross_goal}}</strong></small>
+              <small class="pull-right">{{m.gross | number : 2}}/<strong>{{m.gross_goal | number: 2}}</strong></small>
             </div>
             <div class="progress progress-mini">
               <div style="{{m.gross_progress_bar}}" class="progress-bar"

@@ -1,7 +1,7 @@
 
 angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
-  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, Dashboard, Messages,appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout, $compile) {
+  function ($scope, $state, $uibModal, $anchorScroll, Auth, Util, DataFilters, KPI, Dealers, UnassignedLeads, Dashboard, Messages,appConfig, NgMap, DTOptionsBuilder, $filter, toaster, $window, $timeout, $compile) {
 
     var _dashboard = this;
 
@@ -60,56 +60,13 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       _dashboard.isGM = ans;
     })
 
-
-    _dashboard.KPI = function(){
-      if (_dashboard.loadingKPI) return;
-      _dashboard.loadingKPI = true;
-      Dashboard.kpi().then(function(res){
-        console.log(res);
-        _dashboard.kpis = res;
-        _dashboard.loadingKPI = false;
-        toaster.wait({title: res.RemainingWorkingDays+' remaining working days!'})
-      }).catch(function(err){
-         console.log(err);
-         _dashboard.loadingKPI = false;
-         toaster.error({title: 'KPI Error', body: 'An error occurred while retrieving KPI Info'})
-      })
+    _dashboard.initKPI = function(){
+        if (KPI) {
+          _dashboard.kpis = KPI;
+          toaster.wait({title: _dashboard.kpis.RemainingWorkingDays+' remaining working days!'})
+        } else toaster.error({title: 'KPI Error', body: 'An error occurred while retrieving KPI Info'})
     }
-
-    _dashboard.KPI();
-
-    _dashboard.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
-    _dashboard.selectedDealership = {};
-    _dashboard.selectedTeam = {};
-
-    _dashboard.getFilters = function(){
-      Dashboard.filters().then(function(filters){
-        console.log(filters);
-        if (filters){
-          _dashboard.dataFilters = filters;
-          _dashboard.selectedType = _dashboard.dealTypes[0];
-          _dashboard.selectedDealership = _dashboard.dataFilters[0];
-          _dashboard.selectedTeam = _dashboard.selectedDealership.Teams[0];
-          _dashboard.selectedEmployee  = (_dashboard.user.role == 'sale_rep') ?
-              {MemberID: _dashboard.user.userID, profile: _dashboard.user.profile} :
-              _dashboard.selectedEmployee = _dashboard.selectedTeam.TeamMembers[0];
-          _dashboard.viewIsReady = true;
-          _dashboard.getSales();
-        }
-      }).catch(function(err){
-          console.log(err);
-          toaster.error({title: 'Dashboard Error', body: 'An error occurred while loading data filters'})
-      });
-    }
-    _dashboard.getFilters();
-
-    _dashboard.groupByRole = function (employee){
-       return employee.profile.role;
-    };
-
-
-
-
+    _dashboard.initKPI();
 
 
     /**
@@ -189,6 +146,29 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
          toaster.error({title: 'Sales Load Error', body: 'An Error occurred while attempting to retreive sales data'});
       });
     }
+
+    _dashboard.dealTypes = [{id: 0, text: 'All'}, {id: 1, text: 'New'}, {id: 2, text: 'Used'}];
+    _dashboard.selectedDealership = {};
+    _dashboard.selectedTeam = {};
+
+    _dashboard.initFilters = function(){
+      if (DataFilters){
+        console.log(DataFilters);
+        _dashboard.dataFilters = DataFilters;
+        _dashboard.selectedType = _dashboard.dealTypes[0];
+        _dashboard.selectedDealership = _dashboard.dataFilters[0];
+        _dashboard.selectedTeam = _dashboard.selectedDealership.Teams[0];
+        _dashboard.selectedEmployee  = (_dashboard.user.role == 'sale_rep') ?
+        {MemberID: _dashboard.user.userID, profile: _dashboard.user.profile} :
+          _dashboard.selectedEmployee = _dashboard.selectedTeam.TeamMembers[0];
+        _dashboard.viewIsReady = true;
+        _dashboard.getSales();
+      } else toaster.error({title: 'Dashboard Error', body: 'An error occurred while loading data filters'})
+    }
+
+    _dashboard.groupByRole = function (employee){
+      return employee.profile.role;
+    };
 
     _dashboard.goToProfile = function(deal, map){
         if (map){
@@ -1213,8 +1193,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
           "<li><strong>Price:</strong> $"+price+"</li>" +
           "<li> Assisted by <strong>"+salesman+"</strong> on <strong>"+date+"</strong></li>" +
           "</ul></div>";
-      var contentNode = $compile(content)($scope);
 
+
+      var contentNode = $compile(content)($scope);
       if (infoWindow === null){
         infoWindow = new google.maps.InfoWindow({
           content: contentNode[0],
@@ -1230,6 +1211,8 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       google.maps.event.addListener(infoWindow,'closeclick',function(){});
 
     }
+
+
 
     _dashboard.chatRecipient = {name: '', number: ''};
     _dashboard.composeText = function (deal, event) {
@@ -1263,6 +1246,9 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
     }
 
 
+
+
+
     _dashboard.sendMessage = function(form){
       if (_dashboard.sendingMessage) return;
       if (!_dashboard.message || _dashboard.message.toString().trim() == '') return;
@@ -1289,8 +1275,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
 
 
 
-
-
     _dashboard.composeMail = function(deal, event){
       event.stopPropagation();
       console.log('*** Compose Mail ****');
@@ -1309,29 +1293,6 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
         body: 'No Email address detected for customer. Please update the customer info.'
       })
 
-
-
-      /*var modalInstance = $uibModal.open({
-        size: 'lg',
-        //windowClass: 'animated slideInRight',
-        templateUrl: 'app/views/index/dashboard/modalMailCompose.html',
-        resolve: {
-          deal: function(){
-            return deal;
-          }
-        },
-        controller: function($scope, $uibModalInstance, deal){
-          console.log(deal);
-          $scope.recipient = deal.customerDetails;
-          $scope.ok = function () {
-            $uibModalInstance.close();
-          };
-
-          $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-          };
-        }
-      });*/
     }
 
 
@@ -1339,6 +1300,8 @@ angular.module('dealScanCrmApp').controller('DashboardCtrl',
       infoWindow.close();
       infoWindow = null;
     });
+
+    _dashboard.initFilters();
   });
 
 

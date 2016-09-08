@@ -39,18 +39,25 @@ angular.module('dealScanCrmApp')
         var filteredData = [];
         //console.log(salesData);
 
-        function getFilters() {
-        return User.getFilters({id:_user.userID})
-          .$promise.then(function(filters){
+      function getFilters(id) {
+        console.log('\n\n\n\n UserID: '+id+' \n\n\n\n');
+        return User.getFilters({id: id})
+          .$promise.then(function (filters) {
             console.log(filters);
-            for(var i = 0; i < filters.length; i++){
-              for (var j = 0;  j < filters[i].Teams.length; j++){
+            for (var i = 0; i < filters.length; i++) {
+              for (var j = 0; j < filters[i].Teams.length; j++) {
                 if (filters[i].Teams[j].TeamMembers)
-                  filters[i].Teams[j].TeamMembers.unshift({profile: {name: 'Sales Personnel', role: 'Sales Representative', email: ''}});
+                  filters[i].Teams[j].TeamMembers.unshift({
+                    profile: {
+                      name: 'Sales Personnel',
+                      role: 'Sales Representative',
+                      email: ''
+                    }
+                  });
               }
             }
             return filters;
-          }).catch(function(err){
+          }).catch(function (err) {
             console.log(err);
             return err;
           })

@@ -18,7 +18,24 @@ angular.module('dealScanCrmApp')
         templateUrl: "app/views/common/content.html",
         authenticate: true,
         resolve: {
-          loadDealers: function($q, Auth){
+          DataFilters: function ($q, Dashboard, Auth) {
+            var df  = $q.defer();
+            Auth.getCurrentUser().$promise
+              .then(function(user){
+                Dashboard.filters(user.userID).then(function(filters){
+                  return (filters) ? df.resolve(filters) : df.reject();
+                }).catch(function(err){
+                  console.log(err);
+                  df.reject(err);
+                })
+              })
+              .catch(function(err){
+               console.log(err);
+               df.reject(err);
+            })
+            return df.promise;
+          },
+          Dealers: function($q, Auth){
             var df = $q.defer();
             Auth.loadDealerships().then(function(dealers){
               if (dealers) df.resolve(dealers);
@@ -29,7 +46,7 @@ angular.module('dealScanCrmApp')
             });
             return df.promise;
           },
-          loadKPI: function(Dashboard, $q){
+          KPI: function(Dashboard, $q){
             var df = $q.defer();
             Dashboard.kpi().then(function(kpi){
               if (kpi) df.resolve(kpi);
@@ -40,7 +57,7 @@ angular.module('dealScanCrmApp')
             });
             return df.promise;
           },
-          loadUnassignedLeads: function(Lead, $q){
+          UnassignedLeads: function(Lead, $q){
             var df = $q.defer();
             Lead.scheduledLeads().then(function(leads){
               (leads) ? df.resolve(leads) : df.reject();
