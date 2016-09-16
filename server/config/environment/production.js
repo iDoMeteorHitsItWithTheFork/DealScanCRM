@@ -14,14 +14,27 @@ module.exports = {
           8080,
 
   sequelize: {
-    uri:  process.env.SEQUELIZE_URI ||
-          'sqlite://',
+  // Sequelize connection opions
+  sequelize: {
+    database: 'DealScanCRM',
+    username: 'DealScanCRM',
+    password: 'Baiser12!',
     options: {
+      host:'dealscancrm.db.3266541.hostedresource.com',
+      dialect: 'mysql',
+      pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+      },
       logging: false,
-      storage: 'dist.sqlite',
       define: {
-        timestamps: false
+        timestamps: true,
       }
     }
+  },
+
+  // Seed database on startup
+  seedDB: false
   }
 };

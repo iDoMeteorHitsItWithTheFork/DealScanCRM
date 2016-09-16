@@ -1,6 +1,8 @@
 // Generated on 2016-03-08 using generator-angular-fullstack 3.3.0
 'use strict';
 
+grunt.loadNpmTasks('grunt-install-dependencies');
+
 module.exports = function (grunt) {
   var localConfig;
   try {
